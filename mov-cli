@@ -102,6 +102,7 @@ get_query "$*"
 search_movie
 [ -z "$results" ] && die "No search results found"
 selection_id=$(printf "$results" | fzf)
+[ -z "$selection_id" ] && die "No movie chosen"
 open_movie 
 
 while :; do
@@ -117,6 +118,7 @@ while :; do
 			get_query
 			search_movie
 			[ -z "$results" ] && die "No search results found"
+			[ -z "$selection_id" ] && die "No movie chosen"
 			selection_id=$(printf "$results" | fzf)
 			open_movie
 			;;
