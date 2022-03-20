@@ -49,11 +49,12 @@ def display(info):
             try:
                 mov = int(input(Fore.YELLOW + "[!] Please enter the number of the movie you want to download: "))-1
                 inf = info[mov]
+                print(inf)
                 if inf[-1] == "WS":
                     season = ""
                     while season not in range(inf[-2]+1):
                         season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{inf[-2]}): ")
-                        episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/60574-peaky-blinders/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
+                        episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{inf[1]}-{inf[0].lower().replace(' ','-').replace(a,'-').replace(':','')}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
                         episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
                         with open(f'{inf[0]}.mp4','wb') as f:
                             url = cdnurl(wspage([inf[0],inf[1],season,episode])[0],inf[0])
@@ -78,7 +79,8 @@ def display(info):
                 print(selection)
                 if selection[-1] == "WS":
                     season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{selection[-2]}): ")
-                    episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{selection[1]}-{selection[0].lower()}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
+                    a = "'"
+                    episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{selection[1]}-{selection[0].lower().replace(' ','-').replace(a,'-').replace(':','')}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
                     episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
                     selection.append(season)
                     selection.append(episode)
