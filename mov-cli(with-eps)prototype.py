@@ -22,12 +22,13 @@ def data(q,ws=True,m=True,v=False):
     return display(choices)
 
 def page(info):
-    link = f'https://theflix.to/movie/{info[1]}-{info[0].lower().replace(" ","-")}'
+    link = f'https://theflix.to/movie/{info[1]}-{info[0].lower().replace(" ","-").replace(":","").replace(a,"").replace(".","")}'
     return (link,info[0])
 
 def wspage(info):
     print(info)
-    link = f'https://theflix.to/tv-show/{info[1]}-{info[0].lower().replace(" ","-")}/season-{info[-2]}/episode-{info[-1]}'
+    a = "'"
+    link = f'https://theflix.to/tv-show/{info[1]}-{info[0].lower().replace(" ","-").replace(":","").replace(a,"").replace(".","")}/season-{info[-2]}/episode-{info[-1]}'
     #https://theflix.to/tv-show/60574-peaky-blinders/season-6/episode-2
     #1=id,0=name,2=season,3=episode
     return (link,info[0])
@@ -54,7 +55,7 @@ def display(info):
                     season = ""
                     while season not in range(inf[-2]+1):
                         season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{inf[-2]}): ")
-                        episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{inf[1]}-{inf[0].lower().replace(' ','-').replace(a,'-').replace(':','')}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
+                        episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{inf[1]}-{inf[0].lower().replace(' ','-').replace(a,'-').replace(':','').replace('.','')}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
                         episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
                         with open(f'{inf[0]}.mp4','wb') as f:
                             url = cdnurl(wspage([inf[0],inf[1],season,episode])[0],inf[0])
@@ -80,7 +81,7 @@ def display(info):
                 if selection[-1] == "WS":
                     season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{selection[-2]}): ")
                     a = "'"
-                    episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{selection[1]}-{selection[0].lower().replace(' ','-').replace(a,'-').replace(':','')}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
+                    episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{selection[1]}-{selection[0].lower().replace(' ','-').replace(a,'-').replace(':','').replace('.','')}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
                     episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
                     selection.append(season)
                     selection.append(episode)
