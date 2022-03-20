@@ -34,7 +34,9 @@ class Movie:
         choice = ""
         while choice not in range(len(info) + 1):# or not choice == "q"
             choice = input(Fore.BLUE + "Enter choice: ")
-            if choice == "q":return
+            if choice == "q":
+                print(Fore.RESET + 'Bye!')
+                return                
             elif choice == "s":
                 q = input(Fore.BLUE + "[!] Please Enter the name of the Movie: ")
                 self.data(q)
