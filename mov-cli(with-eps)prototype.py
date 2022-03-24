@@ -75,7 +75,7 @@ def display(wm):
                         dl(cdnurl(wspage([name,chn[1],season,episode]), name)[0],f"{name}_S_{season}_EP_{episode}")
                 else:dl(cdnurl(page(inf)[0],inf[0])[0],name)
             except:
-                if len(info) < mov:print(Fore.RED + "Invalid Choice entered" )
+                if len(wm) < mov:print(Fore.RED + "Invalid Choice entered" )
                 else:print(Fore.RED + "Invalid choice entered")
         else:
             selection = wm[int(choice)-1]
