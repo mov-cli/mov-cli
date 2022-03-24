@@ -1,6 +1,6 @@
 import requests, json, os, re
 from bs4 import BeautifulSoup as BS
-from colorama import Fore
+from colorama import Fore, Style
 from sys import stdout as st
 
 def parse(q):return re.sub("\W+", "-", q.lower())
@@ -16,7 +16,11 @@ def query(q):
 
 def data(q,ws=True,m=True,v=False):return display(query(q))
 
-#def ask(ts):
+def ask(ts,id,name):
+    season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{ts}): ")
+    episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{id}-{name}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
+    episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
+    return (season,episodes,episode)
 
 def page(info):
     i = info[0]
@@ -37,12 +41,12 @@ def dl(url,name):
                 if i:
                     dl+=len(i)
                     f.write(i)
-                    done = int(50 * dl / tl)
-                    st.write("\r[%s%s]" % ('▋' * done, ' ' * (50-done)) )    
+                    done = int(50 * dl/tl)
+                    st.write("\r[%s%s]" % ('█'*done, ' '*(50-done)) )    
                     st.flush()
-                st.write('\n')
-                return print(Fore.RESET + f"Downloaded {name}")
-    except:return print(Fore.RESET + 'Unable to Download')
+        st.write('\n')
+        return print(Fore.RESET + f"Downloaded {name}")
+    except Exception as e:return print(Fore.RESET + f'Unable to Download: {e}')
 
 def play(info):
     link,info = cdnurl(info[0], info[1])
@@ -69,26 +73,22 @@ def display(wm):
                 if chn[-1] == "WS":
                     season = ""
                     while season not in range(chn[-2]+1):
-                        season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{chn[-2]}): ")
-                        episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{chn[1]}-{i}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
-                        episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
+                        season,episodes,episode = ask(chn[-2],chn[1],i)
                         dl(cdnurl(wspage([name,chn[1],season,episode]), name)[0],f"{name}_S_{season}_EP_{episode}")
                 else:dl(cdnurl(page(chn)[0],chn[0])[0],name)
-            except:
+            except Exception as e:
+                print(e)
                 if len(wm) < mov:print(Fore.RED + "Invalid Choice entered" )
                 else:print(Fore.RED + "Invalid choice entered")
         else:
             selection = wm[int(choice)-1]
             try:
                 if selection[-1] == "WS":
-                    season = input(Fore.LIGHTMAGENTA_EX + f"Please input the season number(total seasons:{selection[-2]}): ")
-                    episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{selection[1]}-{selection[0]}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
-                    episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
+                    season,episodes,episode = ask(selection[-2],selection[1],selection[0])
                     selection.append(season)
                     selection.append(episode)
                     play(wspage(selection))
                 else:play(page(selection))
-            except:
-                print(Fore.RED + "This episode is coming soon! or unable to play")
+            except:print(Fore.RED + "This episode is coming soon! or unable to play")
 
 data(input(Fore.BLUE + "[!] Please Enter the name of the Movie: "))
