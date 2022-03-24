@@ -73,7 +73,7 @@ def display(wm):
                         episodes = json.loads(BS(requests.get(f"https://theflix.to/tv-show/{chn[1]}-{i}/season-{season}/episode-1").text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons'][0]['numberOfEpisodes']
                         episode = input(Fore.LIGHTMAGENTA_EX + f"Please input the episode number(total episodes in {season}:{episodes}): ")
                         dl(cdnurl(wspage([name,chn[1],season,episode]), name)[0],f"{name}_S_{season}_EP_{episode}")
-                else:dl(cdnurl(page(inf)[0],inf[0])[0],name)
+                else:dl(cdnurl(page(chn)[0],chn[0])[0],name)
             except:
                 if len(wm) < mov:print(Fore.RED + "Invalid Choice entered" )
                 else:print(Fore.RED + "Invalid choice entered")
