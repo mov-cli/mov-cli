@@ -3,7 +3,12 @@ from bs4 import BeautifulSoup as BS
 from colorama import Fore, Style
 from sys import stdout as st
 
-def parse(q):return re.sub("\W+", "-", q.lower())
+def parse(q):
+    l = ""
+    for i in q[1:]:
+        if i.isupper():l += f" {i}"
+        else:l += i
+    return re.sub("\W+", "-", f"{q[0]}{l}".lower())
 
 def query(q):
     data = []
