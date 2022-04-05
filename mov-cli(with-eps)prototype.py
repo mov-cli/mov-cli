@@ -78,7 +78,7 @@ def display(wm):
                 if chn[-1] == "WS":
                     season = ""
                     while season not in range(chn[-2]+1):
-                        season,episodes,episode = ask(chn[-2],chn[1],i)
+                        season,episodes,episode = ask(chn[-2],chn[1],name)
                         dl(cdnurl(wspage([name,chn[1],season,episode]), name)[0],f"{name}_S_{season}_EP_{episode}")
                 else:dl(cdnurl(page(chn)[0],chn[0])[0],name)
             except Exception as e:
