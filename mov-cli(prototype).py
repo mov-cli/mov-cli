@@ -86,7 +86,6 @@ def dl(url,name):
 def redo():display(search())
 
 def display(wm):
-    print(wm)
     for ix,vl in enumerate(wm):print(Fore.GREEN + f"[{ix+1}] {vl[1]}", end="\n\n")
     print(red("[q] Exit!"), end="\n\n")
     print(yellow("[s] Search Again!"), end="\n\n")
