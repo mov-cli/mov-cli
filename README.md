@@ -1,6 +1,6 @@
 # mov-cli
 
-A cli to browse and watch movies. This tool scrapes the site [theflix](https://theflix.to).
+A cli to browse and watch movies. This tool scrapes the site [sflix](https://sflix.se).
 
 ## Installation
 This project is a work in progress
