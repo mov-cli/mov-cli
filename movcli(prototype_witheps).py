@@ -121,7 +121,7 @@ def display(wm):
                 iframe_url,mov_id = rab_id(sid)
                 key,num = key_num(iframe_url)
                 token = json.loads(gettoken(key))[1]
-                dl(m3u8(mov_id,token,num)["sources"][0]["file"],)
+                dl(m3u8(mov_id,token,num)["sources"][0]["file"],chn[1])
             else:
                 sid = return_server(chn[-1])
                 iframe_url,mov_id = rab_id(sid)
