@@ -37,8 +37,8 @@ err () {
 }
 
 get_query () {
-	if [ -z "$*" ]; then 
-		printf "search: "
+	if [ -z "$*" ]; then
+		[ "$is_show" -eq "0" ] && printf "search movie: " || printf "search tv-show: "
 		read -r movie
 	else
 		movie=$*
@@ -78,7 +78,9 @@ download () {
 get_show() {
 	query=$(printf "%s" "$movie" | tr " " "+")
 	data=$(curl -s "https://theflix.to/tv-shows/trending?search=$query")
-	result=$(printf "%s" "$data" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/.*"name":"([^"]*)","numberOfSeasons":(.*),.*numberOfEpisod.*"id":(.*),"available":true.*/\2 \3 \1/p' | fzf | tr "[:punct:]" " " | tr -s " " | tr ' |[:upper:]' '-|[:lower:]')
+	results=$(printf "%s" "$data" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/.*"name":"([^"]*)","numberOfSeasons":(.*),.*numberOfEpisod.*"id":(.*),"available":true.*/\2 \3 \1/p')
+	[ -z "$results" ] && die "No search results found"
+	result=$(printf "%s" "$results" | fzf | tr "[:punct:]" " " | tr -s " " | tr ' |[:upper:]' '-|[:lower:]')
 	[ -z "$result" ] && die "No tv-show selected"
 	build_id=$(printf "%s" "$data" | sed -nE 's/.*buildId\":"(.*)",.*run.*/\1/p')
 	result_id=$(printf "%s" "$result" | cut -d"-" -f2-)
@@ -89,7 +91,7 @@ get_show() {
 get_show_se() {
 	season=$(printf "%s" "$result" | cut -d"-" -f1)
 	input "Season" "$season" "0"
-	noofeps=$(printf "%s" "$show_all" | sed -nE "s/.*Season $season_choice\",\"numberOfEpisodes\":(.*),\"seasonN.*/\1/p")
+	noofeps=$(printf "%s" "$show_all" | sed -nE "s/\"name\":\".*$season_choice\",\"numberOfEpisodes\":(.*),\"seasonN.*/\1/p")
 	input "Episode" "$noofeps" "1"
 	get_ep_link "$season_choice" "$ep_no"
 }
@@ -103,7 +105,7 @@ get_ep_link(){
 
 get_movie () {
 	query=$(printf "%s" "$movie" | tr " " "+")
-	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p')
+	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p')
 	[ -z "$results" ] && die "No search results found"
 	movie_name=$(printf "$results" | cut -f2- | fzf)
 	[ -z "$movie_name" ] && die "No movie chosen"
