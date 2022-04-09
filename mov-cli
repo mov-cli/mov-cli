@@ -43,6 +43,7 @@ get_query () {
 	else
 		movie=$*
 	fi
+	query=$(printf "%s" "$movie" | tr " " "+")
 }
 
 get_token() {
@@ -54,7 +55,7 @@ input() {
 	read -r x
 	while [ -z "$x" ] || [ "$x" -lt "1" ] || [ "$x" -gt "$2" ];do 
 	    err "Invalid choice"
-	    printf "$c_yellow\t$1??(1-%s):$c_reset " "$2"
+	    printf "$c_yellow  $1??(1-%s):$c_reset " "$2"
 	    read -r x
 	done
 	[ "$3" -eq "0" ] && season_choice=$x || ep_no=$x 
@@ -76,7 +77,6 @@ download () {
 }
 
 get_show() {
-	query=$(printf "%s" "$movie" | tr " " "+")
 	data=$(curl -s "https://theflix.to/tv-shows/trending?search=$query")
 	results=$(printf "%s" "$data" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/.*"name":"([^"]*)","numberOfSeasons":(.*),.*numberOfEpisod.*"id":(.*),"available":true.*/\2 \3 \1/p')
 	[ -z "$results" ] && die "No search results found"
@@ -97,18 +97,19 @@ get_show_se() {
 }
 
 get_ep_link(){
-	id=$(printf "%s" "$show_all" | sed -nE "s/^\"episodeNumber\":$2,.*name.*\"seasonNumber\":$1.*videos\":\[\"(.*)\"\]/\1/p")
+	tput clear
+	id=$(printf "%s" "$show_all" | sed -nE "s/^\"episodeNumber\":$2,.*name.*\"seasonNumber\":$1,.*videos\":\[\"(.*)\"\]/\1/p")
 	[ -z "$id" ] && err "Episode doesn't exist on this site"
 	display=$(printf "%s S%s E%s" "$(printf "$result_id" | cut -d"-" -f2- | tr "-" " ")" "$1" "$2")
 	play_link "tv"
 }
 
 get_movie () {
-	query=$(printf "%s" "$movie" | tr " " "+")
 	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p')
 	[ -z "$results" ] && die "No search results found"
 	movie_name=$(printf "$results" | cut -f2- | fzf)
 	[ -z "$movie_name" ] && die "No movie chosen"
+	tput clear
 	id=$(printf "%s" "$results" | sed -n "s/\t$movie_name$//p")
 	display=$(printf "%s" "$movie_name" | tr -d '[:punct:]')
 	play_link "movies"
@@ -165,15 +166,14 @@ get_token
 while :; do
         printf "\n${c_green}Currently playing %s\n" "$display"
         printf "$c_blue(%s) %s$c_reset\n" "s" "search next"
-        [ "$is_show" -eq "1" ] && printf "$c_yellow(%s) %s$c_reset\n" "n" "next"
-        [ "$is_show" -eq "1" ] && printf "$c_cyan(%s) %s$c_reset\n" "p" "previous"
+        [ "$is_show" -eq "1" ] && [ "$ep_no" != "$noofeps" ] && printf "$c_yellow(%s) %s$c_reset\n" "n" "next"
+        [ "$is_show" -eq "1" ] && [ "$ep_no" != "1" ] && printf "$c_cyan(%s) %s$c_reset\n" "p" "previous"
         [ "$is_show" -eq "1" ] && printf "$c_green(%s) %s$c_reset\n" "c" "change season"
         [ "$is_show" -eq "1" ] && printf "$c_blue(%s) %s$c_reset\n" "e" "select episode"
 	printf "$c_magenta(%s) %s$c_reset\n" "d" "download current video"
 	printf "$c_red(%s) %s$c_reset\n" "q" "exit"
         printf "${c_green}Enter choice:$c_reset "
         read choice
-        printf "$c_reset"
         case $choice in
                 s)
 			get_query
@@ -185,7 +185,7 @@ while :; do
 			ep_no=$((ep_no + 1))
                         get_ep_link "$season_choice" "$ep_no";;
                 p)
-			ep_no=$((ep_no + 1))
+			ep_no=$((ep_no - 1))
                         get_ep_link "$season_choice" "$ep_no";;
                 e)
 			input "Episode" "$noofeps" "1"
