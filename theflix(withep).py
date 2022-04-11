@@ -68,7 +68,7 @@ def play(info,morep):
     except:print(Fore.RED + "Please install either mpv or vlc!")
 
 def display(wm):
-    for ix,vl in enumerate(wm):print(green(f"[{ix+1}] {vl[0]} {vl[-1]}", end="\n\n"))
+    for ix,vl in enumerate(wm):print(green(f"[{ix+1}] {vl[0]} {vl[-1]}"), end="\n\n")
     print(red("[q] Exit!"), end="\n\n")
     print(yellow("[s] Search Again!"), end="\n\n")
     print(cyan("[d] Download!"), end="\n\n")
