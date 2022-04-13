@@ -62,14 +62,20 @@ def play(link,sub_url):
     os.system(f'mpv --sub-file="{sub_url}" --referrer="https://secretlink.xyz" "{link}"')
 
 ###Main###
-def dl(url,name):
+def dl(url,sub_url,name):
+    r=requests.get(sub_url)
+    with open("english.srt",'wb') as f:
+        f.write(r.content)
+    f.close()
+    print(blue(f"Subtitle downloaded"))
+    
     os.system(f'ffmpeg -loglevel error -stats -i "{url}" -c copy "{name}.mp4"')
     return print(blue(f"Downloaded {name}"))
 
 def redo():display(search())
 
 def display(wm):
-    print(wm)
+    #print(wm)
     for ix,vl in enumerate(wm):print(Fore.GREEN + f"[{ix+1}] {vl[1]}", end="\n\n")
     print(red("[q] Exit!"), end="\n\n")
     print(yellow("[s] Search Again!"), end="\n\n")
@@ -80,14 +86,16 @@ def display(wm):
         if choice == "q":return print(lmagenta("Bye!"))
         elif choice == "s":return redo()
         elif choice == 'd':
-            # mov = int(input(yellow("[!] Please enter the number of the movie you want to download: ")))-1
-            # chn = wm[mov]
-            # sid = return_server(chn[-1])
-            # iframe_url,mov_id = rab_id(sid)
-            # key,num = key_num(iframe_url)
-            # token = json.loads(gettoken(key))[1]
-            # dl(m3u8(mov_id,token,num)["sources"][0]["file"],chn[1])
-            pass
+            mov = int(input(yellow("[!] Please enter the number of the movie you want to download: ")))-1
+            slection = wm[mov]
+            link = slection[0]
+            r=requests.get("https://secretlink.xyz"+link)
+            id =  re.findall(r'id="hId" value="(.*?)"',r.text)[0]
+            token1 = BS(r.text,'html.parser').select("#divU")[0].text
+            token2 = BS(r.text,'html.parser').select("#divP")[0].text
+            subtitle_url = f"https://secretlink.xyz/subtitle/movie/{id}/English.srt"
+            dl(get_link("https://secretlink.xyz"+link,id,token1,token2),subtitle_url,slection[1])
+            
         else:
             selection = wm[int(choice)-1]
             link = selection[0]
