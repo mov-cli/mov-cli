@@ -1,7 +1,7 @@
 '''
 based on:-
 https://github.com/alpha-hexor/solar-cli
-https://github.com/mov-cli/mov-cli/blob/main/movcli(prototype_witheps).py
+https://github.com/mov-cli/mov-cli/blob/main/theflix(withep).py
 '''
 
 
