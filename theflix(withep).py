@@ -20,6 +20,8 @@ def parse(q):
 
 def tok():return requests.post("https://theflix.to:5679/authorization/session/continue?contentUsageType=Viewing",data={"affiliateCode": "","pathname": "/"}).headers['Set-Cookie']
 
+def get_season_episode(link):return re.search(r'(?<=season-)\d+', link).group(), re.search(r'(?<=episode-)\d+', link).group()
+
 def query():
     q = input(blue("[!] Please Enter the name of the Movie: "))
     data = []
@@ -43,14 +45,16 @@ def page(info):return (f'https://theflix.to/movie/{info[1]}-{info[0]}',info[0])
 def wspage(info):return (f'https://theflix.to/tv-show/{info[1]}-{info[0]}/season-{info[-2]}/episode-{info[-1]}',f"{info[0]}_S_{info[-2]}_EP_{info[-1]}")
 
 def cdnurl(link,info,k):
-    f = json.loads(BS(requests.get(link,headers={'cookie':k}).text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['video']['id']
+    f = json.loads(BS(requests.get(link,headers={'cookie':k}).text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['movie']['videos'][0]#['video']['id']
     link = requests.get(f"https://theflix.to:5679/movies/videos/{f}/request-access?contentUsageType=Viewing",headers={'cookie':k}).json()['url']
     #thanks to CADES & CoolnsX (https://github.com/alpha-hexor,https://github.com/CoolnsX)
     return (link,info)
 
 def cdnurlep(link,info,k): 
-    f = json.loads(BS(requests.get(link,headers={'cookie':k}).text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['video']['id']
-    link = requests.get(f"https://theflix.to:5679/tv/videos/{f}/request-access?contentUsageType=Viewing",headers={'cookie':k}).json()['url']
+    s,ep = get_season_episode(link)
+    f = json.loads(BS(requests.get(link,headers={'cookie':k}).text,"html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps']['selectedTv']['seasons']#['video']['id']
+    epid = f[int(s)-1]['episodes'][int(ep)-1]['videos'][0]
+    link = requests.get(f"https://theflix.to:5679/tv/videos/{epid}/request-access?contentUsageType=Viewing",headers={'cookie':k}).json()['url']
     #thanks to CADES & CoolnsX (https://github.com/alpha-hexor,https://github.com/CoolnsX)
     return (link,info)
 
@@ -76,7 +80,7 @@ def display(wm):
     while choice not in range(len(wm)+1):
         choice = input(blue( "Enter choice: "))
         if choice == "q":return print(lmagenta("Bye!"))
-        elif choice == "s":return data(query())
+        elif choice == "s":return redo()
         elif choice == 'd':
             try:
                 mov = int(input(yellow("[!] Please enter the number of the movie you want to download: ")))-1
@@ -96,11 +100,11 @@ def display(wm):
             try:
                 selection = wm[int(choice)-1]
                 if selection[-1] == "WS":
-                    season,episodes,episode = ask(selection[-2],selection[1],selection[0])
+                    season,episodes,episode = ask(selection[-2],selection[1],selection[0],tok())
                     selection.append(season)
                     selection.append(episode)
                     play(wspage(selection),"WS")
                 else:play(page(selection),'MOVIE')
             except:print(red("This episode is coming soon! or unable to play"))
 
-data(query())
+redo()
