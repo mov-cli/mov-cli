@@ -3,10 +3,38 @@
 A cli to browse and watch movies.
 
 ## Installation
-This project is a work in progress
+This project is a work in progress.
+However, you can try it out
 
+### python
+
+```bash
+git clone https://github.com/mov-cli/mov-cli
+cd mov-cli
+python setup.py install
+```
+### Shell
+
+```bash
+git clone https://github.com/mov-cli/mov-cli
+cd mov-cli
+./mov-cli
+```
+
+## Known issues
+
+```
+1. The python version currently doesn't work on some systems(Windows).
+2. The read operation timed out.
+3. Numbers in titles from actvid, sflix & solar don't show up -> my bad regex.
+.
+.
+.
+Many more to be found.
+```
+*These issues will be fixed soon.*
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome and *appreciated*. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Inspiration
 Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
