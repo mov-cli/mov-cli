@@ -27,13 +27,8 @@ help_text () {
 	EOF
 }
 
-die () {
-	printf "$c_red%s$c_reset\n" "$*" >&2
-	exit 0
-}
-
-err () {
-	printf "$c_red%s$c_reset\n" "$*" >&2
+err () { 
+    printf "$c_red%s$c_reset\n" "$*" >&2 
 }
 
 get_query () {
@@ -47,13 +42,14 @@ get_query () {
 }
 
 get_token() {
+	printf "${c_blue}Fetching token.."
 	token=$(curl -X POST -sc - -o /dev/null "$base_url:5679/authorization/session/continue?contentUsageType=Viewing" -A "uwu" -H "Origin: $base_url" -e "$base_url" | sed -n 's/.*ipiid\t//p')
 }
 
 input() {
 	printf "$c_yellow  $1??(1-%s):$c_reset " "$2"
 	read -r x
-	while [ -z "$x" ] || [ "$x" -lt "1" ] || [ "$x" -gt "$2" ];do 
+	while [ -z "$x" ] || ! [ "$x" -eq "$x" ] 2>/dev/null || [ "$x" -lt "1" ] || [ "$x" -gt "$2" ];do
 	    err "Invalid choice"
 	    printf "$c_yellow  $1??(1-%s):$c_reset " "$2"
 	    read -r x
@@ -77,14 +73,18 @@ download () {
 }
 
 get_show() {
-	data=$(curl -s "https://theflix.to/tv-shows/trending?search=$query")
+	printf "\33[2K\r${c_blue}Searching query.."
+	data=$(curl -s "$base_url/tv-shows/trending?search=$query")
 	results=$(printf "%s" "$data" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/.*"name":"([^"]*)","numberOfSeasons":(.*),.*numberOfEpisod.*"id":(.*),"available":true.*/\2 \3 \1/p')
-	[ -z "$results" ] && die "No search results found"
+	[ -z "$results" ] && printf "\33[2K\r${c_red}No search results found${c_reset}" && exit 0
+	printf "\33[2K\r${c_green}Results found\n"
 	result=$(printf "%s" "$results" | fzf | tr "[:punct:]" " " | tr -s " " | tr ' |[:upper:]' '-|[:lower:]')
-	[ -z "$result" ] && die "No tv-show selected"
+	[ -z "$result" ] && err "No tv-show selected" && exit 0
+	printf "${c_magenta}selected $result\n${c_blue}Fetching season/episode list"
 	build_id=$(printf "%s" "$data" | sed -nE 's/.*buildId\":"(.*)",.*run.*/\1/p')
 	result_id=$(printf "%s" "$result" | cut -d"-" -f2-)
-	show_all=$(curl -s "https://theflix.to:443/_next/data/$build_id/tv-show/$result_id/season-1/episode-1.json" -b "theflix.ipiid=$token" | sed 's/selectedTvSeason.*//' | tr '{|}' '\n')
+	show_all=$(curl -s "$base_url:443/_next/data/$build_id/tv-show/$result_id/season-1/episode-1.json" -b "theflix.ipiid=$token" | sed 's/selectedTvSeason.*//' | tr '{|}' '\n')
+	printf "\33[2K\r${c_green}Seasons/Episodes list fetched\n"
 	get_show_se
 }
 
@@ -98,29 +98,33 @@ get_show_se() {
 
 get_ep_link(){
 	tput clear
+	printf "${c_blue}Loading Episode $2"
 	id=$(printf "%s" "$show_all" | sed -nE "s/^\"episodeNumber\":$2,.*name.*\"seasonNumber\":$1,.*videos\":\[\"(.*)\"\]/\1/p")
-	[ -z "$id" ] && err "Episode doesn't exist on this site"
 	display=$(printf "%s S%s E%s" "$(printf "$result_id" | cut -d"-" -f2- | tr "-" " ")" "$1" "$2")
-	play_link "tv"
+	[ -z "$id" ] && printf "\33[2K\r${c_red}Episode doesn't exist on this site${c_reset}" || play_link "tv"
 }
 
 get_movie () {
+	printf "\33[2K\r${c_blue}Searching query.."
 	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p')
-	[ -z "$results" ] && die "No search results found"
+	[ -z "$results" ] && printf "\33[2K\r${c_red}No search results found${c_reset}" && exit 0
+	printf "\33[2K\r${c_green}Results found\n"
 	movie_name=$(printf "$results" | cut -f2- | fzf)
-	[ -z "$movie_name" ] && die "No movie chosen"
+	[ -z "$movie_name" ] && err "No movie chosen" && exit 0
 	tput clear
-	id=$(printf "%s" "$results" | sed -n "s/\t$movie_name$//p")
+	printf "${c_blue}Fetching movie"
 	display=$(printf "%s" "$movie_name" | tr -d '[:punct:]')
+	id=$(printf "%s" "$results" | sed -n "s/\t$movie_name$//p")
 	play_link "movies"
 }
 
 play_link() {
+	printf "\33[2K\r${c_blue}Fetching video link"
 	video_link="$(curl -s "$base_url:5679/$1/videos/$id/request-access?contentUsageType=Viewing" -b "theflix.ipiid=$token" | sed -nE 's/.*url\":"([^"]*)",.*id.*/\1/p')"
 	if [ -z "$video_link" ];then 
-	    err "Video Url Not found" 
+	    printf "\33[2K\r${c_red}Video Url not found${c_reset}\n"
 	else
-	    printf "\n%s\n" "$video_link"
+	    printf "\33[2K\r${c_green}Video link fetched${c_reset}\n%s" "$video_link"
 	    if [ "$is_download" -eq "0" ];then
 		stream "$video_link" "$display"
 	    else
@@ -183,10 +187,10 @@ while :; do
 			download "$video_link" "$display";;
                 n)
 			ep_no=$((ep_no + 1))
-                        get_ep_link "$season_choice" "$ep_no";;
+			[ "$ep_no" -gt "$noofeps" ] && err "Episode out of range" && ep_no=$((ep_no - 1)) || get_ep_link "$season_choice" "$ep_no";;
                 p)
 			ep_no=$((ep_no - 1))
-                        get_ep_link "$season_choice" "$ep_no";;
+			[ "$ep_no" -lt "1" ] && err "Episode out of range" && ep_no=$((ep_no + 1)) || get_ep_link "$season_choice" "$ep_no";;
                 e)
 			input "Episode" "$noofeps" "1"
                         get_ep_link "$season_choice" "$ep_no";;
