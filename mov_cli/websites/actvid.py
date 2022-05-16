@@ -65,7 +65,7 @@ class Actvid(WebScraper):
         soup = BS(html, 'html.parser')
         urls = [i['href'] for i in soup.select('.film-poster-ahref')]
         mov_or_tv = ["MOVIE" if i['href'].__contains__('/movie/') else "TV" for i in soup.select('.film-poster-ahref')]
-        title = [re.sub(pattern="full|/tv/|/movie/|hd|watch|[0-9]*", repl='', string=" ".join(i.split("-"))) for i in
+        title = [re.sub(pattern="full|/tv/|/movie/|hd|watch|[0-9]{2,}", repl='', string=" ".join(i.split("-"))) for i in
                  urls]
         ids = [i.split('-')[-1] for i in urls]
         return [list(sublist) for sublist in zip(mov_or_tv, urls, title, ids)]
