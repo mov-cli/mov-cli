@@ -15,7 +15,9 @@ calls = {
     'solar': Solar
 }
 
-os.system('color FF') # Fixes colour in Windows 10 CMD terminal.
+# Fixes colour in Windows 10 CMD terminal.
+if sys.platform == "win32":
+    os.system('color FF') 
 
 @click.command()
     # @click.option('--name', prompt='The name of the movie/series with the provider',
