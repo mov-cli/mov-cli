@@ -1,4 +1,5 @@
 import sys
+import os
 
 import click
 
@@ -13,6 +14,8 @@ calls = {
     'sflix': Sflix,
     'solar': Solar
 }
+
+os.system('color FF') # Fixes colour in Windows 10 CMD terminal.
 
 @click.command()
     # @click.option('--name', prompt='The name of the movie/series with the provider',
