@@ -17,18 +17,17 @@ help_text () {
 	    ${0##*/} [-v] [<query>]
 	    ${0##*/} [-t] [<query>]
 	    ${0##*/} -h
-	
+
 	Options:
 	    -h show helptext
 	    -d download video
 	    -t search tv-show (default search:movies)
 	    -p download video to specified directory
-	    -v use VLC as the media player
 	EOF
 }
 
-err () { 
-    printf "$c_red%s$c_reset\n" "$*" >&2 
+err () {
+    printf "$c_red%s$c_reset\n" "$*" >&2
 }
 
 get_query () {
@@ -54,16 +53,14 @@ input() {
 	    printf "$c_yellow  $1??(1-%s):$c_reset " "$2"
 	    read -r x
 	done
-	[ "$3" -eq "0" ] && season_choice=$x || ep_no=$x 
+	[ "$3" -eq "0" ] && season_choice=$x || ep_no=$x
 	unset x
 }
 
 stream () {
-	case $player_fn in 
-		vlc)
-			setsid -f "$player_fn" --http-referrer="$base_url" "$1" > /dev/null 2>&1;;
+	case $player_fn in
 		mpv)
-			setsid -f "$player_fn" "$1" --referrer="$base_url" --force-media-title="$2" > /dev/null 2>&1;;
+      mpv $1
 	esac
 }
 
@@ -121,7 +118,7 @@ get_movie () {
 play_link() {
 	printf "\33[2K\r${c_blue}Fetching video link"
 	video_link="$(curl -s "$base_url:5679/$1/videos/$id/request-access?contentUsageType=Viewing" -b "theflix.ipiid=$token" | sed -nE 's/.*url\":"([^"]*)",.*id.*/\1/p')"
-	if [ -z "$video_link" ];then 
+	if [ -z "$video_link" ];then
 	    printf "\33[2K\r${c_red}Video Url not found${c_reset}\n"
 	else
 	    printf "\33[2K\r${c_green}Video link fetched${c_reset}\n%s" "$video_link"
@@ -151,9 +148,6 @@ while getopts 'dhtp:v' OPT; do
                 p)
                         is_download=1
 			download_dir=$OPTARG
-                        ;;
-                v)
-                        player_fn="vlc"
                         ;;
                 *|h)
                         help_text
