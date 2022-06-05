@@ -28,6 +28,8 @@ if platform.system() == 'Windows':
 # TODO doesn't work fully yet
 # @click.option('--regex', default=None, help='allows you to apply regexes to the search queries')
 def main():  # TODO add regex
+    for i in calls.keys():
+        print(i)
     name = input("Please name the movie/series with the provider, ex: theflix: ").lower()
     # name, query = name.replace("'", '').replace('"', '').split(';')
     try:
