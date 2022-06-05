@@ -10,14 +10,12 @@ from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 
 
-
-
 class Theflix(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
 
-    def parse(self, text: str): 
+    def parse(self, text: str):
         name = f"{text[0].lower()}{''.join([f' {i}' if i.isupper() else i for i in text[1:]]).lower().rstrip('.')}"
         return re.sub("\W+", "-", name)
 
@@ -54,10 +52,12 @@ class Theflix(WebScraper):
     def cdnurl(self, link, info, k):
         self.client.set_headers({'Cookie': k})
         objid = \
-            json.loads(BS(self.client.get(link).text, "html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps'][
+            json.loads(BS(self.client.get(link).text, "html.parser").select('#__NEXT_DATA__')[0].text)['props'][
+                'pageProps'][
                 'movie']['videos'][0]  # ['video']['id']
         self.client.set_headers({'Cookie': k})
-        link = self.client.get(f"https://theflix.to:5679/movies/videos/{objid}/request-access?contentUsageType=Viewing").json()['url']
+        link = self.client.get(
+            f"https://theflix.to:5679/movies/videos/{objid}/request-access?contentUsageType=Viewing").json()['url']
         return link, info
 
     def get_season_episode(self, link):
@@ -66,7 +66,8 @@ class Theflix(WebScraper):
     def cdnurlep(self, link, info, k):
         s, ep = self.get_season_episode(link)
         self.client.set_headers({'Cookie': k})
-        f = json.loads(BS(self.client.get(link).text, "html.parser").select('#__NEXT_DATA__')[0].text)['props']['pageProps'][
+        f = json.loads(BS(self.client.get(link).text, "html.parser").select('#__NEXT_DATA__')[0].text)['props'][
+            'pageProps'][
             'selectedTv']['seasons']
         # ['props']['pageProps']['selectedTv']['seasons']  # ['video']['id']
         try:
@@ -83,7 +84,9 @@ class Theflix(WebScraper):
                                                                                     "theflix"))
             sys.exit()
         self.client.set_headers({'Cookie': k})
-        link = self.client.get(f"https://theflix.to:5679/tv/videos/{epid}/request-access?contentUsageType=Viewing").json()['url']
+        link = \
+            self.client.get(f"https://theflix.to:5679/tv/videos/{epid}/request-access?contentUsageType=Viewing").json()[
+                'url']
         # thanks to CADES & CoolnsX (https://github.com/alpha-hexor,https://github.com/CoolnsX)
         return link, info
 
