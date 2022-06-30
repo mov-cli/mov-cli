@@ -62,7 +62,7 @@ class Theflix(WebScraper):
             if i["available"]
         ]:
             data.append(k)
-        if len(data):
+        if not len(data):
             print(self.red("No Results found"), self.lmagenta("Bye!"))
             sys.exit(1)
         else:
