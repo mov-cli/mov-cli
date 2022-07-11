@@ -20,7 +20,11 @@ git clone https://github.com/mov-cli/mov-cli
 cd mov-cli
 ./mov-cli
 ```
-https://cdn.discordapp.com/attachments/987342230211686472/995914171948482570/showcase.mov
+
+https://user-images.githubusercontent.com/83706294/178190967-8d12bb6d-b8f2-473e-a3d0-031106c4a623.mov
+
+
+
 
 ## Known issues
 
