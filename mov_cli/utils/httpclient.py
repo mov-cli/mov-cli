@@ -2,7 +2,7 @@ import sys
 
 import httpx
 
-default_header = {
+default_header: dict = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/80.0.3987.163 "
     "Safari/537.36",
@@ -11,10 +11,12 @@ default_header = {
 
 
 class HttpClient:
-    def __init__(self, headers=default_header):
+    def __init__(self, headers: dict = None):
+        if headers is None:
+            headers = default_header
         self.session = httpx.Client(timeout=10.0, headers=headers)
 
-    def get(self, page):
+    def get(self, page: str) -> httpx.Response:
         print(page)
         try:
             req = self.session.get(page)
@@ -27,7 +29,7 @@ class HttpClient:
             sys.exit(-1)
         return req
 
-    def post(self, page, data):
+    def post(self, page: str, data: dict) -> httpx.Response:
         try:
             req = self.session.post(page, data=data)
             self.session.headers["Referer"] = page
@@ -39,8 +41,10 @@ class HttpClient:
             sys.exit(-1)
         return req
 
-    def set_headers(self, header):
+    def set_headers(self, header: dict) -> None:
         self.session.headers = header
+        # do not use this!
 
-    def add_elem(self, key, value):
-        self.session.headers[key] = value
+    def add_elem(self, elements: dict) -> None:
+        for i in elements.items():
+            self.session.headers[i[0]] = i[1]

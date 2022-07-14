@@ -1,6 +1,6 @@
 import sys
 
-import httpx
+# import httpx
 
 sys.path.append("..")
 
@@ -33,9 +33,9 @@ class OlgPly(WebScraper):
             f"https://olgply.com/api/?imdb={imdb_id}",
             headers={
                 "User-Agent": "Mozilla/5.0 (X11; Linux "
-                "x86_64; rv:100.0) "
-                "Gecko/20100101 "
-                "Firefox/100.0"
+                              "x86_64; rv:100.0) "
+                              "Gecko/20100101 "
+                              "Firefox/100.0"
             },
         ).text
         url = re.findall(r"https?:[a-zA-Z\d.+-/#~]+\.mp4", req)
@@ -51,14 +51,14 @@ class OlgPly(WebScraper):
             f"https://olgply.com/api/?imdb={imdb_id}&season={season}&episode={episode}",
             headers={
                 "User-Agent": "Mozilla"
-                "/5.0 ("
-                "X11; "
-                "Linux "
-                "x86_64; "
-                "rv:100"
-                ".0) "
-                "Gecko"
-                "/20100101 Firefox/100.0"
+                              "/5.0 ("
+                              "X11; "
+                              "Linux "
+                              "x86_64; "
+                              "rv:100"
+                              ".0) "
+                              "Gecko"
+                              "/20100101 Firefox/100.0"
             },
         ).text
         url = re.findall(r"https?:[a-zA-Z\d_.+-/#~]+\.mp4", req)
@@ -102,7 +102,7 @@ class OlgPly(WebScraper):
                             )
                         )
                         - 1
-                    ]
+                        ]
                     name = mov[0]
                     if mov[-1] == "TV":
                         cdnurl, name = self.ask(mov[2], name)
@@ -131,12 +131,13 @@ class OlgPly(WebScraper):
                     cdn, name = self.cdn_url(selection[0])
                     self.play(cdn, name)
 
-    def redo(self, query: str = None):
+    def redo(self, query: str = None, result: int = None):
         if query is None:
             return self.display(self.search())
         else:
             return self.display(self.search(query))
 
-
 # f = OlgPly()
 # OlgPly.cdnurl(OlgPly.search()[0][2])
+
+## Has not been edited since olgply is down

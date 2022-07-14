@@ -14,6 +14,11 @@ class Theflix(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
+        self.token = self.auth_token()
+        self.aid = 1
+        self.m_available = -3
+        self.t_available = -2
+        self.seasons = -1
 
     def parse(self, text: str):
         name = f"{text[0].lower()}{''.join([f' {i}' if i.isupper() else i for i in text[1:]]).lower().rstrip('.')}"
@@ -27,7 +32,7 @@ class Theflix(WebScraper):
             data={"affiliateCode": "", "pathname": "/"},
         ).headers["Set-Cookie"]
 
-    def search(self, query: str = None):
+    def search(self, query: str = None) -> list:
         q = (
             input(self.blue("[!] Please Enter the name of the Movie: "))
             if query is None
@@ -35,7 +40,7 @@ class Theflix(WebScraper):
         )
         data = []
         for j in [
-            [self.parse(i["name"]), i["id"], i["available"], i["numberOfSeasons"], "WS"]
+            [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"]]
             for i in json.loads(
                 BS(
                     self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
@@ -48,7 +53,7 @@ class Theflix(WebScraper):
         ]:
             data.append(j)
         for k in [
-            [self.parse(i["name"]), i["id"], i["available"], "MOVIE"]
+            [self.parse(i["name"]), i["id"], "MOVIE", i["available"]]
             for i in json.loads(
                 BS(
                     self.client.get(
@@ -62,7 +67,7 @@ class Theflix(WebScraper):
             if i["available"]
         ]:
             data.append(k)
-        if len(data):
+        if not len(data):
             print(self.red("No Results found"), self.lmagenta("Bye!"))
             sys.exit(1)
         else:
@@ -83,9 +88,7 @@ class Theflix(WebScraper):
             BS(self.client.get(link).text, "html.parser")
             .select("#__NEXT_DATA__")[0]
             .text
-        )["props"]["pageProps"]["movie"]["videos"][
-            0
-        ]
+        )["props"]["pageProps"]["movie"]["videos"][0]
         self.client.set_headers({"Cookie": k})
         link = self.client.get(
             f"https://theflix.to:5679/movies/videos/{objid}/request-access?contentUsageType=Viewing"
@@ -153,7 +156,8 @@ class Theflix(WebScraper):
         )
         return season, episodes, episode
 
-    def display(self, result):
+    """def display(self, result: list, result_no: int = None):
+        print(result_no)
         for ix, vl in enumerate(result):
             print(self.green(f"[{ix + 1}] {vl[0]} {vl[-1]}"), end="\n\n")
         print(self.red("[q] Exit!"), end="\n\n")
@@ -161,7 +165,9 @@ class Theflix(WebScraper):
         print(self.cyan("[d] Download!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
-            choice = input(self.blue("Enter your choice: "))
+            choice = (
+                input(self.blue("Enter your choice: ")) if not result_no else result_no
+            )
             if choice == "q":
                 sys.exit()
             elif choice == "s":
@@ -218,10 +224,34 @@ class Theflix(WebScraper):
                 else:
                     page = self.page(selection)
                     cdn, name = self.cdnurl(page[0], selection[0], token)
-                    self.play(cdn, name)
+                    self.play(cdn, name)"""
 
-    def redo(self, query: str = None):
-        if query is None:
-            return self.display(self.search())
-        else:
-            return self.display(self.search(query))
+    def SandR(self, q: str = None):
+        return self.search(q)
+
+    def MOV_PandDP(self, m: list, state: str = "d" or "p"):
+        name = m[self.title]
+        page = self.page(m)
+        url, name = self.cdnurl(page[0], name, self.token)
+        if state == "d":
+            self.dl(url, name)
+            return
+        self.play(url, name)
+
+    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+        name = t[self.title]
+        season, episodes, episode = self.ask(
+            t[self.seasons], t[self.aid], name, self.token
+        )
+        page, name = self.wspage([name, t[1], season, episode])
+        cdn, name = self.cdnurlep(page, name, self.token)
+        if state == "d":
+            self.dl(cdn, name)
+            return
+        self.play(cdn, name)
+
+    # def redo(self, query: str = None, result: int = None):
+    #    if query is None:
+    #        return self.display(self.search(), result)
+    #    else:
+    #        return self.display(self.search(query), result)

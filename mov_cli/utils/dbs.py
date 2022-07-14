@@ -4,7 +4,7 @@ import httpx
 from bs4 import BeautifulSoup as BS
 
 
-def get_tmdb_id(query: str):
+def get_tmdb_id(query: str) -> list:
     req, res = (
         httpx.get(f"https://www.themoviedb.org/search?query={query}").text,
         httpx.get(f"https://www.themoviedb.org/search/tv?query={query}").text,
@@ -22,7 +22,7 @@ def get_tmdb_id(query: str):
     # TODO title, url , id, mv_tv
 
 
-def get_imdb_id(query):
+def get_imdb_id(query: str) -> str:
     query = query.replace(" ", "_")
     req = httpx.get(
         f"https://v2.sg.media-imdb.com/suggestion/{query[0].lower()}/{query}.json"
@@ -31,7 +31,7 @@ def get_imdb_id(query):
     return req[0]["id"]
 
 
-def get_season_seasons(tmdb_id, name):
+def get_season_seasons(tmdb_id: str, name: str) -> int:
     req = httpx.get(
         f"https://www.themoviedb.org/tv/{tmdb_id}-{parse(name)}/seasons"
     ).text
@@ -40,7 +40,7 @@ def get_season_seasons(tmdb_id, name):
     return len(seasons)
 
 
-def get_season_episodes(tmdb_id, name, season_number):
+def get_season_episodes(tmdb_id: str, name: str, season_number: str) -> int:
     req = httpx.get(
         f"https://www.themoviedb.org/tv/{tmdb_id}-{parse(name)}/season/{season_number}"
     ).text
@@ -48,5 +48,5 @@ def get_season_episodes(tmdb_id, name, season_number):
     return episodes
 
 
-def parse(text: str):
-    return re.sub("\W+", "-", text.lower())
+def parse(text: str) -> str:
+    return re.sub(r"\W+", "-", text.lower())

@@ -28,6 +28,7 @@ cd mov-cli
 2. The read operation timed out. -> fixed.
 3. Numbers in titles from actvid, sflix & solar don't show up -> my bad regex. -> fixed.
 4. Downloads Don't work.
+5. Theflix; no results found. -> fixed
 .
 .
 .

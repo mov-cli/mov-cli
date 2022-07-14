@@ -17,29 +17,35 @@ calls = {
     "solar": [Solar, "https://solarmovie.pe"],
     "olgply": [OlgPly, "https://oglply.com"],
 }
-# write a function to get the current platform
+
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
 
 
 @click.command()
-# @click.option('--name', prompt='The name of the movie/series with the provider',
-#              help='The name of the movie/series with the provide, ex: "theflix;friends"')
-# TODO doesn't work fully yet
-# @click.option('--regex', default=None, help='allows you to apply regexes to the search queries')
-def main():  # TODO add regex
-    for i in calls.keys():
-        print(i)
-    name = input(
-        "Please name the movie/series with the provider, ex: theflix: "
-    ).lower()
-    # name, query = name.replace("'", '').replace('"', '').split(';')
+@click.option(
+    "-p",
+    "--provider",
+    prompt=f"actvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
+    help='The name of the provider ex: "theflix"',
+    default="theflix",
+)
+@click.option("-q", "--query", default=None, help="Your search query")
+@click.option(
+    "-r",
+    "--result",
+    default=None,
+    help="The Result Number you want to be played",
+    type=int,
+)
+def main(provider, query, result):  # TODO add regex
     try:
-        provider_data = calls.get(name, calls["theflix"])
+        provider_data = calls.get(provider, calls["theflix"])
         provider = provider_data[0](provider_data[1])
-        provider.redo()
-    except KeyError:
-        print("[!] Sorry I don't know that provider!")
+        # provider.redo(query) if query is not None else provider.redo()
+        provider.redo(query, result)  # if result else provider.redo(query)
+    except Exception as e:
+        print("[!] Sorry I don't know that provider! | ", e)
         sys.exit(2)
 
 

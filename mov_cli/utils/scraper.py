@@ -1,11 +1,16 @@
-import re
-import os
-import sys
 import logging
+import os
 import platform
+import re
+import subprocess
+import sys
+
+# import shlex
+# required for development
+
+from colorama import Fore, Style
 
 from .httpclient import HttpClient
-from colorama import Fore, Style
 
 
 def determine_path() -> str:
@@ -13,71 +18,170 @@ def determine_path() -> str:
     if plt == "Windows":
         return f"C://Users//{os.getenv('username')}//Downloads"
     elif (plt == "Linux") or (plt == "Darwin"):
-        return r"~/Downloads"
+        return f"/home/{os.getlogin()}/Downloads"
     else:
         print("Please open an issue for your os")
         sys.exit(-2)
 
 
 class WebScraper:
-    def __init__(self, base_url) -> None:
+    def __init__(self, base_url: str) -> None:
         self.client = HttpClient()
         self.base_url = base_url
+        self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
         pass
 
-    def blue(self, txt: str) -> str:
+    @staticmethod
+    def blue(txt: str) -> str:
         return f"{Fore.BLUE}{txt}{Style.RESET_ALL}"
 
-    def yellow(self, txt: str) -> str:
+    @staticmethod
+    def yellow(txt: str) -> str:
         return f"{Fore.YELLOW}{txt}{Style.RESET_ALL}"
 
-    def red(self, txt: str) -> str:
+    @staticmethod
+    def red(txt: str) -> str:
         return f"{Fore.RED}{txt}{Style.RESET_ALL}"
 
-    def lmagenta(self, txt: str) -> str:
+    @staticmethod
+    def lmagenta(txt: str) -> str:
         return f"{Fore.LIGHTMAGENTA_EX}{txt}{Style.RESET_ALL}"
 
-    def cyan(self, txt: str) -> str:
+    @staticmethod
+    def cyan(txt: str) -> str:
         return f"{Fore.CYAN}{txt}{Style.RESET_ALL}"
 
-    def green(self, txt: str) -> str:
+    @staticmethod
+    def green(txt: str) -> str:
         return f"{Fore.GREEN}{txt}{Style.RESET_ALL}"
 
-    def parse(self, txt: str) -> str:
-        return re.sub("\W+", "-", txt.lower())
-
-    def search(self, q: str = None) -> str:
-        return NotImplementedError()
-
-    def results(self, data: str) -> list:
-        return NotImplementedError()
+    @staticmethod
+    def parse(txt: str) -> str:
+        return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
         self, url: str, name: str, path: str = determine_path(), subtitle: str = None
-    ):  # "./"
-        if not subtitle:
-            os.system(
-                f'ffmpeg -loglevel error -stats -i "{url}" -c copy {path}/{name}.mp4'
+    ):
+        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {path}/{self.parse(name)}.mp4')
+        args = [
+            "ffmpeg",
+            "-i",
+            f"{url}",
+            "-c",
+            "copy",
+            f"{path}/{self.parse(name)}.mp4",
+        ]
+        if subtitle:
+            # args.extend(f'-vf subtitle="{subtitle}" {path}/{self.parse(name)}.mp4')
+            args.extend(
+                ["-vf", f"subtitle={subtitle}", f"{path}/{self.parse(name)}.mp4"]
             )
-            return print(self.blue(f"Downloaded {name} at {path}"))
-        os.system(
-            f'ffmpeg -loglevel error -stats -i "{url}" -i {subtitle} -c copy -c:s mov_text"{path}/{name}.mp4"'
-        )
-        # ! The subtitles are not synced with the video
-        return print(self.blue(f"Downloaded {name} at {path}"))
+        ffmpeg_process = subprocess.Popen(args)
+        ffmpeg_process.wait()
+        return print(f"Downloaded at {path}")
 
     def play(self, url: str, name: str):
         try:
             try:
-                os.system(
-                    f'mpv --referrer="{self.base_url}" "{url}" --force-media-title="mov-cli:{name}"'
+                args = [
+                    "mpv",
+                    f"--referrer={self.base_url}",
+                    f"{url}",
+                    f"--force-media-title=mov-cli:{name}",
+                    "--no-terminal",
+                ]
+                mpv_process = subprocess.Popen(
+                    args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
-            except ModuleNotFoundError:  ##why do you even exist if you don't have MPV installed? WHY?
-                os.system(
-                    f'vlc --http-referrer="{self.base_url}" "{url}" --meta-title="mov-cli{name}"'
+                mpv_process.wait()
+            except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
+                args = [
+                    "vlc",
+                    f"--http-referrer={self.base_url}",
+                    f"{url}",
+                    f"--meta-title=mov-cli{name}",
+                    "--no-terminal",
+                ]
+                vlc_process = subprocess.Popen(
+                    args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                vlc_process.wait()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
             logging.log(logging.ERROR, txt)
             # print(txt)  # TODO implement logging to a file
             sys.exit(1)
+
+    def search(self, q: str = None) -> str:
+        pass
+        # return NotImplementedError()
+
+    def results(self, data: str) -> list:
+        pass
+        # return NotImplementedError()
+
+    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+        pass
+
+    def MOV_PandDP(self, m: list, state: str = "d" or "p"):
+        pass
+
+    def SandR(self, q: str = None):
+        return self.results(self.search(q))
+
+    def display(self, q: str = None, result_no: int = None):
+        result = self.SandR(q)
+        for ix, vl in enumerate(result):
+            print(
+                self.green(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}"), end="\n\n"
+            )
+        print(self.red("[q] Exit!"), end="\n\n")
+        print(self.yellow("[s] Search Again!"), end="\n\n")
+        print(self.cyan("[d] Download!"), end="\n\n")
+        choice = ""
+        while choice not in range(len(result) + 1):
+            choice = (
+                input(self.blue("Enter your choice: ")) if not result_no else result_no
+            )
+            if choice == "q":
+                sys.exit()
+            elif choice == "s":
+                return self.redo()
+            elif choice == "d":
+                try:
+                    mov_or_tv = result[
+                        int(
+                            input(
+                                self.yellow(
+                                    "[!] Please enter the number of the movie you want to download: "
+                                )
+                            )
+                        )
+                        - 1
+                    ]
+                    if mov_or_tv[self.mv_tv] == "TV":
+                        self.TV_PandDP(mov_or_tv, "d")
+                    else:
+                        self.MOV_PandDP(mov_or_tv, "d")
+                except ValueError as e:
+                    print(
+                        self.red(f"[!]  Invalid Choice Entered! | "),
+                        self.lmagenta(str(e)),
+                    )
+                    sys.exit(1)
+                except IndexError as e:
+                    print(
+                        self.red(f"[!]  This Episode is coming soon! | "),
+                        self.lmagenta(str(e)),
+                    )
+                    sys.exit(2)
+            else:
+                mov_or_tv = result[int(choice) - 1]
+                if mov_or_tv[self.mv_tv] == "TV":
+                    self.TV_PandDP(mov_or_tv, "p")
+                else:
+                    self.MOV_PandDP(mov_or_tv, "p")
+
+    def redo(self, search: str = None, result: int = None):
+        print(result)
+        return self.display(search, result)

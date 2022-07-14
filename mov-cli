@@ -19,7 +19,7 @@ help_text () {
 	    ${0##*/} -h
 	
 	Options:
-	    -h show helptext
+	    -h show help-text
 	    -d download video
 	    -t search tv-show (default search:movies)
 	    -p download video to specified directory
@@ -69,7 +69,7 @@ stream () {
 
 download () {
 	printf "${c_blue}Downloading %s${c_reset}\n" "$2"
-	aria2c --summary-interval=0 -x 16 -s 16 --referer="$base_url" "$1" --dir=$download_dir -o "${2}.mp4" --download-result=hide
+	aria2c --summary-interval=0 -x 16 -s 16 --referer="$base_url" "$1" --dir="$download_dir" -o "${2}.mp4" --download-result=hide
 }
 
 get_show() {
@@ -177,7 +177,7 @@ while :; do
 	printf "$c_magenta(%s) %s$c_reset\n" "d" "download current video"
 	printf "$c_red(%s) %s$c_reset\n" "q" "exit"
         printf "${c_green}Enter choice:$c_reset "
-        read choice
+        read -r choice
         case $choice in
                 s)
 			get_query
