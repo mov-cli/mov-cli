@@ -9,9 +9,7 @@ However, you can try it out
 ### python
 
 ```bash
-git clone https://github.com/mov-cli/mov-cli
-cd mov-cli
-python setup.py install
+pip install git+https://github.com/mov-cli/mov-cli
 ```
 ### Shell
 
