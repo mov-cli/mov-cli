@@ -29,6 +29,7 @@ cd mov-cli
 3. Numbers in titles from actvid, sflix & solar don't show up -> my bad regex. -> fixed.
 4. Downloads Don't work.
 5. Theflix; no results found. -> fixed
+6. Olgply doesn't work.
 .
 .
 .
