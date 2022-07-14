@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mov-cli",
-    version="0.0.1a",
+    version="0.1.0",
     author="pain@poseidon444",
     author_email="painedposeidon444@gmail.com",
     description="A module to download and stream your favorite movies and series.",
