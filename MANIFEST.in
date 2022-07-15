@@ -1,0 +1,4 @@
+include LICENSE
+include requirements.txt
+include mov_cli/utils/*
+include mov_cli/websites/*
