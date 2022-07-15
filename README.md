@@ -8,15 +8,13 @@ However, you can try it out
 
 ### python
 
-```bash
+```python
 pip install git+https://github.com/mov-cli/mov-cli
 ```
 ### Shell
 
 ```bash
-git clone https://github.com/mov-cli/mov-cli
-cd mov-cli
-./mov-cli
+sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
 ```
 
 ## Known issues
