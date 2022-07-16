@@ -1,4 +1,0 @@
-click
-httpx
-beautifulsoup4
-colorama
