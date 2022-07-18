@@ -1,6 +1,6 @@
 #+TITLE:Disclaimer
 
-* This project: flix-cli
+* This project: mov-cli
 
 
 The core aim of this project is to co-relate automation and efficiency to extract what is provided to an user on the internet. Every content available in the project is hosted by external non-affiliated sources. 
