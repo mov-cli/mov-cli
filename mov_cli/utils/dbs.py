@@ -13,12 +13,15 @@ def get_tmdb_id(query: str) -> list:
     titles = [i.text for i in rem.select("a.result > h2")] + [
         i.text for i in ram.select("a.result > h2")
     ]
+    releases = [(i.text)[-4:] for i in rem.select("span.release_date")] + [
+        (i.text)[-4:] for i in ram.select("span.release_date")
+    ]
     url = [f"https://olgply.com{i['href']}" for i in rem.select("a.result")] + [
         f"https://https://olgply.com{i['href']}" for i in ram.select("a.result")
     ]
     tmdb_id = [re.sub(r"\D+", "", i) for i in url]
     mv_tv = ["MOVIE" if i.__contains__("movie") else "TV" for i in url]
-    return [list(i) for i in zip(titles, url, tmdb_id, mv_tv)]
+    return [list(i) for i in zip(titles, releases, url, tmdb_id, mv_tv)]
     # TODO title, url , id, mv_tv
 
 
@@ -44,7 +47,8 @@ def get_season_episodes(tmdb_id: str, name: str, season_number: str) -> int:
     req = httpx.get(
         f"https://www.themoviedb.org/tv/{tmdb_id}-{parse(name)}/season/{season_number}"
     ).text
-    episodes = int(BS(req, "html.parser").select_one(".episode_sort.space > span").text)
+    episodes = int(BS(req, "html.parser").select_one(
+        ".episode_sort.space > span").text)
     return episodes
 
 
