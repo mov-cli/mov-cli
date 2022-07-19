@@ -80,7 +80,7 @@ class OlgPly(WebScraper):
 
     def display(self, result):
         for ix, vl in enumerate(result):
-            print(self.green(f"[{ix + 1}] {vl[0]} {vl[-1]}"), end="\n\n")
+            print(self.green(f"[{ix + 1}] {vl[0]} ({vl[1]}) {vl[-1]}"), end="\n\n")
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")

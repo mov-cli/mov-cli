@@ -41,3 +41,7 @@ class Solar(Actvid):
             f"https://rabbitstream.net/ajax/embed-4/getSources?id={rabbid}&_token={rose}&_number={num}"
         ).json()["sources"][0]["file"]
         return data
+
+    def get_release_years(self, soup):
+        return filter(
+            lambda x: x.isdigit() or (x.removeprefix('SS ')).isdigit(), [i.text for i in soup.select("div.fd-infor > span.fdi-item")])

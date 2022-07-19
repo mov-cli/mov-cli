@@ -40,7 +40,7 @@ class Theflix(WebScraper):
         )
         data = []
         for j in [
-            [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"]]
+                [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"], i["releaseDate"][0:4]]
             for i in json.loads(
                 BS(
                     self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
@@ -53,7 +53,7 @@ class Theflix(WebScraper):
         ]:
             data.append(j)
         for k in [
-            [self.parse(i["name"]), i["id"], "MOVIE", i["available"]]
+                [self.parse(i["name"]), i["id"], "MOVIE", i["available"], i["releaseDate"][0:4]]
             for i in json.loads(
                 BS(
                     self.client.get(

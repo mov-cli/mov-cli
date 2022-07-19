@@ -106,14 +106,14 @@ get_ep_link(){
 
 get_movie () {
 	printf "\33[2K\r${c_blue}Searching query.."
-	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p')
+	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*\"releaseDate\":"([^"]{4}).*available\":true.*videos\":\["(.*)"\],.*/\3\t\1 (\2)/p')
 	[ -z "$results" ] && printf "\33[2K\r${c_red}No search results found${c_reset}" && exit 0
 	printf "\33[2K\r${c_green}Results found\n"
 	movie_name=$(printf "$results" | cut -f2- | fzf)
 	[ -z "$movie_name" ] && err "No movie chosen" && exit 0
 	tput clear
 	printf "${c_blue}Fetching movie"
-	display=$(printf "%s" "$movie_name" | tr -d '[:punct:]')
+	display=$(printf "%s" "$movie_name" | tr -d '[:punct:]' | sed -nE "s/\s.{4}$//p")
 	id=$(printf "%s" "$results" | sed -n "s/\t$movie_name$//p")
 	play_link "movies"
 }

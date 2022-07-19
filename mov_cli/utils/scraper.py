@@ -28,7 +28,7 @@ class WebScraper:
     def __init__(self, base_url: str) -> None:
         self.client = HttpClient()
         self.base_url = base_url
-        self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
+        self.title, self.url, self.aid, self.mv_tv, self.year = 0, 1, 2, 3, 4
         pass
 
     @staticmethod
@@ -133,7 +133,7 @@ class WebScraper:
         result = self.SandR(q)
         for ix, vl in enumerate(result):
             print(
-                self.green(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}"), end="\n\n"
+                self.green(f"[{ix + 1}] {vl[self.title].strip()} ({vl[self.year]})   {vl[self.mv_tv]}"), end="\n\n"
             )
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")

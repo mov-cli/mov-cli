@@ -11,7 +11,8 @@ from bs4 import BeautifulSoup as BS
 sys.path.append("..")
 
 x: Callable[[Any], str] = (
-    lambda d: base64.b64encode(d.encode()).decode().replace("\n", "").replace("=", ".")
+    lambda d: base64.b64encode(d.encode()).decode().replace(
+        "\n", "").replace("=", ".")
 )
 
 
@@ -36,13 +37,15 @@ class Actvid(WebScraper):
         # self.client.headers['Referer'] = self.base_url
         req = self.client.get(iframe_link).text
         soup = BS(req, "html.parser")
-        k = list([i.text for i in soup.find_all("script")][-3].replace("var", ""))
+        k = list([i.text for i in soup.find_all("script")]
+                 [-3].replace("var", ""))
         key, num = "".join(k[21:61]), k[-3]
         return key, num  # returns a tuple
 
     def auth_token(self, key: str) -> str:
         self.client.add_elem({"Referer": self.base_url})
-        self.client.add_elem({"cacheTime": "0"})  # adding referer to the headers
+        # adding referer to the headers
+        self.client.add_elem({"cacheTime": "0"})
         r = self.client.get(
             f"https://www.google.com/recaptcha/api.js?render={self.rep_key}"
         )
@@ -80,6 +83,7 @@ class Actvid(WebScraper):
     def results(self, html: str) -> list:
         soup = BS(html, "html.parser")
         urls = [i["href"] for i in soup.select(".film-poster-ahref")]
+        releases = self.get_release_years(soup)
         mov_or_tv = [
             "MOVIE" if i["href"].__contains__("/movie/") else "TV"
             for i in soup.select(".film-poster-ahref")
@@ -93,7 +97,11 @@ class Actvid(WebScraper):
             for i in urls
         ]
         ids = [i.split("-")[-1] for i in urls]
-        return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
+        return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv, releases)]
+
+    def get_release_years(self, soup):
+        return filter(
+            lambda x: x.isdigit(), [i.text for i in soup.select("div.film-infor > span")])
 
     def ask(self, series_id: str) -> str:
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
@@ -107,7 +115,8 @@ class Actvid(WebScraper):
         )
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
-        episodes = [i["data-id"] for i in BS(rf, "html.parser").select(".nav-item > a")]
+        episodes = [i["data-id"]
+                    for i in BS(rf, "html.parser").select(".nav-item > a")]
         episode = episodes[
             int(
                 input(
