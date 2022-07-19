@@ -36,7 +36,8 @@ class Sflix(Actvid):
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
-        episodes = [i["data-id"] for i in BS(rf, "html.parser").select(".episode-item")]
+        episodes = [i["data-id"]
+                    for i in BS(rf, "html.parser").select(".episode-item")]
         episode = episodes[
             int(
                 input(
@@ -60,3 +61,7 @@ class Sflix(Actvid):
         )
         soup = BS(rem, "html.parser")
         return [i["data-id"] for i in soup.select(".link-item")][0]
+
+    def get_release_years(self, soup):
+        return filter(
+            lambda x: len(x) == 4, [i.text for i in soup.select("div.fd-infor > span.fdi-item")])
