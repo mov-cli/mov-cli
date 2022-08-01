@@ -12,16 +12,16 @@ from colorama import Fore, Style
 
 from .httpclient import HttpClient
 
-
-def determine_path() -> str:
-    plt = platform.system()
-    if plt == "Windows":
-        return f"C://Users//{os.getenv('username')}//Downloads"
-    elif (plt == "Linux") or (plt == "Darwin"):
-        return f"/home/{os.getlogin()}/Downloads"
-    else:
-        print("Please open an issue for your os")
-        sys.exit(-2)
+# Not needed
+# def determine_path() -> str:
+#    plt = platform.system()
+#    if plt == "Windows":
+#        return f"C://Users//{os.getenv('username')}//Downloads"
+#    elif (plt == "Linux") or (plt == "Darwin"):
+#        return f"/home/{os.getlogin()}/Downloads"
+#    else:
+#        print("Please open an issue for your os")
+#        sys.exit(-2)
 
 
 class WebScraper:
@@ -60,25 +60,26 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, path: str = determine_path(), subtitle: str = None
+        self, url: str, name: str, subtitle: str = None
     ):
-        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {path}/{self.parse(name)}.mp4')
+        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
             "-i",
             f"{url}",
             "-c",
             "copy",
-            f"{path}/{self.parse(name)}.mp4",
+            f"{self.parse(name)}.mp4",
         ]
         if subtitle:
-            # args.extend(f'-vf subtitle="{subtitle}" {path}/{self.parse(name)}.mp4')
+            # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{path}/{self.parse(name)}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{self.parse(name)}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
-        return print(f"Downloaded at {path}")
+        
+        return print(f"Downloaded at {os.getcwd()}")
 
     def play(self, url: str, name: str):
         try:
