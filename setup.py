@@ -32,6 +32,6 @@ setup(
     install_requires=requirements,
     entry_points="""
         [console_scripts]
-        mov-cli=mov_cli.__main__:__movcli__
+        mov-cli=mov_cli.__main__:movcli
     """,
 )

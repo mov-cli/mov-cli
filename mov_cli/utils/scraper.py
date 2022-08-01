@@ -4,7 +4,7 @@ import platform
 import re
 import subprocess
 import sys
-
+import mov_cli.__main__ as movcli
 # import shlex
 # required for development
 
@@ -46,7 +46,7 @@ class WebScraper:
     @staticmethod
     def lmagenta(txt: str) -> str:
         return f"{Fore.LIGHTMAGENTA_EX}{txt}{Style.RESET_ALL}"
-
+    
     @staticmethod
     def cyan(txt: str) -> str:
         return f"{Fore.CYAN}{txt}{Style.RESET_ALL}"
@@ -139,6 +139,7 @@ class WebScraper:
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
+        print(("[p] Switch Provider!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -148,6 +149,8 @@ class WebScraper:
                 sys.exit()
             elif choice == "s":
                 return self.redo()
+            elif choice == "p":
+                return movcli.movcli()
             elif choice == "d":
                 try:
                     mov_or_tv = result[
