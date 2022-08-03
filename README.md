@@ -37,11 +37,10 @@ Pull requests are welcome and *appreciated*. For major changes, please open an i
 
 ## Downloads
 ```
-For Downloads u need FFmpeg.
+You'll need FFmpeg, You'll most likely have it if you have mpv installed!
 For Linux Users: https://ffmpeg.org/download.html#build-linux
 For Windows Users: https://github.com/BtbN/FFmpeg-Builds/releases
-Linux Users find there Distro and install it.
-Windows users need: ffmpeg-master-latest-win64-lgpl.zip and add to path
+IMPORTANT: Please add FFmpeg to Path!!
 ```
 ## Inspiration
 Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
