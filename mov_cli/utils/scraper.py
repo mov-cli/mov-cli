@@ -4,7 +4,7 @@ import platform
 import re
 import subprocess
 import sys
-
+import mov_cli.__main__ as movcli
 # import shlex
 # required for development
 
@@ -12,16 +12,16 @@ from colorama import Fore, Style
 
 from .httpclient import HttpClient
 
-
-def determine_path() -> str:
-    plt = platform.system()
-    if plt == "Windows":
-        return f"C://Users//{os.getenv('username')}//Downloads"
-    elif (plt == "Linux") or (plt == "Darwin"):
-        return f"/home/{os.getlogin()}/Downloads"
-    else:
-        print("Please open an issue for your os")
-        sys.exit(-2)
+# Not needed
+# def determine_path() -> str:
+#    plt = platform.system()
+#    if plt == "Windows":
+#        return f"C://Users//{os.getenv('username')}//Downloads"
+#    elif (plt == "Linux") or (plt == "Darwin"):
+#        return f"/home/{os.getlogin()}/Downloads"
+#    else:
+#        print("Please open an issue for your os")
+#        sys.exit(-2)
 
 
 class WebScraper:
@@ -46,7 +46,7 @@ class WebScraper:
     @staticmethod
     def lmagenta(txt: str) -> str:
         return f"{Fore.LIGHTMAGENTA_EX}{txt}{Style.RESET_ALL}"
-
+    
     @staticmethod
     def cyan(txt: str) -> str:
         return f"{Fore.CYAN}{txt}{Style.RESET_ALL}"
@@ -60,25 +60,26 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, path: str = determine_path(), subtitle: str = None
+        self, url: str, name: str, subtitle: str = None
     ):
-        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {path}/{self.parse(name)}.mp4')
+        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
             "-i",
             f"{url}",
             "-c",
             "copy",
-            f"{path}/{self.parse(name)}.mp4",
+            f"{self.parse(name)}.mp4",
         ]
         if subtitle:
-            # args.extend(f'-vf subtitle="{subtitle}" {path}/{self.parse(name)}.mp4')
+            # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{path}/{self.parse(name)}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{self.parse(name)}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
-        return print(f"Downloaded at {path}")
+        
+        return print(f"Downloaded at {os.getcwd()}")
 
     def play(self, url: str, name: str):
         try:
@@ -138,6 +139,7 @@ class WebScraper:
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
+        print(("[p] Switch Provider!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -147,6 +149,8 @@ class WebScraper:
                 sys.exit()
             elif choice == "s":
                 return self.redo()
+            elif choice == "p":
+                return movcli.movcli()
             elif choice == "d":
                 try:
                     mov_or_tv = result[

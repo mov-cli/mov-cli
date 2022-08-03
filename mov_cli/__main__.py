@@ -38,7 +38,7 @@ if platform.system() == "Windows":
     help="The Result Number you want to be played",
     type=int,
 )
-def __movcli__(provider, query, result):  # TODO add regex
+def movcli(provider, query, result):  # TODO add regex
     try:
         provider_data = calls.get(provider, calls["theflix"])
         provider = provider_data[0](provider_data[1])
@@ -50,4 +50,4 @@ def __movcli__(provider, query, result):  # TODO add regex
 
 
 if __name__ == '__main__':
-    __movcli__()
+    movcli()
