@@ -19,7 +19,7 @@ sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/loca
 
 ## Usage
 
-### Bash
+### Shell
 
 ```bash
 mov-cli
