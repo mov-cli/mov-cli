@@ -1,6 +1,6 @@
 # mov-cli
 
-A cli to browse and watch movies. It is written in python and uses mpv to play videos
+A cli to browse and watch movies. It is written in python and uses mpv to play videos.
 
 ## Installation
 This project is a work in progress.
