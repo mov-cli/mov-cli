@@ -17,6 +17,13 @@ pip install git+https://github.com/mov-cli/mov-cli
 sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
 ```
 
+## Usage
+
+```linux
+mov-cli
+```
+After running the command, follow the instructions given in your terminal
+
 ## Known issues
 
 ```
