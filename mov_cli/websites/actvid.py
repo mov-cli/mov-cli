@@ -158,7 +158,7 @@ class Actvid(WebScraper):
         key, num = self.key_num(iframe_url)
         token = self.auth_token(key)[1]
         url = self.cdn_url(tv_id, token, num)
-        History.addhistory(name, state, iframe_url)
+        History.addhistory(name, state, "")
         if state == "d":
             self.dl(url, name)
             return
@@ -171,7 +171,7 @@ class Actvid(WebScraper):
         key, num = self.key_num(iframe_url)
         token = self.auth_token(key)[1]
         url = self.cdn_url(mov_id, token, num)
-        History.addhistory(name, state, iframe_url)
+        History.addhistory(name, state, "")
         if state == "d":
             self.dl(url, name)
             return
