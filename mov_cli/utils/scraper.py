@@ -8,7 +8,10 @@ import mov_cli.__main__ as movcli
 # import shlex
 # required for development
 from .history import History
+<<<<<<< HEAD
 from .config import config 
+=======
+>>>>>>> 900baf064005d7b6a86c7745f8663e218bc7c99c
 from colorama import Fore, Style
 
 from .httpclient import HttpClient
@@ -140,9 +143,14 @@ class WebScraper:
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
+<<<<<<< HEAD
         print(self.green("[p] Switch Provider!"), end="\n\n")
         print(self.cyan("[h] History!"), end="\n\n")
         print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
+=======
+        print(("[p] Switch Provider!"), end="\n\n")
+        print(("[h] History!"), end="\n\n")
+>>>>>>> 900baf064005d7b6a86c7745f8663e218bc7c99c
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -156,6 +164,7 @@ class WebScraper:
                 return movcli.movcli()
             elif choice == "h":
                 History.gethistory()
+<<<<<<< HEAD
             elif choice == "c":
                 print(self.red("[a] Actvid"))
                 print(self.red("[s] SFlix"))
@@ -172,6 +181,8 @@ class WebScraper:
                     config.setprovider("solar")
                 elif provider == "q":
                     sys.exit()
+=======
+>>>>>>> 900baf064005d7b6a86c7745f8663e218bc7c99c
             elif choice == "d":
                 try:
                     mov_or_tv = result[
