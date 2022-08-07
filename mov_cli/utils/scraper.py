@@ -7,7 +7,7 @@ import sys
 import mov_cli.__main__ as movcli
 # import shlex
 # required for development
-
+from .history import History
 from colorama import Fore, Style
 
 from .httpclient import HttpClient
@@ -140,6 +140,7 @@ class WebScraper:
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
         print(("[p] Switch Provider!"), end="\n\n")
+        print(("[h] History!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -151,6 +152,8 @@ class WebScraper:
                 return self.redo()
             elif choice == "p":
                 return movcli.movcli()
+            elif choice == "h":
+                History.gethistory()
             elif choice == "d":
                 try:
                     mov_or_tv = result[
