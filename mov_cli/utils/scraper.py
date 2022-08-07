@@ -143,8 +143,6 @@ class WebScraper:
         print(self.green("[p] Switch Provider!"), end="\n\n")
         print(self.cyan("[h] History!"), end="\n\n")
         print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
-        print(("[p] Switch Provider!"), end="\n\n")
-        print(("[h] History!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
