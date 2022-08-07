@@ -63,6 +63,8 @@ class WebScraper:
     def dl(
         self, url: str, name: str, subtitle: str = None
     ):
+        name = self.parse(name)
+        fixname = re.sub(r"-+", "_", name)
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
@@ -70,7 +72,7 @@ class WebScraper:
             f"{url}",
             "-c",
             "copy",
-            f"{self.parse(name)}.mp4",
+            f"{fixname}.mp4",
         ]
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
