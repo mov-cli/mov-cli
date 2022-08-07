@@ -5,7 +5,7 @@ import json
 import httpx
 
 sys.path.append("..")
-
+from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 
@@ -233,6 +233,7 @@ class Theflix(WebScraper):
         name = m[self.title]
         page = self.page(m)
         url, name = self.cdnurl(page[0], name, self.token)
+        History.addhistory(name, state, url)
         if state == "d":
             self.dl(url, name)
             return
@@ -245,6 +246,7 @@ class Theflix(WebScraper):
         )
         page, name = self.wspage([name, t[1], season, episode])
         cdn, name = self.cdnurlep(page, name, self.token)
+        History.addhistory(name, state, page)
         if state == "d":
             self.dl(cdn, name)
             return
