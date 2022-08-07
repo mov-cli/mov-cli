@@ -9,7 +9,7 @@ A cli to browse and watch movies. It is written in python and uses mpv to play v
 This project is a work in progress.
 However, you can try it out
 
-### python
+### Python
 
 ```python
 pip install git+https://github.com/mov-cli/mov-cli
