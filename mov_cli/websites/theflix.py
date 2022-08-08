@@ -33,17 +33,66 @@ class Theflix(WebScraper):
         ).headers["Set-Cookie"]
 
     def search(self, query: str = None) -> list:
-        q = (
-            input(self.blue("[!] Please Enter the name of the Movie: "))
-            if query is None
-            else query
-        )
+        print(self.red("[s] Search"))
+        print(self.red("[ts] Trending TV Shows"))
+        print(self.red("[tm] Trending Movies"))
+        print(self.red("[q] Quit"))
+        choice = input(self.blue("Enter your choice: ")).lower()
+        if choice == "s":
+            q = (
+                input(self.blue("[!] Please Enter the name of the Movie: "))
+                if query is None
+                else query
+            )
+            data = []
+            for j in [
+                [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"]]
+                for i in json.loads(
+                    BS(
+                        self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
+                        "html.parser",
+                    )
+                    .select("#__NEXT_DATA__")[0]
+                    .text
+                )["props"]["pageProps"]["mainList"]["docs"]
+                if i["available"]
+            ]:
+                data.append(j)
+            for k in [
+                [self.parse(i["name"]), i["id"], "MOVIE", i["available"]]
+                for i in json.loads(
+                    BS(
+                        self.client.get(
+                            f"https://theflix.to/movies/trending?search={q.replace(' ', '+')}"
+                        ),
+                        "html.parser",
+                    )
+                    .select("#__NEXT_DATA__")[0]
+                    .text
+                )["props"]["pageProps"]["mainList"]["docs"]
+                if i["available"]
+            ]:
+                data.append(k)
+            if not len(data):
+                print(self.red("No Results found"), self.lmagenta("Bye!"))
+                sys.exit(1)
+            else:
+                return data
+        elif choice == "ts":
+            return self.trendingmovies()
+        elif choice == "tm":
+            return self.trendingtvshows()
+        elif choice == "q":
+            print(self.red("Bye!"))
+            sys.exit(1)
+
+    def trendingtvshows(self):
         data = []
         for j in [
             [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"]]
             for i in json.loads(
                 BS(
-                    self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
+                    self.client.get(f"https://theflix.to/tv-shows/trending"),
                     "html.parser",
                 )
                 .select("#__NEXT_DATA__")[0]
@@ -52,12 +101,16 @@ class Theflix(WebScraper):
             if i["available"]
         ]:
             data.append(j)
+        return data
+    
+    def trendingmovies(self):
+        data = []
         for k in [
             [self.parse(i["name"]), i["id"], "MOVIE", i["available"]]
             for i in json.loads(
                 BS(
                     self.client.get(
-                        f"https://theflix.to/movies/trending?search={q.replace(' ', '+')}"
+                        f"https://theflix.to/movies/trending"
                     ),
                     "html.parser",
                 )
@@ -67,11 +120,7 @@ class Theflix(WebScraper):
             if i["available"]
         ]:
             data.append(k)
-        if not len(data):
-            print(self.red("No Results found"), self.lmagenta("Bye!"))
-            sys.exit(1)
-        else:
-            return data
+        return data
 
     def page(self, info):
         return f"{self.base_url}/movie/{info[1]}-{info[0]}", info[0]
