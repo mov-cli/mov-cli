@@ -7,7 +7,7 @@
 html,body{overflow-y: scroll; }
 
 .topbar-container {
-	width: 80%;
+	width: 80vw;
 }
 
 .topbar {
@@ -22,7 +22,7 @@ html,body{overflow-y: scroll; }
 
 .logo {
   position: relative;	
-  width: 5%;
+  width: 4vw;
   height: auto;
 
 }
@@ -33,13 +33,13 @@ nav {
 
 nav li {
     display: inline-block;
-    margin-left: 60px;
-    padding-top: 8px;
+    margin-left: 3vw;
+    padding-top: 0.4vw;
   
     position: relative;
     text-align: center;
-    font-size: 15px;
-    line-height: 55px;
+    font-size: 0.8vw;
+    line-height: 3vw;
 }
 
 nav a {
@@ -57,8 +57,8 @@ html {
 
 .download-info {
     text-align: center;
-    font-size: 20px;
-    margin-top: 15em;
+    font-size: 1vw;
+    margin-top: 17vw;
 }
 
 .download-info a {
@@ -75,6 +75,6 @@ html {
 .footer {
     opacity: 5%;
     text-align: center;
-    font-size: 15px;
-    margin-top: 31em;
+    font-size: 0.8vw;
+    margin-top: 22vw;
 }
