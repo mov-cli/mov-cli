@@ -64,7 +64,7 @@ html {
 }
 
 .showcase {
-    height: 25svw;
+    height: 25vw;
     margin-top: 7vw;
     margin-left: 27vw;
 }
@@ -72,6 +72,6 @@ html {
 .footer {
     opacity: 5vw;
     text-align: center;
-    font-size: 15vw;
+    font-size: 0.7vw;
     margin-top: 19vw;
 }
