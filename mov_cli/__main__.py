@@ -22,7 +22,6 @@ calls = {
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
 
-getprovider = config.getprovider()
 @click.command()
 @click.option(
     "-p",
