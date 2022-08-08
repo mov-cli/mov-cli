@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+
+*{
+    margin: 0 auto;
+}
+
+html,body{overflow-y: scroll; }
+
+.topbar-container {
+	width: 80%;
+}
+
+.topbar {
+  background: #000;
+}
+
+.topbar::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.logo {
+  position: relative;	
+  width: 5%;
+  height: auto;
+
+}
+
+nav {
+    float: right;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 60px;
+    padding-top: 8px;
+  
+    position: relative;
+    text-align: center;
+    font-size: 15px;
+    line-height: 55px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+ 
+html {
+    background-color: black;
+    color: white;
+    scroll-behavior: smooth;
+    font-family: 'PT Sans', sans-serif;
+	font-weight: 400;
+}
+
+.download-info {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 15em;
+}
+
+.download-info a {
+    text-align: center;
+    text-decoration: none;
+    color: blue;
+}
+
+.download-info a, .download-info a:visited, .download-info a:hover, .download-info a:active {
+    color: inherit;
+    color: grey;
+}
+
+.footer {
+    opacity: 5%;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 31em;
+}
