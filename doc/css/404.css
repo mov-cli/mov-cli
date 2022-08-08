@@ -4,6 +4,8 @@
     margin: 0 auto;
 }
 
+html,body{overflow-y: scroll; }
+
 .topbar-container {
 	width: 80vw;
 }
@@ -53,34 +55,38 @@ html {
 	font-weight: 400;
 }
 
-
-.about-info {
-    text-align: center;
-    font-size: 1vw;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.about-info a {
-    text-align: center;
-    text-decoration: none;
-    color: blue;
-}
-
-.about-info a, .about-info a:visited, .about-info a:hover, .about-info a:active {
-    color: inherit;
-    color: grey;
-}
-
 .footer {
-    opacity: 5%;
+    opacity: 5vw;
     text-align: center;
-    font-size: 0.8vw;
-    margin-top: 25vw;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 0.7vw;
+    margin-top: 19vw;
+}
+
+.error h1{
+    font-size: 4vw;
+    margin-top: 0vw;
+    margin-bottom: 0vw;
+    transition: all ease-in 0.3s;
+}
+
+.error p {
+    font-size: 1.5vw;
+    margin-top: 0vw;
+    margin-bottom: 0vw;
+    transition: all ease-in 0.3s;
+}
+
+.error p:hover {
+    font-size: 1.7vw;
+    color: red;
+}
+
+.error {
+    text-align: center;
+    margin-top: 10vw;
+}
+
+.error h1:hover{
+    font-size: 5vw;
+    color: red;
 }
