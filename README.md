@@ -1,12 +1,15 @@
 # mov-cli
+A cli to browse and watch movies. It is written in python and uses mpv to play videos.
 
-A cli to browse and watch movies.
+![GitHub Repo stars](https://img.shields.io/github/stars/mov-cli/mov-cli?style=for-the-badge) ![GitHub repo size](https://img.shields.io/github/repo-size/mov-cli/mov-cli?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/mov-cli/mov-cli?style=for-the-badge)
+
+![ezgif com-gif-maker(2)](https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif)
 
 ## Installation
 This project is a work in progress.
 However, you can try it out
 
-### python
+### Python
 
 ```python
 pip install git+https://github.com/mov-cli/mov-cli
@@ -16,6 +19,15 @@ pip install git+https://github.com/mov-cli/mov-cli
 ```bash
 sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
 ```
+
+## Usage
+
+### Shell
+
+```bash
+mov-cli
+```
+After running the command, follow the instructions given in your terminal
 
 ## Known issues
 
