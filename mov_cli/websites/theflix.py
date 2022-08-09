@@ -79,9 +79,9 @@ class Theflix(WebScraper):
             else:
                 return data
         elif choice == "ts":
-            return self.trendingmovies()
-        elif choice == "tm":
             return self.trendingtvshows()
+        elif choice == "tm":
+            return self.trendingmovies()
         elif choice == "q":
             print(self.red("Bye!"))
             sys.exit(1)
