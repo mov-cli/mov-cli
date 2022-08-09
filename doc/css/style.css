@@ -9,9 +9,18 @@ html,body{overflow-y: scroll; }
 .topbar-container {
 	width: 80vw;
 }
-
 .topbar {
   background: #000;
+}
+
+body{animation: 1.5s ease-out 0s 1 FadeIn;}
+@keyframes FadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
 }
 
 .topbar::after {
@@ -46,6 +55,7 @@ nav a {
     color: #fff;
     text-decoration: none;
 }
+
  
 html {
     background-color: black;
@@ -60,7 +70,7 @@ html {
     text-align: center;
     font-size: 1vw;
     margin-right: 25vw;
-    margin-top: 15vw;
+    margin-top: 16vw;
 }
 
 .showcase {
@@ -73,5 +83,6 @@ html {
     opacity: 5%;
     text-align: center;
     font-size: 0.7vw;
-    margin-top: 19vw;
+    margin-top: 17vw;
 }
+  
