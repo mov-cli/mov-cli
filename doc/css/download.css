@@ -77,7 +77,7 @@ html {
 
 .download-info a, .download-info a:visited, .download-info a:hover, .download-info a:active {
     color: inherit;
-    color: grey;
+    color: #0000FF;
 }
 
 .footer {
