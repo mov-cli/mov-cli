@@ -3,6 +3,7 @@ import sys
 import platform
 
 import click
+from .utils.config import config
 
 from .websites.theflix import Theflix
 from .websites.actvid import Actvid
@@ -21,14 +22,13 @@ calls = {
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
 
-
 @click.command()
 @click.option(
     "-p",
     "--provider",
     prompt=f"On V:0.1.0\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
-    default="theflix",
+    default=f"{config.getprovider()}",
 )
 @click.option("-q", "--query", default=None, help="Your search query")
 @click.option(

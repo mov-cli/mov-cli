@@ -7,7 +7,8 @@ import sys
 import mov_cli.__main__ as movcli
 # import shlex
 # required for development
-
+from .history import History
+from .config import config 
 from colorama import Fore, Style
 
 from .httpclient import HttpClient
@@ -62,6 +63,8 @@ class WebScraper:
     def dl(
         self, url: str, name: str, subtitle: str = None
     ):
+        name = self.parse(name)
+        fixname = re.sub(r"-+", "_", name)
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
@@ -69,7 +72,7 @@ class WebScraper:
             f"{url}",
             "-c",
             "copy",
-            f"{self.parse(name)}.mp4",
+            f"{fixname}.mp4",
         ]
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
@@ -139,7 +142,9 @@ class WebScraper:
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
-        print(("[p] Switch Provider!"), end="\n\n")
+        print(self.green("[p] Switch Provider!"), end="\n\n")
+        print(self.cyan("[h] History!"), end="\n\n")
+        print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -151,6 +156,24 @@ class WebScraper:
                 return self.redo()
             elif choice == "p":
                 return movcli.movcli()
+            elif choice == "h":
+                History.gethistory()
+            elif choice == "c":
+                print(self.red("[a] Actvid"))
+                print(self.red("[s] SFlix"))
+                print(self.red("[o] Solar"))
+                print(self.red("[t] TheFlix"))
+                print(self.green(f"{config.getprovider()} is standard"))
+                print(self.cyan("[q] Quit"))
+                provider = input(self.blue("Enter your Provider: "))
+                if provider == "a":
+                    config.setprovider("actvid")
+                elif provider == "s":
+                    config.setprovider("sflix")
+                elif provider == "o":
+                    config.setprovider("solar")
+                elif provider == "q":
+                    sys.exit()
             elif choice == "d":
                 try:
                     mov_or_tv = result[

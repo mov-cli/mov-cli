@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
+
+*{
+    margin: 0 auto;
+}
+
+html,body{overflow-y: scroll; }
+
+.topbar-container {
+	width: 80vw;
+}
+
+.topbar {
+  background: #000;
+}
+
+body{animation: 1.5s ease-out 0s 1 FadeIn;}
+@keyframes FadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+}
+
+.topbar::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.logo {
+  position: relative;	
+  width: 4vw;
+  height: auto;
+
+}
+
+nav {
+    float: right;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 3vw;
+    padding-top: 0.4vw;
+  
+    position: relative;
+    text-align: center;
+    font-size: 0.8vw;
+    line-height: 3vw;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+ 
+html {
+    background-color: black;
+    color: white;
+    scroll-behavior: smooth;
+    font-family: 'PT Sans', sans-serif;
+	font-weight: 400;
+}
+
+
+.about-info {
+    text-align: center;
+    font-size: 1vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.about-info a {
+    text-align: center;
+    text-decoration: none;
+    color: blue;
+}
+
+.about-info a, .about-info a:visited, .about-info a:hover, .about-info a:active {
+    color: inherit;
+    color: grey;
+}
+
+.footer {
+    opacity: 5%;
+    text-align: center;
+    font-size: 0.8vw;
+    margin-top: 25vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
