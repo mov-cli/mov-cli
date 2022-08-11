@@ -29,6 +29,13 @@ mov-cli
 ```
 After running the command, follow the instructions given in your terminal
 
+## Disclaimer
+This project is to be used at the user’s own risk, based on their government and laws.
+
+The Devs hold no responsibility for actions done with this Tool.
+
+[Full Disclaimer](disclaimer.org)
+
 ## Known issues
 
 ```

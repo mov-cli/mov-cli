@@ -4,7 +4,6 @@
     margin: 0 auto;
 }
 
-html,body{overflow-y: scroll; }
 
 .topbar-container {
 	width: 80vw;
@@ -83,7 +82,7 @@ html {
 
 .about-info a, .about-info a:visited, .about-info a:hover, .about-info a:active {
     color: inherit;
-    color: grey;
+    color: #0000FF;
 }
 
 .footer {

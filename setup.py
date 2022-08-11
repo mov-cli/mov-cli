@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from __version__ import __core__
+from mov_cli.__version__ import __core__
 
 
 with open("requirements.txt") as requirements_txt:

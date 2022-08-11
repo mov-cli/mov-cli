@@ -10,6 +10,7 @@ from .websites.actvid import Actvid
 from .websites.solar import Solar
 from .websites.sflix import Sflix
 from .websites.olgply import OlgPly
+from .utils.update import update
 
 calls = {
     "actvid": [Actvid, "https://www.actvid.com"],
@@ -26,7 +27,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"On V:0.1.0\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
+    prompt=f"On V:0.1.3\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
@@ -39,6 +40,7 @@ if platform.system() == "Windows":
     type=int,
 )
 def movcli(provider, query, result):  # TODO add regex
+    update.checkupdate()
     try:
         provider_data = calls.get(provider, calls["theflix"])
         provider = provider_data[0](provider_data[1])
@@ -51,3 +53,4 @@ def movcli(provider, query, result):  # TODO add regex
 
 if __name__ == '__main__':
     movcli()
+

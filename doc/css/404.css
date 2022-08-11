@@ -4,8 +4,6 @@
     margin: 0 auto;
 }
 
-html,body{overflow-y: scroll; }
-
 .topbar-container {
 	width: 80vw;
 }
