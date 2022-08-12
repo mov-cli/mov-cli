@@ -1,1 +1,1 @@
-from .__main__ import movcli
+from . import __main__
