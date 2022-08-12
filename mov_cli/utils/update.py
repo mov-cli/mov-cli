@@ -1,4 +1,4 @@
-from ...__version__ import __core__
+from ..version.__version__ import __core__
 import httpx
 import sys
 import subprocess

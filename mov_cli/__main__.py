@@ -1,7 +1,7 @@
 import os
 import sys
 import platform
-from .__version__ import __core__
+from .version.__version__ import __core__
 
 import click
 from .utils.config import config
