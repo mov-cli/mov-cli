@@ -9,7 +9,7 @@ class update:
         pass
     @staticmethod
     def checkupdate():
-        unformated = requests.get("https://raw.githubusercontent.com/mov-cli/mov-cli/v3/__version__.py").text
+        unformated = requests.get("https://raw.githubusercontent.com/mov-cli/mov-cli/v3/mov_cli/__version__.py").text
         newversion = unformated.split("__core__ = ")[1]
         # strip all dots
         newversion = newversion.replace(".", "")
