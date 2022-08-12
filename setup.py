@@ -1,5 +1,9 @@
 from setuptools import setup, find_packages
+<<<<<<< HEAD
 from mov_cli.version.__version__ import __core__
+=======
+from __version__ import __core__
+>>>>>>> parent of d696560 (Added Automatic Check for Updates)
 
 
 with open("requirements.txt") as requirements_txt:
