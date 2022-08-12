@@ -1,7 +1,6 @@
 import os
 import sys
 import platform
-from .version.__version__ import __core__
 
 import click
 from .utils.config import config
@@ -27,11 +26,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-<<<<<<< HEAD
-    prompt=f"On V:{__core__}\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
-=======
     prompt=f"On V:0.1.0\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
->>>>>>> parent of d696560 (Added Automatic Check for Updates)
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
