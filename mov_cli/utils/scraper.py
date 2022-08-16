@@ -113,7 +113,9 @@ class WebScraper:
                 vlc_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                presence.update_presence(name)
                 vlc_process.wait()
+                presence.clear_presence()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
             logging.log(logging.ERROR, txt)

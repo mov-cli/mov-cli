@@ -1,7 +1,6 @@
 from pypresence import Presence
 import re
 import time
-import os
 from .config import config
 
 dc = Presence("1008936657241767936")
