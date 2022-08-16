@@ -65,6 +65,7 @@ class WebScraper:
     ):
         name = self.parse(name)
         fixname = re.sub(r"-+", "_", name)
+
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
@@ -72,12 +73,12 @@ class WebScraper:
             f"{url}",
             "-c",
             "copy",
-            f"{fixname}.mp4",
+            f"{config.getdownload()}/{fixname}.mp4",
         ]
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{self.parse(name)}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{config.getdownload()}/{self.parse(name)}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
