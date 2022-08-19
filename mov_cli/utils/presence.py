@@ -2,9 +2,13 @@ from pypresence import Presence
 import re
 import time
 from .config import config
+from colorama import Fore, Style
 
-dc = Presence("1008936657241767936")
-dc.connect()
+try:
+    dc = Presence("1008936657241767936")
+    dc.connect()
+except: 
+    print("[X]: Error while connecting to Discord")
 
 def update_presence(name):
     if config.getpresence() is True:
