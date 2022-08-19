@@ -14,9 +14,17 @@ def update_presence(name):
     if config.getpresence() is True:
         name = re.sub(r"-+", " ", name)
         name = re.sub(r"_+", " ", name)
-        dc.update(state=f"Watching {name}", large_image="logo", large_text="mov-cli", buttons=[{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"}], start=time.time())
+        try:
+            dc.update(state=f"Watching {name}", large_image="logo", large_text="mov-cli", buttons=[{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"}], start=time.time())
+        except:
+            pass
     else:
         pass
 def clear_presence():
-    dc.clear()
-
+    if config.getpresence() is True:
+        try:
+            dc.clear()
+        except:
+            pass
+    else:
+        pass
