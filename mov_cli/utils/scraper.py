@@ -83,7 +83,7 @@ class WebScraper:
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
         
-        return print(f"Downloaded at {os.getcwd()}")
+        return print(f"Downloaded at {config.getdownload()}")
 
     def play(self, url: str, name: str):
         try:
@@ -95,11 +95,9 @@ class WebScraper:
                     f"--force-media-title=mov-cli:{name}",
                     "--no-terminal",
                 ]
-
                 mpv_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
-                presence.update_presence(name)
                 mpv_process.wait()
                 presence.clear_presence()
             except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
@@ -113,7 +111,6 @@ class WebScraper:
                 vlc_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
-                presence.update_presence(name)
                 vlc_process.wait()
                 presence.clear_presence()
         except Exception as e:
