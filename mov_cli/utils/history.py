@@ -8,7 +8,7 @@ class History:
     def winorlinux():
         plt = platform.system()
         if plt == "Windows":
-            return f"C://Users//{os.getenv('username')}//Documents"
+            return f"C:/Users/{os.getenv('username')}/Documents"
         elif (plt == "Linux") or (plt == "Darwin"):
             return f"/home/{os.getlogin()}/Documents"
     
@@ -18,17 +18,17 @@ class History:
             state= "Downloaded"
         else:
             state = "Watched"
-        if os.path.exists(f"{History.winorlinux()}//mov_cli"):
+        if os.path.exists(f"{History.winorlinux()}/mov_cli"):
             pass
         else:
-            os.mkdir(f"{History.winorlinux()}//mov_cli")
-        file = f"{History.winorlinux()}//mov_cli//history.txt"
+            os.mkdir(f"{History.winorlinux()}/mov_cli")
+        file = f"{History.winorlinux()}/mov_cli//history.txt"
         with open(file, "a") as f:
             f.write(f"{name} | {state} | {url} | {dt.datetime.now()}\n")
     
     @staticmethod
     def gethistory():
-        file = f"{History.winorlinux()}//mov_cli//history.txt"
+        file = f"{History.winorlinux()}/mov_cli/history.txt"
         with open(file, "r") as f:
             history = f.read()
             return print(history)

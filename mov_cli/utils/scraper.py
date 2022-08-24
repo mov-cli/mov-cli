@@ -10,8 +10,8 @@ import mov_cli.__main__ as movcli
 from .history import History
 from .config import config 
 from colorama import Fore, Style
-
 from .httpclient import HttpClient
+from . import presence
 
 # Not needed
 # def determine_path() -> str:
@@ -65,6 +65,7 @@ class WebScraper:
     ):
         name = self.parse(name)
         fixname = re.sub(r"-+", "_", name)
+
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
@@ -72,12 +73,12 @@ class WebScraper:
             f"{url}",
             "-c",
             "copy",
-            f"{fixname}.mp4",
+            f"{config.getdownload()}/{fixname}.mp4",
         ]
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{self.parse(name)}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{config.getdownload()}/{self.parse(name)}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
@@ -94,10 +95,13 @@ class WebScraper:
                     f"--force-media-title=mov-cli:{name}",
                     "--no-terminal",
                 ]
+
                 mpv_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                presence.update_presence(name)
                 mpv_process.wait()
+                presence.clear_presence()
             except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
                 args = [
                     "vlc",
@@ -109,7 +113,9 @@ class WebScraper:
                 vlc_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                presence.update_presence(name)
                 vlc_process.wait()
+                presence.clear_presence()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
             logging.log(logging.ERROR, txt)
@@ -134,9 +140,10 @@ class WebScraper:
         return self.results(self.search(q))
 
     def display(self, q: str = None, result_no: int = None):
+        presence.clear_presence()
         result = self.SandR(q)
         for ix, vl in enumerate(result):
-            print(
+            print(  
                 self.green(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}"), end="\n\n"
             )
         print(self.red("[q] Exit!"), end="\n\n")
@@ -145,6 +152,7 @@ class WebScraper:
         print(self.green("[p] Switch Provider!"), end="\n\n")
         print(self.cyan("[h] History!"), end="\n\n")
         print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
+        print(self.green("[r] Set Discord Presence!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -158,6 +166,16 @@ class WebScraper:
                 return movcli.movcli()
             elif choice == "h":
                 History.gethistory()
+            elif choice == "r":
+                print(self.red("[e] Enable"))
+                print(self.red("[d] Disable"))
+                choice = input(self.blue("Enter your choice: "))
+                if choice == "e":
+                    config.setpresence("true")
+                    print(self.green("Presence Enabled!"))
+                elif choice == "d":
+                    config.setpresence("false")
+                    print(self.green("Presence Disabled!"))
             elif choice == "c":
                 print(self.red("[a] Actvid"))
                 print(self.red("[s] SFlix"))
