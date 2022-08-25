@@ -2,7 +2,6 @@ import json
 
 from .actvid import Actvid
 from bs4 import BeautifulSoup as BS
-import httpx
 
 
 class Sflix(Actvid):
@@ -48,23 +47,7 @@ class Sflix(Actvid):
             )
             - 1
         ]
-        ep = self.getep(f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}", data_id=episode)
-        return episode, season, ep
-    
-    def getep(self, url, data_id):
-        source = httpx.get(f"{url}").text
-        soup = BS(source, "html.parser")
-
-        unformated = soup.find("div", {"data-id": f"{data_id}"})
-
-        children = unformated.findChildren("div", {"class": "episode-number"})
-        for child in children:
-            text = child.text
-        
-        text = text.split("Episode")[1]
-        text = text.split(":")[0]
-
-        return text
+        return episode
 
     def server_id(self, mov_id):
         rem = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
