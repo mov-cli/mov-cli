@@ -8,6 +8,7 @@ from urllib import parse as p
 from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
+from ..utils.presence import update_presence
 
 sys.path.append("..")
 
@@ -76,6 +77,7 @@ class Actvid(WebScraper):
             if query is None
             else query
         )
+        self.userinput = query
         return self.client.get(f"{self.base_url}/search/{self.parse(query)}").text
 
     def results(self, html: str) -> list:
@@ -119,7 +121,21 @@ class Actvid(WebScraper):
             )
             - 1
         ]
-        return episode
+        ep = self.getep(url=f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}", data_id=f"{episode}")
+        return episode, season, ep
+
+
+    def getep(self, url, data_id):
+        source = self.client.get(f"{url}").text
+
+        soup = BS(source, "html.parser")
+
+        unformated = soup.find("a", {"data-id": f"{data_id}"})['title']
+
+        formated = unformated.split("Eps")[1]
+        formated = formated.split(":")[0]
+
+        return formated
 
     def cdn_url(self, rabb_id: str, rose: str, num: str) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
@@ -152,7 +168,7 @@ class Actvid(WebScraper):
 
     def TV_PandDP(self, t: list, state: str = "d" or "p"):
         name = t[self.title]
-        episode = self.ask(t[self.aid])
+        episode, season, ep = self.ask(t[self.aid])
         sid = self.ep_server_id(episode)
         iframe_url, tv_id = self.get_link(sid)
         key, num = self.key_num(iframe_url)
@@ -162,6 +178,7 @@ class Actvid(WebScraper):
         if state == "d":
             self.dl(url, name)
             return
+        update_presence(self.userinput, season, ep)
         self.play(url, name)
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p"):
@@ -175,6 +192,7 @@ class Actvid(WebScraper):
         if state == "d":
             self.dl(url, name)
             return
+        update_presence(self.userinput)
         self.play(url, name)
 
     def SandR(self, q: str = None):
