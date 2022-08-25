@@ -33,7 +33,20 @@ class Solar(Actvid):
             )
             - 1
         ]
-        return episode
+        ep = self.getep(f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}", episode)
+        return episode, season, ep
+
+    def getep(self, url, data_id):
+        source = self.client.get(f"{url}").text
+
+        soup = BS(source, "html.parser")
+
+        unformated = soup.find("a", {"data-id": f"{data_id}"})['title']
+
+        formated = unformated.split("Eps")[1]
+        formated = formated.split(":")[0]
+
+        return formated
 
     def cdn_url(self, rabbid, rose, num) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})

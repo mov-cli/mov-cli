@@ -1,8 +1,7 @@
 from pypresence import Presence
-import re
 import time
 from .config import config
-from colorama import Fore, Style
+from .dbs import get_imdb_title
 
 try:
     dc = Presence("1008936657241767936")
@@ -10,16 +9,20 @@ try:
 except: 
     print("[X]: Error while connecting to Discord")
 
-def update_presence(name):
+def update_presence(userinput, season=None, episode=None):
     if config.getpresence() is True:
-        name = re.sub(r"-+", " ", name)
-        name = re.sub(r"_+", " ", name)
+        name = get_imdb_title(userinput)
+        if season is None:
+            pass
+        else:
+            name = f"{name} - S {season} EP {episode}"
         try:
-            dc.update(state=f"Watching {name}", large_image="logo", large_text="mov-cli", buttons=[{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"}], start=time.time())
+            dc.update(state=f"Watching {name}", large_image="logo", large_text="mov-cli", buttons=[{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"},{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"}], start=time.time())
         except:
             pass
     else:
         pass
+
 def clear_presence():
     if config.getpresence() is True:
         try:
