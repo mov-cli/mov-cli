@@ -33,9 +33,9 @@ class config:
                 if provider == "actvid" or "theflix" or "sflix" or "solar":
                     return provider
                 else:
-                    return "actvid"
+                    return "theflix"
         else:
-            return "actvid"
+            return "theflix"
         
     @staticmethod
     def providerexists():

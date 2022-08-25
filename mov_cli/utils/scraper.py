@@ -78,12 +78,12 @@ class WebScraper:
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{config.getdownload()}/{fixname}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{config.getdownload()}/{self.parse(name)}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
         
-        return print(f"Downloaded at {config.getdownload()}")
+        return print(f"Downloaded at {os.getcwd()}")
 
     def play(self, url: str, name: str):
         try:
@@ -99,6 +99,7 @@ class WebScraper:
                 mpv_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                presence.update_presence(name)
                 mpv_process.wait()
                 presence.clear_presence()
             except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
@@ -112,6 +113,7 @@ class WebScraper:
                 vlc_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                presence.update_presence(name)
                 vlc_process.wait()
                 presence.clear_presence()
         except Exception as e:
