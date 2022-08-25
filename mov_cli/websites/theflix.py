@@ -4,13 +4,11 @@ import json
 
 import httpx
 
-from mov_cli.utils import presence
-
 sys.path.append("..")
 from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
-from ..utils.presence import *
+
 
 class Theflix(WebScraper):
     def __init__(self, base_url):
@@ -21,7 +19,6 @@ class Theflix(WebScraper):
         self.m_available = -3
         self.t_available = -2
         self.seasons = -1
-        self.userinput = ""
 
     def parse(self, text: str):
         name = f"{text[0].lower()}{''.join([f' {i}' if i.isupper() else i for i in text[1:]]).lower().rstrip('.')}"
@@ -284,13 +281,11 @@ class Theflix(WebScraper):
     def MOV_PandDP(self, m: list, state: str = "d" or "p"):
         name = m[self.title]
         page = self.page(m)
-        self.userinput = f"{name}"
         url, name = self.cdnurl(page[0], name, self.token)
         History.addhistory(name, state, url)
         if state == "d":
             self.dl(url, name)
             return
-        presence.update_presence(self.userinput)
         self.play(url, name)
 
     def TV_PandDP(self, t: list, state: str = "d" or "p"):
@@ -298,14 +293,12 @@ class Theflix(WebScraper):
         season, episodes, episode = self.ask(
             t[self.seasons], t[self.aid], name, self.token
         )
-        self.userinput = f"{name}"
         page, name = self.wspage([name, t[1], season, episode])
         cdn, name = self.cdnurlep(page, name, self.token)
         History.addhistory(name, state, page)
         if state == "d":
             self.dl(cdn, name)
             return
-        presence.update_presence(self.userinput, season, episode)
         self.play(cdn, name)
 
     # def redo(self, query: str = None, result: int = None):
