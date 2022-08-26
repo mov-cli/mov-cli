@@ -281,7 +281,7 @@ class Theflix(WebScraper):
         self.userinput = f"{name}"
         page = self.page(m)
         url, name = self.cdnurl(page[0], name, self.token)
-        History.addhistory(name, state, url)
+        History.addhistory(self.userinput, state, url)
         if state == "d":
             self.dl(url, name)
             return
@@ -296,7 +296,7 @@ class Theflix(WebScraper):
         self.userinput = f"{name}"
         page, name = self.wspage([name, t[1], season, episode])
         cdn, name = self.cdnurlep(page, name, self.token)
-        History.addhistory(name, state, page)
+        History.addhistory(self.userinput, state, page, season, episode)
         if state == "d":
             self.dl(cdn, name)
             return
