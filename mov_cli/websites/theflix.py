@@ -48,7 +48,7 @@ class Theflix(WebScraper):
                 for i in json.loads(
                     BS(
                         self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
-                        "html.parser",
+                        "lxml",
                     )
                     .select("#__NEXT_DATA__")[0]
                     .text
@@ -63,7 +63,7 @@ class Theflix(WebScraper):
                         self.client.get(
                             f"https://theflix.to/movies/trending?search={q.replace(' ', '+')}"
                         ),
-                        "html.parser",
+                        "lxml",
                     )
                     .select("#__NEXT_DATA__")[0]
                     .text
@@ -91,7 +91,7 @@ class Theflix(WebScraper):
             for i in json.loads(
                 BS(
                     self.client.get(f"https://theflix.to/tv-shows/trending"),
-                    "html.parser",
+                    "lxml",
                 )
                 .select("#__NEXT_DATA__")[0]
                 .text
@@ -110,7 +110,7 @@ class Theflix(WebScraper):
                     self.client.get(
                         f"https://theflix.to/movies/trending"
                     ),
-                    "html.parser",
+                    "lxml",
                 )
                 .select("#__NEXT_DATA__")[0]
                 .text
@@ -132,7 +132,7 @@ class Theflix(WebScraper):
     def cdnurl(self, link, info, k):
         self.client.set_headers({"Cookie": k})
         objid = json.loads(
-            BS(self.client.get(link).text, "html.parser")
+            BS(self.client.get(link).text, "lxml")
             .select("#__NEXT_DATA__")[0]
             .text
         )["props"]["pageProps"]["movie"]["videos"][0]
@@ -152,7 +152,7 @@ class Theflix(WebScraper):
         s, ep = self.get_season_episode(link)
         self.client.set_headers({"Cookie": k})
         f = json.loads(
-            BS(self.client.get(link).text, "html.parser")
+            BS(self.client.get(link).text, "lxml")
             .select("#__NEXT_DATA__")[0]
             .text
         )["props"]["pageProps"]["selectedTv"]["seasons"]
@@ -191,7 +191,7 @@ class Theflix(WebScraper):
                 self.client.get(
                     f"https://theflix.to/tv-show/{ids}-{name}/season-{season}/episode-1"
                 ),
-                "html.parser",
+                "lxml",
             )
             .select("#__NEXT_DATA__")[0]
             .text

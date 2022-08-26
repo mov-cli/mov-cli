@@ -37,7 +37,7 @@ class Actvid(WebScraper):
         )  # adding referer to the headers
         # self.client.headers['Referer'] = self.base_url
         req = self.client.get(iframe_link).text
-        soup = BS(req, "html.parser")
+        soup = BS(req, "lxml")
         k = list([i.text for i in soup.find_all("script")][-3].replace("var", ""))
         key, num = "".join(k[21:61]), k[-3]
         return key, num  # returns a tuple
@@ -54,7 +54,7 @@ class Actvid(WebScraper):
         r = self.client.get(
             f"https://www.google.com/recaptcha/api2/anchor?ar=1&hl=en&size=invisible&cb=xxmovclix&k={key}&co={self.rab_domain}&v={v_token}"
         ).text
-        soup = BS(r, "html.parser")
+        soup = BS(r, "lxml")
         recap_token = [i["value"] for i in soup.select("#recaptcha-token")][0]
         data = {
             "v": v_token,
@@ -81,7 +81,7 @@ class Actvid(WebScraper):
         return self.client.get(f"{self.base_url}/search/{self.parse(query)}").text
 
     def results(self, html: str) -> list:
-        soup = BS(html, "html.parser")
+        soup = BS(html, "lxml")
         urls = [i["href"] for i in soup.select(".film-poster-ahref")]
         mov_or_tv = [
             "MOVIE" if i["href"].__contains__("/movie/") else "TV"
@@ -101,7 +101,7 @@ class Actvid(WebScraper):
     def ask(self, series_id: str) -> str:
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
         season_ids = [
-            i["data-id"] for i in BS(r, "html.parser").select(".dropdown-item")
+            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
         ]
         season = input(
             self.lmagenta(
@@ -110,7 +110,7 @@ class Actvid(WebScraper):
         )
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
-        episodes = [i["data-id"] for i in BS(rf, "html.parser").select(".nav-item > a")]
+        episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
         episode = episodes[
             int(
                 input(
@@ -128,7 +128,7 @@ class Actvid(WebScraper):
     def getep(self, url, data_id):
         source = self.client.get(f"{url}").text
 
-        soup = BS(source, "html.parser")
+        soup = BS(source, "lxml")
 
         unformated = soup.find("a", {"data-id": f"{data_id}"})['title']
 
@@ -146,14 +146,14 @@ class Actvid(WebScraper):
 
     def server_id(self, mov_id: str) -> str:
         req = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
-        soup = BS(req, "html.parser")
+        soup = BS(req, "lxml")
         return [i["data-linkid"] for i in soup.select(".nav-item > a")][0]
 
     def ep_server_id(self, ep_id: str) -> str:
         req = self.client.get(
             f"{self.base_url}/ajax/v2/episode/servers/{ep_id}/#servers-list"
         )
-        soup = BS(req, "html.parser")
+        soup = BS(req, "lxml")
         return [i["data-id"] for i in soup.select(".nav-item > a")][0]
 
     def get_link(self, thing_id: str) -> tuple:

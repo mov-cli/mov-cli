@@ -26,7 +26,7 @@ class Sflix(Actvid):
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
         season_ids = [
-            i["data-id"] for i in BS(r, "html.parser").select(".dropdown-item")
+            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
         ]
         season = input(
             self.lmagenta(
@@ -36,7 +36,7 @@ class Sflix(Actvid):
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
-        episodes = [i["data-id"] for i in BS(rf, "html.parser").select(".episode-item")]
+        episodes = [i["data-id"] for i in BS(rf, "lxml").select(".episode-item")]
         episode = episodes[
             int(
                 input(
@@ -52,7 +52,7 @@ class Sflix(Actvid):
 
     def getep(self, url, data_id):
         source = self.client.get(f"{url}").text
-        soup = BS(source, "html.parser")
+        soup = BS(source, "lxml")
 
         unformated = soup.find("div", {"data-id": f"{data_id}"})
 
@@ -67,12 +67,12 @@ class Sflix(Actvid):
 
     def server_id(self, mov_id):
         rem = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
-        soup = BS(rem, "html.parser")
+        soup = BS(rem, "lxml")
         return [i["data-id"] for i in soup.select(".link-item")][0]
 
     def ep_server_id(self, ep_id):
         rem = self.client.get(
             f"{self.base_url}/ajax/v2/episode/servers/{ep_id}/#servers-list"
         )
-        soup = BS(rem, "html.parser")
+        soup = BS(rem, "lxml")
         return [i["data-id"] for i in soup.select(".link-item")][0]
