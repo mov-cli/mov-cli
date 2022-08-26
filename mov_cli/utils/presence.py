@@ -17,7 +17,11 @@ def update_presence(userinput, season=None, episode=None):
         else:
             name = f"{name} - S {season} EP {episode}"
         try:
-            dc.update(state=f"Watching {name}", large_image="logo", large_text="mov-cli", buttons=[{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"}, {"label": "GitHub", "url": "https://github.com/mov-cli/mov-cli"}], start=time.time())
+            dc.update(state=f"Watching {name}", large_image="logo", large_text="mov-cli", small_image="mov-cli",
+                      small_text=f"{name}",
+                      buttons=[{"label": "mov-cli", "url": "https://mov-cli.github.io/mov-cli"},
+                               {"label": "GitHub", "url": "https://github.com/mov-cli/mov-cli"}],
+                      start=time.time())
         except:
             pass
     else:
