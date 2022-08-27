@@ -1,5 +1,7 @@
 import platform
 import os
+from os import environ
+
 class config:
     def __init__(self):
         pass
@@ -8,7 +10,7 @@ class config:
     def winorlinux():
         plt = platform.system()
         if plt == "Windows":
-            return f'C:/Users/{os.getlogin()}/Documents'
+            return f'{environ["USERPROFILE"]}\\Documents'
         elif (plt == "Linux") or (plt == "Darwin"):
             return f"/home/{os.getlogin()}/Documents"
     

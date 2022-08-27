@@ -2,6 +2,7 @@ import platform
 import os
 import datetime as dt
 from .dbs import get_imdb_title
+from os import environ
 
 class History:
     def __init__(self):
@@ -10,7 +11,7 @@ class History:
     def winorlinux():
         plt = platform.system()
         if plt == "Windows":
-            return f'C:/Users/{os.getlogin()}/Documents'
+            return f'{environ["USERPROFILE"]}\\Documents'
         elif (plt == "Linux") or (plt == "Darwin"):
             return f"/home/{os.getlogin()}/Documents"
     
