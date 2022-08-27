@@ -8,7 +8,7 @@ class config:
     def winorlinux():
         plt = platform.system()
         if plt == "Windows":
-            return str(f"C:/Users/{os.getenv('username')}/Documents")
+            return f'C:/Users/{os.getlogin()}/Documents'
         elif (plt == "Linux") or (plt == "Darwin"):
             return f"/home/{os.getlogin()}/Documents"
     
