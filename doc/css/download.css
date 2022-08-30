@@ -69,7 +69,7 @@ html {
 .download-info {
     text-align: center;
     font-size: 20px;
-    margin-top: 300px;
+    margin-top: 326px;
 }
 
 .download-info a {
@@ -87,5 +87,74 @@ html {
     opacity: 5%;
     text-align: center;
     font-size: 10px;
-    margin-top: 350px;
+    margin-top: 340px;
+}
+
+
+@media only screen and (max-device-width: 480px) {
+    html,body{overflow-y: scroll; }
+
+    .topbar-container {
+    	width: 80%;
+    }
+    .topbar {
+      background: #000;
+    }
+
+    body{animation: 1.5s ease-out 0s 1 FadeIn;}
+    @keyframes FadeIn {
+        0% {
+          opacity:0;
+        }
+        100% {
+          opacity:1;
+        }
+    }
+
+    .topbar::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
+    .logo {
+      width: 60px;
+      height: auto;
+      left: 70px;
+    }
+
+    nav {
+        float: left;
+    }
+
+    nav li {
+        display: inline-block;
+        margin-left: 4px;
+        position: relative;
+        text-align: center;
+        font-size: 15px;
+        line-height: 50px;
+        right: 2cm;
+    }
+
+    nav a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+    html {
+        background-color: black;
+        color: white;
+        scroll-behavior: smooth;
+        font-family: 'PT Sans', sans-serif;
+    	font-weight: 400;
+    }
+
+        .footer {
+            opacity: 5%;
+            text-align: center;
+            font-size: 10px;
+            margin-top: 280px;
+        }
 }
