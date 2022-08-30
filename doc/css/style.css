@@ -7,7 +7,7 @@
 html,body{overflow-y: scroll; }
 
 .topbar-container {
-	width: 80vw;
+	width: 80%;
 }
 .topbar {
   background: #000;
@@ -31,7 +31,7 @@ body{animation: 1.5s ease-out 0s 1 FadeIn;}
 
 .logo {
   position: relative;	
-  width: 4vw;
+  width: 70px;
   height: auto;
 
 }
@@ -42,13 +42,13 @@ nav {
 
 nav li {
     display: inline-block;
-    margin-left: 3vw;
-    padding-top: 0.4vw;
+    margin-left: 50px;
+    padding-top: 4px;
   
     position: relative;
     text-align: center;
-    font-size: 0.8vw;
-    line-height: 3vw;
+    font-size: 15px;
+    line-height: 60px;
 }
 
 nav a {
@@ -68,21 +68,21 @@ html {
 .home-info {
     float: right;
     text-align: center;
-    font-size: 1vw;
-    margin-right: 25vw;
-    margin-top: 16vw;
+    font-size: 20px;
+    margin-right: 500px;
+    margin-top: 307px;
 }
 
 .showcase {
-    height: 25vw;
-    margin-top: 7vw;
-    margin-left: 27vw;
+    height: 480px;
+    margin-top: 134px;
+    margin-left: 520px;
 }
 
 .footer {
     opacity: 5%;
     text-align: center;
-    font-size: 0.7vw;
-    margin-top: 17vw;
+    font-size: 10px;
+    margin-top: 290px;
 }
   

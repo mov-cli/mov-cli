@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
 
+
 *{
     margin: 0 auto;
 }
 
-.topbar-container {
-	width: 80vw;
-}
+html,body{overflow-y: scroll; }
 
+.topbar-container {
+	width: 80%;
+}
 .topbar {
   background: #000;
 }
@@ -29,8 +31,8 @@ body{animation: 1.5s ease-out 0s 1 FadeIn;}
 }
 
 .logo {
-  position: relative;	
-  width: 4vw;
+  position: relative;
+  width: 70px;
   height: auto;
 
 }
@@ -41,20 +43,21 @@ nav {
 
 nav li {
     display: inline-block;
-    margin-left: 3vw;
-    padding-top: 0.4vw;
-  
+    margin-left: 50px;
+    padding-top: 4px;
+
     position: relative;
     text-align: center;
-    font-size: 0.8vw;
-    line-height: 3vw;
+    font-size: 15px;
+    line-height: 60px;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
 }
- 
+
+
 html {
     background-color: black;
     color: white;
@@ -62,12 +65,11 @@ html {
     font-family: 'PT Sans', sans-serif;
 	font-weight: 400;
 }
-
 .footer {
-    opacity: 5vw;
+    opacity: 5%;
     text-align: center;
-    font-size: 0.7vw;
-    margin-top: 19vw;
+    font-size: 10px;
+    margin-top: 290px;
 }
 
 .error h1{
