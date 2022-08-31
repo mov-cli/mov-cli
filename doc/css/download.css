@@ -1,17 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
 
-
 *{
     margin: 0 auto;
 }
 
-html,body{overflow-y: scroll; }
-
 .topbar-container {
-	width: 80%;
-}
-.topbar {
-  background: #000;
+	width: 80vw;
 }
 
 body{animation: 1.5s ease-out 0s 1 FadeIn;}
@@ -24,6 +18,10 @@ body{animation: 1.5s ease-out 0s 1 FadeIn;}
     }
 }
 
+.topbar {
+  background: #000;
+}
+
 .topbar::after {
   content: '';
   display: table;
@@ -32,7 +30,7 @@ body{animation: 1.5s ease-out 0s 1 FadeIn;}
 
 .logo {
   position: relative;
-  width: 70px;
+  width: 4vw;
   height: auto;
 
 }
@@ -43,13 +41,13 @@ nav {
 
 nav li {
     display: inline-block;
-    margin-left: 50px;
-    padding-top: 4px;
+    margin-left: 3vw;
+    padding-top: 0.4vw;
 
     position: relative;
     text-align: center;
-    font-size: 15px;
-    line-height: 60px;
+    font-size: 0.8vw;
+    line-height: 3vw;
 }
 
 nav a {
@@ -57,7 +55,6 @@ nav a {
     text-decoration: none;
 }
 
- 
 html {
     background-color: black;
     color: white;
@@ -68,8 +65,8 @@ html {
 
 .download-info {
     text-align: center;
-    font-size: 20px;
-    margin-top: 326px;
+    font-size: 1vw;
+    margin-top: 17vw;
 }
 
 .download-info a {
@@ -86,8 +83,8 @@ html {
 .footer {
     opacity: 5%;
     text-align: center;
-    font-size: 10px;
-    margin-top: 340px;
+    font-size: 0.8vw;
+    margin-top: 22vw;
 }
 
 

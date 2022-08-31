@@ -1,15 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
 
-
 *{
     margin: 0 auto;
 }
 
-html,body{overflow-y: scroll; }
-
 .topbar-container {
-	width: 80%;
+	width: 80vw;
 }
+
 .topbar {
   background: #000;
 }
@@ -32,7 +30,7 @@ body{animation: 1.5s ease-out 0s 1 FadeIn;}
 
 .logo {
   position: relative;
-  width: 70px;
+  width: 4vw;
   height: auto;
 
 }
@@ -43,20 +41,19 @@ nav {
 
 nav li {
     display: inline-block;
-    margin-left: 50px;
-    padding-top: 4px;
+    margin-left: 3vw;
+    padding-top: 0.4vw;
 
     position: relative;
     text-align: center;
-    font-size: 15px;
-    line-height: 60px;
+    font-size: 0.8vw;
+    line-height: 3vw;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
 }
-
 
 html {
     background-color: black;
@@ -65,24 +62,25 @@ html {
     font-family: 'PT Sans', sans-serif;
 	font-weight: 400;
 }
+
 .footer {
-    opacity: 5%;
+    opacity: 5vw;
     text-align: center;
-    font-size: 10px;
-    margin-top: 290px;
+    font-size: 0.7vw;
+    margin-top: 19vw;
 }
 
 .error h1{
-    font-size: 100px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    font-size: 4vw;
+    margin-top: 0vw;
+    margin-bottom: 0vw;
     transition: all ease-in 0.3s;
 }
 
 .error p {
-    font-size: 50px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    font-size: 1.5vw;
+    margin-top: 0vw;
+    margin-bottom: 0vw;
     transition: all ease-in 0.3s;
 }
 
@@ -92,7 +90,7 @@ html {
 
 .error {
     text-align: center;
-    margin-top: 300px;
+    margin-top: 10vw;
 }
 
 .error h1:hover{
