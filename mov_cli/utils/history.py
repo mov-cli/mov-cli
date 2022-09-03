@@ -13,7 +13,7 @@ class History:
         if plt == "Windows":
             return f'{environ["USERPROFILE"]}\\Documents'
         elif (plt == "Linux") or (plt == "Darwin"):
-            return f"/home/{os.getlogin()}/Documents"
+            return f"/home/{os.getlogin()}"
     
     @staticmethod
     def addhistory(userinput, state, url, season=None, episode=None):

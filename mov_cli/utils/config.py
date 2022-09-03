@@ -12,7 +12,7 @@ class config:
         if plt == "Windows":
             return f'{environ["USERPROFILE"]}\\Documents'
         elif (plt == "Linux") or (plt == "Darwin"):
-            return f"/home/{os.getlogin()}/Documents"
+            return f"/home/{os.getlogin()}"
     
     @staticmethod
     def setprovider(provider):
