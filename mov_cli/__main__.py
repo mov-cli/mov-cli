@@ -3,6 +3,7 @@ import sys
 import platform
 
 import click
+from .utils.config import config
 
 from .websites.theflix import Theflix
 from .websites.actvid import Actvid
@@ -21,14 +22,13 @@ calls = {
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
 
-
 @click.command()
 @click.option(
     "-p",
     "--provider",
-    prompt=f"On V:0.1.0\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
+    prompt=f"On V:0.1.3\n\nactvid\ntheflix\nsflix\nsolar\nolgply\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
-    default="theflix",
+    default=f"{config.getprovider()}",
 )
 @click.option("-q", "--query", default=None, help="Your search query")
 @click.option(
@@ -38,7 +38,7 @@ if platform.system() == "Windows":
     help="The Result Number you want to be played",
     type=int,
 )
-def __movcli__(provider, query, result):  # TODO add regex
+def movcli(provider, query, result):  # TODO add regex
     try:
         provider_data = calls.get(provider, calls["theflix"])
         provider = provider_data[0](provider_data[1])
@@ -50,4 +50,4 @@ def __movcli__(provider, query, result):  # TODO add regex
 
 
 if __name__ == '__main__':
-    __movcli__()
+    movcli()

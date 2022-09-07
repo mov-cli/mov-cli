@@ -1,27 +1,28 @@
 import logging
 import os
-import platform
+#import platform
 import re
 import subprocess
 import sys
-
+import mov_cli.__main__ as movcli
 # import shlex
 # required for development
-
+from .history import History
+from .config import config 
 from colorama import Fore, Style
-
 from .httpclient import HttpClient
+from . import presence
 
-
-def determine_path() -> str:
-    plt = platform.system()
-    if plt == "Windows":
-        return f"C://Users//{os.getenv('username')}//Downloads"
-    elif (plt == "Linux") or (plt == "Darwin"):
-        return f"/home/{os.getlogin()}/Downloads"
-    else:
-        print("Please open an issue for your os")
-        sys.exit(-2)
+# Not needed
+# def determine_path() -> str:
+#    plt = platform.system()
+#    if plt == "Windows":
+#        return f"C://Users//{os.getenv('username')}//Downloads"
+#    elif (plt == "Linux") or (plt == "Darwin"):
+#        return f"/home/{os.getlogin()}/Downloads"
+#    else:
+#        print("Please open an issue for your os")
+#        sys.exit(-2)
 
 
 class WebScraper:
@@ -46,7 +47,7 @@ class WebScraper:
     @staticmethod
     def lmagenta(txt: str) -> str:
         return f"{Fore.LIGHTMAGENTA_EX}{txt}{Style.RESET_ALL}"
-
+    
     @staticmethod
     def cyan(txt: str) -> str:
         return f"{Fore.CYAN}{txt}{Style.RESET_ALL}"
@@ -60,25 +61,29 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, path: str = determine_path(), subtitle: str = None
+        self, url: str, name: str, subtitle: str = None
     ):
-        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {path}/{self.parse(name)}.mp4')
+        name = self.parse(name)
+        fixname = re.sub(r"-+", "_", name)
+
+        # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
             "ffmpeg",
             "-i",
             f"{url}",
             "-c",
             "copy",
-            f"{path}/{self.parse(name)}.mp4",
+            f"{config.getdownload()}/{fixname}.mp4",
         ]
         if subtitle:
-            # args.extend(f'-vf subtitle="{subtitle}" {path}/{self.parse(name)}.mp4')
+            # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{path}/{self.parse(name)}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{config.getdownload()}/{fixname}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
-        return print(f"Downloaded at {path}")
+        
+        return print(f"Downloaded at {config.getdownload()}")
 
     def play(self, url: str, name: str):
         try:
@@ -90,10 +95,12 @@ class WebScraper:
                     f"--force-media-title=mov-cli:{name}",
                     "--no-terminal",
                 ]
+
                 mpv_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
                 mpv_process.wait()
+                presence.clear_presence()
             except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
                 args = [
                     "vlc",
@@ -106,6 +113,7 @@ class WebScraper:
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
                 vlc_process.wait()
+                presence.clear_presence()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
             logging.log(logging.ERROR, txt)
@@ -130,14 +138,19 @@ class WebScraper:
         return self.results(self.search(q))
 
     def display(self, q: str = None, result_no: int = None):
+        presence.clear_presence()
         result = self.SandR(q)
         for ix, vl in enumerate(result):
-            print(
+            print(  
                 self.green(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}"), end="\n\n"
             )
         print(self.red("[q] Exit!"), end="\n\n")
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
+        print(self.green("[p] Switch Provider!"), end="\n\n")
+        print(self.cyan("[h] History!"), end="\n\n")
+        print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
+        print(self.green("[r] Set Discord Presence!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -147,6 +160,36 @@ class WebScraper:
                 sys.exit()
             elif choice == "s":
                 return self.redo()
+            elif choice == "p":
+                return movcli.movcli()
+            elif choice == "h":
+                History.gethistory()
+            elif choice == "r":
+                print(self.red("[e] Enable"))
+                print(self.red("[d] Disable"))
+                choice = input(self.blue("Enter your choice: "))
+                if choice == "e":
+                    config.setpresence("true")
+                    print(self.green("Presence Enabled!"))
+                elif choice == "d":
+                    config.setpresence("false")
+                    print(self.green("Presence Disabled!"))
+            elif choice == "c":
+                print(self.red("[a] Actvid"))
+                print(self.red("[s] SFlix"))
+                print(self.red("[o] Solar"))
+                print(self.red("[t] TheFlix"))
+                print(self.green(f"{config.getprovider()} is standard"))
+                print(self.cyan("[q] Quit"))
+                provider = input(self.blue("Enter your Provider: "))
+                if provider == "a":
+                    config.setprovider("actvid")
+                elif provider == "s":
+                    config.setprovider("sflix")
+                elif provider == "o":
+                    config.setprovider("solar")
+                elif provider == "q":
+                    sys.exit()
             elif choice == "d":
                 try:
                     mov_or_tv = result[

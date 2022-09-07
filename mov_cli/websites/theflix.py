@@ -1,13 +1,13 @@
 import re
 import sys
 import json
-
 import httpx
 
 sys.path.append("..")
-
+from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
+from ..utils.presence import update_presence
 
 
 class Theflix(WebScraper):
@@ -19,13 +19,11 @@ class Theflix(WebScraper):
         self.m_available = -3
         self.t_available = -2
         self.seasons = -1
+        self.userinput = ""
 
     def parse(self, text: str):
         name = f"{text[0].lower()}{''.join([f' {i}' if i.isupper() else i for i in text[1:]]).lower().rstrip('.')}"
         return re.sub("\W+", "-", name)
-
-    # ? The isupper,etc is added since theflix treats an uppercase letter in the middle of the titles as space
-
     def auth_token(self):
         return httpx.post(
             "https://theflix.to:5679/authorization/session/continue?contentUsageType=Viewing",
@@ -33,18 +31,67 @@ class Theflix(WebScraper):
         ).headers["Set-Cookie"]
 
     def search(self, query: str = None) -> list:
-        q = (
-            input(self.blue("[!] Please Enter the name of the Movie: "))
-            if query is None
-            else query
-        )
+        print(self.red("[s] Search"))
+        print(self.red("[ts] Trending TV Shows"))
+        print(self.red("[tm] Trending Movies"))
+        print(self.red("[q] Quit"))
+        choice = input(self.blue("Enter your choice: ")).lower()
+        if choice == "s":
+            q = (
+                input(self.blue("[!] Please Enter the name of the Movie: "))
+                if query is None
+                else query
+            )
+            data = []
+            for j in [
+                [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"]]
+                for i in json.loads(
+                    BS(
+                        self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
+                        "lxml",
+                    )
+                    .select("#__NEXT_DATA__")[0]
+                    .text
+                )["props"]["pageProps"]["mainList"]["docs"]
+                if i["available"]
+            ]:
+                data.append(j)
+            for k in [
+                [self.parse(i["name"]), i["id"], "MOVIE", i["available"]]
+                for i in json.loads(
+                    BS(
+                        self.client.get(
+                            f"https://theflix.to/movies/trending?search={q.replace(' ', '+')}"
+                        ),
+                        "lxml",
+                    )
+                    .select("#__NEXT_DATA__")[0]
+                    .text
+                )["props"]["pageProps"]["mainList"]["docs"]
+                if i["available"]
+            ]:
+                data.append(k)
+            if not len(data):
+                print(self.red("No Results found"), self.lmagenta("Bye!"))
+                sys.exit(1)
+            else:
+                return data
+        elif choice == "ts":
+            return self.trendingtvshows()
+        elif choice == "tm":
+            return self.trendingmovies()
+        elif choice == "q":
+            print(self.red("Bye!"))
+            sys.exit(1)
+
+    def trendingtvshows(self):
         data = []
         for j in [
             [self.parse(i["name"]), i["id"], i["available"], "TV", i["numberOfSeasons"]]
             for i in json.loads(
                 BS(
-                    self.client.get(f"https://theflix.to/tv-shows/trending?search={q}"),
-                    "html.parser",
+                    self.client.get(f"https://theflix.to/tv-shows/trending"),
+                    "lxml",
                 )
                 .select("#__NEXT_DATA__")[0]
                 .text
@@ -52,14 +99,18 @@ class Theflix(WebScraper):
             if i["available"]
         ]:
             data.append(j)
+        return data
+    
+    def trendingmovies(self):
+        data = []
         for k in [
             [self.parse(i["name"]), i["id"], "MOVIE", i["available"]]
             for i in json.loads(
                 BS(
                     self.client.get(
-                        f"https://theflix.to/movies/trending?search={q.replace(' ', '+')}"
+                        f"https://theflix.to/movies/trending"
                     ),
-                    "html.parser",
+                    "lxml",
                 )
                 .select("#__NEXT_DATA__")[0]
                 .text
@@ -67,11 +118,7 @@ class Theflix(WebScraper):
             if i["available"]
         ]:
             data.append(k)
-        if not len(data):
-            print(self.red("No Results found"), self.lmagenta("Bye!"))
-            sys.exit(1)
-        else:
-            return data
+        return data
 
     def page(self, info):
         return f"{self.base_url}/movie/{info[1]}-{info[0]}", info[0]
@@ -85,7 +132,7 @@ class Theflix(WebScraper):
     def cdnurl(self, link, info, k):
         self.client.set_headers({"Cookie": k})
         objid = json.loads(
-            BS(self.client.get(link).text, "html.parser")
+            BS(self.client.get(link).text, "lxml")
             .select("#__NEXT_DATA__")[0]
             .text
         )["props"]["pageProps"]["movie"]["videos"][0]
@@ -105,7 +152,7 @@ class Theflix(WebScraper):
         s, ep = self.get_season_episode(link)
         self.client.set_headers({"Cookie": k})
         f = json.loads(
-            BS(self.client.get(link).text, "html.parser")
+            BS(self.client.get(link).text, "lxml")
             .select("#__NEXT_DATA__")[0]
             .text
         )["props"]["pageProps"]["selectedTv"]["seasons"]
@@ -144,7 +191,7 @@ class Theflix(WebScraper):
                 self.client.get(
                     f"https://theflix.to/tv-show/{ids}-{name}/season-{season}/episode-1"
                 ),
-                "html.parser",
+                "lxml",
             )
             .select("#__NEXT_DATA__")[0]
             .text
@@ -231,11 +278,14 @@ class Theflix(WebScraper):
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p"):
         name = m[self.title]
+        self.userinput = f"{name}"
         page = self.page(m)
         url, name = self.cdnurl(page[0], name, self.token)
+        History.addhistory(self.userinput, state, url)
         if state == "d":
             self.dl(url, name)
             return
+        update_presence(self.userinput)
         self.play(url, name)
 
     def TV_PandDP(self, t: list, state: str = "d" or "p"):
@@ -243,11 +293,14 @@ class Theflix(WebScraper):
         season, episodes, episode = self.ask(
             t[self.seasons], t[self.aid], name, self.token
         )
+        self.userinput = f"{name}"
         page, name = self.wspage([name, t[1], season, episode])
         cdn, name = self.cdnurlep(page, name, self.token)
+        History.addhistory(self.userinput, state, page, season, episode)
         if state == "d":
             self.dl(cdn, name)
             return
+        update_presence(self.userinput, season, episode)
         self.play(cdn, name)
 
     # def redo(self, query: str = None, result: int = None):

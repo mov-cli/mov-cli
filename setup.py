@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from mov_cli.__version__ import __core__
+from __version__ import __core__
 
 
 with open("requirements.txt") as requirements_txt:
@@ -32,6 +32,6 @@ setup(
     install_requires=requirements,
     entry_points="""
         [console_scripts]
-        mov-cli=mov_cli.__main__:__movcli__
+        mov-cli=mov_cli.__main__:movcli
     """,
 )

@@ -9,7 +9,7 @@ def get_tmdb_id(query: str) -> list:
         httpx.get(f"https://www.themoviedb.org/search?query={query}").text,
         httpx.get(f"https://www.themoviedb.org/search/tv?query={query}").text,
     )
-    rem, ram = BS(req, "html.parser"), BS(res, "html.parser")
+    rem, ram = BS(req, "lxml"), BS(res, "lxml")
     titles = [i.text for i in rem.select("a.result > h2")] + [
         i.text for i in ram.select("a.result > h2")
     ]
@@ -30,12 +30,16 @@ def get_imdb_id(query: str) -> str:
     print(req)
     return req[0]["id"]
 
+def get_imdb_title(query: str) -> str:
+    query = query.replace(" ", "-")
+    req = httpx.get(f"https://v2.sg.media-imdb.com/suggestion/{query[0].lower()}/{query}.json").json()["d"][0]["l"]
+    return req
 
 def get_season_seasons(tmdb_id: str, name: str) -> int:
     req = httpx.get(
         f"https://www.themoviedb.org/tv/{tmdb_id}-{parse(name)}/seasons"
     ).text
-    rem = BS(req, "html.parser")
+    rem = BS(req, "lxml")
     seasons = [i.text for i in rem.select(".flex > div.season_wrapper")]
     return len(seasons)
 
@@ -44,7 +48,7 @@ def get_season_episodes(tmdb_id: str, name: str, season_number: str) -> int:
     req = httpx.get(
         f"https://www.themoviedb.org/tv/{tmdb_id}-{parse(name)}/season/{season_number}"
     ).text
-    episodes = int(BS(req, "html.parser").select_one(".episode_sort.space > span").text)
+    episodes = int(BS(req, "lxml").select_one(".episode_sort.space > span").text)
     return episodes
 
 
