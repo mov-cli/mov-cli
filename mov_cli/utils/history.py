@@ -12,8 +12,10 @@ class History:
         plt = platform.system()
         if plt == "Windows":
             return f'{environ["USERPROFILE"]}\\Documents'
-        elif (plt == "Linux") or (plt == "Darwin"):
+        elif plt == "Linux":
             return f"/home/{os.getlogin()}"
+        elif plt == "Darwin":
+            return f"/Users/{os.getlogin()}"
     
     @staticmethod
     def addhistory(userinput, state, url, season=None, episode=None):

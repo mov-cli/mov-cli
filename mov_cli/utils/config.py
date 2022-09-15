@@ -11,9 +11,24 @@ class config:
         plt = platform.system()
         if plt == "Windows":
             return f'{environ["USERPROFILE"]}\\Documents'
-        elif (plt == "Linux") or (plt == "Darwin"):
+        elif plt == "Linux":
             return f"/home/{os.getlogin()}"
-    
+        elif plt == "Darwin":
+            return f"/Users/{os.getlogin()}"
+
+    @staticmethod
+    def ismac():
+        plt = platform.system()
+        if plt == "Darwin":
+            return "Currently only theflix works with MacOS"
+        else:
+            return "actvid\ntheflix\nsflix\nsolar"
+
+    @staticmethod
+    def pltcheck():
+        plt = platform.system()
+        return plt
+
     @staticmethod
     def setprovider(provider):
         if os.path.exists(f"{config.winorlinux()}/mov_cli"):
@@ -32,12 +47,15 @@ class config:
             with open(file, "r") as f:
                 # get what stands after "provider: "
                 provider = f.read().split("provider: ")[1]
-                if provider == "actvid" or "theflix" or "sflix" or "solar":
-                    return provider
+                if config.pltcheck() == "Darwin":
+                    return "theflix"
                 else:
-                    return "actvid"
+                    if provider == "actvid" or "theflix" or "sflix" or "solar":
+                        return provider
+                    else:
+                        return "theflix"
         else:
-            return "actvid"
+            return "theflix"
         
     @staticmethod
     def providerexists():
