@@ -5,10 +5,6 @@ A cli tool to browse and watch movies.
 
 ![ezgif com-gif-maker(2)](https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif)
 
-### Current State
-mov-cli doesn´t work, the Providers have changed how they work.
-This may take a while to get up and running again.
-
 Sorry, for the inconvenience.
 
 ### Python
