@@ -26,7 +26,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"On V:0.1.3\n\n{config.ismac()}\nThe name of the provider",
+    prompt=f"On V:0.1.3\n\ntheflix\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"theflix",
 )
