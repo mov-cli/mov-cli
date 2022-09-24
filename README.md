@@ -5,8 +5,6 @@ A cli tool to browse and watch movies.
 
 ![ezgif com-gif-maker(2)](https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif)
 
-Sorry, for the inconvenience.
-
 ### Python
 
 ```python
