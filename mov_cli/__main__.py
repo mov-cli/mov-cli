@@ -28,7 +28,7 @@ if platform.system() == "Windows":
     "--provider",
     prompt=f"On V:0.1.3\n\n{config.ismac()}\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
-    default=f"{config.getprovider()}",
+    default=f"theflix",
 )
 @click.option("-q", "--query", default=None, help="Your search query")
 @click.option(
