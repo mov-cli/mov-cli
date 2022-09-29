@@ -28,7 +28,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nactvid\nsflix\nsolar\nThe name of the provider",
+    prompt=f"\ntheflix\nactvid\nsflix\nsolar\ndopebox\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"theflix",
 )
