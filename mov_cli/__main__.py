@@ -10,13 +10,15 @@ from .websites.actvid import Actvid
 from .websites.solar import Solar
 from .websites.sflix import Sflix
 from .websites.olgply import OlgPly
+from .websites.dopebox import DopeBox
 
 calls = {
     "actvid": [Actvid, "https://www.actvid.com"],
     "theflix": [Theflix, "https://theflix.to"],
     "sflix": [Sflix, "https://sflix.se"],
     "solar": [Solar, "https://solarmovie.pe"],
-    "olgply": [OlgPly, "https://oglply.com"],
+    "olgply": [OlgPly, "https://olgply.com"],
+    "dopebox": [DopeBox, "https://dopebox.to"],
 }
 
 if platform.system() == "Windows":

@@ -47,13 +47,10 @@ class config:
             with open(file, "r") as f:
                 # get what stands after "provider: "
                 provider = f.read().split("provider: ")[1]
-                if config.pltcheck() == "Darwin":
-                    return "theflix"
+                if provider == "actvid" or "theflix" or "sflix" or "solar" or "dopebox":
+                    return provider
                 else:
-                    if provider == "actvid" or "theflix" or "sflix" or "solar":
-                        return provider
-                    else:
-                        return "theflix"
+                    return "actvid"
         else:
             return "theflix"
         
