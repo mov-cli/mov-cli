@@ -30,7 +30,7 @@ if platform.system() == "Windows":
     "--provider",
     prompt=f"\ntheflix\nactvid\nsflix\nsolar\ndopebox\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
-    default=f"theflix",
+    default=f"{config.getprovider()}",
 )
 @click.option("-q", "--query", default=None, help="Your search query")
 @click.option(
