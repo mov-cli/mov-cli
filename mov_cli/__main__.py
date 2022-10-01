@@ -47,8 +47,7 @@ def movcli(provider, query, result):  # TODO add regex
         # provider.redo(query) if query is not None else provider.redo()
         provider.redo(query, result)  # if result else provider.redo(query)
     except Exception as e:
-        print("[!] Sorry I don't know that provider! | ", e)
-        sys.exit(2)
+        print(f"[x] An error has occurred | {e} ")
 
 
 if __name__ == '__main__':

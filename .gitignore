@@ -1,3 +1,6 @@
 __pycache__/
 .idea/*
 .DS_Store
+dist/*
+build/*
+mov_cli.egg-info/*
