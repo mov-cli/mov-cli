@@ -50,6 +50,13 @@ Many more to be found.
 ## Contributing
 Pull requests are welcome and *appreciated*. For major changes, please open an issue first to discuss what you would like to change.
 
+## ISP
+```
+Your ISP may or may not block some providers, if thats the Case:
+Change your DNS Settings to 1.1.1.1 or 1.0.0.1
+https://1.1.1.1/dns/#setup-instructions
+```
+
 ## Downloads
 ```
 You'll need FFmpeg, You'll most likely have it if you have mpv installed!
