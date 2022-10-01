@@ -54,8 +54,8 @@ Pull requests are welcome and *appreciated*. For major changes, please open an i
 ```
 Your ISP may or may not block some providers, if thats the Case:
 Change your DNS Settings to 1.1.1.1 or 1.0.0.1
-[1.1.1.1](https://1.1.1.1/dns/#setup-instructions)
 ```
+[1.1.1.1](https://1.1.1.1/dns/#setup-instructions)
 
 ## Downloads
 ```
