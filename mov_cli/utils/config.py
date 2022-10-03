@@ -81,7 +81,7 @@ class config:
                 else:
                     return f"{config.winorlinux()}/Downloads"
         else:
-            return f"{config.winorlinux()}/Downloads"
+            return f"{os.getcwd()}"
 
     @staticmethod
     def setdownload(download):
