@@ -68,17 +68,14 @@ stream () {
 }
 
 download () {
-	printf "${c_blue}Downloading %s${c_reset}\n" "$2"
+	printf "\n${c_blue}Downloading %s${c_reset}\n" "$2"
 	aria2c --summary-interval=0 -x 16 -s 16 --referer="$base_url" "$1" --dir="$download_dir" -o "${2}.mp4" --download-result=hide
 }
 
 get_show() {
 	printf "\33[2K\r${c_blue}Searching query.."
 	data=$(curl -s "$base_url/tv-shows/trending?search=$query")
-	results=$(printf "%s" "$data" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/.*"name":"([^"]*)","numberOfSeasons":(.*),.*numberOfEpisod.*"id":(.*),"available":true.*/\2 \3 \1/p')
-	[ -z "$results" ] && printf "\33[2K\r${c_red}No search results found${c_reset}" && exit 0
-	printf "\33[2K\r${c_green}Results found\n"
-	result=$(printf "%s" "$results" | fzf | tr "[:punct:]" " " | tr -s " " | tr ' |[:upper:]' '-|[:lower:]')
+	result=$(printf "%s" "$data" | tr '{|}' '\n' | sed '/recommendationsList/,$d' | sed -nE 's/.*"name":"([^"]*)","numberOfSeasons":(.*),.*numberOfEpisod.*"id":(.*),"available":true.*/\2 \3 \1/p' | fzf --with-nth 3.. --height=30% --border -1 --layout=reverse | tr "[:punct:]" " " | tr -s " " | tr ' |[:upper:]' '-|[:lower:]')
 	[ -z "$result" ] && err "No tv-show selected" && exit 0
 	printf "${c_magenta}selected $result\n${c_blue}Fetching season/episode list"
 	build_id=$(printf "%s" "$data" | sed -nE 's/.*buildId\":"(.*)",.*run.*/\1/p')
@@ -106,15 +103,12 @@ get_ep_link(){
 
 get_movie () {
 	printf "\33[2K\r${c_blue}Searching query.."
-	results=$(curl -s "$base_url/movies/trending?search=$query" | sed "s/:\"$movie.*//" | tr '{|}' '\n' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p')
-	[ -z "$results" ] && printf "\33[2K\r${c_red}No search results found${c_reset}" && exit 0
-	printf "\33[2K\r${c_green}Results found\n"
-	movie_name=$(printf "$results" | cut -f2- | fzf)
-	[ -z "$movie_name" ] && err "No movie chosen" && exit 0
+	result=$(curl -s "$base_url/movies/trending?search=$query" | tr '{|}' '\n' | sed '/recommendationsList/,$d' | sed -nE 's/^\"name\":"([^"]*)",.*available\":true.*videos\":\["(.*)"\],.*/\2\t\1/p' | fzf --with-nth 2.. --height=30% --border -1 --layout=reverse)
+	[ -z "$result" ] && err "No movie chosen" && exit 0
 	tput clear
 	printf "${c_blue}Fetching movie"
-	display=$(printf "%s" "$movie_name" | tr -d '[:punct:]')
-	id=$(printf "%s" "$results" | sed -n "s/\t$movie_name$//p")
+	id=$(printf "%s" "$result" | cut -f1)
+	display=$(printf "%s" "$result" | cut -f2 | tr -d '[:punct:]')
 	play_link "movies"
 }
 
