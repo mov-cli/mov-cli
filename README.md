@@ -95,7 +95,6 @@ Actvid · SFlix · TheFlix · Solar · DopeBox
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * mpv
   ```
   Most Linux Distros have it as a Package.
