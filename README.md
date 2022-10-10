@@ -68,7 +68,7 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#inspiration">inspiration</a></li>
   </ol>
 </details>
 
@@ -178,7 +178,7 @@ Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mo
 
 
 
-<!-- ACKNOWLEDGMENTS -->
+<!-- Inspiration -->
 ## Inspiration
 
 Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
