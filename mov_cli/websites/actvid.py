@@ -34,7 +34,7 @@ class Actvid(WebScraper):
         self.CODE_REGEX = r"""^\d*"""
         self.SID_REGEX = r'{"sid":"(.*?)"'
         self.SOURCE_REGEX = r"""\{.*\}"""
-          # encoding and then decoding the url
+        # encoding and then decoding the url
         # self.redo()
         # IMP: self.client.get/post always returns a response object
         # self.client.post/get -> httpx.response
@@ -145,39 +145,52 @@ class Actvid(WebScraper):
 
         return formated
 
-    def websocket(self, iframe_id):
+    """    def websocket(self, iframe_id):
         # Thanks to Twilight for fixing it.
         '''
         will return decryption key, sources and tracks
         '''
         ws = create_connection("wss://wsx.dokicloud.one/socket.io/?EIO=4&transport=websocket")
         p = ws.recv()
-        code = re.findall(self.CODE_REGEX,p)[0]
-        
-        #dirty impleamentation
+        code = re.findall(self.CODE_REGEX, p)[0]
+
+        # dirty impleamentation
         if code == "0":
             ws.send("40")
-            p=ws.recv()
-            
-            code = re.findall(self.CODE_REGEX,p)[0]
-            
+            p = ws.recv()
+
+            code = re.findall(self.CODE_REGEX, p)[0]
+
             if code == "40":
-                key =re.findall(self.SID_REGEX,p)[0]
-                
+                key = re.findall(self.SID_REGEX, p)[0]
+
                 ws.send(
-                    '42["getSources",{"id":"'+iframe_id+'"}]'
+                    '42["getSources",{"id":"' + iframe_id + '"}]'
                 )
-                p =ws.recv()
-                x = json.loads(re.findall(self.SOURCE_REGEX,p)[0])
-                
-        return key,x["sources"],x["tracks"]
+                p = ws.recv()
+                x = json.loads(re.findall(self.SOURCE_REGEX, p)[0])
+
+        return key, x["sources"], x["tracks"]
 
     def cdn_url(self, rabb_id: str) -> str:
-        key,source,track = self.websocket(rabb_id)
-        predata = self.decrypt(source,bytes(key,"utf-8"))
+        key, source, track = self.websocket(rabb_id)
+        predata = self.decrypt(source, bytes(key, "utf-8"))
         data = json.loads(predata)
         print(predata)
-        return data[0]['file']
+        return data[0]['file']"""
+
+    def cdn_url(self, final_link: str, rabb_id: str) -> str:
+        self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
+        data = self.client.get(
+            f"{final_link}getSources?id={rabb_id}"
+        ).json()
+        source = data['sources']
+        print(source)
+        print(len(source))
+        if source.endswith("=="):
+            n = json.loads(self.decrypt(data['sources'], self.gh_key()))
+            return n[0]['file']
+        return source[0]['file']
 
     def server_id(self, mov_id: str) -> str:
         req = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
@@ -202,39 +215,41 @@ class Actvid(WebScraper):
         parts = p.urlparse(url, allow_fragments=True, scheme="/").path.split("/")
         return re.findall(r'(https:\/\/.*\/embed-4)', url)[0].replace("embed-4", "ajax/embed-4/"), parts[-1]
 
-
     ## decryption
     ## Thanks to Twilight
 
-    #def determine_char_enc(self, value):
+    # def determine_char_enc(self, value):
     #    result = chardet.detect(value)['encoding']
     #    return result
 
+    # websocket simulation
 
-    #websocket simulation
-    
+    def gh_key(self):
+        u = self.client.get("https://raw.githubusercontent.com/consumet/rapidclown/rabbitstream/key.txt").text
+        print(u)
+        return bytes(u, 'utf-8')
 
     def md5(self, data):
         return hashlib.md5(data).digest()
 
-    def get_key(self, salt,key):
-        x = self.md5(key+salt)
+    def get_key(self, salt, key):
+        x = self.md5(key + salt)
         currentkey = x
-        while(len(currentkey) < 48):
-            x = self.md5(x+key+salt)
+        while (len(currentkey) < 48):
+            x = self.md5(x + key + salt)
             currentkey += x
         return currentkey
 
     def unpad(self, s):
         return s[:-ord(s[len(s) - 1:])]
 
-    def decrypt(self, data ,key):
+    def decrypt(self, data, key):
         k = self.get_key(
-        base64.b64decode(data)[8:16],key
+            base64.b64decode(data)[8:16], key
         )
         dec_key = k[:32]
         iv = k[32:]
-        p= AES.new(dec_key,AES.MODE_CBC,iv=iv).decrypt(
+        p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(
             base64.b64decode(data)[16:]
         )
         return self.unpad(p).decode()
@@ -245,7 +260,7 @@ class Actvid(WebScraper):
         sid = self.ep_server_id(episode)
         iframe_url, tv_id = self.get_link(sid)
         iframe_link, iframe_id = self.rabbit_id(iframe_url)
-        url = self.cdn_url(iframe_id)
+        url = self.cdn_url(iframe_link, iframe_id)
         History.addhistory(self.userinput, state, "", season, ep)
         if state == "d":
             self.dl(url, name)
@@ -258,7 +273,7 @@ class Actvid(WebScraper):
         sid = self.server_id(m[self.aid])
         iframe_url, tv_id = self.get_link(sid)
         iframe_link, iframe_id = self.rabbit_id(iframe_url)
-        url = self.cdn_url(iframe_id)
+        url = self.cdn_url(iframe_link, iframe_id)
         History.addhistory(self.userinput, state, "")
         if state == "d":
             self.dl(url, name)
