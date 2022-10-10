@@ -9,10 +9,15 @@ A cli tool to browse and watch movies.
 
 ## Pre-requisites
 ```
-You'll need FFmpeg, You'll most likely have it if you have mpv installed!
+You'll need FFmpeg!
 For Linux Users: https://ffmpeg.org/download.html#build-linux
 For Windows Users: https://github.com/BtbN/FFmpeg-Builds/releases
 IMPORTANT: Please add FFmpeg to Path!!
+```
+```
+You'll Need MPV:
+Most Linux Distros have MPV as a package.
+For Windows Users: https://mpv.io/installation/
 ```
 
 ### Python
