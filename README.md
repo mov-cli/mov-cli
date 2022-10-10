@@ -2,6 +2,7 @@
 A cli tool to browse and watch movies.
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/mov-cli/mov-cli?style=for-the-badge) ![GitHub repo size](https://img.shields.io/github/repo-size/mov-cli/mov-cli?style=for-the-badge) ![GitHub last commit](https://img.shields.io/github/last-commit/mov-cli/mov-cli?style=for-the-badge)
+[![GitHub issues](https://img.shields.io/github/issues/mov-cli/mov-cli?style=flat-square)](https://github.com/mov-cli/mov-cli/issues)
 
 ![ezgif com-gif-maker(2)](https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif)
 
