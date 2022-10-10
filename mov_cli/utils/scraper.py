@@ -61,20 +61,30 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, subtitle: str = None
+        self, url: str, name: str, subtitle: str = None, season = None, episode = None
     ):
         name = self.parse(name)
-        fixname = re.sub(r"-+", "_", name)
+        fixname = re.sub(r"-+", " ", name)
+        if season is None:
+            pass
+        else:
+            fixname = f"{fixname}S{season}E{episode}"
+        print(fixname)
 
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
-            "ffmpeg",
-            "-i",
-            f"{url}",
-            "-c",
-            "copy",
-            f"{config.getdownload()}/{fixname}.mp4",
+        'ffmpeg', 
+        '-thread_queue_size',
+        '4096',
+        '-i', 
+        f'{url}', 
+        '-c', 
+        'copy',
+        '-preset',
+        'ultrafast',
+        f'{config.getdownload()}/{fixname}.mp4'
         ]
+
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
@@ -151,6 +161,7 @@ class WebScraper:
         print(self.cyan("[h] History!"), end="\n\n")
         print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
         print(self.green("[r] Set Discord Presence!"), end="\n\n")
+        print(self.green("[sd] Download Whole Show!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
             choice = (
@@ -206,6 +217,34 @@ class WebScraper:
                         self.TV_PandDP(mov_or_tv, "d")
                     else:
                         self.MOV_PandDP(mov_or_tv, "d")
+                except ValueError as e:
+                    print(
+                        self.red(f"[!]  Invalid Choice Entered! | "),
+                        self.lmagenta(str(e)),
+                    )
+                    sys.exit(1)
+                except IndexError as e:
+                    print(
+                        self.red(f"[!]  This Episode is coming soon! | "),
+                        self.lmagenta(str(e)),
+                    )
+                    sys.exit(2)
+            elif choice == "sd":
+                try:
+                    mov_or_tv = result[
+                        int(
+                            input(
+                                self.yellow(
+                                    "[!] Please enter the number of the movie you want to download: "
+                                )
+                            )
+                        )
+                        - 1
+                    ]
+                    if mov_or_tv[self.mv_tv] == "TV":
+                        self.TV_PandDP(mov_or_tv, "sd")
+                    else:
+                        self.MOV_PandDP(mov_or_tv, "sd")
                 except ValueError as e:
                     print(
                         self.red(f"[!]  Invalid Choice Entered! | "),

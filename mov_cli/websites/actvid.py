@@ -185,9 +185,8 @@ class Actvid(WebScraper):
             f"{final_link}getSources?id={rabb_id}"
         ).json()
         source = data['sources']
-        print(source)
-        print(len(source))
-        if source.endswith("=="):
+        link = f"{source}"
+        if link.endswith("=="):
             n = json.loads(self.decrypt(data['sources'], self.gh_key()))
             return n[0]['file']
         return source[0]['file']
@@ -226,7 +225,6 @@ class Actvid(WebScraper):
 
     def gh_key(self):
         u = self.client.get("https://raw.githubusercontent.com/BlipBlob/blabflow/main/keys.json").json()["key"]
-        print(u)
         return bytes(u, 'utf-8')
 
     def md5(self, data):
@@ -253,9 +251,30 @@ class Actvid(WebScraper):
             base64.b64decode(data)[16:]
         )
         return self.unpad(p).decode()
+    
+    def download(self, series_id: str, name):
+        r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
+        season_ids = [
+            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
+        ]
+        for s in range(len(season_ids)):
+            z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
+            rf = self.client.get(z)
+            episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
+            for e in range(len(episodes)):
+                episode = episodes[e]
+                sid = self.ep_server_id(episode)
+                iframe_url, tv_id = self.get_link(sid)
+                iframe_link, iframe_id = self.rabbit_id(iframe_url)
+                url = self.cdn_url(iframe_link, iframe_id)
+                self.dl(url, name, season=s +1, episode=e +1)
 
-    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+
+    def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
+        if state == "sd":
+            self.download(t[self.aid],name)
+            return
         episode, season, ep = self.ask(t[self.aid])
         sid = self.ep_server_id(episode)
         iframe_url, tv_id = self.get_link(sid)
@@ -268,7 +287,7 @@ class Actvid(WebScraper):
         update_presence(self.userinput, season, ep)
         self.play(url, name)
 
-    def MOV_PandDP(self, m: list, state: str = "d" or "p"):
+    def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
         name = m[self.title]
         sid = self.server_id(m[self.aid])
         iframe_url, tv_id = self.get_link(sid)
@@ -277,6 +296,9 @@ class Actvid(WebScraper):
         History.addhistory(self.userinput, state, "")
         if state == "d":
             self.dl(url, name)
+            return
+        if state == "sd":
+            print("You can download only Shows with 'sd'")
             return
         update_presence(self.userinput)
         self.play(url, name)
