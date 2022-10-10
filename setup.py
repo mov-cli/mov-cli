@@ -8,8 +8,8 @@ with open("requirements.txt") as requirements_txt:
 setup(
     name="mov-cli",
     version=__core__,
-    author="pain@poseidon444",
-    author_email="painedposeidon444@gmail.com",
+    author="pain@poseidon444, ananas@r3tr0ananas",
+    author_email="painedposeidon444@gmail.com, r3tr0ananas@outlook.com",
     description="A module to download and stream your favorite movies and series.",
     packages=find_packages(),
     url="https://github.com/mov-cli/mov-cli",
