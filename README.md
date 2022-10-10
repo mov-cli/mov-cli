@@ -30,8 +30,9 @@
 <!-- PROJECT LOGO -->!
 <br />
 <div align="center">
+
   <a href="https://github.com/mov-cli/mov-cli">
-    <img src="https://user-images.githubusercontent.com/83706294/194959044-4039038e-d339-413c-b86d-cfbdbd2b7ec7.png" alt="Logo" width="80" height="80">
+    <img src="https://user-images.githubusercontent.com/83706294/194960059-a9202d72-f033-46b4-b756-3193dc54fb20.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">mov-cli</h3>
