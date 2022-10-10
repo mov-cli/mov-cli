@@ -7,6 +7,14 @@ A cli tool to browse and watch movies.
 
 ![ezgif com-gif-maker(2)](https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif)
 
+## Pre-requisites
+```
+You'll need FFmpeg, You'll most likely have it if you have mpv installed!
+For Linux Users: https://ffmpeg.org/download.html#build-linux
+For Windows Users: https://github.com/BtbN/FFmpeg-Builds/releases
+IMPORTANT: Please add FFmpeg to Path!!
+```
+
 ### Python
 
 ```python
@@ -60,13 +68,6 @@ Change your DNS Settings
 
 [1.1.1.1](https://1.1.1.1/dns/#setup-instructions)
 
-## Downloads
-```
-You'll need FFmpeg, You'll most likely have it if you have mpv installed!
-For Linux Users: https://ffmpeg.org/download.html#build-linux
-For Windows Users: https://github.com/BtbN/FFmpeg-Builds/releases
-IMPORTANT: Please add FFmpeg to Path!!
-```
 ## Inspiration
 Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
 
