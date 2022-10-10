@@ -24,6 +24,8 @@ For Windows Users: https://mpv.io/installation/
 
 ```python
 pip install git+https://github.com/mov-cli/mov-cli
+or
+pip install mov-cli
 ```
 ### Shell
 
