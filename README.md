@@ -35,8 +35,6 @@
     <img src="https://user-images.githubusercontent.com/83706294/194960059-a9202d72-f033-46b4-b756-3193dc54fb20.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">mov-cli</h3>
-
   <p align="center">
     A cli tool to browse and watch movies.
     <br />
