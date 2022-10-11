@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
-
+from pathlib import Path
 
 with open("requirements.txt") as requirements_txt:
     requirements = requirements_txt.read().splitlines()
 
-with open("readme.md") as readme_md:
-    readme = readme_md.read()
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="mov-cli",
@@ -38,5 +38,6 @@ setup(
         [console_scripts]
         mov-cli=mov_cli.__main__:movcli
     """,
-    long_description=f"{readme}",
+    long_description_content_type="text/markdown",
+    long_description=long_description,
 )
