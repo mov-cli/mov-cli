@@ -73,7 +73,8 @@ class WebScraper:
 
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
-        'ffmpeg', 
+        'ffmpeg',
+        '-n', 
         '-thread_queue_size',
         '4096',
         '-i', 
