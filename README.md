@@ -169,6 +169,7 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 ## Contact
 
 Author: Poseidon444 | painedposeidon444@gmail.com
+
 Maintainer: R3tr0Ananas | r3tr0ananas@hotmail.com
 
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
