@@ -224,7 +224,7 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        u = self.client.get("https://raw.githubusercontent.com/BlipBlob/blabflow/main/keys.json").json()["key"]
+        u = self.client.get("https://raw.githubusercontent.com/consumet/rapidclown/main/key.txt").text
         return bytes(u, 'utf-8')
 
     def md5(self, data):
