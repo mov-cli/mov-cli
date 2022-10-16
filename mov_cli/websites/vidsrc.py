@@ -4,14 +4,12 @@ import sys
 from ..utils.scraper import WebScraper
 sys.path.append("..")
 import httpx
-import json
 
 class Vidsrc(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
         self.stream = "https://vidsrc.stream/pro/"
-        self.enable = "https://tm2p.vidsrc.stream/set_pass.php?h="
         self.streamh = {"Referer": "https://source.vidsrc.me/", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"}
         self.headers = {"Referer": "https://v2.vidsrc.me", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"}
         self.finalheaders = {"Referer": "https://vidsrc.stream/", "Origin": "https://vidsrc.stream", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"}
@@ -70,19 +68,22 @@ class Vidsrc(WebScraper):
         script = scripts[7]
         script = "".join(script)
         path = script.split("=")[4]
+        actlink = script.split("=")[3]
+        actlink = actlink.split('"')[1]
         path = path.split('"')[0]
+        actlink = "https:" + actlink + "=" + path
+        print(actlink)
         url = script.split("/")
         url = "https://" + url[19] + "/" + url[20] + "/" + url[21] + "/index-v1-a1.m3u8"
-        print(url)
-        return url, path
+        return url, actlink
 
     def enabler(self, path):
-        test = httpx.get(f"{self.enable + path}", headers=self.finalheaders).text
+        test = httpx.get(path, headers=self.finalheaders).text
         return
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
-        episode, season = self.ask(t[self.aid])
+        season, episode = self.ask(t[self.aid])
         iframe = self.get_playeriframe(f"{t[self.url]}/{season}-{episode}")
         url, enable = self.cdn_url(iframe)
         self.enabler(enable)
