@@ -82,7 +82,7 @@ mov-cli is an Commandline Tool to watch and download shows, movies.
 
 Shows and Movies are scraped from Streaming Sites.
 
-mov-cli currently 5 Providers:
+mov-cli currently 3 Providers:
 
 
 TheFlix 
@@ -91,15 +91,7 @@ Vidsrc
 
 Eja
 
-Discontinued:
-
-Actvid 
-
-SFlix 
-
-Solar 
-
-DopeBox 
+Discontinued: Actvid SFlix Solar DopeBox 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
