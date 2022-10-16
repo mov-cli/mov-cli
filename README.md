@@ -84,7 +84,22 @@ Shows and Movies are scraped from Streaming Sites.
 
 mov-cli currently 5 Providers:
 
-Actvid · SFlix · TheFlix · Solar · DopeBox
+
+TheFlix 
+
+Vidsrc
+
+Eja
+
+Discontinued:
+
+Actvid 
+
+SFlix 
+
+Solar 
+
+DopeBox 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
