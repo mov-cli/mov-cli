@@ -83,7 +83,7 @@ class Vidsrc(WebScraper):
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
         episode, season = self.ask(t[self.aid])
-        iframe = self.get_playeriframe(f"{t[self.url]}/{season}-{season}")
+        iframe = self.get_playeriframe(f"{t[self.url]}/{season}-{episode}")
         url, enable = self.cdn_url(iframe)
         self.enabler(enable)
         print(url)
