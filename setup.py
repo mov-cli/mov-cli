@@ -9,12 +9,12 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="mov-cli",
-    version="0.2.2",
+    version="0.2.3",
     author="pain@poseidon444",
     author_email="painedposeidon444@gmail.com",
     maintainer="ananas@r3tr0ananas",
     maintainer_email="r3tr0ananas@hotmail.com",
-    description="A module to download and stream your favorite movies and series.",
+    description="A module to download and stream your favorite movies and shows.",
     packages=find_packages(),
     url="https://github.com/mov-cli/mov-cli",
     keywords=[

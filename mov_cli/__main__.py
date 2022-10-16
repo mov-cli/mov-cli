@@ -6,21 +6,13 @@ import click
 from .utils.config import config
 
 from .websites.theflix import Theflix
-from .websites.actvid import Actvid
-from .websites.solar import Solar
-from .websites.sflix import Sflix
-from .websites.olgply import OlgPly
-from .websites.dopebox import DopeBox
 from .websites.vidsrc import Vidsrc
+from .websites.eja import eja
 
 calls = {
-    "actvid": [Actvid, "https://www.actvid.com"],
     "theflix": [Theflix, "https://theflix.to"],
-    "sflix": [Sflix, "https://sflix.se"],
-    "solar": [Solar, "https://solarmovie.pe"],
-    "olgply": [OlgPly, "https://olgply.com"],
-    "dopebox": [DopeBox, "https://dopebox.to"],
-    "vidsrc": [Vidsrc, "https://v2.vidsrc.me"]
+    "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
+    "eja" : [eja, "https://eja.tv"],
 }
 
 if platform.system() == "Windows":
@@ -30,7 +22,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nactvid\nsflix\nsolar\ndopebox\nvidsrc\nThe name of the provider",
+    prompt=f"\ntheflix\nvidsrc\neja\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
