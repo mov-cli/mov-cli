@@ -11,6 +11,7 @@ from .websites.solar import Solar
 from .websites.sflix import Sflix
 from .websites.olgply import OlgPly
 from .websites.dopebox import DopeBox
+from .websites.vidsrc import Vidsrc
 
 calls = {
     "actvid": [Actvid, "https://www.actvid.com"],
@@ -19,6 +20,7 @@ calls = {
     "solar": [Solar, "https://solarmovie.pe"],
     "olgply": [OlgPly, "https://olgply.com"],
     "dopebox": [DopeBox, "https://dopebox.to"],
+    "vidsrc": [Vidsrc, "https://v2.vidsrc.me"]
 }
 
 if platform.system() == "Windows":
@@ -28,7 +30,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nactvid\nsflix\nsolar\ndopebox\nThe name of the provider",
+    prompt=f"\ntheflix\nactvid\nsflix\nsolar\ndopebox\nvidsrc\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
@@ -41,13 +43,10 @@ if platform.system() == "Windows":
     type=int,
 )
 def movcli(provider, query, result):  # TODO add regex
-    try:
-        provider_data = calls.get(provider, calls["theflix"])
-        provider = provider_data[0](provider_data[1])
+    provider_data = calls.get(provider, calls["theflix"])
+    provider = provider_data[0](provider_data[1])
         # provider.redo(query) if query is not None else provider.redo()
-        provider.redo(query, result)  # if result else provider.redo(query)
-    except Exception as e:
-        print(f"[x] An error has occurred | {e} ")
+    provider.redo(query, result)  # if result else provider.redo(query)
 
 
 if __name__ == '__main__':
