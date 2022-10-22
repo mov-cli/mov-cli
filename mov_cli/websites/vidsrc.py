@@ -35,9 +35,17 @@ class Vidsrc(WebScraper):
         ids = [data["d"][i]["id"] for i in range(len(data["d"]))]
         title = [data["d"][i]["l"] for i in range(len(data["d"]))]
         urls = ["/embed/" + data["d"][i]["id"] for i in range(len(data["d"]))]
-        mov_or_tv = ["TV" if data["d"][i]["qid"].__contains__("tvSeries") else "MOVIE"
-                     for i in range(len(data["d"]))
-                     ]
+        def movtv(num):
+            try:
+                if data["d"][num]["qid"].__contains__("tvSeries"):
+                    return "TV"  
+                else:
+                    return "MOVIE"
+            except:
+                return "UNKNOWN"
+                    
+        mov_or_tv =[movtv(i) for i in range(len(data["d"]))]
+        
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def get_playeriframe(self, embed):
