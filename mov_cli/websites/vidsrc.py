@@ -82,7 +82,7 @@ class Vidsrc(WebScraper):
         print(actlink)
         url = script.split("/")
         url = "https://" + url[19] + "/" + url[20] + "/" + url[21] + "/index-v1-a1.m3u8"
-        t1 = threading.Thread(target=self.keep_alive.ping, args=(actlink,))
+        t1 = threading.Thread(target=self.keep_alive.ping, args=(actlink, self.finalheaders))
         t1.start()
         return url, actlink
 

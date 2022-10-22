@@ -12,12 +12,13 @@ class KP:
         self.website = website
         # self.cr_th()
 
-    def ping(self, website: str = None):
+    def ping(self, website: str = None, headers: dict = None):
         if not website:
             website = self.website
         while True:
+            self.client.set_headers(headers)
             x = self.client.get(website)
-            print(x)
+            print(x.text)
             time.sleep(self.time)
 
     # def cr_th(self):
