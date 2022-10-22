@@ -46,8 +46,8 @@ class trailers(WebScraper):
     def shows_cdn_url(self, season, episode, link):
         re = self.client.get(f"https://trailers.to{link}").text
         soup = BS(re, "lxml")
-        seasons = soup.findAll("div", {"class": "collapse"})[int(episode) - 1]
-        episode = seasons.findAll("article", {"class": "tour-modern"})[int(season) - 1].find("a")["href"]
+        seasons = soup.findAll("div", {"class": "collapse"})[int(season) - 1]
+        episode = seasons.findAll("article", {"class": "tour-modern"})[int(episode) - 1].find("a")["href"]
         res = self.client.get(f"https://trailers.to{episode}").text
         soup = BS(res, "lxml") 
         url = soup.find("a", {"id": "download-button"})["href"]
@@ -70,6 +70,7 @@ class trailers(WebScraper):
             self.dl(url, name)
             return
         #update_presence(t[self.title], season)
+        print("Seeking is Disabled with Trailers")
         self.play(url, name)
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
@@ -81,4 +82,5 @@ class trailers(WebScraper):
         if state == "sd":
             print("You can download only Shows with 'sd'")
             return
+        print("Seeking is Disabled with Trailers")
         self.play(url, name)
