@@ -8,11 +8,12 @@ from .utils.config import config
 from .websites.theflix import Theflix
 from .websites.vidsrc import Vidsrc
 from .websites.eja import eja
-
+from .websites.trailers import trailers
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
     "eja" : [eja, "https://eja.tv"],
+    "trailers": [trailers, "https://trailers.to"],
 }
 
 if platform.system() == "Windows":
@@ -22,7 +23,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nvidsrc\neja\nThe name of the provider",
+    prompt=f"\ntheflix\nvidsrc\neja\ntrailers\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
