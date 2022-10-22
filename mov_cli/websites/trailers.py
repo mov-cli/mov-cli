@@ -20,7 +20,9 @@ class trailers(WebScraper):
         soup = BS(t, "lxml")
         lis = soup.findAll("article", {"class": "tour-modern list-item"})
         ids = [lis[i].find("a")["href"].split("/")[2] for i in range(len(lis))]
-        title = [lis[i]["id"] for i in range(len(lis))]
+        title = [lis[i]["id"] + ", " + 
+        lis[i].findAll("span", {"class": "small-text font-weight-sbold"})[1].text + 
+        "," for i in range(len(lis))]
         urls = [lis[i].find("a")["href"] for i in range(len(lis))]
         mov_or_tv = ["TV" if lis[i].find("a")["href"].__contains__("tvshow") else "MOVIE" for i in range(len(lis))]
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]

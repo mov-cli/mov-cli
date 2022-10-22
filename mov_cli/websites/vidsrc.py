@@ -33,7 +33,8 @@ class Vidsrc(WebScraper):
     def results(self, html: str) -> list:
         data = httpx.get(f"https://v2.sg.media-imdb.com/suggestion/{html[0]}/{html}.json", headers=self.headers).json()
         ids = [data["d"][i]["id"] for i in range(len(data["d"]))]
-        title = [data["d"][i]["l"] for i in range(len(data["d"]))]
+        title = [f'{data["d"][i]["l"]}, {data["d"][i]["y"]},' 
+        for i in range(len(data["d"]))]
         urls = ["/embed/" + data["d"][i]["id"] for i in range(len(data["d"]))]
         def movtv(num):
             try:
