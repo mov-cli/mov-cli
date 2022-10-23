@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as BS
 from ..utils.scraper import WebScraper
+import re
 
 class trailers(WebScraper):
     def __init__(self, base_url):
@@ -13,6 +14,7 @@ class trailers(WebScraper):
             if q is None
             else q
         )
+        q = re.sub('\W+',' ', q)
         return q.replace(" ", "+")
 
     def results (self, q: str) -> list:
