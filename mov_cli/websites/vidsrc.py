@@ -68,6 +68,7 @@ class Vidsrc(WebScraper):
                 f"Please input the season number(total seasons:{seasons}): "
             ))
         z = self.client.get(f"https://www.imdb.com/title/{imdb}/episodes?season={season}")
+        soup = BS(z, "lxml")
         episodes = soup.findAll("div", {"class": "list_item"})
         episode = input(
             self.lmagenta(
@@ -98,8 +99,24 @@ class Vidsrc(WebScraper):
     def enabler(self, path):
         test = httpx.get(path, headers=self.finalheaders).text
         return
-
+    
+    def showdownload(self, t: list):
+        re = self.client.get(f"https://www.imdb.com/title/{t[self.aid]}/episodes")
+        soup = BS(re, "lxml")
+        seasons = soup.find("h3", {"id": "episode_top"}).text.strip("Season")
+        for i in range(int(seasons)):
+            z = self.client.get(f"https://www.imdb.com/title/{t[self.aid]}/episodes?season={i+1}")
+            soup = BS(z, "lxml")
+            episodes = soup.findAll("div", {"class": "list_item"})
+            for e in range(len(episodes)):
+                iframe = self.get_playeriframe(f"{t[self.url]}/{i + 1}-{e + 1}")
+                url, enable = self.cdn_url(iframe)
+                self.enabler(enable)
+                self.dl(url, t[self.title], season=i+1, episode=e+1)
+                
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
+        if state == "sd":
+            self.showdownload(t)
         name = t[self.title]
         season, episode = self.ask(t[self.aid])
         iframe = self.get_playeriframe(f"{t[self.url]}/{season}-{episode}")
@@ -108,7 +125,7 @@ class Vidsrc(WebScraper):
         print(url)
         # History.addhistory(self.userinput, state, "", season)
         if state == "d":
-            self.dl(url, name)
+            self.dl(url, name, season=season, episode=episode)
             return
         # update_presence(t[self.title], season)
         self.play(url, name)
