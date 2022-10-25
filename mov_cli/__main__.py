@@ -9,11 +9,13 @@ from .websites.theflix import Theflix
 from .websites.vidsrc import Vidsrc
 from .websites.eja import eja
 from .websites.trailers import trailers
+from .websites.ask4movie import Ask4Movie
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
     "eja" : [eja, "https://eja.tv"],
     "trailers": [trailers, "https://trailers.to"],
+    "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
 }
 
 if platform.system() == "Windows":
