@@ -14,7 +14,6 @@ class Ask4Movie(WebScraper):
             if q is None
             else q
         )
-        print("Don't use the Seasons labeled as MOVIE, it will not work.")
         return q.replace(" ", "+")  
     
     def results(self, q):
