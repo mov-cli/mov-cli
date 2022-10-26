@@ -4,6 +4,7 @@ import threading
 import sys
 from ..utils.scraper import WebScraper
 from ..utils.keep_alive import KP
+import re
 
 sys.path.append("..")
 import httpx
@@ -33,7 +34,13 @@ class Vidsrc(WebScraper):
     def results(self, html: str) -> list:
         data = httpx.get(f"https://v2.sg.media-imdb.com/suggestion/{html[0]}/{html}.json", headers=self.headers).json()
         ids = [data["d"][i]["id"] for i in range(len(data["d"]))]
-        title = [f'{data["d"][i]["l"]}, {data["d"][i]["y"]},' 
+        def titlename(num):
+            try:
+                name = f'{data["d"][num]["l"]}, {data["d"][num]["y"]},'
+                return name
+            except:
+                return f'{data["d"][num]["l"]}, UNKNOWN,'
+        title = [titlename(i)
         for i in range(len(data["d"]))]
         urls = ["/embed/" + data["d"][i]["id"] for i in range(len(data["d"]))]
         def movtv(num):
@@ -79,8 +86,8 @@ class Vidsrc(WebScraper):
 
     def cdn_url(self, iframe):
         stream = self.stream + iframe
-        re = httpx.get(stream, headers=self.streamh).text
-        soup = BS(re, "lxml")
+        res = httpx.get(stream, headers=self.streamh).text
+        soup = BS(res, "lxml")
         scripts = soup.find_all("script")
         script = scripts[7]
         script = "".join(script)
@@ -90,8 +97,7 @@ class Vidsrc(WebScraper):
         path = path.split('"')[0]
         actlink = "https:" + actlink + "=" + path
         print(actlink)
-        url = script.split("/")
-        url = "https://" + url[19] + "/" + url[20] + "/" + url[21] + "/index-v1-a1.m3u8"
+        url = re.findall("""hls\.loadSource['(']['"]([^"']*)['"][')"][;]""", script)[0]
         t1 = threading.Thread(target=self.keep_alive.ping, args=(actlink, self.finalheaders))
         t1.start()
         return url, actlink
