@@ -96,7 +96,25 @@ class Ask4Movie(WebScraper):
         print(url)
         return url
     
+    def directshowdownload(self, t:list):
+        reslink = self.get_link(t[self.url])
+        res = self.client.get(f"https://cinegrabber.com/p/{reslink}").text
+        soup = BS(res, "lxml")
+        season = soup.title.text.split("┋")[1][1:]
+        episodes = soup.findAll("span", {"class": "episode"})
+        for e in range(len(episodes)):
+            url = episodes[e]["data-url"].split("/")[2]
+            url = self.cdn_url(url)
+            self.dl(url, t[self.title], episode=e+1, season=season)
+
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
+        if state == "sd":
+            if t[self.url].__contains__("channel"):
+                print("Do a Direct Selection on what Season you want to download.")
+                return
+            else:
+                url, season, episode = self.directshowdownload(t)
+                return
         if t[self.url].__contains__("channel"):
             url, season, episode = self.ask_season(t[self.url])
         else:
