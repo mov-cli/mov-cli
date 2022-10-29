@@ -64,14 +64,14 @@ class trailers(WebScraper):
         return url
 
     def showdownload(self, t):
-        re = self.client.get(f"https://trailers.to{url}").text
+        re = self.client.get(f"https://trailers.to{t[self.url]}").text
         soup = BS(re, "lxml")
         seasons = soup.findAll("div", {"class": "collapse"})
         for s in range(len(seasons)):
             episodes = seasons[s].findAll("article", {"class": "tour-modern"})
             for e in range(len(episodes)):
                 name = t[self.title]
-                url = self.shows_cdn_url(s, e, t[self.url])
+                url = self.shows_cdn_url(s+1, e+1, t[self.url])
                 self.dl(url, name, season=s+1, episode=e+1)
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         if state == "sd":
