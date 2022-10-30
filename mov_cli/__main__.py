@@ -25,7 +25,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nvidsrc\neja\ntrailers\nask4movie\n\nThe name of the provider",
+    prompt=f"\ntheflix\nvidsrc\neja\ntrailers defective\nask4movie\n\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
