@@ -86,7 +86,7 @@ mov-cli currently 6 Providers:
 
 TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie · KimCartoon
 
-USTVGO: Only US IP or US VPN
+USTVGO: US IP Only or US VPN
 
 ```
 Discontinued: Actvid · SFlix · Solar · DopeBox 
