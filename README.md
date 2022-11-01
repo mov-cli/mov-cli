@@ -82,9 +82,9 @@ mov-cli is an Commandline Tool to watch and download shows, movies.
 
 Shows and Movies are scraped from Streaming Sites.
 
-mov-cli currently 5 Providers:
+mov-cli currently 6 Providers:
 
-TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie
+TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie · KimCartoon
 
 USTVGO: Only US IP or US VPN
 
