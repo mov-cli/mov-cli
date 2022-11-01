@@ -10,12 +10,14 @@ from .websites.vidsrc import Vidsrc
 from .websites.eja import eja
 from .websites.trailers import trailers
 from .websites.ask4movie import Ask4Movie
+from .websites.ustvgo import ustvgo
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
     "eja" : [eja, "https://eja.tv"],
     "trailers": [trailers, "https://trailers.to"],
     "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
+    "ustvgo": [ustvgo, "https://ustvgo.tv"],
 }
 
 if platform.system() == "Windows":
@@ -25,7 +27,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nvidsrc\neja\ntrailers defective\nask4movie\n\nThe name of the provider",
+    prompt=f"\ntheflix\nvidsrc\neja\nask4movie\nustvgo / US IP ONLY\n\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
