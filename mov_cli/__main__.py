@@ -11,6 +11,8 @@ from .websites.eja import eja
 from .websites.trailers import trailers
 from .websites.ask4movie import Ask4Movie
 from .websites.ustvgo import ustvgo
+from .websites.kimcartoon import kimcartoon
+
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
@@ -18,6 +20,7 @@ calls = {
     "trailers": [trailers, "https://trailers.to"],
     "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
     "ustvgo": [ustvgo, "https://ustvgo.tv"],
+    "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
 }
 
 if platform.system() == "Windows":
@@ -27,7 +30,7 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nvidsrc\neja\nask4movie\nustvgo / US IP ONLY\n\nThe name of the provider",
+    prompt=f"\ntheflix\nvidsrc\neja\nask4movie\nustvgo / US IP ONLY\nkimcartoon\n\nThe name of the provider",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
