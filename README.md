@@ -101,19 +101,8 @@ Discontinued: Actvid · SFlix · Solar · DopeBox
 ### Prerequisites
 
 * mpv
-  ```
-  Most Linux Distros have it as a Package.
-  ```
-  ```
-  Windows Users have to install it from: https://mpv.io/installation/
-  ```
 * FFmpeg
-	 ```
-	 Most Linux Distros have it as a Package.
-	 ```
-	 ```
-	 Windows Users have to install it from: https://github.com/BtbN/FFmpeg-Builds/releases
-	```
+
 
 ### Installation
 Choose from Python or Shell
