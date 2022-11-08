@@ -77,6 +77,8 @@ class WebScraper:
         '-n', 
         '-thread_queue_size',
         '4096',
+        '-err_detect',
+        'ignore_err',
         '-i', 
         f'{url}',
         "-user_agent",
