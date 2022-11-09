@@ -55,7 +55,7 @@ class kimcartoon(WebScraper):
         return url
     def TV_PandDP(self, t: list, state: str = "d" or "p"):
         name = t[self.title]
-        link, episode, season = self.ask(t[self.url])
+        link, episode = self.ask(t[self.url])
         url = self.cdn_url(link)
         if state == "d":
             self.dl(url, name, episode=episode)
