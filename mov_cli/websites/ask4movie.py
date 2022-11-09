@@ -35,10 +35,7 @@ class Ask4Movie(WebScraper):
 
     def get_link(self, url):
         res = self.client.get(url).text
-        reg= re.findall("""<script src="data:text\/javascript;base64,([^"']*)""", res)[1]
-        txt = base64.b64decode(reg)
-        text = txt.decode("utf-8")
-        regs = re.findall("""dir['"],['"]([^"']*)""", text)[0]
+        regs = re.findall("""dir['"],['"]([^"']*)""", res)[0]
         txt = base64.b64decode(regs)
         txt = txt.decode("utf-8")
         soup = BS(txt, "lxml")
