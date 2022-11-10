@@ -12,7 +12,10 @@ from .websites.trailers import trailers
 from .websites.ask4movie import Ask4Movie
 from .websites.ustvgo import ustvgo
 from .websites.kimcartoon import kimcartoon
-
+from .websites.actvid import Actvid
+from .websites.dopebox import DopeBox
+from .websites.sflix import Sflix
+from .websites.solar import Solar
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
@@ -21,6 +24,10 @@ calls = {
     "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
     "ustvgo": [ustvgo, "https://ustvgo.tv"],
     "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
+    "actvid": [Actvid, "https://www.actvid.com"],
+    "sflix": [Sflix, "https://sflix.se"],
+    "solar": [Solar, "https://solarmovie.pe"],
+    "dopebox": [DopeBox, "https://dopebox.to"],
 }
 
 if platform.system() == "Windows":
@@ -30,7 +37,23 @@ if platform.system() == "Windows":
 @click.option(
     "-p",
     "--provider",
-    prompt=f"\ntheflix\nvidsrc\neja\nask4movie\nustvgo / US IP ONLY\nkimcartoon\n\nThe name of the provider",
+    prompt=f"""\n
+Movies and Shows:
+theflix
+actvid
+sflix
+solar
+dopebox
+ask4movie
+
+Live TV:
+eja
+ustvgo / US IP ONLY
+    
+Cartoons:
+kimcartoon
+    
+The name of the provider""",
     help='The name of the provider ex: "theflix"',
     default=f"{config.getprovider()}",
 )
@@ -43,11 +66,15 @@ if platform.system() == "Windows":
     type=int,
 )
 def movcli(provider, query, result):  # TODO add regex
-    provider_data = calls.get(provider, calls["theflix"])
-    provider = provider_data[0](provider_data[1])
-        # provider.redo(query) if query is not None else provider.redo()
-    provider.redo(query, result)  # if result else provider.redo(query)
-
+    try:
+        provider_data = calls.get(provider, calls["theflix"])
+        provider = provider_data[0](provider_data[1])
+            # provider.redo(query) if query is not None else provider.redo()
+        provider.redo(query, result)  # if result else provider.redo(query)
+    except UnicodeDecodeError:
+        print("The Current Provider has changed")
+    except Exception as e:
+        print("[!] An error has occurred | ", e)
 
 if __name__ == '__main__':
     movcli()
