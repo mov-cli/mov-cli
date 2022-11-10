@@ -84,13 +84,10 @@ Shows and Movies are scraped from Streaming Sites.
 
 mov-cli currently 6 Providers:
 
-TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie · KimCartoon
+TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie · KimCartoon · Actvid · SFlix · Solar · DopeBox 
 
 USTVGO: US IP Only or US VPN
 
-```
-Discontinued: Actvid · SFlix · Solar · DopeBox 
-```
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
 <!-- GETTING STARTED -->
