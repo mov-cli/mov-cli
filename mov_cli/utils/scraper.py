@@ -7,8 +7,6 @@ import sys
 import mov_cli.__main__ as movcli
 # import shlex
 # required for development
-from .history import History
-from .config import config 
 from colorama import Fore, Style
 from .httpclient import HttpClient
 from . import presence
@@ -87,18 +85,18 @@ class WebScraper:
         'copy',
         '-preset',
         'ultrafast',
-        f'{config.getdownload()}/{fixname}.mp4'
+        f'{fixname}.mp4'
         ]
 
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{config.getdownload()}/{fixname}.mp4"]
+                ["-vf", f"subtitle={subtitle}", f"{fixname}.mp4"]
             )
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
         
-        return print(f"Downloaded at {config.getdownload()}")
+        return print(f"Downloaded at {os.getcwd()}")
 
     def play(self, url: str, name: str):
         try:
@@ -163,8 +161,6 @@ class WebScraper:
         print(self.yellow("[s] Search Again!"), end="\n\n")
         print(self.cyan("[d] Download!"), end="\n\n")
         print(self.green("[p] Switch Provider!"), end="\n\n")
-        print(self.cyan("[h] History!"), end="\n\n")
-        print(self.green("[r] Set Discord Presence!"), end="\n\n")
         print(self.green("[sd] Download Whole Show!"), end="\n\n")
         choice = ""
         while choice not in range(len(result) + 1):
@@ -177,18 +173,6 @@ class WebScraper:
                 return self.redo()
             elif choice == "p":
                 return movcli.movcli()
-            elif choice == "h":
-                History.gethistory()
-            elif choice == "r":
-                print(self.red("[e] Enable"))
-                print(self.red("[d] Disable"))
-                choice = input(self.blue("Enter your choice: "))
-                if choice == "e":
-                    config.setpresence("true")
-                    print(self.green("Presence Enabled!"))
-                elif choice == "d":
-                    config.setpresence("false")
-                    print(self.green("Presence Disabled!"))
             elif choice == "d":
                 try:
                     mov_or_tv = result[

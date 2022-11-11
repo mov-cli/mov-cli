@@ -6,10 +6,8 @@ import hashlib
 from Cryptodome.Cipher import AES
 from typing import Callable, Any
 from urllib import parse as p
-from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
-from ..utils.presence import update_presence
 import json
 
 sys.path.append("..")
@@ -285,11 +283,9 @@ class Actvid(WebScraper):
         iframe_url, tv_id = self.get_link(sid)
         iframe_link, iframe_id = self.rabbit_id(iframe_url)
         url = self.cdn_url(iframe_link, iframe_id)
-        History.addhistory(self.userinput, state, "", season, ep)
         if state == "d":
             self.dl(url, name)
             return
-        update_presence(self.userinput, season, ep)
         self.play(url, name)
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
@@ -298,14 +294,12 @@ class Actvid(WebScraper):
         iframe_url, tv_id = self.get_link(sid)
         iframe_link, iframe_id = self.rabbit_id(iframe_url)
         url = self.cdn_url(iframe_link, iframe_id)
-        History.addhistory(self.userinput, state, "")
         if state == "d":
             self.dl(url, name)
             return
         if state == "sd":
             print("You can download only Shows with 'sd'")
             return
-        update_presence(self.userinput)
         self.play(url, name)
 
     def SandR(self, q: str = None):

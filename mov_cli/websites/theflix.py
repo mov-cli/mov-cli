@@ -4,10 +4,8 @@ import json
 import httpx
 
 sys.path.append("..")
-from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
-from ..utils.presence import update_presence
 
 
 class Theflix(WebScraper):
@@ -281,11 +279,9 @@ class Theflix(WebScraper):
         self.userinput = f"{name}"
         page = self.page(m)
         url, name = self.cdnurl(page[0], name, self.token)
-        History.addhistory(self.userinput, state, url)
         if state == "d":
             self.dl(url, name)
             return
-        update_presence(self.userinput)
         self.play(url, name)
 
     def TV_PandDP(self, t: list, state: str = "d" or "p"):
@@ -296,11 +292,9 @@ class Theflix(WebScraper):
         self.userinput = f"{name}"
         page, name = self.wspage([name, t[1], season, episode])
         cdn, name = self.cdnurlep(page, name, self.token)
-        History.addhistory(self.userinput, state, page, season, episode)
         if state == "d":
             self.dl(cdn, name)
             return
-        update_presence(self.userinput, season, episode)
         self.play(cdn, name)
 
     # def redo(self, query: str = None, result: int = None):
