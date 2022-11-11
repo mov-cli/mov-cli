@@ -11,6 +11,7 @@ from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 from ..utils.presence import update_presence
 import json
+import datetime
 
 sys.path.append("..")
 
@@ -30,9 +31,6 @@ class Actvid(WebScraper):
         self.rab_domain = x(
             "https://rabbitstream.net:443"
         )
-        self.CODE_REGEX = r"""^\d*"""
-        self.SID_REGEX = r'{"sid":"(.*?)"'
-        self.SOURCE_REGEX = r"""\{.*\}"""
         # encoding and then decoding the url
         # self.redo()
         # IMP: self.client.get/post always returns a response object
@@ -223,8 +221,17 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        u = self.client.get("https://raw.githubusercontent.com/consumet/rapidclown/dokicloud/key.txt").text
+        dokicloud = self.client.get("https://api.github.com/repos/consumet/rapidclown/commits/dokicloud").json()
+        rabbitstream = self.client.get("https://api.github.com/repos/consumet/rapidclown/commits/rabbitstream").json()
+        dokidate = dokicloud["commit"]["author"]["date"]
+        rabbitdate = rabbitstream["commit"]["author"]["date"]
+        if dokidate > rabbitdate:
+            decryptkey = "https://raw.githubusercontent.com/consumet/rapidclown/dokicloud/key.txt"
+        else:
+            decryptkey = "https://raw.githubusercontent.com/consumet/rapidclown/rabbitstream/key.txt"
+        u = self.client.get(decryptkey).text
         return bytes(u, 'utf-8')
+
 
     def md5(self, data):
         return hashlib.md5(data).digest()
