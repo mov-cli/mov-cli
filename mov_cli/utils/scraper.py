@@ -164,7 +164,6 @@ class WebScraper:
         print(self.cyan("[d] Download!"), end="\n\n")
         print(self.green("[p] Switch Provider!"), end="\n\n")
         print(self.cyan("[h] History!"), end="\n\n")
-        print(self.yellow("[c] Set Standard Provider!"), end="\n\n")
         print(self.green("[r] Set Discord Presence!"), end="\n\n")
         print(self.green("[sd] Download Whole Show!"), end="\n\n")
         choice = ""
@@ -190,22 +189,6 @@ class WebScraper:
                 elif choice == "d":
                     config.setpresence("false")
                     print(self.green("Presence Disabled!"))
-            elif choice == "c":
-                print(self.red("[a] Actvid"))
-                print(self.red("[s] SFlix"))
-                print(self.red("[o] Solar"))
-                print(self.red("[t] TheFlix"))
-                print(self.green(f"{config.getprovider()} is standard"))
-                print(self.cyan("[q] Quit"))
-                provider = input(self.blue("Enter your Provider: "))
-                if provider == "a":
-                    config.setprovider("actvid")
-                elif provider == "s":
-                    config.setprovider("sflix")
-                elif provider == "o":
-                    config.setprovider("solar")
-                elif provider == "q":
-                    sys.exit()
             elif choice == "d":
                 try:
                     mov_or_tv = result[
