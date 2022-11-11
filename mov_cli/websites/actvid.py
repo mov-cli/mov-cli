@@ -11,7 +11,6 @@ from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 from ..utils.presence import update_presence
 import json
-import datetime
 
 sys.path.append("..")
 
