@@ -6,7 +6,6 @@ import hashlib
 from Cryptodome.Cipher import AES
 from typing import Callable, Any
 from urllib import parse as p
-from websocket import create_connection
 from ..utils.history import History
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
