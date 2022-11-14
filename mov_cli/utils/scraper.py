@@ -9,7 +9,6 @@ import mov_cli.__main__ as movcli
 # required for development
 from colorama import Fore, Style
 from .httpclient import HttpClient
-from . import presence
 
 # Not needed
 # def determine_path() -> str:
