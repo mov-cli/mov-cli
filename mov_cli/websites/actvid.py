@@ -9,6 +9,7 @@ from urllib import parse as p
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import json
+import time
 
 sys.path.append("..")
 
@@ -265,6 +266,7 @@ class Actvid(WebScraper):
             rf = self.client.get(z)
             episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
             for e in range(len(episodes)):
+                time.sleep(20)
                 episode = episodes[e]
                 sid = self.ep_server_id(episode)
                 iframe_url, tv_id = self.get_link(sid)
