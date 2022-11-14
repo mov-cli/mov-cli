@@ -266,6 +266,7 @@ class Actvid(WebScraper):
             rf = self.client.get(z)
             episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
             for e in range(len(episodes)):
+                print("20 Second wait")
                 time.sleep(20)
                 episode = episodes[e]
                 sid = self.ep_server_id(episode)
