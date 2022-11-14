@@ -3,7 +3,6 @@ import sys
 import platform
 
 import click
-from .utils.config import config
 
 from .websites.theflix import Theflix
 from .websites.vidsrc import Vidsrc
