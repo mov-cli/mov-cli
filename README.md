@@ -61,6 +61,10 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <ul>
+          <li><a href="#windows-/-linux">Windows / Linux</a></li>
+          <li><a href="#android">Android</a></li>
+        </ul>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -102,16 +106,47 @@ USTVGO: US IP Only or US VPN
 
 
 ### Installation
-Choose from Python or Shell
 
-Python:
-```
-pip install mov-cli
-```
-Shell:
-```
-sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
-```
+- Windows / Linux
+
+  - Choose from Python or Shell:
+
+    Python:
+    ```
+    pip install mov-cli
+    ```
+    Shell:
+    ```
+    sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
+    ```
+
+- Android
+  - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
+
+  - Add all referrers to ``mpv.conf``.
+    ```
+    referrer="https://theflix.to"
+    referrer="https://v2.vidsrc.me"
+    referrer="https://eja.tv"
+    referrer="https://trailers.to"
+    referrer="https://ask4movie.mx"
+    referrer="https://ustvgo.tv"
+    referrer="https://kimcartoon.li"
+    referrer="https://www.actvid.com"
+    referrer="https://sflix.se"
+    referrer="https://solarmovie.pe"
+    referrer="https://dopebox.to"
+    ```
+  
+  - Open Termux to install ``libxml2`` and ``libxslt``.
+    ```
+    apt-get install libxml2 libxslt
+    ```
+
+  - Install ``mov-cli``.
+    ```
+    pip install mov-cli
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

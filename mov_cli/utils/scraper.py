@@ -8,7 +8,12 @@ import mov_cli.__main__ as movcli
 # import shlex
 # required for development
 from colorama import Fore, Style
+
 from .httpclient import HttpClient
+
+from .player import PlayerNotFound
+from ..players.mpv import Mpv
+from ..players.vlc import Vlc
 
 # Not needed
 # def determine_path() -> str:
@@ -100,29 +105,10 @@ class WebScraper:
     def play(self, url: str, name: str):
         try:
             try:
-                args = [
-                    "mpv",
-                    f"--referrer={self.base_url}",
-                    f"{url}",
-                    f"--force-media-title=mov-cli:{name}",
-                    "--no-terminal",
-                ]
-
-                mpv_process = subprocess.Popen(
-                    args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-                )
+                mpv_process = Mpv(self).play(url, self.base_url, name)
                 mpv_process.wait()
-            except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
-                args = [
-                    "vlc",
-                    f"--http-referrer={self.base_url}",
-                    f"{url}",
-                    f"--meta-title=mov-cli{name}",
-                    "--no-terminal",
-                ]
-                vlc_process = subprocess.Popen(
-                    args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-                )
+            except PlayerNotFound:  # why do you even exist if you don't have MPV installed? WHY?
+                vlc_process = Vlc(self).play(url, self.base_url, name)
                 vlc_process.wait()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
