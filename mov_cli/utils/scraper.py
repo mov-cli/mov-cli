@@ -112,7 +112,6 @@ class WebScraper:
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
                 mpv_process.wait()
-                presence.clear_presence()
             except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
                 args = [
                     "vlc",
@@ -125,7 +124,6 @@ class WebScraper:
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
                 vlc_process.wait()
-                presence.clear_presence()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
             logging.log(logging.ERROR, txt)
@@ -150,7 +148,6 @@ class WebScraper:
         return self.results(self.search(q))
 
     def display(self, q: str = None, result_no: int = None):
-        presence.clear_presence()
         result = self.SandR(q)
         for ix, vl in enumerate(result):
             print(  
