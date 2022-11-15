@@ -4,6 +4,7 @@ import platform
 
 import click
 
+from .utils.scraper import WebScraper
 from .websites.theflix import Theflix
 from .websites.vidsrc import Vidsrc
 from .websites.eja import eja
@@ -67,7 +68,7 @@ The name of the provider""",
 def movcli(provider, query, result):  # TODO add regex
     try:
         provider_data = calls.get(provider, calls["theflix"])
-        provider = provider_data[0](provider_data[1])
+        provider:WebScraper = provider_data[0](provider_data[1])
             # provider.redo(query) if query is not None else provider.redo()
         provider.redo(query, result)  # if result else provider.redo(query)
     except UnicodeDecodeError:
