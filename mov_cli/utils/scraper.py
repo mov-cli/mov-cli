@@ -148,7 +148,6 @@ class WebScraper:
         return self.results(self.search(q))
 
     def display(self, q: str = None, result_no: int = None):
-        presence.clear_presence()
         result = self.SandR(q)
         for ix, vl in enumerate(result):
             print(  
