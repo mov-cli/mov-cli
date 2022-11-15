@@ -54,7 +54,7 @@ kimcartoon
     
 The name of the provider""",
     help='The name of the provider ex: "theflix"',
-    default=f"{config.getprovider()}",
+    default=f"theflix",
 )
 @click.option("-q", "--query", default=None, help="Your search query")
 @click.option(
