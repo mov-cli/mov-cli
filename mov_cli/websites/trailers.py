@@ -19,7 +19,7 @@ class trailers(WebScraper):
 
     def results (self, q: str) -> list:
         t = self.client.get(f"https://trailers.to/en/popular/movies-tvshows-collections?q={q}").text
-        soup = BS(t, "lxml")
+        soup = BS(t, "html.parser")
         lis = soup.findAll("article", {"class": "tour-modern list-item"})
         ids = [lis[i].find("a")["href"].split("/")[2] for i in range(len(lis))]
         title = [lis[i]["id"] + ", " + 
@@ -31,7 +31,7 @@ class trailers(WebScraper):
     
     def ask(self, url: str):
         re = self.client.get(f"https://trailers.to{url}").text
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         seasons = soup.findAll("div", {"class": "collapse"})
         season = input(
             self.lmagenta(
@@ -47,25 +47,25 @@ class trailers(WebScraper):
         
     def shows_cdn_url(self, season, episode, link):
         re = self.client.get(f"https://trailers.to{link}").text
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         seasons = soup.findAll("div", {"class": "collapse"})[int(season) - 1]
         episode = seasons.findAll("article", {"class": "tour-modern"})[int(episode) - 1].find("a")["href"]
         res = self.client.get(f"https://trailers.to{episode}").text
-        soup = BS(res, "lxml") 
+        soup = BS(res, "html.parser") 
         url = soup.find("a", {"id": "download-button"})["href"]
         print(url)
         return url
     
     def mov_cdn_url(self, link):
         re = self.client.get(f"https://trailers.to{link}").text
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         url = soup.find("a", {"id": "download-button"})["href"]
         print(url)
         return url
 
     def showdownload(self, t):
         re = self.client.get(f"https://trailers.to{t[self.url]}").text
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         seasons = soup.findAll("div", {"class": "collapse"})
         for s in range(len(seasons)):
             episodes = seasons[s].findAll("article", {"class": "tour-modern"})

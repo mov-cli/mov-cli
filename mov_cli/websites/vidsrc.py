@@ -60,7 +60,7 @@ class Vidsrc(WebScraper):
         url = self.base_url + embed
         re = httpx.get(url, headers=self.headers)
         print(url)
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         iframe = soup.find("iframe", {"id": "player_iframe"})
         iframe = iframe["src"]
         iframe = iframe.split("/")[4]
@@ -68,14 +68,14 @@ class Vidsrc(WebScraper):
 
     def ask(self, imdb: str):
         re = self.client.get(f"https://www.imdb.com/title/{imdb}/episodes")
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         seasons = soup.find("h3", {"id": "episode_top"}).text.strip("Season")
         season = input(
             self.lmagenta(
                 f"Please input the season number(total seasons:{seasons}): "
             ))
         z = self.client.get(f"https://www.imdb.com/title/{imdb}/episodes?season={season}")
-        soup = BS(z, "lxml")
+        soup = BS(z, "html.parser")
         episodes = soup.findAll("div", {"class": "list_item"})
         episode = input(
             self.lmagenta(
@@ -87,7 +87,7 @@ class Vidsrc(WebScraper):
     def cdn_url(self, iframe):
         stream = self.stream + iframe
         res = httpx.get(stream, headers=self.streamh).text
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         scripts = soup.find_all("script")
         script = scripts[7]
         script = "".join(script)
@@ -108,11 +108,11 @@ class Vidsrc(WebScraper):
     
     def showdownload(self, t: list):
         re = self.client.get(f"https://www.imdb.com/title/{t[self.aid]}/episodes")
-        soup = BS(re, "lxml")
+        soup = BS(re, "html.parser")
         seasons = soup.find("h3", {"id": "episode_top"}).text.strip("Season")
         for i in range(int(seasons)):
             z = self.client.get(f"https://www.imdb.com/title/{t[self.aid]}/episodes?season={i+1}")
-            soup = BS(z, "lxml")
+            soup = BS(z, "html.parser")
             episodes = soup.findAll("div", {"class": "list_item"})
             for e in range(len(episodes)):
                 iframe = self.get_playeriframe(f"{t[self.url]}/{i + 1}-{e + 1}")

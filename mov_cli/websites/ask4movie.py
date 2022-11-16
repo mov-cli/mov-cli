@@ -18,7 +18,7 @@ class Ask4Movie(WebScraper):
     
     def results(self, q):
         res = self.client.get(f"{self.base_url}/?s={q}")
-        soup = BS(res.text, "lxml")
+        soup = BS(res.text, "html.parser")
         result = soup.findAll("div", {"class": "item"})
         def checkmov(x):
             if result[x].findAll("a")[1]["href"].__contains__("channel"):
@@ -38,7 +38,7 @@ class Ask4Movie(WebScraper):
         regs = re.findall("""dir['"],['"]([^"']*)""", res)[0]
         txt = base64.b64decode(regs)
         txt = txt.decode("utf-8")
-        soup = BS(txt, "lxml")
+        soup = BS(txt, "html.parser")
         reslink = soup.find("iframe")["src"]
         reslink = reslink.split("/")[4]
         return reslink
@@ -46,7 +46,7 @@ class Ask4Movie(WebScraper):
     def ask_direct_season(self, show_url):
         reslink = self.get_link(show_url)
         res = self.client.get(f"https://cinegrabber.com/p/{reslink}").text
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         season = soup.title.text.split("┋")[1][1:]
         episodes = soup.findAll("span", {"class": "episode"})
         episode = int(input(
@@ -59,7 +59,7 @@ class Ask4Movie(WebScraper):
 
     def ask_season(self, show_url):
         res = self.client.get(show_url)
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         seasons = soup.findAll("div", {"class": "item"})
         season = input(
             self.lmagenta(
@@ -69,7 +69,7 @@ class Ask4Movie(WebScraper):
         seasonlink = season.find("a")["href"]
         reslink = self.get_link(seasonlink)
         res = self.client.get(f"https://cinegrabber.com/p/{reslink}").text
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         season = soup.title.text.split("┋")[1][1:]
         episodes = soup.findAll("span", {"class": "episode"})
         episode = int(
@@ -96,7 +96,7 @@ class Ask4Movie(WebScraper):
     def directshowdownload(self, t:list):
         reslink = self.get_link(t[self.url])
         res = self.client.get(f"https://cinegrabber.com/p/{reslink}").text
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         season = soup.title.text.split("┋")[1][1:]
         episodes = soup.findAll("span", {"class": "episode"})
         for e in range(len(episodes)):

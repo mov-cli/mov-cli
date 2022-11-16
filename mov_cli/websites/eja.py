@@ -23,7 +23,7 @@ class eja(WebScraper):
         q = q.replace(" ", "+")
         self.client.set_headers(self.headers)
         html = self.client.get(f"https://eja.tv/?search={q}").text
-        soup = BS(html, "lxml")
+        soup = BS(html, "html.parser")
         col = soup.findAll("div", {"class": "col-sm-4"})
         urls = [col[i].findAll("a")[1]["href"]
                 for i in range(len(col))

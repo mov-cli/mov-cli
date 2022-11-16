@@ -12,7 +12,7 @@ class Solar(Actvid):
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
         season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
+            i["data-id"] for i in BS(r, "html.parser").select(".dropdown-item")
         ]
         season = input(
             self.lmagenta(
@@ -22,7 +22,7 @@ class Solar(Actvid):
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
-        episodes = [i["data-id"] for i in BS(rf, "lxml").select(".eps-item")]
+        episodes = [i["data-id"] for i in BS(rf, "html.parser").select(".eps-item")]
         episode = episodes[
             int(
                 input(
@@ -39,7 +39,7 @@ class Solar(Actvid):
     def getep(self, url, data_id):
         source = self.client.get(f"{url}").text
 
-        soup = BS(source, "lxml")
+        soup = BS(source, "html.parser")
 
         unformated = soup.find("a", {"data-id": f"{data_id}"})['title']
 

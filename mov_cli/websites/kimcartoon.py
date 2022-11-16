@@ -17,7 +17,7 @@ class kimcartoon(WebScraper):
     
     def results(self, q):
         res = self.client.post(f"{self.base_url}/Search/Cartoon", data={"keyword": q})
-        soup = BS(res.text, "lxml")
+        soup = BS(res.text, "html.parser")
         div = soup.find("div", {"class": "list-cartoon"})
         cartoons = div.findAll("div", {"class": "item"})
         title = [cartoons[i].find("span").text for i in range(len(cartoons))]
@@ -28,7 +28,7 @@ class kimcartoon(WebScraper):
 
     def ask(self, url):
         res = self.client.get(self.base_url + url)
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         table = soup.find("table", {"class": "listing"})
         episodes = table.findAll("a", {"rel": "noreferrer noopener"})
         episode = int(
@@ -49,7 +49,7 @@ class kimcartoon(WebScraper):
     
     def movtable(self, url):
         res = self.client.get(self.base_url + url)
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         table = soup.find("table", {"class": "listing"})
         url = table.findAll("a", {"rel": "noreferrer noopener"})[0]["href"]
         return url

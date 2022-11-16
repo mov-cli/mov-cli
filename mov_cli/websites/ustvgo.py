@@ -23,7 +23,7 @@ class ustvgo(WebScraper):
 
     def results(self, q):
         res = self.client.get(self.base_url)
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         sender = soup.findAll("strong")
         title = [self.tcheck(sender, i) for i in range(len(sender))]
         id = [i for i in range(len(sender) - 3)]
@@ -33,12 +33,12 @@ class ustvgo(WebScraper):
     
     def streamlink(self, uri):
         res = self.client.get(uri)
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         div = soup.find("div", {"class": "iframe-container"})
         url = div.find("iframe")["src"]
         self.client.set_headers({"Referer": f"{uri}"})
         res = self.client.get(f"https://ustvgo.tv{url}")
-        soup = BS(res, "lxml")
+        soup = BS(res, "html.parser")
         script = soup.findAll("script", {"type": "text/javascript"})[1]
         script = "".join(script)
         uri = re.findall("""hls_src='([^"']*)';""", script)[0]
