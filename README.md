@@ -144,6 +144,11 @@ Pull requests are welcome and _appreciated_. For major changes, please open an i
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+Contributors:
+<a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
+</a>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -167,7 +172,6 @@ Maintainer: R3tr0Ananas | r3tr0ananas@hotmail.com
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- Inspiration -->
