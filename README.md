@@ -145,6 +145,7 @@ Pull requests are welcome and _appreciated_. For major changes, please open an i
 5. Open a Pull Request
 
 Contributors:
+
 <a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
 </a>
