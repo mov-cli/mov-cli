@@ -3,6 +3,7 @@ import sys
 import platform
 
 import click
+from .utils.onstartup import startup
 
 from .utils.scraper import WebScraper
 from .websites.theflix import Theflix
@@ -16,6 +17,7 @@ from .websites.actvid import Actvid
 from .websites.dopebox import DopeBox
 from .websites.sflix import Sflix
 from .websites.solar import Solar
+
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
@@ -29,6 +31,8 @@ calls = {
     "solar": [Solar, "https://solarmovie.pe"],
     "dopebox": [DopeBox, "https://dopebox.to"],
 }
+
+startup.getkey()
 
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
