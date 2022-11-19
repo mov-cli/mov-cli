@@ -22,7 +22,6 @@ calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
     "eja" : [eja, "https://eja.tv"],
-    "trailers": [trailers, "https://trailers.to"],
     "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
     "ustvgo": [ustvgo, "https://ustvgo.tv"],
     "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
