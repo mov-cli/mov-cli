@@ -65,8 +65,6 @@ class WebScraper:
         if season or episode is None:
             pass
         else:
-            if season is None:
-                season = ""
             fixname = f"{fixname}S{season}E{episode}"
 
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')

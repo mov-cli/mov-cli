@@ -72,7 +72,7 @@ class kimcartoon(WebScraper):
         link, episode = self.ask(t[self.url])
         url = self.cdn_url(link)
         if state == "d":
-            self.dl(url, name, episode=episode)
+            self.dl(url, name, season=".", episode=episode)
             return
         self.play(url, name)
 

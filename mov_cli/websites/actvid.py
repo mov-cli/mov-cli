@@ -279,7 +279,7 @@ class Actvid(WebScraper):
         iframe_link, iframe_id = self.rabbit_id(iframe_url)
         url = self.cdn_url(iframe_link, iframe_id)
         if state == "d":
-            self.dl(url, name)
+            self.dl(url, name, season=season, episode=ep)
             return
         self.play(url, name)
 
