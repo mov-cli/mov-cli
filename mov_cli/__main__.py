@@ -17,6 +17,7 @@ from .websites.actvid import Actvid
 from .websites.dopebox import DopeBox
 from .websites.sflix import Sflix
 from .websites.solar import Solar
+from .websites.goal import goal9
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -29,6 +30,7 @@ calls = {
     "sflix": [Sflix, "https://sflix.se"],
     "solar": [Solar, "https://solarmovie.pe"],
     "dopebox": [DopeBox, "https://dopebox.to"],
+    "9goal": [goal9, "https://9goal.tv/"],
 }
 
 startup.getkey()
@@ -55,6 +57,9 @@ ustvgo / US IP ONLY
     
 Cartoons:
 kimcartoon
+
+Sports:
+9goal / Football
     
 The name of the provider""",
     help='The name of the provider ex: "theflix"',
