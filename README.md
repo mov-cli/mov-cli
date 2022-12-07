@@ -120,13 +120,8 @@ USTVGO: US IP Only or US VPN
     sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
     ```
 
-- Android
+- Android (Only for Python Version)
   - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
-
-  - Include custom config file in ``mpv.conf``.
-    ```
-    include=/shared/custom.conf
-    ```
   
   - Install ``libxml2`` and ``libxslt`` in Termux.
     ```
