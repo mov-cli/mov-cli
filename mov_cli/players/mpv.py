@@ -15,20 +15,6 @@ class Mpv(Player):
         if self.os == "Android": # Android Support
             print(self.__webscraper.cyan("[!] Detected your using ") + self.__webscraper.green("Android."))
 
-            # Change referrer url in custom.conf file. Create a custom.conf file in root directory if it does not exist.
-            # -----------------------
-            print("owo5")
-
-            # Open file but create if doesn't exist.
-            custom_conf_path = f"{os.getenv('HOME')}/storage/shared/custom.conf"
-            open(custom_conf_path, "a").close()
-
-            # Rewrite file with new referrer.
-            custom_conf_file = open(f"{os.getenv('HOME')}/storage/shared/custom.conf", "w") # I hope this works for everyone. 🙏 #TODO: Test this on different android devices.
-            custom_conf_file.seek(0)
-            custom_conf_file.write(f'referrer="{referrer}/"')
-            custom_conf_file.truncate()
-
             # Now open mpv with url.
             return subprocess.Popen([
                 "am",
