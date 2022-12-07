@@ -10,6 +10,7 @@ from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import json
 import time
+from ..utils.onstartup import startup
 
 sys.path.append("..")
 
@@ -219,15 +220,8 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        dokicloud = self.client.get("https://api.github.com/repos/consumet/rapidclown/commits/dokicloud").json()
-        rabbitstream = self.client.get("https://api.github.com/repos/consumet/rapidclown/commits/rabbitstream").json()
-        dokidate = dokicloud["commit"]["author"]["date"]
-        rabbitdate = rabbitstream["commit"]["author"]["date"]
-        if dokidate > rabbitdate:
-            decryptkey = "https://raw.githubusercontent.com/consumet/rapidclown/dokicloud/key.txt"
-        else:
-            decryptkey = "https://raw.githubusercontent.com/consumet/rapidclown/rabbitstream/key.txt"
-        u = self.client.get(decryptkey).text
+        with open(f"{startup.winorlinux()}/movclikey.txt") as f:
+            u = f.read()
         return bytes(u, 'utf-8')
 
 
@@ -266,8 +260,6 @@ class Actvid(WebScraper):
             rf = self.client.get(z)
             episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
             for e in range(len(episodes)):
-                print("20 Second wait")
-                time.sleep(20)
                 episode = episodes[e]
                 sid = self.ep_server_id(episode)
                 iframe_url, tv_id = self.get_link(sid)
@@ -287,7 +279,7 @@ class Actvid(WebScraper):
         iframe_link, iframe_id = self.rabbit_id(iframe_url)
         url = self.cdn_url(iframe_link, iframe_id)
         if state == "d":
-            self.dl(url, name)
+            self.dl(url, name, season=season, episode=ep)
             return
         self.play(url, name)
 

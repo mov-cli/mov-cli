@@ -3,6 +3,7 @@ import sys
 import platform
 
 import click
+from .utils.onstartup import startup
 
 from .utils.scraper import WebScraper
 from .websites.theflix import Theflix
@@ -16,11 +17,12 @@ from .websites.actvid import Actvid
 from .websites.dopebox import DopeBox
 from .websites.sflix import Sflix
 from .websites.solar import Solar
+from .websites.goal import goal9
+
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
     "eja" : [eja, "https://eja.tv"],
-    "trailers": [trailers, "https://trailers.to"],
     "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
     "ustvgo": [ustvgo, "https://ustvgo.tv"],
     "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
@@ -28,7 +30,10 @@ calls = {
     "sflix": [Sflix, "https://sflix.se"],
     "solar": [Solar, "https://solarmovie.pe"],
     "dopebox": [DopeBox, "https://dopebox.to"],
+    "9goal": [goal9, "https://9goal.tv/"],
 }
+
+startup.getkey()
 
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
@@ -52,6 +57,9 @@ ustvgo / US IP ONLY
     
 Cartoons:
 kimcartoon
+
+Sports:
+9goal / Football
     
 The name of the provider""",
     help='The name of the provider ex: "theflix"',

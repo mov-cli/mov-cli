@@ -169,6 +169,12 @@ Pull requests are welcome and _appreciated_. For major changes, please open an i
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+Contributors:
+
+<a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
+</a>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -185,14 +191,13 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Author: Poseidon444 | painedposeidon444@gmail.com
+Author: Poseidon444 | [Discord](https://discord.com/users/378549774451867648)
 
-Maintainer: R3tr0Ananas | r3tr0ananas@hotmail.com
+Maintainer: R3tr0Ananas | [Discord](https://discord.com/users/695116877042679942)
 
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- Inspiration -->

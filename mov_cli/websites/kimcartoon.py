@@ -41,6 +41,17 @@ class kimcartoon(WebScraper):
         url = episodes[len(episodes) - episode]["href"]
         return url, episode
     
+    def download(self, t: list):
+        res = self.client.get(self.base_url + t[self.url])
+        soup = BS(res, "lxml")
+        table = soup.find("table", {"class": "listing"})
+        episodes = table.findAll("a", {"rel": "noreferrer noopener"})
+        for e in range(len(episodes)):
+            epi = e + 1
+            link = episodes[len(episodes) - epi]["href"]
+            url = self.cdn_url(link)
+            self.dl(url, t[self.title], episode=e + 1)
+    
     def cdn_url(self, url):
         res = self.client.get(self.base_url + url).text
         iframe_id = re.findall('''src="https://www.luxubu.review/v/(.*?)"''',res)[0]
@@ -53,16 +64,22 @@ class kimcartoon(WebScraper):
         table = soup.find("table", {"class": "listing"})
         url = table.findAll("a", {"rel": "noreferrer noopener"})[0]["href"]
         return url
-    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+    def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
+        if state == "sd":
+            self.download(t)
+            return
         name = t[self.title]
         link, episode = self.ask(t[self.url])
         url = self.cdn_url(link)
         if state == "d":
-            self.dl(url, name, episode=episode)
+            self.dl(url, name, season=".", episode=episode)
             return
         self.play(url, name)
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
+        if state == "sd":
+            print("Only Shows can be downloaded with sd")
+            return
         name = m[self.title]
         link = self.movtable(f"{m[self.url]}")
         url = self.cdn_url(link)
