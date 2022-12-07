@@ -1,6 +1,6 @@
 import httpx
 import platform
-import os
+import os, sys
 from os import environ
 
 class startup:
@@ -8,12 +8,16 @@ class startup:
         pass
 
     @staticmethod
-    def winorlinux():
+    def which_platform():
         plt = platform.system()
         if plt == "Windows":
             return f'{environ["USERPROFILE"]}'
+
         elif plt == "Linux":
+            if hasattr(sys, 'getandroidapilevel'): # Android Support (Termux)
+                return "."
             return f"/home/{os.getlogin()}"
+
         elif plt == "Darwin":
             return f"/Users/{os.getlogin()}"
     
@@ -28,6 +32,6 @@ class startup:
         else:
             decryptkey = "https://raw.githubusercontent.com/consumet/rapidclown/rabbitstream/key.txt"
         u = httpx.get(decryptkey).text
-        with open(f"{startup.winorlinux()}/movclikey.txt", "w") as f:
+        with open(f"{startup.which_platform()}/movclikey.txt", "w") as f:
             f.write(u)
             

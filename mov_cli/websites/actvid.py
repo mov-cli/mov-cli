@@ -220,7 +220,7 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        with open(f"{startup.winorlinux()}/movclikey.txt") as f:
+        with open(f"{startup.which_platform()}/movclikey.txt") as f:
             u = f.read()
         return bytes(u, 'utf-8')
 
