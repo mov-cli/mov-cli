@@ -15,6 +15,9 @@ class Mpv(Player):
         if self.os == "Android": # Android Support
             print(self.__webscraper.cyan("[!] Detected your using ") + self.__webscraper.green("Android."))
 
+            if "theflix" in url:
+                raise Exception(self.__webscraper.red("'theflix' is not supported on ") + self.__webscraper.green("Android!"))
+
             # Now open mpv with url.
             return subprocess.Popen([
                 "am",
