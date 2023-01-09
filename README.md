@@ -78,11 +78,11 @@
 ## About The Project
 <img src="https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif" width="400" height="500"/>
 
-mov-cli is an Commandline Tool to watch and download shows, movies.
+mov-cli is a Commandline Tool to watch and download shows and movies.
 
 Shows and Movies are scraped from Streaming Sites.
 
-mov-cli currently 10 Providers:
+mov-cli currently scrapes 10 Providers:
 
 TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie · KimCartoon · Actvid · SFlix · Solar · DopeBox 
 
@@ -120,16 +120,16 @@ sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/loca
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Type: ```mov-cli``` in to your Commandline.
+Type: ```mov-cli``` into your Commandline.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- ROADMAP -->
 ## Roadmap
-We do not have an clear Roadmap.
+We do not have a clear Roadmap.
 
-If you want an Features, create a [issue](https://github.com/mov-cli/mov-cli/issues/new) or create an Feature and make an Pull Request.
+If you want a feature, create an [issue](https://github.com/mov-cli/mov-cli/issues/new) or create a feature and make a pull request.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
