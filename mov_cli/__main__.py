@@ -7,10 +7,7 @@ from .utils.onstartup import startup
 
 from .utils.scraper import WebScraper
 from .websites.theflix import Theflix
-from .websites.vidsrc import Vidsrc
 from .websites.eja import eja
-from .websites.trailers import trailers
-from .websites.ask4movie import Ask4Movie
 from .websites.ustvgo import ustvgo
 from .websites.kimcartoon import kimcartoon
 from .websites.actvid import Actvid
@@ -21,9 +18,7 @@ from .websites.goal import goal9
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
-    "vidsrc": [Vidsrc, "https://v2.vidsrc.me"],
     "eja" : [eja, "https://eja.tv"],
-    "ask4movie": [Ask4Movie, "https://ask4movie.mx"],
     "ustvgo": [ustvgo, "https://ustvgo.tv"],
     "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
     "actvid": [Actvid, "https://www.actvid.com"],
