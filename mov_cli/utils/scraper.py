@@ -9,6 +9,7 @@ import mov_cli.__main__ as movcli
 # required for development
 from colorama import Fore, Style
 from .httpclient import HttpClient
+from .discord import update_presence, clear_presence
 
 # Not needed
 # def determine_path() -> str:
@@ -110,7 +111,9 @@ class WebScraper:
                 mpv_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
+                update_presence(name)
                 mpv_process.wait()
+                clear_presence()
             except ModuleNotFoundError:  # why do you even exist if you don't have MPV installed? WHY?
                 args = [
                     "vlc",

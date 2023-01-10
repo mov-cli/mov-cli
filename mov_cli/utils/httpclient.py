@@ -11,10 +11,10 @@ default_header: dict = {
 
 
 class HttpClient:
-    def __init__(self, headers: dict = None):
+    def __init__(self, headers: dict = None, cookies: dict = None):
         if headers is None:
             headers = default_header
-        self.session = httpx.Client(timeout=10.0, headers=headers)
+        self.session = httpx.Client(timeout=10.0, headers=headers, cookies=cookies)
 
     def get(self, page: str) -> httpx.Response:
         print(page)
@@ -43,7 +43,10 @@ class HttpClient:
 
     def set_headers(self, header: dict) -> None:
         self.session.headers = header
-        # do not use this!
+        # do not use this!w
+    
+    def set_cookies(self, cookies: dict) -> None:
+        self.session.cookies = cookies
 
     def add_elem(self, elements: dict) -> None:
         for i in elements.items():

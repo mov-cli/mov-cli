@@ -28,7 +28,11 @@ calls = {
     "viewasian": [viewasian, "https://viewasian.co"]
 }
 
-startup.getkey()
+try:
+    startup.getkey()
+except:
+    print("You have exceeded Github's API Limit. You are not able to use the following Providers:\r\nActvid, SFlix, Dopebox, Solar\r\nTry using a Token\r\nSee:")
+    pass
 
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
@@ -44,7 +48,6 @@ actvid
 sflix
 solar
 dopebox
-ask4movie
 viewasian
 
 Live TV:
@@ -53,9 +56,6 @@ ustvgo / US IP ONLY
     
 Cartoons:
 kimcartoon
-
-Sports:
-9goal / Football
     
 The name of the provider""",
     help='The name of the provider ex: "theflix"',

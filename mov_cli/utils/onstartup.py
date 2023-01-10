@@ -18,9 +18,22 @@ class startup:
             return f"/Users/{os.getlogin()}"
     
     @staticmethod
+    def getghkey():
+        try:
+            with open(f"{startup.winorlinux()}/gh.txt", "r") as f:
+                return f.read()
+        except: 
+            pass
+
+    @staticmethod
     def getkey():
-        dokicloud = httpx.get("https://api.github.com/repos/consumet/rapidclown/commits/dokicloud").json()
-        rabbitstream = httpx.get("https://api.github.com/repos/consumet/rapidclown/commits/rabbitstream").json()
+        ghkey = startup.getghkey()
+        if ghkey is None:
+            dokicloud = httpx.get("https://api.github.com/repos/consumet/rapidclown/commits/dokicloud").json()
+            rabbitstream = httpx.get("https://api.github.com/repos/consumet/rapidclown/commits/rabbitstream").json()
+        else:
+            dokicloud = httpx.get("https://api.github.com/repos/consumet/rapidclown/commits/dokicloud", headers={"Authorization": f"Bearer {ghkey}"}).json()
+            rabbitstream = httpx.get("https://api.github.com/repos/consumet/rapidclown/commits/rabbitstream", headers={"Authorization": f"Bearer {ghkey}"}).json()
         dokidate = dokicloud["commit"]["author"]["date"]
         rabbitdate = rabbitstream["commit"]["author"]["date"]
         if dokidate > rabbitdate:
