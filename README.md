@@ -64,6 +64,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#disclaimer">Disclaimer</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -124,6 +125,15 @@ Type: ```mov-cli``` into your Commandline.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- DISCLAIMER -->
+## Disclaimer
+
+This project is to be used at the user’s own risk, based on their government and laws.
+
+This project has no control on the content it is serving, using copyrighted content from the providers is not going to be accounted for by the developer. It is the user’s own risk.
+
+[More on That](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
