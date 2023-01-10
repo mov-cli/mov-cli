@@ -31,7 +31,7 @@ calls = {
 try:
     startup.getkey()
 except:
-    print("You have exceeded Github's API Limit. You are not able to use the following Providers:\r\nActvid, SFlix, Dopebox, Solar\r\nTry using a Token\r\nSee:")
+    print("You have exceeded Github's API Limit. You are not able to use the following Providers:\r\nActvid, SFlix, Dopebox, Solar\r\nTry using a Token\r\nSee: https://github.com/mov-cli/mov-cli/blob/v3/ghtoken.md")
     pass
 
 if platform.system() == "Windows":
