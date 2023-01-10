@@ -14,7 +14,7 @@ from .websites.actvid import Actvid
 from .websites.dopebox import DopeBox
 from .websites.sflix import Sflix
 from .websites.solar import Solar
-from .websites.goal import goal9
+from .websites.viewasian import viewasian
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -25,7 +25,7 @@ calls = {
     "sflix": [Sflix, "https://sflix.se"],
     "solar": [Solar, "https://solarmovie.pe"],
     "dopebox": [DopeBox, "https://dopebox.to"],
-    "9goal": [goal9, "https://9goal.tv/"],
+    "viewasian": [viewasian, "https://viewasian.co"]
 }
 
 startup.getkey()
