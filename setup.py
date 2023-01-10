@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="mov-cli",
-    version="0.4.7",
+    version="0.4.8",
     author="pain@poseidon444",
     author_email="painedposeidon444@gmail.com",
     maintainer="ananas@r3tr0ananas",
