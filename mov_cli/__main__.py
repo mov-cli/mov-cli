@@ -45,6 +45,7 @@ sflix
 solar
 dopebox
 ask4movie
+viewasian
 
 Live TV:
 eja
