@@ -52,6 +52,9 @@ solar
 dopebox
 viewasian
 
+Anime:
+gogoanime
+
 Live TV:
 eja
 ustvgo / US IP ONLY

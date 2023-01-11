@@ -9,7 +9,10 @@ except:
     print("[X]: Error while connecting to Discord")
 
 def update_presence(userinput):
-        name, img = get_imdb_title_and_img(userinput)
+        try:
+            name, img = get_imdb_title_and_img(userinput)
+        except:
+            pass
         try:
             dc.update(state=f"Watching {name}", large_image=f"{img}", large_text=f"{name}", small_image="mov-cli",
                       small_text=f"{name}",

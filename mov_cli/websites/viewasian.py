@@ -50,7 +50,12 @@ class viewasian(WebScraper):
                 )
         request = self.client.get(f"{self.base_url}{href}?ep={episode}")
         soup = BS(request, "lxml")
-        li = soup.find("li", {"class": "xstreamcdn"})["data-video"]
+        try:
+            streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
+            li = self.streamtape(streamtape)
+        except:
+            xstreamcdn = soup.find("li", {"class": "xstreamcdn"})["data-video"]
+            li = self.xstreamcdn(xstreamcdn)
         print(li)
         return li, episode
     
@@ -62,11 +67,23 @@ class viewasian(WebScraper):
         soup = BS(request, "lxml")
         li = soup.find("li", {"class": "xstreamcdn"})["data-video"]
         return li
-    
-    def cdn_url(self, url):
+
+    def streamtape(self, url):
+        string = re.findall("""v\/([^"']*)\/""", url)[0]
+        request = self.client.get(f"https://streamtape.com/e/{string}").text
+        regex = r"""'robotlink'\)\.innerHTML = '(.*?)'\+ \('(.*?)'\)"""
+        results = re.findall(regex, request)
+        for tuple in results:
+            url = tuple[0]
+            rest = tuple[1]
+        li = f"https:{url}{rest[3:]}"
+        return li
+
+    def xstreamcdn(self, url):
         self.client.set_headers({"origin": "https://fembed9hd.com", "referer": f"{url}"})
         string = re.findall("""v\/([^"']*)""", url)[0]
         request = self.client.post(f"https://fembed9hd.com/api/source/{string}", data={"r": "https://viewasian.co/", "d": "fembed9hd.com"}).json()
+        file = request["data"]
         if file == "Video not found or has been removed":
             print("Video not found or has been removed")
             return
@@ -77,8 +94,7 @@ class viewasian(WebScraper):
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
-        link, episode = self.ask(t[self.url])
-        url = self.cdn_url(link)
+        url, episode = self.ask(t[self.url])
         if state == "d":
             self.dl(url, name, season=".", episode=episode)
             return
@@ -89,8 +105,7 @@ class viewasian(WebScraper):
             print("Only Shows can be downloaded with sd")
             return
         name = m[self.title]
-        link = self.mov(m[self.url])
-        url = self.cdn_url(link)
+        url = self.mov(m[self.url])
         if state == "d":
             self.dl(url, name)
             return
