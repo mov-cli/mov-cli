@@ -67,9 +67,14 @@ class viewasian(WebScraper):
         self.client.set_headers({"origin": "https://fembed9hd.com", "referer": f"{url}"})
         string = re.findall("""v\/([^"']*)""", url)[0]
         request = self.client.post(f"https://fembed9hd.com/api/source/{string}", data={"r": "https://viewasian.co/", "d": "fembed9hd.com"}).json()
-        file = request["data"][-1]["file"]
+        if file == "Video not found or has been removed":
+            print("Video not found or has been removed")
+            return
+        else:
+            file = request["data"][-1]["file"]
         print(file)
         return file
+
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
         link, episode = self.ask(t[self.url])

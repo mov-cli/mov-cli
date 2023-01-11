@@ -15,6 +15,7 @@ from .websites.dopebox import DopeBox
 from .websites.sflix import Sflix
 from .websites.solar import Solar
 from .websites.viewasian import viewasian
+from .websites.gogoanime import gogoanime
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -25,13 +26,14 @@ calls = {
     "sflix": [Sflix, "https://sflix.se"],
     "solar": [Solar, "https://solarmovie.pe"],
     "dopebox": [DopeBox, "https://dopebox.to"],
-    "viewasian": [viewasian, "https://viewasian.co"]
-}
+    "viewasian": [viewasian, "https://viewasian.co"],
+    "gogoanime": [gogoanime, "https://www1.gogoanime.bid"],
+    }
 
 try:
     startup.getkey()
 except:
-    print("You have exceeded Github's API Limit. You are not able to use the following Providers:\r\nActvid, SFlix, Dopebox, Solar\r\nTry using a Token\r\nSee:")
+    print("You have exceeded Github's API Limit. You are not able to use the following Providers:\r\nActvid, SFlix, Dopebox, Solar\r\nTry using a Token\r\nSee: https://github.com/mov-cli/mov-cli/blob/v3/ghtoken.md")
     pass
 
 if platform.system() == "Windows":

@@ -10,7 +10,6 @@ except:
 
 def update_presence(userinput):
         name, img = get_imdb_title_and_img(userinput)
-        print(name, img)
         try:
             dc.update(state=f"Watching {name}", large_image=f"{img}", large_text=f"{name}", small_image="mov-cli",
                       small_text=f"{name}",
