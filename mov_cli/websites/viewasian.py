@@ -44,7 +44,7 @@ class viewasian(WebScraper):
         try:
             streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
             dood = soup.find("li", {"class": "doodstream"})["data-video"]
-            print("What Streaming Service do you want:\r\n[1] DoodStream\r\n[2] StreamTape")
+            print("\r\nWhat Streaming Service do you want:\r\n[1] DoodStream\r\n[2] StreamTape")
             e = input("Please Enter what you want to use: ")
             if e == "1":
                 li = self.doodstream(dood)
