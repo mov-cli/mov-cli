@@ -19,7 +19,7 @@ def update_presence(userinput):
                       buttons=[{"label": "mov-cli", "url": "https://github.com/mov-cli/mov-cli"}],
                       start=time.time())
         except Exception as e:
-            print(e)
+            pass
             
 
 def clear_presence():
