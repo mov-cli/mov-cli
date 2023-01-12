@@ -52,10 +52,17 @@ class viewasian(WebScraper):
         soup = BS(request, "lxml")
         try:
             streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
-            li = self.streamtape(streamtape)
+            dood = soup.find("li", {"class": "doodstream"})["data-video"]
+            print("What Streaming Service do you want:\r\n[1] DoodStream\r\n[2] StreamTape")
+            e = input("Please Enter what you want to use: ")
+            if e == "1":
+                li = self.doodstream(dood)
+            elif e == "2":
+                li = self.streamtape(streamtape)
+            else:
+                li = self.doodstream(dood)
         except:
-            xstreamcdn = soup.find("li", {"class": "xstreamcdn"})["data-video"]
-            li = self.xstreamcdn(xstreamcdn)
+            li = self.doodstream(soup.find("li", {"class": "doodstream"})["data-video"])
         print(li)
         return li, episode
     
@@ -79,18 +86,16 @@ class viewasian(WebScraper):
         li = f"https:{url}{rest[3:]}"
         return li
 
-    def xstreamcdn(self, url):
-        self.client.set_headers({"origin": "https://fembed9hd.com", "referer": f"{url}"})
-        string = re.findall("""v\/([^"']*)""", url)[0]
-        request = self.client.post(f"https://fembed9hd.com/api/source/{string}", data={"r": "https://viewasian.co/", "d": "fembed9hd.com"}).json()
-        file = request["data"]
-        if file == "Video not found or has been removed":
-            print("Video not found or has been removed")
-            return
-        else:
-            file = request["data"][-1]["file"]
-        print(file)
-        return file
+    def doodstream(self, url):
+        domain = re.findall("""([^"']*)\/e""", url)[0]
+        req = self.client.get(url).text
+        pass_md = re.findall(r"/pass_md5/[^']*", req)[0]
+        token = pass_md.split("/")[-1]
+        self.client.set_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0", "Referer": f"{url}", "Accept-Language": "en-GB,en;q=0.5"})
+        drylink = self.client.get(f"{domain}{pass_md}").text
+        streamlink = f"{drylink}zUEJeL3mUN?token={token}"
+        print(streamlink)
+        return streamlink
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
