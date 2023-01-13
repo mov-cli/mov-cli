@@ -47,36 +47,14 @@ class viewasian(WebScraper):
             print("\r\nWhat Server do you want:\r\n[1] DoodStream\r\n[2] StreamTape")
             e = input("Please Enter what you want to use: ")
             if e == "1":
-                li = self.doodstream(dood)
+                li = self.ext.doodstream(dood)
             elif e == "2":
-                li = self.streamtape(streamtape)
+                li = self.ext.streamtape(streamtape)
             else:
-                li = self.doodstream(dood)
+                li = self.ext.doodstream(dood)
         except:
-            li = self.doodstream(soup.find("li", {"class": "doodstream"})["data-video"])
+            li = self.ext.doodstream(soup.find("li", {"class": "doodstream"})["data-video"])
         return li, episode
-
-    def streamtape(self, url):
-        string = re.findall("""v\/([^"']*)\/""", url)[0]
-        request = self.client.get(f"https://streamtape.com/e/{string}").text
-        regex = r"""'robotlink'\)\.innerHTML = '(.*?)'\+ \('(.*?)'\)"""
-        results = re.findall(regex, request)
-        for tuple in results:
-            url = tuple[0]
-            rest = tuple[1]
-        li = f"https:{url}{rest[3:]}"
-        return li
-
-    def doodstream(self, url):
-        domain = re.findall("""([^"']*)\/e""", url)[0]
-        req = self.client.get(url).text
-        pass_md = re.findall(r"/pass_md5/[^']*", req)[0]
-        token = pass_md.split("/")[-1]
-        self.client.set_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0", "Referer": f"{url}", "Accept-Language": "en-GB,en;q=0.5"})
-        drylink = self.client.get(f"{domain}{pass_md}").text
-        streamlink = f"{drylink}zUEJeL3mUN?token={token}"
-        print(streamlink)
-        return streamlink
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
