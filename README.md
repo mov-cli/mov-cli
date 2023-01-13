@@ -30,12 +30,9 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-
-
-https://user-images.githubusercontent.com/83706294/212222850-b8985d07-2164-4521-9a03-7b9e27e3dad6.mov
-
-
-
+  <a href="https://github.com/mov-cli/mov-cli">
+    <img src="https://user-images.githubusercontent.com/83706294/194960059-a9202d72-f033-46b4-b756-3193dc54fb20.png" alt="Logo" width="80" height="80">
+  </a>
 
   <p align="center">
     A cli tool to browse and watch movies.
@@ -48,6 +45,9 @@ https://user-images.githubusercontent.com/83706294/212222850-b8985d07-2164-4521-
     <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
   </p>
 </div>
+
+## Preview
+https://user-images.githubusercontent.com/83706294/212222850-b8985d07-2164-4521-9a03-7b9e27e3dad6.mov
 
 
 
