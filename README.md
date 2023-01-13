@@ -38,8 +38,6 @@
     A cli tool to browse and watch movies.
     <br />
     <br />
-    <a href="#about-the-project">View Demo</a>
-    ·
     <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
     ·
     <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
