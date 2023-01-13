@@ -135,11 +135,10 @@ This project has no control on the content it is serving, using copyrighted cont
 [More on That](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- ROADMAP -->
-## Roadmap
-We do not have a clear Roadmap.
+<!-- Feature -->
+## Feature
 
-If you want a feature, create an [issue](https://github.com/mov-cli/mov-cli/issues/new) or create a feature and make a pull request.
+If you want a feature, create an [issue](https://github.com/mov-cli/mov-cli/issues/new) or create the feature and make a pull request.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
