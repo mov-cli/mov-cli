@@ -9,7 +9,6 @@ import mov_cli.__main__ as movcli
 # required for development
 from colorama import Fore, Style
 from .httpclient import HttpClient
-from .extractors import Extractors
 
 # Not needed
 # def determine_path() -> str:
@@ -26,7 +25,6 @@ from .extractors import Extractors
 class WebScraper:
     def __init__(self, base_url: str) -> None:
         self.client = HttpClient()
-        self.ext = Extractors()
         self.base_url = base_url
         self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
         pass
