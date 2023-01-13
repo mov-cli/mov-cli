@@ -31,9 +31,11 @@
 <br />
 <div align="center">
 
-  <a href="https://github.com/mov-cli/mov-cli">
-    <img src="https://user-images.githubusercontent.com/83706294/194960059-a9202d72-f033-46b4-b756-3193dc54fb20.png" alt="Logo" width="80" height="80">
-  </a>
+
+
+  <video src="https://user-images.githubusercontent.com/83706294/212220821-78e0078c-591a-41bf-bd14-91e4f6c1700c.mp4" height="120" width="120">
+
+
 
   <p align="center">
     A cli tool to browse and watch movies.
