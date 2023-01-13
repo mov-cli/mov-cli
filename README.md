@@ -46,13 +46,6 @@
   </p>
 </div>
 
-## Preview
-
-https://user-images.githubusercontent.com/83706294/212223865-44ff52f4-359c-4df2-b71c-91b35f7fc85e.mov
-
-
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -78,10 +71,11 @@ https://user-images.githubusercontent.com/83706294/212223865-44ff52f4-359c-4df2-
 </details>
 
 
+## Preview
+https://user-images.githubusercontent.com/83706294/212223865-44ff52f4-359c-4df2-b71c-91b35f7fc85e.mov
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-<img src="https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif" width="400" height="500"/>
 
 mov-cli is a Commandline Tool to watch and download shows and movies.
 
