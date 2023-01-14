@@ -1,6 +1,6 @@
 import httpx
 import platform
-import os
+import getpass
 from os import environ
 
 class startup:
@@ -13,9 +13,9 @@ class startup:
         if plt == "Windows":
             return f'{environ["USERPROFILE"]}'
         elif plt == "Linux":
-            return f"/home/{os.getlogin()}"
+            return f"/home/{getpass.getuser()}"
         elif plt == "Darwin":
-            return f"/Users/{os.getlogin()}"
+            return f"/Users/{getpass.getuser()}"
     
     @staticmethod
     def getghkey():

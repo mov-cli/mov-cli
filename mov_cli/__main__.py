@@ -17,6 +17,7 @@ from .websites.solar import Solar
 from .websites.viewasian import viewasian
 from .websites.gogoanime import gogoanime
 from .websites.watchasian import watchasian
+from .websites.wlext import wlext
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -30,6 +31,7 @@ calls = {
     "viewasian": [viewasian, "https://viewasian.co"],
     "gogoanime": [gogoanime, "https://www1.gogoanime.bid"],
     "watchasian": [watchasian, "https://watchasian.la"],
+    "wlext": [wlext, "https://wlext.is"],
     }
 
 try:
@@ -52,6 +54,7 @@ actvid
 sflix
 solar
 dopebox
+wlext
 
 Asian Movies and Shows:
 viewasian

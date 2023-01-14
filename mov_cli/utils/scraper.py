@@ -106,7 +106,6 @@ class WebScraper:
                     f"--force-media-title=mov-cli:{name}",
                     "--no-terminal",
                 ]
-
                 mpv_process = subprocess.Popen(
                     args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )
