@@ -53,7 +53,10 @@ class wlext(WebScraper):
             )
         req = self.client.get(f"{url}?server=cajitatop&episode={episode}").text
         soup = BS(req, "lxml")
-        t = soup.find("iframe", {"loading": "lazy"})["src"]
+        try:
+            t = soup.find("iframe", {"loading": "lazy"})["src"]
+        except:
+            return print("Couldn't find cajita.to provider.")
         return t, episode
     
     def cdn_url(self, url):
@@ -67,7 +70,6 @@ class wlext(WebScraper):
         else:
             file = request["data"][-1]["file"]
             file = self.client.get(file).url
-        print(file)
         return file
     
     
