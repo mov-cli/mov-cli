@@ -19,6 +19,7 @@ from .websites.gogoanime import gogoanime
 from .websites.watchasian import watchasian
 from .websites.wlext import wlext
 from .websites.streamblasters import streamblasters
+from .websites.kinox import kinox
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -34,6 +35,7 @@ calls = {
     "watchasian": [watchasian, "https://watchasian.la"],
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.art"],
+    "kinox": [kinox, "https://ww16.kinox.to"],
     }
 
 try:
@@ -57,6 +59,9 @@ sflix
 solar
 dopebox
 wlext
+
+German Movies and Shows:
+kinox
 
 Indian Movies and Shows:
 streamblasters

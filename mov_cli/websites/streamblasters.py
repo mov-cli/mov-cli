@@ -44,7 +44,6 @@ class streamblasters(WebScraper):
         print(src)
         return src
 
-    
     def doodstream(self, url):
         domain = re.findall("""([^"']*)\/e""", url)[0]
         red = self.client.get(url).headers

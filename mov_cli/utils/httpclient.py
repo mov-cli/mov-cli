@@ -41,6 +41,19 @@ class HttpClient:
             sys.exit(-1)
         return req
 
+
+    def head(self, page: str, redirects: False) -> httpx.Response:
+        try:
+            req = self.session.head(page, follow_redirects=redirects)
+            self.session.headers["Referer"] = page
+        except Exception as e:
+            print(
+                f"Error: {e}",
+                "\n Please open an issue if this is not due due to your internet connection",
+            )
+            sys.exit(-1)
+        return req
+
     def set_headers(self, header: dict) -> None:
         self.session.headers = header
         # do not use this!w
