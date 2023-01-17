@@ -43,7 +43,6 @@ class watchasian(WebScraper):
         li = soup.find("li", {"class": "doodstream"})["data-video"]
         return li, episode   
 
-    
     def doodstream(self, url):
         domain = re.findall("""([^"']*)\/e""", url)[0]
         req = self.client.get(url).text

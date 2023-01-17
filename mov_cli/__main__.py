@@ -18,6 +18,7 @@ from .websites.viewasian import viewasian
 from .websites.gogoanime import gogoanime
 from .websites.watchasian import watchasian
 from .websites.wlext import wlext
+from .websites.streamblasters import streamblasters
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -32,6 +33,7 @@ calls = {
     "gogoanime": [gogoanime, "https://www1.gogoanime.bid"],
     "watchasian": [watchasian, "https://watchasian.la"],
     "wlext": [wlext, "https://wlext.is"],
+    "streamblasters": [streamblasters, "https://streamblasters.art"],
     }
 
 try:
@@ -56,6 +58,9 @@ solar
 dopebox
 wlext
 
+Indian Movies and Shows:
+streamblasters
+
 Asian Movies and Shows:
 viewasian
 watchasian
@@ -72,7 +77,7 @@ kimcartoon
     
 The name of the provider""",
     help='The name of the provider ex: "theflix"',
-    default=f"theflix",
+    default=f"actvid",
 )
 @click.option("-q", "--query", default=None, help="Your search query")
 @click.option(
@@ -84,7 +89,7 @@ The name of the provider""",
 )
 def movcli(provider, query, result):  # TODO add regex
     try:
-        provider_data = calls.get(provider, calls["theflix"])
+        provider_data = calls.get(provider, calls["actvid"])
         provider:WebScraper = provider_data[0](provider_data[1])
             # provider.redo(query) if query is not None else provider.redo()
         provider.redo(query, result)  # if result else provider.redo(query)
