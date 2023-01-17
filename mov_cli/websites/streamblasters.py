@@ -22,25 +22,28 @@ class streamblasters(WebScraper):
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
     
     def doodext(self, url):
-        req = self.client.get(url)
+        req = self.client.get(url).text
         soup = BS(req, "lxml")
         ply = soup.find("li", {"id": "player-option-1"})
-        type = ply["data-type"]
         post = ply["data-post"]
-        nume = ply["data-nume"]
         self.client.set_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0", "Referer": f"{url}", "Accept-Language":"de,en-US;q=0.7,en;q=0.3"})
         data = {
             "action": "doo_player_ajax",
             "post": post,
-            "nume": nume,
-            "type": type
+            "nume": "1",
+            "type": "movie"
         }
         post = self.client.post(f"{self.base_url}/wp-admin/admin-ajax.php", data=data).text
         try:
-            src = re.findall('''"embed_url":"(.*?)"''', post)[0].replace("\/", "/")
+            src = re.findall('''"https:(.*?)"''', post)[0].replace("\/", "/")
         except:
-            raise Exception("Could not find doodstream link")
+            raise Exception("No URL was found")
+        if "\\" in src:
+            src = src.replace("\\", "")
+        src = f"https:{src}"
+        print(src)
         return src
+
     
     def doodstream(self, url):
         domain = re.findall("""([^"']*)\/e""", url)[0]
