@@ -20,11 +20,8 @@ class kinox(WebScraper):
     
     def comp(self, element):
         title = element.find("a").text
-        print(title)
         lang = element.find("img", {"alt": "language"})["src"]
-        print(lang)
         year = element.find("span", {"class": "Year"}).text
-        print(year)
         if "1" in lang:
             lang = "Ger"
         elif "15" in lang:
@@ -59,7 +56,6 @@ class kinox(WebScraper):
         url = re.findall(regex, html)[0].replace("\/", "/").replace("\\", "")
         redirect = self.client.head(url, redirects=False).headers.get("location")
         req = self.client.get(redirect).text
-        print(req)
         reg = """'mp4': '(.*)'"""
         link = re.findall(reg,req)[0]
         return link
