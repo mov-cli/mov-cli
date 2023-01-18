@@ -81,6 +81,7 @@ class kinox(WebScraper):
             if v:
                 vurl = re.search(r'''{0}".+?src:\s*'([^']+)'''.format(v.group(1)), html)
                 if vurl:
+                    self.client.set_headers({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36', 'Accept-Language': 'en-GB,en;q=0.5', 'Referer': f'{url}'})
                     url = self.client.head(vurl.group(1), redirects=False).headers.get("location")
                     return url
         raise Exception('Video not found or removed')
