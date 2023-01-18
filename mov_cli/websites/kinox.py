@@ -101,7 +101,7 @@ class kinox(WebScraper):
         episode = int(
             input(
                 self.lmagenta(
-                    f"Please input the episode number:{len(option)}: "
+                    f"Please input the episode number(total episodes in season:{season}):{len(option)} : "
                 )
             )
         )
