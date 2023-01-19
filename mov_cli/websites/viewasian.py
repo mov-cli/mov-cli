@@ -59,13 +59,15 @@ class viewasian(WebScraper):
     def streamtape(self, url):
         string = re.findall("""v\/([^"']*)\/""", url)[0]
         request = self.client.get(f"https://streamtape.com/e/{string}").text
-        regex = r"""'robotlink'\)\.innerHTML = '(.*?)'\+ \('(.*?)'\)"""
-        results = re.findall(regex, request)
-        for tuple in results:
-            url = tuple[0]
-            rest = tuple[1]
-        li = f"https:{url}{rest[3:]}"
-        return li
+        if '<h1 class="white">Video not found!</h1>' not in request:
+            regex = r"""'robotlink'\)\.innerHTML = '(.*?)'\+ \('(.*?)'\)"""
+            results = re.findall(regex, request)
+            for tuple in results:
+                url = tuple[0]
+                rest = tuple[1]
+            li = f"https:{url}{rest[3:]}"
+            return li
+        raise Exception('Video not found or removed')
 
     def doodstream(self, url):
         domain = re.findall("""([^"']*)\/e""", url)[0]

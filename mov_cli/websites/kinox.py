@@ -41,7 +41,8 @@ class kinox(WebScraper):
             return "TV"
 
     def results(self, data: str):
-        request = self.client.get(f"{self.base_url}/Search.html?q={data}")
+        self.base_url = self.client.head("https://kinox.to", redirects=False).headers.get("location")[:-1]
+        request = self.client.get(f"{self.base_url}/Search.html?q={data}").text
         soup = BS(request, "lxml")
         streams = soup.find("tbody").findAll("tr")
         urls = [streams[i].find("a")["href"] for i in range(len(streams))]
@@ -56,9 +57,24 @@ class kinox(WebScraper):
         url = re.findall(regex, html)[0].replace("\/", "/").replace("\\", "")
         redirect = self.client.head(url, redirects=False).headers.get("location")
         req = self.client.get(redirect).text
-        reg = """'mp4': '(.*)'"""
-        link = re.findall(reg,req)[0]
-        return link
+        if "404 - Page not found" not in req:
+            reg = """'mp4': '(.*)'"""
+            link = re.findall(reg,req)[0]
+            return link
+        raise Exception('Video not found or removed')
+        
+    def doodstream(self, url):
+        regex = r'"<a href=\\"http:\\\/\\\/[a-z]+.[a-z]+\\\/d\\\/(.*?)\\'
+        html = self.client.get(url).text
+        url = re.findall(regex, html)[0]
+        req = self.client.get(f"https://dood.wf/e/{url}").text
+        pass_md = re.findall(r"/pass_md5/[^']*", req)[0]
+        token = pass_md.split("/")[-1]
+        self.client.set_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0", "Referer": f"https://dood.wf/e/{url}", "Accept-Language": "en-GB,en;q=0.5"})
+        drylink = self.client.get(f"https://dood.wf{pass_md}").text
+        streamlink = f"{drylink}zUEJeL3mUN?token={token}"
+        print(streamlink)
+        return streamlink
     
     def get_packed_data(self, html):
         packed_data = ''
@@ -81,7 +97,7 @@ class kinox(WebScraper):
             if v:
                 vurl = re.search(r'''{0}".+?src:\s*'([^']+)'''.format(v.group(1)), html)
                 if vurl:
-                    self.client.set_headers({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36', 'Accept-Language': 'en-GB,en;q=0.5', 'Referer': f'{url}'})
+                    self.client.set_headers({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36', 'Accept-Language': 'en-GB,en;q=0.5', 'Referer': f'https://streamz.ws/', "sec-fetch-dest": "video"})
                     url = self.client.head(vurl.group(1), redirects=False).headers.get("location")
                     return url
         raise Exception('Video not found or removed')
@@ -90,6 +106,7 @@ class kinox(WebScraper):
         req = self.client.get(f"{self.base_url}{url}").text
         soup = BS(req, "lxml")
         select = soup.find("select",{"id": "SeasonSelection"}).findAll("option")
+        rel = soup.find("select",{"id": "SeasonSelection"})["rel"]
         season = int(
             input(
                 self.lmagenta(
@@ -107,10 +124,13 @@ class kinox(WebScraper):
             )
         )
         option = option[episode - 1]
+        hostlist = self.client.get(f"{self.base_url}/aGET/MirrorByEpisode/{rel}&Season={season}&Episode={option}").text
         name = re.findall("\/Stream\/(.*)\.", url)[0]
-        try:
+        if re.search("Hoster_92", hostlist):
             url = self.voe(f"{self.base_url}/aGET/Mirror/{name}&Hoster=92&Season={season}&Episode={option}")
-        except:
+        elif re.search("Hoster_95", hostlist):
+            url = self.doodstream(f"{self.base_url}/aGET/Mirror/{name}&Hoster=95&Season={season}&Episode={option}")
+        else:
             url = self.streamz(f"{self.base_url}/aGET/Mirror/{name}&Hoster=88&Season={season}&Episode={option}")
         return url, episode, season
     
@@ -119,10 +139,15 @@ class kinox(WebScraper):
         soup = BS(req, "lxml")
         name = re.findall("\/Stream\/(.*)\.", url)[0]
         try:
-            soup.find("li", {"id": "Hoster_92"})
-            url = self.voe(f"{self.base_url}/aGET/Mirror/{name}&Hoster=92")
-        except:
+            if re.search("Hoster_92", req):
+                url = self.voe(f"{self.base_url}/aGET/Mirror/{name}&Hoster=92")
+            elif re.search("Hoster_95", req):
+                url = self.doodstream(f"{self.base_url}/aGET/Mirror/{name}&Hoster=95")
+            else:
+                url = self.streamz(f"{self.base_url}/aGET/Mirror/{name}&Hoster=88")
+        except Exception as e:
             url = self.streamz(f"{self.base_url}/aGET/Mirror/{name}&Hoster=88")
+            print(e)
         return url
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p"):

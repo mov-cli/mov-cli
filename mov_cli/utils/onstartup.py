@@ -2,6 +2,7 @@ import httpx
 import platform
 import getpass
 from os import environ
+import re
 
 class startup:
     def __init__(self):
@@ -23,7 +24,7 @@ class startup:
             with open(f"{startup.winorlinux()}/gh.txt", "r") as f:
                 return f.read()
         except: 
-            pass
+            return None 
 
     @staticmethod
     def getkey():
@@ -43,4 +44,3 @@ class startup:
         u = httpx.get(decryptkey).text
         with open(f"{startup.winorlinux()}/movclikey.txt", "w") as f:
             f.write(u)
-            

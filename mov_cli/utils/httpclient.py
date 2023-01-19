@@ -43,6 +43,7 @@ class HttpClient:
 
 
     def head(self, page: str, redirects: False) -> httpx.Response:
+        print(page)
         try:
             req = self.session.head(page, follow_redirects=redirects)
             self.session.headers["Referer"] = page
