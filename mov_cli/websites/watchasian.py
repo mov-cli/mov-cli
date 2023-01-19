@@ -38,9 +38,12 @@ class watchasian(WebScraper):
             )
         episodes = episodes[::-1]
         href = episodes[episode - 1].find("a")["href"]
-        q = self.client.get(self.base_url + href)
+        q = self.client.get(self.base_url + href).text
         soup = BS(q, "lxml")
-        li = soup.find("li", {"class": "doodstream"})["data-video"]
+        if re.search("doodstream", q):
+            li = soup.find("li", {"class": "doodstream"})["data-video"]
+        else:
+            raise Exception("Unable to find URL")
         return li, episode   
 
     def doodstream(self, url):

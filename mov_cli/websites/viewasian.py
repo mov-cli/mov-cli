@@ -39,21 +39,16 @@ class viewasian(WebScraper):
                         )
                     )
                 )
-        request = self.client.get(f"{self.base_url}{href}?ep={episode}")
+        request = self.client.get(f"{self.base_url}{href}?ep={episode}").text
         soup = BS(request, "lxml")
-        try:
-            streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
+        if re.search("doodstream", request):
             dood = soup.find("li", {"class": "doodstream"})["data-video"]
-            print("\r\nWhat Server do you want:\r\n[1] DoodStream\r\n[2] StreamTape")
-            e = input("Please Enter what you want to use: ")
-            if e == "1":
-                li = self.doodstream(dood)
-            elif e == "2":
-                li = self.streamtape(streamtape)
-            else:
-                li = self.doodstream(dood)
-        except:
-            li = self.doodstream(soup.find("li", {"class": "doodstream"})["data-video"])
+            li = self.doodstream(dood)
+        elif re.search("doodstream", request):
+            streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
+            li = self.streamtape(streamtape)
+        else:
+            raise Exception("Unable to find URL")
         return li, episode
 
     def streamtape(self, url):
