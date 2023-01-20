@@ -181,7 +181,7 @@ class Actvid(WebScraper):
         ).json()
         source = data['sources']
         link = f"{source}"
-        if link.endswith("=="):
+        if link.endswith("==") or link.endswith("="):
             n = json.loads(self.decrypt(data['sources'], self.gh_key()))
             return n[0]['file']
         return source[0]['file']
@@ -263,7 +263,7 @@ class Actvid(WebScraper):
                 iframe_url, tv_id = self.get_link(sid)
                 iframe_link, iframe_id = self.rabbit_id(iframe_url)
                 url = self.cdn_url(iframe_link, iframe_id)
-                self.dl(url, name, season=s +1, episode=e +1)
+                self.dl(url, name, season=s+1, episode=e+1)
 
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):

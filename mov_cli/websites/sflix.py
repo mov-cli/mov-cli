@@ -76,3 +76,20 @@ class Sflix(Actvid):
         )
         soup = BS(rem, "lxml")
         return [i["data-id"] for i in soup.select(".link-item")][0]
+
+    def download(self, series_id: str, name):
+        r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
+        season_ids = [
+            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
+        ]
+        for s in range(len(season_ids)):
+            z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
+            rf = self.client.get(z)
+            episodes = [i["data-id"] for i in BS(rf, "lxml").select(".episode-item")]
+            for e in range(len(episodes)):
+                episode = episodes[e]
+                sid = self.ep_server_id(episode)
+                iframe_url, tv_id = self.get_link(sid)
+                iframe_link, iframe_id = self.rabbit_id(iframe_url)
+                url = self.cdn_url(iframe_link, iframe_id)
+                self.dl(url, name, season=s+1, episode=e+1)

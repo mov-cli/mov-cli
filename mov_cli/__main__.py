@@ -86,15 +86,10 @@ The name of the provider""",
     type=int,
 )
 def movcli(provider, query, result):  # TODO add regex
-    try:
-        provider_data = calls.get(provider, calls["actvid"])
-        provider:WebScraper = provider_data[0](provider_data[1])
+    provider_data = calls.get(provider, calls["actvid"])
+    provider:WebScraper = provider_data[0](provider_data[1])
             # provider.redo(query) if query is not None else provider.redo()
-        provider.redo(query, result)  # if result else provider.redo(query)
-    except UnicodeDecodeError:
-        print("The Current Provider has changed")
-    except Exception as e:
-        print("[!] An error has occurred | ", e)
+    provider.redo(query, result)  # if result else provider.redo(query)
 
 if __name__ == '__main__':
     movcli()
