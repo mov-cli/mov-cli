@@ -10,7 +10,6 @@ from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import json
 import time
-from ..utils.onstartup import startup
 
 sys.path.append("..")
 
@@ -220,8 +219,7 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        with open(f"{startup.winorlinux()}/movclikey.txt") as f:
-            u = f.read()
+        u = self.client.get("https://raw.githubusercontent.com/mov-cli/movkey/main/key.txt").text
         return bytes(u, 'utf-8')
 
 
