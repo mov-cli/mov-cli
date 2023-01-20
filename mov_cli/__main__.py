@@ -38,12 +38,6 @@ calls = {
     "kinox": [kinox, "https://ww16.kinox.to"],
     }
 
-try:
-    startup.getkey()
-except Exception as e:
-    print("You have exceeded Github's API Limit. You are not able to use the following Providers:\r\nActvid, SFlix, Dopebox, Solar\r\nTry using a Token\r\nSee: https://github.com/mov-cli/mov-cli/blob/v3/ghtoken.md")
-    pass
-
 if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
 
