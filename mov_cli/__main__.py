@@ -3,7 +3,6 @@ import sys
 import platform
 
 import click
-from .utils.onstartup import startup
 
 from .utils.scraper import WebScraper
 from .websites.theflix import Theflix
