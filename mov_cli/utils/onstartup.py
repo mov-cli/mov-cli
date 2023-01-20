@@ -21,6 +21,5 @@ class startup:
     @staticmethod
     def getkey():
         key = httpx.get("https://raw.githubusercontent.com/mov-cli/movkey/main/key.txt").text
-        u = httpx.get(key).text
         with open(f"{startup.winorlinux()}/movclikey.txt", "w") as f:
-            f.write(u)
+            f.write(key)
