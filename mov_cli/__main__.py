@@ -35,7 +35,7 @@ calls = {
     "watchasian": [watchasian, "https://watchasian.la"],
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.art"],
-    "kinox": [kinox, "https://ww16.kinox.to"],
+    "kinox": [kinox, "https://ww17.kinox.to"],
     "hentaimama": [hentaimama, "https://hentaimama.io"],
     "tamilyogi": [tamilyogi, "https://tamilyogi.love"],
     "javct": [javct, "https://javct.net"],
@@ -77,7 +77,6 @@ javct
 
 Live TV:
 eja
-ustvgo / US IP ONLY
     
 Cartoons:
 kimcartoon
