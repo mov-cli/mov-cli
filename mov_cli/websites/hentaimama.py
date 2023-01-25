@@ -1,6 +1,8 @@
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
+import mov_cli.__main__ as movcli
+
 
 class hentaimama(WebScraper):
     def __init__(self, base_url):
@@ -8,7 +10,12 @@ class hentaimama(WebScraper):
         self.base_url = base_url
 
     def search(self, q: str):
-        print("This Provider contains Porn")
+        print("[!] Warning: This Provider contains Porn")
+        goon = input("Are you Sure that you want to continue [y/n]: ")
+        if goon == "y":
+            pass
+        else:
+            return movcli.movcli()
         q = (
             input(self.blue("[!] Please Enter the name of the Movie: "))
             if q is None

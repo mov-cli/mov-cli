@@ -20,6 +20,7 @@ from .websites.streamblasters import streamblasters
 from .websites.kinox import kinox
 from .websites.hentaimama import hentaimama
 from .websites.tamilyogi import tamilyogi
+from .websites.javct import javct
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -37,6 +38,7 @@ calls = {
     "kinox": [kinox, "https://ww16.kinox.to"],
     "hentaimama": [hentaimama, "https://hentaimama.io"],
     "tamilyogi": [tamilyogi, "https://tamilyogi.love"],
+    "javct": [javct, "https://javct.net"],
     }
 
 if platform.system() == "Windows":
@@ -69,8 +71,9 @@ watchasian
 Anime:
 gogoanime
 
-Hentai:
+18+:
 hentaimama
+javct
 
 Live TV:
 eja
