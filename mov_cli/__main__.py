@@ -7,7 +7,6 @@ import click
 from .utils.scraper import WebScraper
 from .websites.theflix import Theflix
 from .websites.eja import eja
-from .websites.ustvgo import ustvgo
 from .websites.kimcartoon import kimcartoon
 from .websites.actvid import Actvid
 from .websites.dopebox import DopeBox
@@ -19,11 +18,11 @@ from .websites.watchasian import watchasian
 from .websites.wlext import wlext
 from .websites.streamblasters import streamblasters
 from .websites.kinox import kinox
+from .websites.hentaimama import hentaimama
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
     "eja" : [eja, "https://eja.tv"],
-    "ustvgo": [ustvgo, "https://ustvgo.tv"],
     "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
     "actvid": [Actvid, "https://www.actvid.com"],
     "sflix": [Sflix, "https://sflix.se"],
@@ -35,6 +34,7 @@ calls = {
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.art"],
     "kinox": [kinox, "https://ww16.kinox.to"],
+    "hentaimama": [hentaimama, "https://hentaimama.io"],
     }
 
 if platform.system() == "Windows":
@@ -65,6 +65,9 @@ watchasian
 
 Anime:
 gogoanime
+
+Hentai:
+hentaimama
 
 Live TV:
 eja

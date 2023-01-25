@@ -58,11 +58,14 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, subtitle: str = None, season = None, episode = None
+        self, url: str, name: str, subtitle: str = None, season = "", episode = None
     ):
         name = self.parse(name)
         fixname = re.sub(r"-+", " ", name)
-        fixname = f"{fixname}S{season}E{episode}"
+        if episode is None:
+            fixname = f"{fixname}"
+        else:
+            fixname = f"{fixname}S{season}E{episode}"
 
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
@@ -76,6 +79,8 @@ class WebScraper:
         f'{url}',
         "-user_agent",
         '"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"',
+        "-referer",
+        f"{self.base_url}",
         '-c', 
         'copy',
         '-preset',

@@ -156,7 +156,7 @@ class kinox(WebScraper):
         if state == "d":
             self.dl(url, name)
             return
-        self.play(url, name,)
+        self.play(url, name)
     
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
