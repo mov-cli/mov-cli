@@ -79,9 +79,9 @@ mov-cli is a Commandline Tool to watch and download shows and movies.
 
 Shows and Movies are scraped from Streaming Sites.
 
-mov-cli currently scrapes 15 Providers:
+mov-cli currently scrapes 16 Providers:
 
-TheFlix · Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · TamilYogi · ViewAsian · Watchasian · Gogoanime · Hentaimama · Eja · KimCartoon
+TheFlix · Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · TamilYogi · ViewAsian · Watchasian · Gogoanime · Hentaimama · Eja · KimCartoon  · Javct
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
