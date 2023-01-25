@@ -74,7 +74,6 @@ hentaimama
 
 Live TV:
 eja
-ustvgo / US IP ONLY
     
 Cartoons:
 kimcartoon
