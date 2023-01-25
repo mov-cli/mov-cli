@@ -19,6 +19,7 @@ from .websites.wlext import wlext
 from .websites.streamblasters import streamblasters
 from .websites.kinox import kinox
 from .websites.hentaimama import hentaimama
+from .websites.tamilyogi import tamilyogi
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -35,6 +36,7 @@ calls = {
     "streamblasters": [streamblasters, "https://streamblasters.art"],
     "kinox": [kinox, "https://ww16.kinox.to"],
     "hentaimama": [hentaimama, "https://hentaimama.io"],
+    "tamilyogi": [tamilyogi, "https://tamilyogi.love"],
     }
 
 if platform.system() == "Windows":
@@ -58,6 +60,7 @@ kinox
 
 Indian Movies and Shows:
 streamblasters
+tamilyogi
 
 Asian Movies and Shows:
 viewasian

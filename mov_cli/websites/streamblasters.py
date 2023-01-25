@@ -64,5 +64,5 @@ class streamblasters(WebScraper):
         if state == "d":
             self.dl(url, name)
             return
-        self.play(url, name,)
+        self.play(url, name)
 
