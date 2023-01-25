@@ -28,7 +28,7 @@ class javct(WebScraper):
         soup = BS(req, "lxml")
         items = soup.findAll("div", {"class": "card__content"})
         urls = [items[i].find("a")["href"] for i in range(len(items))]
-        title = [items[i].find("h3").find("a").text for i in range(len(items))]
+        title = [items[i].find("span").find("a").text for i in range(len(items))]
         ids = [i for i in range(len(items))]
         mov_or_tv = ["MOVIE" for i in range(len(items))]
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
