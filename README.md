@@ -163,9 +163,9 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Author: Poseidon444 | [Discord](https://discord.com/users/378549774451867648)
+Author: Poseidon444 | ```Discord: P A I N 4 4 4#4736```
 
-Maintainer: R3tr0Ananas | [Discord](https://discord.com/users/695116877042679942)
+Maintainer: R3tr0Ananas | ```Discord: </Ananas>#1000```
 
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 
