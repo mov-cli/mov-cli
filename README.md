@@ -36,7 +36,7 @@
   </a>
 
   <p align="center">
-    A cli tool to browse and watch movies.
+    A cli tool to browse and watch movies/shows.
     <br />
     <br />
     <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
