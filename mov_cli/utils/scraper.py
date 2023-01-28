@@ -8,9 +8,14 @@ import mov_cli.__main__ as movcli
 # import shlex
 # required for development
 from colorama import Fore, Style
+
 from .httpclient import HttpClient
 from fzf import fzf_prompt
 from platform import system
+
+from .player import PlayerNotFound
+from ..players.mpv import Mpv
+from ..players.vlc import Vlc
 
 # Not needed
 # def determine_path() -> str:
@@ -103,30 +108,12 @@ class WebScraper:
     def play(self, url: str, name: str, referrer = None):
         if referrer is None: referrer == self.base_url
         try:
-            if(system() == "Linux" or system() == "Windows"):
-                args = [
-                    "mpv",
-                    f"--referrer={referrer}",
-                    url,
-                    f"--force-media-title=mov-cli:{name}",
-                    "--no-terminal",
-                ]
-                mpv_process = subprocess.Popen(
-                    args  # stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-                )
+            try:
+                mpv_process = Mpv(self).play(url, self.base_url, name)
                 mpv_process.wait()
-            elif(system() == "Darwin"):
-                args = [
-                "iina",
-                "--no-stdin",
-                "--keep-running",
-                f"--mpv-referrer={referrer}",
-                url,
-                f"--mpv-force-media-title=mov-cli:{name}",
-            ]
-            else:
-                print(self.red("[!] Couldn't not determine what Player to use on your OS"))
-                sys.exit(1)
+            except PlayerNotFound:  # why do you even exist if you don't have MPV installed? WHY?
+                vlc_process = Vlc(self).play(url, self.base_url, name)
+                vlc_process.wait()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV not found | {e}"
             logging.log(logging.ERROR, txt)
