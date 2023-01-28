@@ -3,14 +3,12 @@ import sys
 import base64
 import hashlib
 # import chardet
-from Cryptodome.Cipher import AES
+from Crypto.Cipher import AES
 from typing import Callable, Any
 from urllib import parse as p
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import json
-import time
-from ..utils.onstartup import startup
 
 sys.path.append("..")
 
@@ -107,23 +105,12 @@ class Actvid(WebScraper):
         season_ids = [
             i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
         ]
-        season = input(
-            self.lmagenta(
-                f"Please input the season number(total seasons:{len(season_ids)}): "
-            )
-        )
+        season = self.askseason(len(season_ids))
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
         episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
         episode = episodes[
-            int(
-                input(
-                    self.lmagenta(
-                        f"Please input the episode number(total episodes in season:{season}):{len(episodes)} : "
-                    )
-                )
-            )
-            - 1
+            int(self.askepisode(len(episodes))) - 1
             ]
         ep = self.getep(url=f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
                         data_id=f"{episode}")
@@ -182,7 +169,7 @@ class Actvid(WebScraper):
         ).json()
         source = data['sources']
         link = f"{source}"
-        if link.endswith("=="):
+        if link.endswith("==") or link.endswith("="):
             n = json.loads(self.decrypt(data['sources'], self.gh_key()))
             return n[0]['file']
         return source[0]['file']
@@ -220,8 +207,7 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        with open(f"{startup.which_platform()}/movclikey.txt") as f:
-            u = f.read()
+        u = self.client.get("https://raw.githubusercontent.com/mov-cli/movkey/main/key.txt").text
         return bytes(u, 'utf-8')
 
 
@@ -265,7 +251,7 @@ class Actvid(WebScraper):
                 iframe_url, tv_id = self.get_link(sid)
                 iframe_link, iframe_id = self.rabbit_id(iframe_url)
                 url = self.cdn_url(iframe_link, iframe_id)
-                self.dl(url, name, season=s +1, episode=e +1)
+                self.dl(url, name, season=s+1, episode=e+1)
 
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):

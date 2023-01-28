@@ -24,30 +24,26 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://makeapullrequest.com) 
 
 
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-
   <a href="https://github.com/mov-cli/mov-cli">
     <img src="https://user-images.githubusercontent.com/83706294/194960059-a9202d72-f033-46b4-b756-3193dc54fb20.png" alt="Logo" width="80" height="80">
   </a>
 
   <p align="center">
-    A cli tool to browse and watch movies.
+    A cli tool to browse and watch movies/shows.
     <br />
     <br />
-    <a href="#about-the-project">View Demo</a>
-    ·
     <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
     ·
     <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
   </p>
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -68,6 +64,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#disclaimer">Disclaimer</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -77,21 +74,20 @@
 </details>
 
 
+## Preview
+https://user-images.githubusercontent.com/83706294/212223865-44ff52f4-359c-4df2-b71c-91b35f7fc85e.mov
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-<img src="https://user-images.githubusercontent.com/64269332/183303522-9035eee7-f6a0-4ebe-8d22-753204a64efc.gif" width="400" height="500"/>
 
-mov-cli is an Commandline Tool to watch and download shows, movies.
+mov-cli is a Commandline Tool to watch and download shows and movies.
 
 Shows and Movies are scraped from Streaming Sites.
 
-mov-cli currently 10 Providers:
-
-TheFlix · Vidsrc · Eja · ustvgo · Ask4Movie · KimCartoon · Actvid · SFlix · Solar · DopeBox 
-
-USTVGO: US IP Only or US VPN
-
+mov-cli currently scrapes 18 Providers:
+```
+TheFlix · Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · TamilYogi · Einthusan · ViewAsian · Watchasian · Gogoanime · Hentaimama · Eja · KimCartoon · Javct · Turkish123
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
 <!-- GETTING STARTED -->
@@ -101,8 +97,10 @@ USTVGO: US IP Only or US VPN
 
 ### Prerequisites
 
-* mpv
-* FFmpeg
+- [`mpv`](https://mpv.io) - Player used for Windows and Linux
+- [`iina`](https://iina.io) - player used for MacOS
+- [`ffmpeg`](https://github.com/FFmpeg/FFmpeg) - For downloads 
+- [`fzf`](https://github.com/junegunn/fzf) - The selection Menu
 
 
 ### Installation
@@ -140,16 +138,24 @@ USTVGO: US IP Only or US VPN
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Type: ```mov-cli``` in to your Commandline.
+Type: ```mov-cli``` into your Commandline.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- DISCLAIMER -->
+## Disclaimer
 
-<!-- ROADMAP -->
-## Roadmap
-We do not have an clear Roadmap.
+This project is to be used at the user’s own risk, based on their government and laws.
 
-If you want an Features, create a [issue](https://github.com/mov-cli/mov-cli/issues/new) or create an Feature and make an Pull Request.
+This project has no control on the content it is serving, using copyrighted content from the providers is not going to be accounted for by the developer. It is the user’s own risk.
+
+[More on That](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Feature -->
+## Feature
+
+If you want a feature, create an [issue](https://github.com/mov-cli/mov-cli/issues/new) or create the feature and make a pull request.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
@@ -157,12 +163,6 @@ If you want an Features, create a [issue](https://github.com/mov-cli/mov-cli/iss
 
 
 Pull requests are welcome and _appreciated_. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 Contributors:
 
@@ -186,9 +186,9 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Author: Poseidon444 | [Discord](https://discord.com/users/378549774451867648)
+Author: Poseidon444 | ```Discord: P A I N 4 4 4#4736```
 
-Maintainer: R3tr0Ananas | [Discord](https://discord.com/users/695116877042679942)
+Maintainer: R3tr0Ananas | ```Discord: </Ananas>#1000```
 
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 

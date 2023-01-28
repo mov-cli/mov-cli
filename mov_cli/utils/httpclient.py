@@ -11,10 +11,10 @@ default_header: dict = {
 
 
 class HttpClient:
-    def __init__(self, headers: dict = None):
+    def __init__(self, headers: dict = None, cookies: dict = None):
         if headers is None:
             headers = default_header
-        self.session = httpx.Client(timeout=10.0, headers=headers)
+        self.session = httpx.Client(timeout=10.0, headers=headers, cookies=cookies)
 
     def get(self, page: str) -> httpx.Response:
         print(page)
@@ -41,9 +41,26 @@ class HttpClient:
             sys.exit(-1)
         return req
 
+
+    def head(self, page: str, redirects: False) -> httpx.Response:
+        print(page)
+        try:
+            req = self.session.head(page, follow_redirects=redirects)
+            self.session.headers["Referer"] = page
+        except Exception as e:
+            print(
+                f"Error: {e}",
+                "\n Please open an issue if this is not due due to your internet connection",
+            )
+            sys.exit(-1)
+        return req
+
     def set_headers(self, header: dict) -> None:
         self.session.headers = header
-        # do not use this!
+        # do not use this!w
+    
+    def set_cookies(self, cookies: dict) -> None:
+        self.session.cookies = cookies
 
     def add_elem(self, elements: dict) -> None:
         for i in elements.items():

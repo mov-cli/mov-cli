@@ -10,6 +10,8 @@ import mov_cli.__main__ as movcli
 from colorama import Fore, Style
 
 from .httpclient import HttpClient
+from fzf import fzf_prompt
+from platform import system
 
 from .player import PlayerNotFound
 from ..players.mpv import Mpv
@@ -63,12 +65,12 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, subtitle: str = None, season = None, episode = None
+        self, url: str, name: str, subtitle: str = None, season = "", episode = None
     ):
         name = self.parse(name)
         fixname = re.sub(r"-+", " ", name)
-        if season or episode is None:
-            pass
+        if episode is None:
+            fixname = f"{fixname}"
         else:
             fixname = f"{fixname}S{season}E{episode}"
 
@@ -84,6 +86,8 @@ class WebScraper:
         f'{url}',
         "-user_agent",
         '"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0"',
+        "-referer",
+        f"{self.base_url}",
         '-c', 
         'copy',
         '-preset',
@@ -101,7 +105,8 @@ class WebScraper:
         
         return print(f"Downloaded at {os.getcwd()}")
 
-    def play(self, url: str, name: str):
+    def play(self, url: str, name: str, referrer = None):
+        if referrer is None: referrer == self.base_url
         try:
             try:
                 mpv_process = Mpv(self).play(url, self.base_url, name)
@@ -110,7 +115,7 @@ class WebScraper:
                 vlc_process = Vlc(self).play(url, self.base_url, name)
                 vlc_process.wait()
         except Exception as e:
-            txt = f"{self.red('[!]')} Could not play {name}: MPV or VLC not found | {e}"
+            txt = f"{self.red('[!]')} Could not play {name}: MPV not found | {e}"
             logging.log(logging.ERROR, txt)
             # print(txt)  # TODO implement logging to a file
             sys.exit(1)
@@ -134,19 +139,16 @@ class WebScraper:
 
     def display(self, q: str = None, result_no: int = None):
         result = self.SandR(q)
+        r = [] 
         for ix, vl in enumerate(result):
-            print(  
-                self.green(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}"), end="\n\n"
-            )
-        print(self.red("[q] Exit!"), end="\n\n")
-        print(self.yellow("[s] Search Again!"), end="\n\n")
-        print(self.cyan("[d] Download!"), end="\n\n")
-        print(self.green("[p] Switch Provider!"), end="\n\n")
-        print(self.green("[sd] Download Whole Show!"), end="\n\n")
+            r.append(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}")
+        r.extend(["[q] Exit!","[s] Search Again!","[d] Download!","[p] Switch Provider!","[sd] Download Whole Show!"])
+        r = r[::-1]
         choice = ""
         while choice not in range(len(result) + 1):
+            pre = fzf_prompt(r)
             choice = (
-                input(self.blue("Enter your choice: ")) if not result_no else result_no
+                re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
             )
             if choice == "q":
                 sys.exit()
@@ -156,16 +158,9 @@ class WebScraper:
                 return movcli.movcli()
             elif choice == "d":
                 try:
-                    mov_or_tv = result[
-                        int(
-                            input(
-                                self.yellow(
-                                    "[!] Please enter the number of the movie you want to download: "
-                                )
-                            )
-                        )
-                        - 1
-                    ]
+                    pre = fzf_prompt(r)
+                    choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
                         self.TV_PandDP(mov_or_tv, "d")
                     else:
@@ -184,16 +179,9 @@ class WebScraper:
                     sys.exit(2)
             elif choice == "sd":
                 try:
-                    mov_or_tv = result[
-                        int(
-                            input(
-                                self.yellow(
-                                    "[!] Please enter the number of the movie you want to download: "
-                                )
-                            )
-                        )
-                        - 1
-                    ]
+                    pre = fzf_prompt(r, opts="--header 'Select what to Download'")
+                    choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
                         self.TV_PandDP(mov_or_tv, "sd")
                     else:
@@ -220,3 +208,17 @@ class WebScraper:
     def redo(self, search: str = None, result: int = None):
         print(result)
         return self.display(search, result)
+    
+    def askseason(self, seasons: int):
+        texts = []
+        for i in range(seasons):
+            texts.append(f"Season {i+1}")
+        choice = fzf_prompt(texts).split(" ")[-1]
+        return choice
+    
+    def askepisode(self, episodes: int):
+        texts = []
+        for i in range(episodes):
+            texts.append(f"Episode {i+1}")
+        choice = fzf_prompt(texts).split(" ")[-1]
+        return choice

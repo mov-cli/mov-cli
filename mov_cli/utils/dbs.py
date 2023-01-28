@@ -35,6 +35,13 @@ def get_imdb_title(query: str) -> str:
     req = httpx.get(f"https://v2.sg.media-imdb.com/suggestion/{query[0].lower()}/{query}.json").json()["d"][0]["l"]
     return req
 
+def get_imdb_title_and_img(query: str) -> str:
+    query = query.replace(" ", "-")
+    req = httpx.get(f"https://v2.sg.media-imdb.com/suggestion/{query[0].lower()}/{query}.json").json()
+    title = req["d"][0]["l"]
+    img = req["d"][0]["i"]["imageUrl"]
+    return title, img
+
 def get_season_seasons(tmdb_id: str, name: str) -> int:
     req = httpx.get(
         f"https://www.themoviedb.org/tv/{tmdb_id}-{parse(name)}/seasons"
