@@ -94,8 +94,10 @@ TheFlix · Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlaste
 ### Prerequisites
 
 * mpv
+* iina If you use MacOS
 * FFmpeg
 * fzf
+
 
 ### Installation
 Choose from Python or Shell
