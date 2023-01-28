@@ -50,11 +50,15 @@ if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
 
 def movcli():  # TODO add regex
-    provider = ask()
-    provider_data = calls.get(provider, calls["actvid"])
-    provider:WebScraper = provider_data[0](provider_data[1])
-            # provider.redo(query) if query is not None else provider.redo()
-    provider.redo()  # if result else provider.redo(query)
-
+    try:
+        provider = ask()
+        provider_data = calls.get(provider, calls["actvid"])
+        provider:WebScraper = provider_data[0](provider_data[1])
+                # provider.redo(query) if query is not None else provider.redo()
+        provider.redo()  # if result else provider.redo(query)
+    except UnicodeDecodeError:
+        print("[!] The Current Key is not correct, please wait.")
+    except Exception as e:
+        print(f"[!] Got Error: {e}")
 if __name__ == '__main__':
     movcli()
