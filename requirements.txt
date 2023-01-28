@@ -7,3 +7,4 @@ pypresence
 pycryptodome
 six
 krfzf-py
+cloudscraper
