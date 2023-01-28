@@ -106,12 +106,23 @@ class Actvid(WebScraper):
         season_ids = [
             i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
         ]
-        season = self.askseason(len(season_ids))
+        season = input(
+            self.lmagenta(
+                f"Please input the season number(total seasons:{len(season_ids)}): "
+            )
+        )
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
         episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
         episode = episodes[
-            int(self.askepisode(len(episodes))) - 1
+            int(
+                input(
+                    self.lmagenta(
+                        f"Please input the episode number(total episodes in season:{season}):{len(episodes)} : "
+                    )
+                )
+            )
+            - 1
             ]
         ep = self.getep(url=f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
                         data_id=f"{episode}")

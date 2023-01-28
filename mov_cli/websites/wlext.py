@@ -44,7 +44,13 @@ class wlext(WebScraper):
             episodes = len(t.findAll("option"))
         except:
             return print("Episode unavailable")
-        episode = int(self.askepisode(len(episodes)))
+        episode = int(
+            input(
+                self.lmagenta(
+                    f"Please input the episode number(Total: {episodes}): "
+                    )
+                )
+            )
         req = self.client.get(f"{url}?server=cajitatop&episode={episode}").text
         soup = BS(req, "lxml")
         try:
@@ -63,13 +69,14 @@ class wlext(WebScraper):
             exit(1)
         else:
             file = request["data"][-1]["file"]
+            file = self.client.get(file).url
         return file
     
     
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
         url, episode = self.ask(t[self.url])
-        url = str(self.cdn_url(url))
+        url = self.cdn_url(url)
         if state == "d":
             self.dl(url, name, season=".", episode=episode)
             return

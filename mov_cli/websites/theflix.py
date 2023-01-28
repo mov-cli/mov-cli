@@ -180,7 +180,9 @@ class Theflix(WebScraper):
         return link, info
 
     def ask(self, ts, ids, name, tok):
-        season = self.askseason(ts)
+        season = input(
+            self.lmagenta(f"Please input the season number(total seasons:{ts}): ")
+        )
         self.client.set_headers({"cookie": tok})
         episodes = json.loads(
             BS(
@@ -192,8 +194,11 @@ class Theflix(WebScraper):
             .select("#__NEXT_DATA__")[0]
             .text
         )["props"]["pageProps"]["selectedTv"]["numberOfEpisodes"]
-        episode = self.askepisode(episodes // int(ts))
-
+        episode = input(
+            self.lmagenta(
+                f"Please input the episode number(total episodes in {season}:{episodes // int(ts)}: "
+            )
+        )
         return season, episodes, episode
 
     """def display(self, result: list, result_no: int = None):

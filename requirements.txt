@@ -6,4 +6,3 @@ colorama>=0.4.5
 pypresence
 pycryptodome
 six
-git+https://www.github.com/justfoolingaround/fzf.py
