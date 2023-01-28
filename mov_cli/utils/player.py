@@ -28,9 +28,9 @@ class Player():
     @property
     def os(self) -> str:
         """
-        Returns the operating system we're currently running on.
+        Returns the operating system we're currently running on. (Adds android detection.)
         
-        E.g. Windows, Linux, Android
+        E.g. Windows, Linux, Android, Darwin
         """
         if self.__os == "Linux":
             if hasattr(sys, 'getandroidapilevel'):

@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 
 from ..utils.player import Player, PlayerNotFound
@@ -8,15 +9,15 @@ class Mpv(Player):
     def __init__(self, webscraper_class:object) -> None:
         super().__init__("MPV")
 
-        self.__webscraper = webscraper_class
+        self.webscraper = webscraper_class
         
     def play(self, url: str, referrer: str, media_title: str) -> subprocess.Popen:
         
         if self.os == "Android": # Android Support
-            print(self.__webscraper.cyan("[!] Detected your using ") + self.__webscraper.green("Android."))
+            print(self.webscraper.cyan("[!] Detected your using ") + self.webscraper.green("Android."))
 
             if "theflix" in url:
-                raise Exception(self.__webscraper.red("'theflix' is not supported on ") + self.__webscraper.green("Android!"))
+                raise Exception(self.webscraper.red("'theflix' is not supported on ") + self.webscraper.green("Android!"))
 
             # Now open mpv with url.
             return subprocess.Popen([
@@ -31,13 +32,33 @@ class Mpv(Player):
             ])
 
         else: # Windows, Linux and Other
+
             try:
-                return subprocess.Popen([
-                    "mpv",
-                    f"--referrer={referrer}",
-                    f"{url}",
-                    f"--force-media-title=mov-cli:{media_title}",
-                    "--no-terminal",
-                ])
+
+                if self.os == "Linux" or self.os == "Windows":
+
+                    return subprocess.Popen([
+                        "mpv",
+                        f"--referrer={referrer}",
+                        f"{url}",
+                        f"--force-media-title=mov-cli:{media_title}",
+                        "--no-terminal",
+                    ])
+
+                elif self.os == "Darwin":
+
+                    return subprocess.Popen([
+                        "iina",
+                        "--no-stdin",
+                        "--keep-running",
+                        f"--mpv-referrer={referrer}",
+                        url,
+                        f"--mpv-force-media-title=mov-cli:{media_title}"
+                    ])
+
+                else:
+                    print(self.red("[!] Could not determine what Player to use on your OS"))
+                    sys.exit(1)
+
             except ModuleNotFoundError:
                 raise PlayerNotFound(self)
