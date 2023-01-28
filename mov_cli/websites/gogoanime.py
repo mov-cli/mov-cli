@@ -29,13 +29,7 @@ class gogoanime(WebScraper):
         req = self.client.get(f"{self.base_url}{url}")
         soup = BS(req, "lxml")
         episodes = soup.find("ul", {"id": "episode_page"}).find("a")["ep_end"]
-        episode = int(
-            input(
-                self.lmagenta(
-                    f"Please input the episode number(Total: {episodes}): "
-                    )
-                )
-            )
+        episode = self.askepisode(len(episodes))
         url = url.split("/")[-1]
         request = self.client.get(f"{self.base_url}/{url}-episode-{episode}")
         soup = BS(request, "lxml")

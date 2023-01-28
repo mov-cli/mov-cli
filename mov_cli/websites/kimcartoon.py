@@ -31,13 +31,7 @@ class kimcartoon(WebScraper):
         soup = BS(res, "lxml")
         table = soup.find("table", {"class": "listing"})
         episodes = table.findAll("a", {"rel": "noreferrer noopener"})
-        episode = int(
-            input(
-                self.lmagenta(
-                    f"Please input the episode number:{len(episodes)}: "
-                )
-            )
-        )
+        episode = int(self.askepisode(len(episodes)))
         url = episodes[len(episodes) - episode]["href"]
         return url, episode
     

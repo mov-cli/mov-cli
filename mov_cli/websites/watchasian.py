@@ -29,13 +29,7 @@ class watchasian(WebScraper):
         req = self.client.get(f"{self.base_url}{url}").text
         soup = BS(req, "lxml")
         episodes = soup.find("ul",{"class": "list-episode-item-2 all-episode"}).findAll("li")
-        episode = int(
-            input(
-                self.lmagenta(
-                    f"Please input the episode number(Total: {len(episodes)}): "
-                    )
-                )
-            )
+        episode = int(self.askepisode(len(episodes)))
         episodes = episodes[::-1]
         href = episodes[episode - 1].find("a")["href"]
         q = self.client.get(self.base_url + href).text
