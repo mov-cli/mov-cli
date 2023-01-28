@@ -109,10 +109,10 @@ class WebScraper:
         if referrer is None: referrer == self.base_url
         try:
             try:
-                mpv_process = Mpv(self).play(url, self.base_url, name)
+                mpv_process = Mpv(self).play(url, referrer, name)
                 mpv_process.wait()
             except PlayerNotFound:  # why do you even exist if you don't have MPV installed? WHY?
-                vlc_process = Vlc(self).play(url, self.base_url, name)
+                vlc_process = Vlc(self).play(url, referrer, name)
                 vlc_process.wait()
         except Exception as e:
             txt = f"{self.red('[!]')} Could not play {name}: MPV not found | {e}"
@@ -179,7 +179,7 @@ class WebScraper:
                     sys.exit(2)
             elif choice == "sd":
                 try:
-                    pre = fzf_prompt(r, opts="--header 'Select what to Download'")
+                    pre = fzf_prompt(r)
                     choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
                     mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
