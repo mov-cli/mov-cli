@@ -32,13 +32,7 @@ class viewasian(WebScraper):
         request = self.client.get(f"{self.base_url}{href}")
         soup = BS(request, "lxml")
         episodes = soup.findAll("li", {"class": "ep-item"})
-        episode = int(
-                    input(
-                        self.lmagenta(
-                            f"Please input the episode number(Total: {len(episodes)}): "
-                        )
-                    )
-                )
+        episode = int(self.askepisode(len(episodes)))
         request = self.client.get(f"{self.base_url}{href}?ep={episode}").text
         soup = BS(request, "lxml")
         if re.search("doodstream", request):

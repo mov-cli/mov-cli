@@ -107,22 +107,9 @@ class kinox(WebScraper):
         soup = BS(req, "lxml")
         select = soup.find("select",{"id": "SeasonSelection"}).findAll("option")
         rel = soup.find("select",{"id": "SeasonSelection"})["rel"]
-        season = int(
-            input(
-                self.lmagenta(
-                    f"Please input the season number(total seasons:{len(select)}): "
-                )
-            )
-        )
+        season = int(self.askseason(len(select)))
         option = select[season - 1]["rel"].split(",")
-        print(option)
-        episode = int(
-            input(
-                self.lmagenta(
-                    f"Please input the episode number(total episodes in season:{season}):{len(option)} : "
-                )
-            )
-        )
+        episode = int(self.askepisode(len(option)))
         option = option[episode - 1]
         hostlist = self.client.get(f"{self.base_url}/aGET/MirrorByEpisode/{rel}&Season={season}&Episode={option}").text
         name = re.findall("\/Stream\/(.*)\.", url)[0]

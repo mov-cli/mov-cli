@@ -37,13 +37,7 @@ class hentaimama(WebScraper):
         req = self.client.get(url).text
         soup = BS(req, "lxml")
         episodes = soup.findAll("article", {"class": "item se episodes"})
-        episode = int(
-            input(
-                self.lmagenta(
-                    f"Please input the episode number:({len(episodes)}): "
-                )
-            )
-        )
+        episode = int(self.askepisode(len(episodes)))
         episodes = episodes[::-1]
         url = episodes[episode - 1].find("a")["href"]
         return url, episode
