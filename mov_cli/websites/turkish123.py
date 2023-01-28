@@ -1,7 +1,7 @@
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
-from cloudscraper import create_scraper
+
 class turkish123(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
