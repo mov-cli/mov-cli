@@ -93,10 +93,10 @@ TheFlix · Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlaste
 
 ### Prerequisites
 
-* mpv
-* iina If you use MacOS
-* FFmpeg
-* fzf
+- [`mpv`](https://mpv.io) - Player used for Windows and Linux
+- [`iina`](https://iina.io) - player used for MacOS
+- [`ffmpeg`](https://github.com/FFmpeg/FFmpeg) - For downloads 
+- [`fzf`](https://github.com/junegunn/fzf) - The selection Menu
 
 
 ### Installation
