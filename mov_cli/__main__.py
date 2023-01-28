@@ -21,6 +21,7 @@ from .websites.kinox import kinox
 from .websites.hentaimama import hentaimama
 from .websites.tamilyogi import tamilyogi
 from .websites.javct import javct
+from .websites.einthusan import einthusan
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -39,6 +40,7 @@ calls = {
     "hentaimama": [hentaimama, "https://hentaimama.io"],
     "tamilyogi": [tamilyogi, "https://tamilyogi.love"],
     "javct": [javct, "https://javct.net"],
+    "einthusan": [einthusan, "https://einthusan.tv"],
     }
 
 if platform.system() == "Windows":
@@ -63,6 +65,7 @@ kinox
 Indian Movies and Shows:
 streamblasters
 tamilyogi
+einthusan
 
 Asian Movies and Shows:
 viewasian
