@@ -9,7 +9,7 @@ class wlext(WebScraper):
     
     def search(self, q: str = None) -> list:
         q = (
-            input(self.blue("[!] Please Enter the name of the Movie: "))
+            input("[!] Please Enter the name of the Movie: ")
             if q is None
             else q
         )

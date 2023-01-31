@@ -73,14 +73,14 @@ class Actvid(WebScraper):
             ).text.replace(")]}'", "")
         )"""
 
-    def search(self, query: str = None) -> str:
-        query = (
-            input(self.blue("[!] Please Enter the name of the Movie: "))
-            if query is None
-            else query
+    def search(self, q: str = None) -> str:
+        q = (
+            input("[!] Please Enter the name of the Movie: ")
+            if q is None
+            else q
         )
-        self.userinput = query
-        return self.client.get(f"{self.base_url}/search/{self.parse(query)}").text
+        self.userinput = q
+        return self.client.get(f"{self.base_url}/search/{self.parse(q)}").text
 
     def results(self, html: str) -> list:
         soup = BS(html, "lxml")

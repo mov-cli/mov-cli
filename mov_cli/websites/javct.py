@@ -17,7 +17,7 @@ class javct(WebScraper):
         else:
             return movcli.movcli()
         q = (
-            input(self.blue("[!] Please Enter the name: "))
+            input("[!] Please Enter the name of the Movie: ")
             if q is None
             else q
         )

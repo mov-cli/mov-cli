@@ -8,7 +8,11 @@ class streamblasters(WebScraper):
         self.base_url = base_url
 
     def search(self, q):
-        q = input(self.blue("[!] Please Enter the name of the Movie: "))
+        q = (
+            input("[!] Please Enter the name of the Movie: ")
+            if q is None
+            else q
+        )
         return q.replace(" ", "+")
 
     def results(self, data: str) -> list:

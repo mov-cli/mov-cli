@@ -9,7 +9,7 @@ class viewasian(WebScraper):
 
     def search(self, q: str):
         q = (
-            input(self.blue("[!] Please Enter the name of the Movie: "))
+            input("[!] Please Enter the name of the Movie: ")
             if q is None
             else q
         )
