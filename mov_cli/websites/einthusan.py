@@ -1,6 +1,7 @@
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
+from fzf import fzf_prompt
 
 class einthusan(WebScraper):
     def __init__(self, base_url):
@@ -17,7 +18,9 @@ class einthusan(WebScraper):
     
 
     def results(self, data: str) -> list:
-        req = self.client.get(f"{self.base_url}/movie/results/?lang=&query={data}")
+        lang = ["tamil", "hindi", "telugu", "malayalam", "kannada", "bengali", "marathi", "punjabi"]
+        lang = fzf_prompt(lang)
+        req = self.client.get(f"{self.base_url}/movie/results/?lang={lang}&query={data}")
         soup = BS(req, "lxml")
         items = soup.findAll("div", {"class": "block2"})
         urls = [items[i].find("a")["href"] for i in range(len(items))]
