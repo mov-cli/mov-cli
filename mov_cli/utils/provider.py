@@ -54,6 +54,7 @@ preselction = [
     "LIVE TV Providers",
     "Cartoons Providers",
     "Turkish Providers",
+    "Anime Providers",
 ]
 
 def ask():
@@ -74,6 +75,8 @@ def ask():
         return fzf_prompt(cartoons)
     elif choice == "Turkish Providers":
         return fzf_prompt(turkish)
+    elif choice == "Anime Providers":
+        return fzf_prompt(anime)
     else:
         exit(1)
 
