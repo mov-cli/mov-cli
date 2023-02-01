@@ -24,6 +24,8 @@ from .websites.tamilyogi import tamilyogi
 from .websites.javct import javct
 from .websites.einthusan import einthusan
 from .websites.turkish123 import turkish123
+from .websites.xxxmax import xxxmax
+from .websites.pornhub import pornhub
 
 calls = {
     "theflix": [Theflix, "https://theflix.to"],
@@ -44,6 +46,8 @@ calls = {
     "javct": [javct, "https://javct.net"],
     "einthusan": [einthusan, "https://einthusan.tv"],
     "turkish123": [turkish123, "https://turkish123.ac"],
+    "xxxmax": [xxxmax, "https://xxxmax.net"],
+    "pornhub": [pornhub, "https://www.pornhub.com"]
     }
 
 if platform.system() == "Windows":
@@ -58,7 +62,5 @@ def movcli():  # TODO add regex
         provider.redo()  # if result else provider.redo(query)
     except UnicodeDecodeError:
         print("[!] The Current Key is not correct, please wait.")
-    except Exception as e:
-        print(f"[!] Got Error: {e}")
 if __name__ == '__main__':
     movcli()

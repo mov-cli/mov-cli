@@ -31,6 +31,8 @@ anime = [
 nsfw = [
     "hentaimama",
     "javct",
+    "xxxmax",
+    "pornhub",
 ]
 
 tv = [
