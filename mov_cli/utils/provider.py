@@ -1,7 +1,6 @@
 from fzf import fzf_prompt
 
 english = [
-    "theflix",
     "actvid",
     "sflix",
     "solar",

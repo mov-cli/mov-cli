@@ -23,7 +23,7 @@ class kimcartoon(WebScraper):
         title = [cartoons[i].find("span").text for i in range(len(cartoons))]
         urls = [cartoons[i].find("a")["href"] for i in range(len(cartoons))]
         ids = [i for i in range(len(cartoons))]
-        mov_or_tv = ["TV" if cartoons[i].find("a")["href"].__contains__("Season") else "MOVIE" for i in range(len(cartoons))]
+        mov_or_tv = ["TV" for i in range(len(cartoons))]
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def ask(self, url):
@@ -47,17 +47,11 @@ class kimcartoon(WebScraper):
             self.dl(url, t[self.title], episode=e + 1)
     
     def cdn_url(self, url):
-        res = self.client.get(self.base_url + url).text
+        res = self.client.get(self.base_url + url + "&s=fe").text
         iframe_id = re.findall('''src="https://www.luxubu.review/v/(.*?)"''',res)[0]
-        r= self.client.post(f"https://www.luxubu.review/api/source/{iframe_id}", data=None).json()['data']
+        r = self.client.post(f"https://www.luxubu.review/api/source/{iframe_id}", data=None).json()['data']
         return r[-1]["file"]
     
-    def movtable(self, url):
-        res = self.client.get(self.base_url + url)
-        soup = BS(res, "lxml")
-        table = soup.find("table", {"class": "listing"})
-        url = table.findAll("a", {"rel": "noreferrer noopener"})[0]["href"]
-        return url
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         if state == "sd":
             self.download(t)
@@ -69,18 +63,5 @@ class kimcartoon(WebScraper):
             self.dl(url, name, season=".", episode=episode)
             return
         self.play(url, name)
-
-    def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
-        if state == "sd":
-            print("Only Shows can be downloaded with sd")
-            return
-        name = m[self.title]
-        link = self.movtable(f"{m[self.url]}")
-        url = self.cdn_url(link)
-        if state == "d":
-            self.dl(url, name)
-            return
-        self.play(url, name)
-
 
 

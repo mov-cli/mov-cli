@@ -6,7 +6,6 @@ import click
 from .utils.provider import ask
 
 from .utils.scraper import WebScraper
-from .websites.theflix import Theflix
 from .websites.eja import eja
 from .websites.kimcartoon import kimcartoon
 from .websites.actvid import Actvid
@@ -28,7 +27,6 @@ from .websites.xxxmax import xxxmax
 from .websites.pornhub import pornhub
 
 calls = {
-    "theflix": [Theflix, "https://theflix.to"],
     "eja" : [eja, "https://eja.tv"],
     "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
     "actvid": [Actvid, "https://www.actvid.com"],
