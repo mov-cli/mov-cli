@@ -111,7 +111,7 @@ TheFlix · Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlaste
     ```
     Shell:
     ```
-    sudo curl -s "https://github.com/mov-cli/mov-cli/raw/v3/mov-cli" -L -o /usr/local/bin/mov-cli && sudo chmod +x /usr/local/bin/mov-cli
+    Shell Version of mov-cli currently doesn't work.
     ```
 
 - Android (Only for Python Version)
