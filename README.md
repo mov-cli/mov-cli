@@ -93,7 +93,7 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
 
 ### Prerequisites
 
-- [`mpv`](https://mpv.io) - Player used for Windows and Linux
+- [`mpv`](https://mpv.io) - Player used for Windows, Linux and Android
 - [`iina`](https://iina.io) - player used for MacOS
 - [`ffmpeg`](https://github.com/FFmpeg/FFmpeg) - For downloads 
 - [`fzf`](https://github.com/junegunn/fzf) - The selection Menu
