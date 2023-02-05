@@ -18,13 +18,9 @@ from .websites.watchasian import watchasian
 from .websites.wlext import wlext
 from .websites.streamblasters import streamblasters
 from .websites.kinox import kinox
-from .websites.hentaimama import hentaimama
 from .websites.tamilyogi import tamilyogi
-from .websites.javct import javct
 from .websites.einthusan import einthusan
 from .websites.turkish123 import turkish123
-from .websites.xxxmax import xxxmax
-from .websites.pornhub import pornhub
 
 calls = {
     "eja" : [eja, "https://eja.tv"],
@@ -39,13 +35,9 @@ calls = {
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.art"],
     "kinox": [kinox, "https://ww17.kinox.to"],
-    "hentaimama": [hentaimama, "https://hentaimama.io"],
     "tamilyogi": [tamilyogi, "https://tamilyogi.love"],
-    "javct": [javct, "https://javct.net"],
     "einthusan": [einthusan, "https://einthusan.tv"],
     "turkish123": [turkish123, "https://turkish123.ac"],
-    "xxxmax": [xxxmax, "https://xxxmax.net"],
-    "pornhub": [pornhub, "https://www.pornhub.com"]
     }
 
 if platform.system() == "Windows":

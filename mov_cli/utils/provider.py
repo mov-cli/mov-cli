@@ -27,13 +27,6 @@ anime = [
     "gogoanime"
 ]
 
-nsfw = [
-    "hentaimama",
-    "javct",
-    "xxxmax",
-    "pornhub",
-]
-
 tv = [
     "eja"
 ]
@@ -51,7 +44,6 @@ preselction = [
     "German Providers",
     "Indian Providers",
     "Asian Providers",
-    "18+ Providers",
     "LIVE TV Providers",
     "Cartoons Providers",
     "Turkish Providers",
@@ -68,8 +60,6 @@ def ask():
         return fzf_prompt(indian)
     elif choice == "Asian Providers":
         return fzf_prompt(asian)
-    elif choice == "18+ Providers":
-        return fzf_prompt(nsfw)
     elif choice == "LIVE TV Providers":
         return fzf_prompt(tv)
     elif choice == "Cartoons Providers":

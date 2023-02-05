@@ -14,10 +14,11 @@ class Mpv(Player):
     def play(self, url: str, referrer: str, media_title: str) -> subprocess.Popen:
         
         if self.os == "Android": # Android Support
-            print(self.webscraper.cyan("[!] Detected your using ") + self.webscraper.green("Android."))
+            print("[!] Detected your using Android.")
 
-            if "theflix" in url:
-                raise Exception(self.webscraper.red("'theflix' is not supported on ") + self.webscraper.green("Android!"))
+            #if "theflix" in url:
+            #    raise Exception(self.webscraper.red("'theflix' is not supported on ") + self.webscraper.green("Android!")) as theflix is removed its not required
+
 
             # Now open mpv with url.
             return subprocess.Popen([
