@@ -51,7 +51,9 @@ preselction = [
     "Anime Providers",
 ]
 
-def ask():
+def ask(update: bool = False):
+    if update == True:
+        preselction.append(["", "New Update Available!"])
     choice = fzf_prompt(preselction)
     if choice == "English Providers":
         return fzf_prompt(english)

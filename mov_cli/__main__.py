@@ -4,6 +4,7 @@ import platform
 
 import click
 from .utils.provider import ask
+from .utils.update import check
 
 from .utils.scraper import WebScraper
 from .websites.eja import eja
@@ -47,7 +48,7 @@ if platform.system() == "Windows":
 
 def movcli():  # TODO add regex
     try:
-        provider = ask()
+        provider = ask(update=check())
         provider_data = calls.get(provider, calls["actvid"])
         provider:WebScraper = provider_data[0](provider_data[1])
                 # provider.redo(query) if query is not None else provider.redo()

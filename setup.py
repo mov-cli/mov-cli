@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 from pathlib import Path
+from mov_cli.__version__ import __core__ as ver
 
 with open("requirements.txt") as requirements_txt:
     requirements = requirements_txt.read().splitlines()
@@ -9,7 +10,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="mov-cli",
-    version="1.1.7",
+    version=ver,
     author="pain@poseidon444",
     author_email="painedposeidon444@gmail.com",
     maintainer="ananas@r3tr0ananas",
