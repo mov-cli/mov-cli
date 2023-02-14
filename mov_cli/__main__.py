@@ -1,11 +1,8 @@
 import os
 import sys
 import platform
-
-import click
 from .utils.provider import ask
 from .utils.update import check
-
 from .utils.scraper import WebScraper
 from .websites.eja import eja
 from .websites.kimcartoon import kimcartoon
