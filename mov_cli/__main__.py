@@ -21,6 +21,7 @@ from .websites.kinox import kinox
 from .websites.tamilyogi import tamilyogi
 from .websites.einthusan import einthusan
 from .websites.turkish123 import turkish123
+from .websites.animefox import animefox
 
 calls = {
     "eja" : [eja, "https://eja.tv"],
@@ -38,6 +39,7 @@ calls = {
     "tamilyogi": [tamilyogi, "https://tamilyogi.love"],
     "einthusan": [einthusan, "https://einthusan.tv"],
     "turkish123": [turkish123, "https://turkish123.ac"],
+    "animefox": [animefox, "https://animefox.to"]
     }
 
 if platform.system() == "Windows":

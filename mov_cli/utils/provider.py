@@ -24,7 +24,8 @@ asian = [
 ]
 
 anime = [
-    "gogoanime"
+    "gogoanime",
+    "animefox"
 ]
 
 tv = [
