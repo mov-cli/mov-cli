@@ -236,7 +236,24 @@ class Actvid(WebScraper):
         )
         return self.unpad(p).decode()
     
-    def download(self, series_id: str, name):
+    def ds(self, series_id: str, name):
+        r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
+        season_ids = [
+            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
+        ]
+        season = self.askseason(len(season_ids))
+        z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
+        rf = self.client.get(z)
+        episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
+        for e in range(len(episodes)):
+            episode = episodes[e]
+            sid = self.ep_server_id(episode)
+            iframe_url, tv_id = self.get_link(sid)
+            iframe_link, iframe_id = self.rabbit_id(iframe_url)
+            url = self.cdn_url(iframe_link, iframe_id)
+            self.dl(url, name, season=season, episode=e+1)
+
+    def sd(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
         season_ids = [
             i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
@@ -253,11 +270,13 @@ class Actvid(WebScraper):
                 url = self.cdn_url(iframe_link, iframe_id)
                 self.dl(url, name, season=s+1, episode=e+1)
 
-
-    def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
+    def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd" or "ds"):
         name = t[self.title]
         if state == "sd":
-            self.download(t[self.aid],name)
+            self.sd(t[self.aid],name)
+            return
+        if state == "ds":
+            self.ds(t[self.aid],name)
             return
         episode, season, ep = self.ask(t[self.aid])
         sid = self.ep_server_id(episode)

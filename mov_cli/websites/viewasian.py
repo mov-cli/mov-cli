@@ -38,7 +38,7 @@ class viewasian(WebScraper):
         if re.search("doodstream", request):
             dood = soup.find("li", {"class": "doodstream"})["data-video"]
             li = self.doodstream(dood)
-        elif re.search("doodstream", request):
+        elif re.search("streamtape", request):
             streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
             li = self.streamtape(streamtape)
         else:
@@ -69,7 +69,30 @@ class viewasian(WebScraper):
         print(streamlink)
         return streamlink
 
+    def download(self, t):
+        request = self.client.get(f"{self.base_url}{t[self.url]}")
+        soup = BS(request, "lxml")
+        href = soup.find("a", {"class":"bwac-btn"})["href"]
+        request = self.client.get(f"{self.base_url}{href}")
+        soup = BS(request, "lxml")
+        episodes = soup.findAll("li", {"class": "ep-item"})
+        for e in range(len(episodes)):
+            request = self.client.get(f"{self.base_url}{href}?ep={e+1}").text
+            soup = BS(request, "lxml")
+            if re.search("doodstream", request):
+                dood = soup.find("li", {"class": "doodstream"})["data-video"]
+                li = self.doodstream(dood)
+            elif re.search("streamtape", request):
+                streamtape = soup.find("li", {"class": "streamtape"})["data-video"]
+                li = self.streamtape(streamtape)
+            else:
+                raise Exception("Unable to find URL")
+            self.dl(li, t[self.title], episode=e+1)
+
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
+        if state == "sd":
+            self.download(t)
+            return
         name = t[self.title]
         url, episode = self.ask(t[self.url])
         if state == "d":

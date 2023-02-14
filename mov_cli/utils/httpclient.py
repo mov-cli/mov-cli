@@ -29,17 +29,30 @@ class HttpClient:
             sys.exit(-1)
         return req
 
-    def post(self, page: str, data: dict) -> httpx.Response:
-        try:
-            req = self.session.post(page, data=data)
-            self.session.headers["Referer"] = page
-        except Exception as e:
-            print(
-                f"Error: {e}",
-                "\n Please open an issue if this is not due due to your internet connection",
-            )
-            sys.exit(-1)
-        return req
+    def post(self, page: str, data: dict = None, json = None) -> httpx.Response:
+        print(page)
+        if json == None:    
+            try:
+                req = self.session.post(page, data=data)
+                self.session.headers["Referer"] = page
+            except Exception as e:
+                print(
+                    f"Error: {e}",
+                    "\n Please open an issue if this is not due due to your internet connection",
+                )
+                sys.exit(-1)
+            return req
+        else:
+            try:
+                req = self.session.post(page, json=json)
+                self.session.headers["Referer"] = page
+            except Exception as e:
+                print(
+                    f"Error: {e}",
+                    "\n Please open an issue if this is not due due to your internet connection",
+                )
+                sys.exit(-1)
+            return req
 
 
     def head(self, page: str, redirects: False) -> httpx.Response:

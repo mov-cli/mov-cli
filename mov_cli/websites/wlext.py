@@ -16,24 +16,16 @@ class wlext(WebScraper):
         return q.replace(" ", "+")
     
     def results(self, data: str) -> list:
-        print("Is it an Movie or a Show?\r\n[1] Movie\r\n[2] Show")
-        question = input("Enter: ")
-        if question == "1":
-            m = self.client.get(f"{self.base_url}/ptb-search/?f=search_movies&ptb-search=1&title={data}")
-            movie = BS(m, "lxml")
-            movies = movie.findAll("h5", {"class": "ptb_post_title"})
-            urls = [movies[i].find("a")["href"] for i in range(len(movies))]
-            title = [movies[i].find("a").text for i in range(len(movies))]
-            ids = [i for i in range(len(movies))]
-            mov_or_tv = ["TV" for i in range(len(movies))]
-        else:
-            s = self.client.get(f"{self.base_url}/ptb-search/?f=search_series_1&ptb-search=1&title={data}")
-            show = BS(s, "lxml")
-            shows = show.findAll("h5", {"class": "ptb_post_title"})
-            urls = [shows[i].find("a")["href"] for i in range(len(shows))]
-            title = [shows[i].find("a").text for i in range(len(shows))]
-            ids = [i for i in range(len(shows))]
-            mov_or_tv = ["TV" for i in range(len(shows))]
+        m = self.client.get(f"{self.base_url}/ptb-search/?f=search_movies&ptb-search=1&title={data}")
+        s = self.client.get(f"{self.base_url}/ptb-search/?f=search_series_1&ptb-search=1&title={data}")
+        show = BS(s, "lxml")
+        shows = show.findAll("h5", {"class": "ptb_post_title"})
+        movie = BS(m, "lxml")
+        movies = movie.findAll("h5", {"class": "ptb_post_title"})
+        urls = [movies[i].find("a")["href"] for i in range(len(movies))] + [shows[i].find("a")["href"] for i in range(len(shows))]
+        title = [movies[i].find("a").text for i in range(len(movies))] + [shows[i].find("a").text for i in range(len(shows))]
+        ids = [i for i in range(len(movies))] + [i for i in range(len(shows))]
+        mov_or_tv = ["MOVIE" for i in range(len(movies))] + ["TV" for i in range(len(shows))]
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
     
     def ask(self, url):
@@ -44,7 +36,7 @@ class wlext(WebScraper):
             episodes = len(t.findAll("option"))
         except:
             return print("Episode unavailable")
-        episode = int(self.askepisode(len(episodes)))
+        episode = int(self.askepisode(episodes))
         req = self.client.get(f"{url}?server=cajitatop&episode={episode}").text
         soup = BS(req, "lxml")
         try:
@@ -65,6 +57,24 @@ class wlext(WebScraper):
             file = request["data"][-1]["file"]
         return file
     
+    def download(self, t):
+        req = self.client.get(t[self.url])
+        soup = BS(req, "lxml")
+        t = soup.find("select", {"id": "loadepisode"})
+        try:
+            episodes = len(t.findAll("option"))
+        except:
+            return print("Episode unavailable")
+        for e in range(len(episodes)):
+            req = self.client.get(f"{[self.url]}?server=cajitatop&episode={e+1}").text
+            soup = BS(req, "lxml")
+            try:
+                t = soup.find("iframe", {"loading": "lazy"})["src"]
+            except:
+                return print("Couldn't find cajita.to provider.")
+            url = str(self.cdn_url(t))
+            self.dl(url, t[self.title], episode=e+1)
+
     
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
@@ -77,8 +87,7 @@ class wlext(WebScraper):
     
     def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
         name = m[self.title]
-        url, episode = self.ask(f"{m[self.url]}")
-        url = self.cdn_url(url)
+        url = self.cdn_url(f"{m[self.url]}?server=cajitatop")
         if state == "d":
             self.dl(url, name)
             return

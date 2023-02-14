@@ -51,7 +51,27 @@ class watchasian(WebScraper):
         print(streamlink)
         return streamlink
     
-    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+    def download(self, t):
+        req = self.client.get(f"{self.base_url}{t[self.url]}").text
+        soup = BS(req, "lxml")
+        episodes = soup.find("ul",{"class": "list-episode-item-2 all-episode"}).findAll("li")
+        episodes = episodes[::-1]
+        for e in range(len(episodes)):
+            href = episodes[e].find("a")["href"]
+            q = self.client.get(self.base_url + href).text
+            soup = BS(q, "lxml")
+            if re.search("doodstream", q):
+                li = soup.find("li", {"class": "doodstream"})["data-video"]
+            else:
+                raise Exception("Unable to find URL")
+            url = self.doodstream(li)
+            self.dl(url, t[self.title], episode=e+1)
+
+
+    def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
+        if state == "sd":
+            self.download(t)
+            return
         name = t[self.title]
         link, episode = self.ask(t[self.url])
         url = self.doodstream(link)

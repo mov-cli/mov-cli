@@ -12,7 +12,6 @@ class Mpv(Player):
         self.webscraper = webscraper_class
         
     def play(self, url: str, referrer: str, media_title: str) -> subprocess.Popen:
-        
         if self.os == "Android": # Android Support
             print("[!] Detected your using Android.")
 
@@ -58,7 +57,7 @@ class Mpv(Player):
                     ])
 
                 else:
-                    print(self.red("[!] Could not determine what Player to use on your OS"))
+                    print("[!] Could not determine what Player to use on your OS")
                     sys.exit(1)
 
             except ModuleNotFoundError:

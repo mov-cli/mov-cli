@@ -29,7 +29,7 @@ class gogoanime(WebScraper):
         req = self.client.get(f"{self.base_url}{url}")
         soup = BS(req, "lxml")
         episodes = soup.find("ul", {"id": "episode_page"}).find("a")["ep_end"]
-        episode = self.askepisode(len(episodes))
+        episode = self.askepisode(int(episodes))
         url = url.split("/")[-1]
         request = self.client.get(f"{self.base_url}/{url}-episode-{episode}")
         soup = BS(request, "lxml")
@@ -47,6 +47,17 @@ class gogoanime(WebScraper):
         print(streamlink)
         return streamlink
 
+    def download(self, t):
+        req = self.client.get(f"{self.base_url}{t[self.url]}")
+        soup = BS(req, "lxml")
+        episodes = soup.find("ul", {"id": "episode_page"}).find("a")["ep_end"]
+        for e in range(len(episodes)):
+            url = url.split("/")[-1]
+            request = self.client.get(f"{self.base_url}/{url}-episode-{e+1}")
+            soup = BS(request, "lxml")
+            url = self.doodstream(soup.find("li", {"class": "doodstream"}).find("a")["data-video"])
+            self.dl(url, t[self.title], episode=e+1)
+    
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         name = t[self.title]
         url, episode = self.ask(t[self.url])
