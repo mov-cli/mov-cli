@@ -5,7 +5,6 @@ english = [
     "sflix",
     "solar",
     "dopebox",
-    "wlext",
 ]
 
 german = [
@@ -16,6 +15,7 @@ indian = [
     "streamblasters",
     "tamilyogi",
     "einthusan",
+    "wlext",
 ]
 
 asian = [
