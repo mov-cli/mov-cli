@@ -40,38 +40,32 @@ turkish = [
     "turkish123"
 ]
 
-preselction = [
-    "English Providers",
-    "German Providers",
-    "Indian Providers",
-    "Asian Providers",
-    "LIVE TV Providers",
-    "Cartoons Providers",
-    "Turkish Providers",
-    "Anime Providers",
+sports = [
+    "sportscentral"
 ]
 
-def ask(update: bool = False):
+update = [
+    "pip install mov-cli"
+]
+
+preselction = {
+    "English Providers": [english],
+    "German Providers": [german],
+    "Indian Providers": [indian],
+    "Asian Providers": [asian],
+    "LIVE TV Providers": [tv],
+    "Cartoons Providers": [cartoons],
+    "Turkish Providers": [turkish],
+    "Anime Providers": [anime],
+    "Sports Providers": [sports],
+}
+
+def ask(update: bool = True):
     if update == True:
-        preselction.extend(["", "New Update Available!"])
-    choice = fzf_prompt(preselction)
-    if choice == "English Providers":
-        return fzf_prompt(english)
-    elif choice == "German Providers":
-        return fzf_prompt(german)
-    elif choice == "Indian Providers":
-        return fzf_prompt(indian)
-    elif choice == "Asian Providers":
-        return fzf_prompt(asian)
-    elif choice == "LIVE TV Providers":
-        return fzf_prompt(tv)
-    elif choice == "Cartoons Providers":
-        return fzf_prompt(cartoons)
-    elif choice == "Turkish Providers":
-        return fzf_prompt(turkish)
-    elif choice == "Anime Providers":
-        return fzf_prompt(anime)
-    else:
-        exit(1)
+        preselction.update({"": [], "Update Avaliable!": [update]})
+    init = fzf_prompt(preselction)
+    get = preselction.get(init)[0]
+    choice = fzf_prompt(get)
+    return choice
 
 
