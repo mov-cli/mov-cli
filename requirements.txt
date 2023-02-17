@@ -1,6 +1,6 @@
-beautifulsoup4>=0.0.1
-lxml>=4.9.1
-httpx>=0.23.0
+beautifulsoup4
+lxml
+httpx
 pycryptodome
 six
 krfzf-py
