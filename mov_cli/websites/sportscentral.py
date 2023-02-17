@@ -68,7 +68,6 @@ class sportscentral(WebScraper):
             elif A == "rainostreams.com":ts.append(tr)
             elif A == "onionstream.live":ts.append(tr)
         else:pass
-        print(ts[0])
         channels = [ts[0][i].find("b").text for i in range(len(ts))]
         watch_urls = [ts[0][i].find("a")["href"] for i in range(len(ts))]
         res = [ts[0][i].find("td").text for i in range(len(ts))]
@@ -81,9 +80,7 @@ class sportscentral(WebScraper):
         url = stuff[int(choice) - 1][self.url]
         h = self.client.get(url).text
         url = re.findall('window.location.href = "(.*?)";', h)[0]
-        print(url)
         A = urlparse(url).netloc
-        print(A)
         if A == "weakstream.org":from ..extractors.sportcentral.weakstream import get_link
         elif A == "fabtech.work":from ..extractors.sportcentral.fabtech import get_link
         elif A == "allsportsdaily.co":from ..extractors.sportcentral.allsportsdaily import get_link
