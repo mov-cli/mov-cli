@@ -1,10 +1,12 @@
 from fzf import fzf_prompt
+from getpass import getuser
 
 english = [
     "actvid",
     "sflix",
     "solar",
     "dopebox",
+    "openloadmov",
 ]
 
 german = [
@@ -41,7 +43,7 @@ turkish = [
 ]
 
 sports = [
-    "sportscentral"
+    "scdn"
 ]
 
 update = [
@@ -58,6 +60,7 @@ preselction = {
     "Turkish Providers": [turkish],
     "Anime Providers": [anime],
     "Sports Providers": [sports],
+    "": [], f"Hi, {getuser()}" : [],
 }
 
 def ask(update: bool = True):

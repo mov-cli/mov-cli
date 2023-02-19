@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "mov-cli"
+version = "1.2.7"
+description = "An ani-cli like cli tool for movies and shows"
+authors = ["Pain <painedposeidon444@gmail.com>"]
+maintainers = ["Ananas <r3tr0ananas@hotmail.com>"]
+license = "GPLv3"
+readme = "README.md"
+packages = [{include = "mov_cli"}]
+repository = "https://github.com/mov-cli/mov-cli"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+beautifulsoup4 = "^4.11.2"
+lxml = "^4.9.2"
+httpx = "^0.23.3"
+pycryptodome = "^3.17"
+six = "^1.16.0"
+krfzf-py = "^0.0.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+mov-cli = "mov_cli.__main__:movcli"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/mov-cli/mov-cli/issues"

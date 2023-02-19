@@ -2,7 +2,6 @@ import os
 import sys
 import platform
 from .utils.provider import ask
-from .utils.update import check
 from .utils.scraper import WebScraper
 
 from .websites.eja import eja
@@ -21,7 +20,8 @@ from .websites.tamilyogi import tamilyogi
 from .websites.einthusan import einthusan
 from .websites.turkish123 import turkish123
 from .websites.animefox import animefox
-from .websites.sportscentral import sportscentral
+from .websites.scdn import scdn
+from .websites.openloadmov import openloadmov
 
 calls = {
     "eja" : [eja, "https://eja.tv"],
@@ -40,15 +40,16 @@ calls = {
     "einthusan": [einthusan, "https://einthusan.tv"],
     "turkish123": [turkish123, "https://turkish123.ac"],
     "animefox": [animefox, "https://animefox.to"],
-    "sportscentral": [sportscentral, ""]
+    "scdn": [scdn, ""],
+    "openloadmov": [openloadmov, "https://openloadmov.com"]
     }
 
 if platform.system() == "Windows":
-    os.system("color FF")  # Fixes colour in Windows 10 CMD terminal.
+    os.system("color FF")  # Fixes colour in Windows 10 CMD terminal
 
 def movcli():  # TODO add regex
     try:
-        provider = ask(update=check())
+        provider = ask()
         provider_data = calls.get(provider, calls["actvid"])
         provider:WebScraper = provider_data[0](provider_data[1])
                 # provider.redo(query) if query is not None else provider.redo()

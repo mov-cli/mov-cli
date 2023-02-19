@@ -9,7 +9,7 @@ Original Code from https://github.com/edl2/sportsapi
 Rewritten for mov-cli
 """
 
-class sportscentral(WebScraper):
+class scdn(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
@@ -40,12 +40,7 @@ class sportscentral(WebScraper):
         print(soup.prettify())
         ts = [] 
         tr = soup.find("tbody").find_all("tr")#
-        num = 0
-        if 10 > len(tr):
-            num = len(tr)
-        else:
-            num = 10
-        for i in range(num):
+        for i in range(len(tr)):
             h = self.client.get(tr[i].find("a")["href"]).text
             try:
                 url = re.findall('window.location.href = "(.*?)";', h)[0]
@@ -63,16 +58,18 @@ class sportscentral(WebScraper):
             elif A == "com.methstreams.site":ts.append(tr)
             elif A == "1stream.eu":ts.append(tr)
             elif A == "www.techstips.info":ts.append(tr)
-            elif A == "poscitech.com":ts.append(tr)
+            elif A == "poscitech.com" or "poscitech.org" :ts.append(tr)
             elif A == "en.ripplestream4u.online":ts.append(tr)
             elif A == "rainostreams.com":ts.append(tr)
             elif A == "onionstream.live":ts.append(tr)
+            elif A == "livestreames.us":ts.append(tr)
         else:pass
         channels = [ts[0][i].find("b").text for i in range(len(ts))]
         watch_urls = [ts[0][i].find("a")["href"] for i in range(len(ts))]
         res = [ts[0][i].find("td").text for i in range(len(ts))]
         stuff = [list(sublist) for sublist in zip(channels, watch_urls, res)]
         ask = []
+        print(ts)
         for ix, vl in enumerate(stuff):
             ask.append(f"[{ix + 1}] {vl[self.title]} {vl[2]}")
         pre = fzf_prompt(ask)
@@ -81,21 +78,22 @@ class sportscentral(WebScraper):
         h = self.client.get(url).text
         url = re.findall('window.location.href = "(.*?)";', h)[0]
         A = urlparse(url).netloc
-        if A == "weakstream.org":from ..extractors.sportcentral.weakstream import get_link
-        elif A == "fabtech.work":from ..extractors.sportcentral.fabtech import get_link
-        elif A == "allsportsdaily.co":from ..extractors.sportcentral.allsportsdaily import get_link
-        elif A == "techclips.net":from ..extractors.sportcentral.techclips import get_link
-        elif A == "gameshdlive.xyz":from ..extractors.sportcentral.gameshdlive import get_link
-        elif A == "enjoy4hd.site":from ..extractors.sportcentral.enjoy4hd import get_link
-        elif A == "motornews.live":from ..extractors.sportcentral.motornews import get_link
-        elif A == "cr7sports.us":from ..extractors.sportcentral.cr7sports import get_link; A = "nstream.to"
-        elif A == "com.methstreams.site":from ..extractors.sportcentral.methstreams import get_link
-        elif A == "1stream.eu":from ..extractors.sportcentral.onestream import get_link
-        elif A == "www.techstips.info":from ..extractors.sportcentral.techstips import get_link;A = "https://streamservicehd.click/"
-        elif A == "poscitech.com":from ..extractors.sportcentral.poscitech import get_link;A = "https://streamservicehd.click/"
-        elif A == "en.ripplestream4u.online":from ..extractors.sportcentral.ripple import get_link;A = "https://streamservicehd.click/"
-        elif A == "rainostreams.com":from ..extractors.sportcentral.rainostreams import get_link;A = "bdnewszh.com"
-        elif A == "onionstream.live":from ..extractors.sportcentral.onionstream import get_link;A = "wecast.to"
+        if A == "weakstream.org":from ..extractors.scdn.weakstream import get_link
+        elif A == "fabtech.work":from ..extractors.scdn.fabtech import get_link
+        elif A == "allsportsdaily.co":from ..extractors.scdn.allsportsdaily import get_link
+        elif A == "techclips.net":from ..extractors.scdn.techclips import get_link
+        elif A == "gameshdlive.xyz":from ..extractors.scdn.gameshdlive import get_link
+        elif A == "enjoy4hd.site":from ..extractors.scdn.enjoy4hd import get_link
+        elif A == "motornews.live":from ..extractors.scdn.motornews import get_link
+        elif A == "cr7sports.us":from ..extractors.scdn.cr7sports import get_link; A = "nstream.to"
+        elif A == "com.methstreams.site":from ..extractors.scdn.methstreams import get_link
+        elif A == "1stream.eu":from ..extractors.scdn.onestream import get_link
+        elif A == "www.techstips.info":from ..extractors.scdn.techstips import get_link;A = "streamservicehd.click"
+        elif A == "poscitech.com" or "poscitech.org":from ..extractors.scdn.poscitech import get_link;A = "streamservicehd.click"
+        elif A == "en.ripplestream4u.online":from ..extractors.scdn.ripple import get_link;A = "streamservicehd.click"
+        elif A == "rainostreams.com":from ..extractors.scdn.rainostreams import get_link;A = "bdnewszh.com"
+        elif A == "onionstream.live":from ..extractors.scdn.onionstream import get_link;A = "wecast.to"
+        elif A == "livestreames.us": from ..extractors.scdn.livestreames import get_link; A = "streamservicehd.click"
         m3u8 = get_link(url)
         return m3u8, A
 
@@ -106,4 +104,4 @@ class sportscentral(WebScraper):
         if state == "d":
             self.dl(url, name)
             return
-        self.play(url, name, referrer=f"http://{domain}/")
+        self.play(url, name, referrer=f"https://{domain}/")
