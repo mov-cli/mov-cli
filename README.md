@@ -71,7 +71,7 @@
 
 
 ## Preview
-https://user-images.githubusercontent.com/83706294/212223865-44ff52f4-359c-4df2-b71c-91b35f7fc85e.mov
+https://user-images.githubusercontent.com/83706294/220458059-5d61cdad-7c99-4031-a320-ceed5c660a4e.mov
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
