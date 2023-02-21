@@ -63,9 +63,7 @@ preselction = {
     "": [], f"Hi, {getuser()}" : [],
 }
 
-def ask(update: bool = True):
-    if update == True:
-        preselction.update({"": [], "Update Avaliable!": [update]})
+def ask():
     init = fzf_prompt(preselction)
     get = preselction.get(init)[0]
     choice = fzf_prompt(get)

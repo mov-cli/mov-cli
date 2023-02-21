@@ -55,6 +55,8 @@ class WebScraper:
         args = [
         'ffmpeg',
         '-n',
+        '-thread_queue_size',
+        '4096',
         f'-headers',
         f'Referer: {referrer}',
         '-i', 
