@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "mov-cli"
 version = "1.2.6"
-description = "An ani-cli like cli tool for movies and shows"
+description = "A cli tool to browse and watch movies/shows"
 authors = ["Pain <painedposeidon444@gmail.com>"]
 maintainers = ["Ananas <r3tr0ananas@hotmail.com>"]
 license = "GPLv3"
