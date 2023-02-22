@@ -60,6 +60,6 @@ def setlang():
     s = fzf_prompt(sel)
     selection = sel.get(s)
     print(selection)
-    txt = httpx.get(f"https://raw.githubusercontent.com/mov-cli/translations/main/{selection}.json").text
+    txt = httpx.get(f"https://raw.githubusercontent.com/mov-cli/translations/main/languages/{selection}.json").text 
     with open(homepath() + "lang.json", "w") as f:
         f.write(txt)
