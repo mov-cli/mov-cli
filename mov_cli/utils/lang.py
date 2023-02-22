@@ -33,7 +33,7 @@ def getlang():
         t = [ask, ex, searcha, download, spro, dshow, dseason, season, episode, change]
         return t
     except FileNotFoundError:
-        t = httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/en.json").json()
+        t = httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/languages/en.json").json()
         ask = t["ASK"]
         ex = t["EXIT"]
         searcha = t["SEARCHA"]
