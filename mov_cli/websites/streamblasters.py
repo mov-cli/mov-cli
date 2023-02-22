@@ -9,7 +9,7 @@ class streamblasters(WebScraper):
 
     def search(self, q):
         q = (
-            input("[!] Please Enter the name of the Movie: ")
+            input(f"[!] {self.translated[self.task]}")
             if q is None
             else q
         )

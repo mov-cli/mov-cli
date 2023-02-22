@@ -5,6 +5,7 @@ import re
 import subprocess
 import sys
 import mov_cli.__main__ as movcli
+from .lang import getlang, setlang
 # import shlex
 # required for development
 
@@ -33,6 +34,8 @@ class WebScraper:
         self.client = HttpClient()
         self.base_url = base_url
         self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
+        self.translated = getlang()
+        self.task, self.exit, self.searcha, self.download, self.sprovider, self.dshow, self.dseason, self.tep, self.tse, self.change = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         pass
 
     @staticmethod
@@ -114,7 +117,8 @@ class WebScraper:
         r = [] 
         for ix, vl in enumerate(result):
             r.append(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}")
-        r.extend(["","[q] Exit!","[s] Search Again!","[d] Download!","[p] Switch Provider!","[sd] Download Whole Show!","[ds] Download Season!"])
+        r.extend(["",f"[q] {self.translated[self.exit]}",f"[s] {self.translated[self.searcha]}",f"[d] {self.translated[self.download]}",
+                     f"[p] {self.translated[self.sprovider]}",f"[sd] {self.translated[self.dshow]}",f"[ds] {self.translated[self.dseason]}", f"[c] {self.translated[self.change]}"])
         r = r[::-1]
         choice = ""
         while choice not in range(len(result) + 1):
@@ -127,6 +131,9 @@ class WebScraper:
             elif choice == "s":
                 return self.redo()
             elif choice == "p":
+                return movcli.movcli()
+            elif choice == "c":
+                setlang()
                 return movcli.movcli()
             elif choice == "d":
                 try:
@@ -207,13 +214,13 @@ class WebScraper:
     def askseason(self, seasons: int):
         texts = []
         for i in range(seasons):
-            texts.append(f"Season {i+1}")
+            texts.append(f"{self.translated[self.tse]} {i+1}")
         choice = fzf_prompt(texts).split(" ")[-1]
         return choice
     
     def askepisode(self, episodes: int):
         texts = []
         for i in range(episodes):
-            texts.append(f"Episode {i+1}")
+            texts.append(f"{self.translated[self.tep]} {i+1}")
         choice = fzf_prompt(texts).split(" ")[-1]
         return choice

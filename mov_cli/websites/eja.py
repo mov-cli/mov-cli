@@ -13,7 +13,7 @@ class eja(WebScraper):
 
     def search(self, q: str = None):
         q =( 
-            input("[!] Enter a Channel: ")
+            input(f"[!] {self.translated[self.task]}")
             if q is None
             else q
         )

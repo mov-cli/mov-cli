@@ -10,7 +10,7 @@ class einthusan(WebScraper):
 
     def search(self, q: str):
         q = (
-            input("[!] Please Enter the name of the Movie: ")
+            input(f"[!] {self.translated[self.task]}")
             if q is None
             else q
         )
