@@ -42,32 +42,30 @@
 </div>
 
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
+### Table of Contents
+<ol>
+  <li>
+    <a href="#about-the-project">About The Project</a>
+  </li>
+  <li>
+    <a href="#getting-started">Getting Started</a>
+    <ul>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#installation">Installation</a></li>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-        <ul>
-          <li><a href="#windows-/-linux">Windows / Linux</a></li>
-          <li><a href="#android">Android</a></li>
-        </ul>
+        <li><a href="#win-and-linux">Windows / Linux</a></li>
+        <li><a href="#android">Android</a></li>
       </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#disclaimer">Disclaimer</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#inspiration">inspiration</a></li>
-  </ol>
-</details>
+    </ul>
+  </li>
+  <li><a href="#usage">Usage</a></li>
+  <li><a href="#disclaimer">Disclaimer</a></li>
+  <li><a href="#contributing">Contributing</a></li>
+  <li><a href="#add-a-language">Adding Languages</a></li>
+  <li><a href="#license">License</a></li>
+  <li><a href="#contact">Contact</a></li>
+  <li><a href="#inspiration">inspiration</a></li>
+
 
 
 ## Preview
@@ -99,9 +97,10 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
 - [`fzf`](https://github.com/junegunn/fzf) - The selection Menu
 
 
-### Installation
-
-- Windows / Linux
+## Installation
+<!-- WIN AND LINUX -->
+<div id="win-and-linux"></div>
+### Windows / Linux
 
   - Choose from Python or Shell:
 
@@ -113,8 +112,9 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
     ```
     Shell Version of mov-cli currently doesn't work.
     ```
-
-- Android (Only for Python Version)
+  
+<!-- ANDROID -->
+### Android
   - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
   
   - Install ``libxml2`` and ``libxslt`` in Termux.
@@ -179,7 +179,6 @@ Please go to [mov-cli/translations](https://github.com/mov-cli/translations) the
 Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
