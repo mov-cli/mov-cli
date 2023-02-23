@@ -35,7 +35,7 @@ class WebScraper:
         self.base_url = base_url
         self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
         self.translated = getlang()
-        self.task, self.exit, self.searcha, self.download, self.sprovider, self.dshow, self.dseason, self.tep, self.tse, self.change = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        self.task, self.exit, self.searcha, self.download, self.sprovider, self.dshow, self.dseason, self.tse, self.tep, self.change = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         pass
 
     @staticmethod
