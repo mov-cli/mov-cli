@@ -17,7 +17,6 @@ indian = [
     "streamblasters",
     "tamilyogi",
     "einthusan",
-    "wlext",
 ]
 
 asian = [
@@ -50,6 +49,10 @@ update = [
     "pip install mov-cli"
 ]
 
+inter = [
+    "wlext",
+]
+
 preselction = {
     "English Providers": [english],
     "German Providers": [german],
@@ -60,6 +63,7 @@ preselction = {
     "Turkish Providers": [turkish],
     "Anime Providers": [anime],
     "Sports Providers": [sports],
+    "International Providers": [inter],
     "": [], f"Hi, {getuser()}" : [],
 }
 

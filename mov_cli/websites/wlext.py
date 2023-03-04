@@ -41,6 +41,7 @@ class wlext(WebScraper):
         soup = BS(req, "lxml")
         try:
             t = soup.find("iframe", {"loading": "lazy"})["src"]
+            print(t)
         except:
             return print("Couldn't find cajita.to provider.")
         return t, episode
@@ -87,7 +88,8 @@ class wlext(WebScraper):
     
     def MOV_PandDP(self, m: list, state: str = "d" or "p" or "sd"):
         name = m[self.title]
-        url = self.cdn_url(f"{m[self.url]}?server=cajitatop")
+        url, episode = self.ask(m[self.url])
+        url = self.cdn_url(url)
         if state == "d":
             self.dl(url, name)
             return
