@@ -102,17 +102,8 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
 <div id="win-and-linux"></div>
 
 ### Windows / Linux
-
-  - Choose from Python or Shell:
-
-    Python:
-    ```
     pip install mov-cli
-    ```
-    Shell:
-    ```
-    Shell Version of mov-cli currently doesn't work.
-    ```
+   
 <!-- ANDROID -->
 ### Android
   - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
