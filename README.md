@@ -54,6 +54,9 @@
       <li><a href="#installation">Installation</a></li>
       <ul>
         <li><a href="#win-and-linux">Windows / Linux</a></li>
+        <ul>
+          <li><a href="#linux">Linux</a></li>
+        </ul>
         <li><a href="#android">Android</a></li>
       </ul>
     </ul>
