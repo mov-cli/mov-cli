@@ -103,7 +103,12 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
 
 ### Windows / Linux
     pip install mov-cli
-   
+<!-- LINUX -->
+### Linux
+  - If the above command results in an error, install `pycryptodome` before installing mov-cli.
+    ```
+    pip install pycryptodome
+    ```
 <!-- ANDROID -->
 ### Android
   - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
