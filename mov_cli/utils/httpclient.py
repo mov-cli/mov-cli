@@ -29,9 +29,9 @@ class HttpClient:
             sys.exit(-1)
         return req
 
-    def post(self, page: str, data: dict = None, json = None) -> httpx.Response:
+    def post(self, page: str, data: dict = None, json=None) -> httpx.Response:
         print(page)
-        if json == None:    
+        if json is None:
             try:
                 req = self.session.post(page, data=data)
                 self.session.headers["Referer"] = page
@@ -54,7 +54,6 @@ class HttpClient:
                 sys.exit(-1)
             return req
 
-
     def head(self, page: str, redirects: False) -> httpx.Response:
         print(page)
         try:
@@ -71,7 +70,7 @@ class HttpClient:
     def set_headers(self, header: dict) -> None:
         self.session.headers = header
         # do not use this!w
-    
+
     def set_cookies(self, cookies: dict) -> None:
         self.session.cookies = cookies
 

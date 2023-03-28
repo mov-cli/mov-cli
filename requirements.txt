@@ -4,3 +4,4 @@ httpx
 pycryptodome
 six
 krfzf-py
+tldextract

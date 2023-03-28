@@ -1,5 +1,3 @@
-import json
-
 from .actvid import Actvid
 from bs4 import BeautifulSoup as BS
 
@@ -25,18 +23,17 @@ class Sflix(Actvid):
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
         episodes = [i["data-id"] for i in BS(rf, "lxml").select(".episode-item")]
-        episode = episodes[
-            int(self.askepisode(len(episodes))) - 1
-        ]
-        ep = self.getep(f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}", data_id=episode)
+        episode = episodes[int(self.askepisode(len(episodes))) - 1]
+        ep = self.getep(
+            f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
+            data_id=episode,
+        )
         return episode, season, ep
 
     def getep(self, url, data_id):
@@ -48,11 +45,10 @@ class Sflix(Actvid):
         children = unformated.findChildren("div", {"class": "episode-number"})
         for child in children:
             text = child.text
+            text = text.split("Episode")[1]
+            text = text.split(":")[0]
 
-        text = text.split("Episode")[1]
-        text = text.split(":")[0]
-
-        return text
+            return text
 
     def server_id(self, mov_id):
         rem = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
@@ -68,9 +64,7 @@ class Sflix(Actvid):
 
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
@@ -82,13 +76,11 @@ class Sflix(Actvid):
             iframe_url, tv_id = self.get_link(sid)
             iframe_link, iframe_id = self.rabbit_id(iframe_url)
             url = self.cdn_url(iframe_link, iframe_id)
-            self.dl(url, name, season=season, episode=e+1)
-    
+            self.dl(url, name, season=season, episode=e + 1)
+
     def sd(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         for s in range(len(season_ids)):
             rf = self.client.get(
                 f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
@@ -100,4 +92,4 @@ class Sflix(Actvid):
                 iframe_url, tv_id = self.get_link(sid)
                 iframe_link, iframe_id = self.rabbit_id(iframe_url)
                 url = self.cdn_url(iframe_link, iframe_id)
-                self.dl(url, name, season=s+1, episode=e+1)
+                self.dl(url, name, season=s + 1, episode=e + 1)

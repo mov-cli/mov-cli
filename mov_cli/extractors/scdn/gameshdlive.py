@@ -1,5 +1,7 @@
 import httpx
 import re
+
+
 def get_link(url):
     r = httpx.get(url).text
     php = re.findall(r"src=\"(.*?) sc", r)[0]

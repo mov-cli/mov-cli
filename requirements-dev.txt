@@ -1,0 +1,3 @@
+black
+ruff
+shlex

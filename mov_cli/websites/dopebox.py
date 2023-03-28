@@ -1,5 +1,3 @@
-import json
-
 from .actvid import Actvid
 from bs4 import BeautifulSoup as BS
 
@@ -25,18 +23,17 @@ class DopeBox(Actvid):
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
         episodes = [i["data-id"] for i in BS(rf, "lxml").select(".episode-item")]
-        episode = episodes[
-            int(self.askepisode(len(episodes))) - 1
-        ]
-        ep = self.getep(f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}", data_id=episode)
+        episode = episodes[int(self.askepisode(len(episodes))) - 1]
+        ep = self.getep(
+            f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
+            data_id=episode,
+        )
         return episode, season, ep
 
     def getep(self, url, data_id):
@@ -65,12 +62,10 @@ class DopeBox(Actvid):
         )
         soup = BS(rem, "lxml")
         return [i["data-id"] for i in soup.select(".link-item")][0]
-        
+
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
@@ -82,13 +77,11 @@ class DopeBox(Actvid):
             iframe_url, tv_id = self.get_link(sid)
             iframe_link, iframe_id = self.rabbit_id(iframe_url)
             url = self.cdn_url(iframe_link, iframe_id)
-            self.dl(url, name, season=season, episode=e+1)
-    
+            self.dl(url, name, season=season, episode=e + 1)
+
     def sd(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         for s in range(len(season_ids)):
             rf = self.client.get(
                 f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
@@ -100,4 +93,4 @@ class DopeBox(Actvid):
                 iframe_url, tv_id = self.get_link(sid)
                 iframe_link, iframe_id = self.rabbit_id(iframe_url)
                 url = self.cdn_url(iframe_link, iframe_id)
-                self.dl(url, name, season=s+1, episode=e+1)
+                self.dl(url, name, season=s + 1, episode=e + 1)

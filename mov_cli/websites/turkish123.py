@@ -2,19 +2,16 @@ from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
 
+
 class turkish123(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
 
-    def search(self, q: str):
-        q = (
-            input(f"[!] {self.translated[self.task]}")
-            if q is None
-            else q
-        )
+    def search(self, q: str = None) -> str:
+        q = input(f"[!] {self.translated[self.task]}") if q is None else q
         return q.replace(" ", "+")
-        
+
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}").text
         soup = BS(req, "lxml")
@@ -24,7 +21,7 @@ class turkish123(WebScraper):
             if str(mlitem[i]).__contains__("episode"):
                 pass
             else:
-                items.append(mlitem[i])    
+                items.append(mlitem[i])
         urls = [items[i].find("a")["href"] for i in range(len(items))]
         title = [items[i].find("a")["oldtitle"] for i in range(len(items))]
         ids = [items[i]["class"] for i in range(len(items))]
@@ -43,7 +40,7 @@ class turkish123(WebScraper):
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
         print(url)
         return url, episode, f"https://tukipasti.com{s}"
-    
+
     def download(self, t):
         req = self.client.get(t[self.url]).text
         soup = BS(req, "lxml")
@@ -55,7 +52,13 @@ class turkish123(WebScraper):
             req = self.client.get(f"https://tukipasti.com{s}").text
             url = re.findall("var urlPlay = '(.*?)'", req)[0]
             print(url)
-            self.dl(url, t[self.title], season="", episode=e+1, referrer=f"https://tukipasti.com{s}")
+            self.dl(
+                url,
+                t[self.title],
+                season="",
+                episode=e + 1,
+                referrer=f"https://tukipasti.com{s}",
+            )
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd" or "ds"):
         if state == "sd":

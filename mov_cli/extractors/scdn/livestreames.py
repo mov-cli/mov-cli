@@ -2,6 +2,7 @@ import httpx
 import re
 from bs4 import BeautifulSoup as BS
 
+
 def get_link(url):
     req = httpx.get(url).text
     soup = BS(req, "lxml")

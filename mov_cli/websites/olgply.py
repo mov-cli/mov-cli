@@ -33,9 +33,9 @@ class OlgPly(WebScraper):
             f"https://olgply.com/api/?imdb={imdb_id}",
             headers={
                 "User-Agent": "Mozilla/5.0 (X11; Linux "
-                              "x86_64; rv:100.0) "
-                              "Gecko/20100101 "
-                              "Firefox/100.0"
+                "x86_64; rv:100.0) "
+                "Gecko/20100101 "
+                "Firefox/100.0"
             },
         ).text
         url = re.findall(r"https?:[a-zA-Z\d.+-/#~]+\.mp4", req)
@@ -51,14 +51,14 @@ class OlgPly(WebScraper):
             f"https://olgply.com/api/?imdb={imdb_id}&season={season}&episode={episode}",
             headers={
                 "User-Agent": "Mozilla"
-                              "/5.0 ("
-                              "X11; "
-                              "Linux "
-                              "x86_64; "
-                              "rv:100"
-                              ".0) "
-                              "Gecko"
-                              "/20100101 Firefox/100.0"
+                "/5.0 ("
+                "X11; "
+                "Linux "
+                "x86_64; "
+                "rv:100"
+                ".0) "
+                "Gecko"
+                "/20100101 Firefox/100.0"
             },
         ).text
         url = re.findall(r"https?:[a-zA-Z\d_.+-/#~]+\.mp4", req)
@@ -102,7 +102,7 @@ class OlgPly(WebScraper):
                             )
                         )
                         - 1
-                        ]
+                    ]
                     name = mov[0]
                     if mov[-1] == "TV":
                         cdnurl, name = self.ask(mov[2], name)
@@ -112,13 +112,13 @@ class OlgPly(WebScraper):
                         self.dl(cdn, name)
                 except ValueError as e:
                     print(
-                        self.red(f"[!]  Invalid Choice Entered! | "),
+                        self.red("[!]  Invalid Choice Entered! | "),
                         self.lmagenta(str(e)),
                     )
                     sys.exit(1)
                 except IndexError as e:
                     print(
-                        self.red(f"[!]  This Episode / Movie is coming soon! | "),
+                        self.red("[!]  This Episode / Movie is coming soon! | "),
                         self.lmagenta(str(e)),
                     )
                     sys.exit(2)
@@ -136,6 +136,7 @@ class OlgPly(WebScraper):
             return self.display(self.search())
         else:
             return self.display(self.search(query))
+
 
 # f = OlgPly()
 # OlgPly.cdnurl(OlgPly.search()[0][2])

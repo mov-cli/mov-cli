@@ -1,17 +1,9 @@
 from fzf import fzf_prompt
 from getpass import getuser
 
-english = [
-    "actvid",
-    "sflix",
-    "solar",
-    "dopebox",
-    "openloadmov",
-]
+english = ["actvid", "sflix", "solar", "dopebox", "openloadmov", "remotestream"]
 
-german = [
-    "kinox"
-]
+german = ["kinox"]
 
 indian = [
     "streamblasters",
@@ -24,30 +16,17 @@ asian = [
     "watchasian",
 ]
 
-anime = [
-    "gogoanime",
-    "animefox"
-]
+anime = ["gogoanime", "animefox"]
 
-tv = [
-    "eja"
-]
+tv = ["eja"]
 
-cartoons = [
-    "kimcartoon"
-]
+cartoons = ["kisscartoon"]
 
-turkish = [
-    "turkish123"
-]
+turkish = ["turkish123"]
 
-sports = [
-    "scdn"
-]
+sports = ["scdn"]
 
-update = [
-    "pip install mov-cli"
-]
+update = ["pip install mov-cli"]
 
 inter = [
     "wlext",
@@ -64,13 +43,13 @@ preselction = {
     "Anime Providers": [anime],
     "Sports Providers": [sports],
     "International Providers": [inter],
-    "": [], f"Hi, {getuser()}" : [],
+    "": [],
+    f"Hi, {getuser()}": [],
 }
+
 
 def ask():
     init = fzf_prompt(preselction)
     get = preselction.get(init)[0]
     choice = fzf_prompt(get)
     return choice
-
-

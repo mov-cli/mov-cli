@@ -5,7 +5,10 @@ from os import environ
 import json
 from fzf import fzf_prompt
 
-sel = eval(httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text)
+sel = eval(
+    httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text
+)
+
 
 def homepath() -> str:
     plt = pf.system()
@@ -33,7 +36,9 @@ def getlang():
         t = [ask, ex, searcha, download, spro, dshow, dseason, season, episode, change]
         return t
     except FileNotFoundError:
-        t = httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/languages/en.json").json()
+        t = httpx.get(
+            "https://raw.githubusercontent.com/mov-cli/translations/main/languages/en.json"
+        ).json()
         ask = t["ASK"]
         ex = t["EXIT"]
         searcha = t["SEARCHA"]
@@ -50,16 +55,23 @@ def getlang():
         plt = pf.system()
         if plt == "Windows":
             username = environ["username"]
-            print(fr"Please delete the lang.json in this directory: C:\Users\{username}")
+            print(
+                rf"Please delete the lang.json in this directory: C:\Users\{username}"
+            )
             exit(0)
         elif (plt == "Linux") or (plt == "Darwin"):
-            print(f"Please delete the lang.json in this directory: /home/{os.getlogin()}/") 
+            print(
+                f"Please delete the lang.json in this directory: /home/{os.getlogin()}/"
+            )
             exit(0)
+
 
 def setlang():
     s = fzf_prompt(sel)
     selection = sel.get(s)
     print(selection)
-    txt = httpx.get(f"https://raw.githubusercontent.com/mov-cli/translations/main/languages/{selection}.json").text 
+    txt = httpx.get(
+        f"https://raw.githubusercontent.com/mov-cli/translations/main/languages/{selection}.json"
+    ).text
     with open(homepath() + "lang.json", "w") as f:
         f.write(txt)

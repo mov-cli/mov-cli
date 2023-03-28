@@ -2,9 +2,9 @@ import re
 import sys
 import base64
 import hashlib
+
 # import chardet
 from Crypto.Cipher import AES
-from typing import Callable, Any
 from urllib import parse as p
 from ..utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
@@ -12,9 +12,9 @@ import json
 
 sys.path.append("..")
 
-x: Callable[[Any], str] = (
-    lambda d: base64.b64encode(d.encode()).decode().replace("\n", "").replace("=", ".")
-)
+
+def x(d):
+    return base64.b64encode(d.encode()).decode().replace("\n", "").replace("=", ".")
 
 
 class Actvid(WebScraper):
@@ -25,9 +25,7 @@ class Actvid(WebScraper):
         self.rep_key = (
             "6LfV6aAaAAAAAC-irCKNuIS5Nf5ocl5r0K3Q0cdz"  # Google Recaptcha key
         )
-        self.rab_domain = x(
-            "https://rabbitstream.net:443"
-        )
+        self.rab_domain = x("https://rabbitstream.net:443")
         # encoding and then decoding the url
         # self.redo()
         # IMP: self.client.get/post always returns a response object
@@ -74,11 +72,7 @@ class Actvid(WebScraper):
         )"""
 
     def search(self, q: str = None) -> str:
-        q = (
-            input(f"[!] {self.translated[self.task]}")
-            if q is None
-            else q
-        )
+        q = input(f"[!] {self.translated[self.task]}") if q is None else q
         self.userinput = q
         return self.client.get(f"{self.base_url}/search/{self.parse(q)}").text
 
@@ -102,18 +96,16 @@ class Actvid(WebScraper):
 
     def ask(self, series_id: str) -> tuple:
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
         episodes = [i["data-id"] for i in BS(rf, "lxml").select(".nav-item > a")]
-        episode = episodes[
-            int(self.askepisode(len(episodes))) - 1
-            ]
-        ep = self.getep(url=f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
-                        data_id=f"{episode}")
+        episode = episodes[int(self.askepisode(len(episodes))) - 1]
+        ep = self.getep(
+            url=f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
+            data_id=f"{episode}",
+        )
         return episode, season, ep
 
     def getep(self, url, data_id):
@@ -121,7 +113,7 @@ class Actvid(WebScraper):
 
         soup = BS(source, "lxml")
 
-        unformated = soup.find("a", {"data-id": f"{data_id}"})['title']
+        unformated = soup.find("a", {"data-id": f"{data_id}"})["title"]
 
         formated = unformated.split("Eps")[1]
         formated = formated.split(":")[0]
@@ -164,15 +156,13 @@ class Actvid(WebScraper):
 
     def cdn_url(self, final_link: str, rabb_id: str) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
-        data = self.client.get(
-            f"{final_link}getSources?id={rabb_id}"
-        ).json()
-        source = data['sources']
+        data = self.client.get(f"{final_link}getSources?id={rabb_id}").json()
+        source = data["sources"]
         link = f"{source}"
         if link.endswith("==") or link.endswith("="):
-            n = json.loads(self.decrypt(data['sources'], self.gh_key()))
-            return n[0]['file']
-        return source[0]['file']
+            n = json.loads(self.decrypt(data["sources"], self.gh_key()))
+            return n[0]["file"]
+        return source[0]["file"]
 
     def server_id(self, mov_id: str) -> str:
         req = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
@@ -195,7 +185,12 @@ class Actvid(WebScraper):
 
     def rabbit_id(self, url: str) -> tuple:
         parts = p.urlparse(url, allow_fragments=True, scheme="/").path.split("/")
-        return re.findall(r'(https:\/\/.*\/embed-4)', url)[0].replace("embed-4", "ajax/embed-4/"), parts[-1]
+        return (
+            re.findall(r"(https:\/\/.*\/embed-4)", url)[0].replace(
+                "embed-4", "ajax/embed-4/"
+            ),
+            parts[-1],
+        )
 
     ## decryption
     ## Thanks to Twilight
@@ -207,40 +202,34 @@ class Actvid(WebScraper):
     # websocket simulation
 
     def gh_key(self):
-        u = self.client.get("https://raw.githubusercontent.com/mov-cli/movkey/main/key.txt").text
-        return bytes(u, 'utf-8')
-
+        u = self.client.get(
+            "https://raw.githubusercontent.com/mov-cli/movkey/main/key.txt"
+        ).text
+        return bytes(u, "utf-8")
 
     def md5(self, data):
         return hashlib.md5(data).digest()
 
     def get_key(self, salt, key):
         x = self.md5(key + salt)
-        currentkey = x
-        while (len(currentkey) < 48):
+        while len(currentkey := x) < 48:
             x = self.md5(x + key + salt)
             currentkey += x
         return currentkey
 
     def unpad(self, s):
-        return s[:-ord(s[len(s) - 1:])]
+        return s[: -ord(s[len(s) - 1 :])]
 
     def decrypt(self, data, key):
-        k = self.get_key(
-            base64.b64decode(data)[8:16], key
-        )
+        k = self.get_key(base64.b64decode(data)[8:16], key)
         dec_key = k[:32]
         iv = k[32:]
-        p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(
-            base64.b64decode(data)[16:]
-        )
+        p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(base64.b64decode(data)[16:])
         return self.unpad(p).decode()
-    
+
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
@@ -251,13 +240,11 @@ class Actvid(WebScraper):
             iframe_url, tv_id = self.get_link(sid)
             iframe_link, iframe_id = self.rabbit_id(iframe_url)
             url = self.cdn_url(iframe_link, iframe_id)
-            self.dl(url, name, season=season, episode=e+1)
+            self.dl(url, name, season=season, episode=e + 1)
 
     def sd(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [
-            i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")
-        ]
+        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
         for s in range(len(season_ids)):
             z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
             rf = self.client.get(z)
@@ -268,15 +255,15 @@ class Actvid(WebScraper):
                 iframe_url, tv_id = self.get_link(sid)
                 iframe_link, iframe_id = self.rabbit_id(iframe_url)
                 url = self.cdn_url(iframe_link, iframe_id)
-                self.dl(url, name, season=s+1, episode=e+1)
+                self.dl(url, name, season=s + 1, episode=e + 1)
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd" or "ds"):
         name = t[self.title]
         if state == "sd":
-            self.sd(t[self.aid],name)
+            self.sd(t[self.aid], name)
             return
         if state == "ds":
-            self.ds(t[self.aid],name)
+            self.ds(t[self.aid], name)
             return
         episode, season, ep = self.ask(t[self.aid])
         sid = self.ep_server_id(episode)

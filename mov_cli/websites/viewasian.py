@@ -2,17 +2,14 @@ from bs4 import BeautifulSoup as BS
 from ..utils.scraper import WebScraper
 import re
 
+
 class viewasian(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
 
     def search(self, q: str):
-        q = (
-            input(f"[!] {self.translated[self.task]}")
-            if q is None
-            else q
-        )
+        q = input(f"[!] {self.translated[self.task]}") if q is None else q
         return q.replace(" ", "-")
 
     def results(self, data: str):
@@ -28,7 +25,7 @@ class viewasian(WebScraper):
     def ask(self, url):
         request = self.client.get(f"{self.base_url}{url}")
         soup = BS(request, "lxml")
-        href = soup.find("a", {"class":"bwac-btn"})["href"]
+        href = soup.find("a", {"class": "bwac-btn"})["href"]
         request = self.client.get(f"{self.base_url}{href}")
         soup = BS(request, "lxml")
         episodes = soup.findAll("li", {"class": "ep-item"})
@@ -56,23 +53,29 @@ class viewasian(WebScraper):
                 rest = tuple[1]
             li = f"https:{url}{rest[3:]}"
             return li
-        raise Exception('Video not found or removed')
+        raise Exception("Video not found or removed")
 
-    def doodstream(self, url):
-        domain = re.findall("""([^"']*)\/e""", url)[0]
-        req = self.client.get(url).text
-        pass_md = re.findall(r"/pass_md5/[^']*", req)[0]
-        token = pass_md.split("/")[-1]
-        self.client.set_headers({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0", "Referer": f"{url}", "Accept-Language": "en-GB,en;q=0.5"})
-        drylink = self.client.get(f"{domain}{pass_md}").text
-        streamlink = f"{drylink}zUEJeL3mUN?token={token}"
-        print(streamlink)
-        return streamlink
+    #    def doodstream(self, url):
+    #        domain = re.findall("""([^"']*)\/e""", url)[0]
+    #        req = self.client.get(url).text
+    #        pass_md = re.findall(r"/pass_md5/[^']*", req)[0]
+    #        token = pass_md.split("/")[-1]
+    #        self.client.set_headers(
+    #            {
+    #                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0",
+    #                "Referer": f"{url}",
+    #                "Accept-Language": "en-GB,en;q=0.5",
+    #            }
+    #        )
+    #        drylink = self.client.get(f"{domain}{pass_md}").text
+    #        streamlink = f"{drylink}zUEJeL3mUN?token={token}"
+    #        print(streamlink)
+    #        return streamlink
 
     def download(self, t):
         request = self.client.get(f"{self.base_url}{t[self.url]}")
         soup = BS(request, "lxml")
-        href = soup.find("a", {"class":"bwac-btn"})["href"]
+        href = soup.find("a", {"class": "bwac-btn"})["href"]
         request = self.client.get(f"{self.base_url}{href}")
         soup = BS(request, "lxml")
         episodes = soup.findAll("li", {"class": "ep-item"})
@@ -87,7 +90,7 @@ class viewasian(WebScraper):
                 li = self.streamtape(streamtape)
             else:
                 raise Exception("Unable to find URL")
-            self.dl(li, t[self.title], episode=e+1)
+            self.dl(li, t[self.title], episode=e + 1)
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         if state == "sd":
@@ -99,6 +102,3 @@ class viewasian(WebScraper):
             self.dl(url, name, season=".", episode=episode)
             return
         self.play(url, name)
-
-
-

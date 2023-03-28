@@ -44,12 +44,12 @@ def unpack(source):
     payload, symtab, radix, count = _filterargs(source)
 
     if count != len(symtab):
-        raise UnpackingError('Malformed p.a.c.k.e.r. symtab.')
+        raise UnpackingError("Malformed p.a.c.k.e.r. symtab.")
 
     try:
         unbase = Unbaser(radix)
     except TypeError:
-        raise UnpackingError('Unknown p.a.c.k.e.r. encoding.')
+        raise UnpackingError("Unknown p.a.c.k.e.r. encoding.")
 
     def lookup(match):
         """Look up symbols in the synthetic symtab."""
@@ -64,18 +64,27 @@ def unpack(source):
             return getstring(int(c / a), a) + foo
 
     payload = payload.replace("\\\\", "\\").replace("\\'", "'")
-    p = re.search(r'eval\(function\(p,a,c,k,e.+?String\.fromCharCode\(([^)]+)', source)
+    p = re.search(r"eval\(function\(p,a,c,k,e.+?String\.fromCharCode\(([^)]+)", source)
     if p:
-        pnew = re.findall(r'String\.fromCharCode\(([^)]+)', source)[0].split('+')[1] == '161'
+        pnew = (
+            re.findall(r"String\.fromCharCode\(([^)]+)", source)[0].split("+")[1]
+            == "161"
+        )
     else:
         pnew = False
 
     if pnew:
         for i in range(count - 1, -1, -1):
-            payload = payload.replace(getstring(i).decode('latin-1') if PY2 else getstring(i), symtab[i])
+            payload = payload.replace(
+                getstring(i).decode("latin-1") if PY2 else getstring(i), symtab[i]
+            )
         return _replacejsstrings((_replacestrings(payload)))
     else:
-        source = re.sub(r"\b\w+\b", lookup, payload) if PY2 else re.sub(r"\b\w+\b", lookup, payload, flags=re.ASCII)
+        source = (
+            re.sub(r"\b\w+\b", lookup, payload)
+            if PY2
+            else re.sub(r"\b\w+\b", lookup, payload, flags=re.ASCII)
+        )
         return _replacestrings(source)
 
 
@@ -87,9 +96,9 @@ def _filterargs(source):
     try:
         payload, radix, count, symtab = args
         radix = 36 if not radix.isdigit() else int(radix)
-        return payload, symtab.split('|'), radix, int(count)
+        return payload, symtab.split("|"), radix, int(count)
     except ValueError:
-        raise UnpackingError('Corrupted p.a.c.k.e.r. data.')
+        raise UnpackingError("Corrupted p.a.c.k.e.r. data.")
 
 
 def _replacestrings(source):
@@ -100,11 +109,11 @@ def _replacestrings(source):
         varname, strings = match.groups()
         startpoint = len(match.group(0))
         lookup = strings.split('","')
-        variable = '%s[%%d]' % varname
+        variable = "%s[%%d]" % varname
         for index, value in enumerate(lookup):
-            if '\\x' in value:
-                value = value.replace('\\x', '')
-                value = binascii.unhexlify(value).decode('ascii')
+            if "\\x" in value:
+                value = value.replace("\\x", "")
+                value = binascii.unhexlify(value).decode("ascii")
             source = source.replace(variable % index, '"%s"' % value)
         return source[startpoint:]
     return source
@@ -112,12 +121,14 @@ def _replacestrings(source):
 
 def _replacejsstrings(source):
     """Strip JS string encodings and replace values in source."""
-    match = re.findall(r'\\x([0-7][0-9A-F])', source)
+    match = re.findall(r"\\x([0-7][0-9A-F])", source)
 
     if match:
         match = set(match)
         for value in match:
-            source = source.replace('\\x{0}'.format(value), binascii.unhexlify(value).decode('ascii'))
+            source = source.replace(
+                "\\x{0}".format(value), binascii.unhexlify(value).decode("ascii")
+            )
 
     return source
 
@@ -125,10 +136,13 @@ def _replacejsstrings(source):
 class Unbaser(object):
     """Functor for a given base. Will efficiently convert
     strings to natural numbers."""
+
     ALPHABET = {
-        62: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        95: (r' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-             r'[\]^_`abcdefghijklmnopqrstuvwxyz{|}~')
+        62: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        95: (
+            r' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            r"[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+        ),
     }
 
     def __init__(self, base):
@@ -145,10 +159,10 @@ class Unbaser(object):
             # Build conversion dictionary cache
             try:
                 self.dictionary = dict(
-                    (cipher, index) for index, cipher in enumerate(
-                        self.ALPHABET[base]))
+                    (cipher, index) for index, cipher in enumerate(self.ALPHABET[base])
+                )
             except KeyError:
-                raise TypeError('Unsupported base encoding.')
+                raise TypeError("Unsupported base encoding.")
 
             self.unbase = self._dictunbaser
 
@@ -159,11 +173,12 @@ class Unbaser(object):
         """Decodes a  value to an integer."""
         ret = 0
         for index, cipher in enumerate(string[::-1]):
-            ret += (self.base ** index) * self.dictionary[cipher]
+            ret += (self.base**index) * self.dictionary[cipher]
         return ret
 
 
 class UnpackingError(Exception):
     """Badly packed source or general error. Argument is a
     meaningful description."""
+
     pass

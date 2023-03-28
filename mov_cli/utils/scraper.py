@@ -1,21 +1,23 @@
 import logging
 import os
-#import platform
+
+# import platform
 import re
 import subprocess
 import sys
+
 import mov_cli.__main__ as movcli
-from .lang import getlang, setlang
-# import shlex
-# required for development
+from fzf import fzf_prompt
 
 from .httpclient import HttpClient
-from fzf import fzf_prompt
-from platform import system
-
+from .lang import getlang, setlang
 from .player import PlayerNotFound
 from ..players.mpv import Mpv
 from ..players.vlc import Vlc
+from ..extractors.doodstream import dood
+
+# import shlex
+# required for development
 
 # Not needed
 # def determine_path() -> str:
@@ -35,7 +37,18 @@ class WebScraper:
         self.base_url = base_url
         self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
         self.translated = getlang()
-        self.task, self.exit, self.searcha, self.download, self.sprovider, self.dshow, self.dseason, self.tse, self.tep, self.change = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        (
+            self.task,
+            self.exit,
+            self.searcha,
+            self.download,
+            self.sprovider,
+            self.dshow,
+            self.dseason,
+            self.tse,
+            self.tep,
+            self.change,
+        ) = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         pass
 
     @staticmethod
@@ -43,50 +56,57 @@ class WebScraper:
         return re.sub(r"\W+", "-", txt.lower())
 
     def dl(
-        self, url: str, name: str, subtitle: str = None, season = "", episode = None, referrer: str = None
+        self,
+        url: str,
+        name: str,
+        subtitle: str = None,
+        season="",
+        episode=None,
+        referrer: str = None,
     ):
         name = self.parse(name)
         fixname = re.sub(r"-+", " ", name)
         if episode:
             fixname = f"{fixname} S{season}E{episode}"
-        
+
         if referrer:
             referrer = referrer
         else:
             referrer = self.base_url
         # args = shlex.split(f 'ffmpeg -i "{url}" -c copy {self.parse(name)}.mp4')
         args = [
-        'ffmpeg',
-        '-n',
-        '-thread_queue_size',
-        '4096',
-        f'-headers',
-        f'Referer: {referrer}',
-        '-i', 
-        f'{url}',
-        '-c', 
-        'copy',
-        f'{fixname}.mp4'
+            "ffmpeg",
+            "-n",
+            "-thread_queue_size",
+            "4096",
+            "-headers",
+            f"Referer: {referrer}",
+            "-i",
+            f"{url}",
+            "-c",
+            "copy",
+            f"{fixname}.mp4",
         ]
         print(str(args))
 
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
-            args.extend(
-                ["-vf", f"subtitle={subtitle}", f"{fixname}.mp4"]
-            )
+            args.extend(["-vf", f"subtitle={subtitle}", f"{fixname}.mp4"])
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
-        
+
         return print(f"Downloaded at {os.getcwd()}")
 
-    def play(self, url: str, name: str, referrer = None):
-        if referrer is None: referrer == self.base_url
+    def play(self, url: str, name: str, referrer=None):
+        if referrer is None:
+            referrer = self.base_url
         try:
             try:
                 mpv_process = Mpv(self).play(url, referrer, name)
                 mpv_process.wait()
-            except PlayerNotFound:  # why do you even exist if you don't have MPV installed? WHY?
+            except (
+                PlayerNotFound
+            ):  # why do you even exist if you don't have MPV installed? WHY?
                 vlc_process = Vlc(self).play(url, referrer, name)
                 vlc_process.wait()
         except Exception as e:
@@ -114,18 +134,26 @@ class WebScraper:
 
     def display(self, q: str = None, result_no: int = None):
         result = self.SandR(q)
-        r = [] 
+        r = []
         for ix, vl in enumerate(result):
             r.append(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}")
-        r.extend(["",f"[q] {self.translated[self.exit]}",f"[s] {self.translated[self.searcha]}",f"[d] {self.translated[self.download]}",
-                     f"[p] {self.translated[self.sprovider]}",f"[sd] {self.translated[self.dshow]}",f"[ds] {self.translated[self.dseason]}", f"[c] {self.translated[self.change]}"])
+        r.extend(
+            [
+                "",
+                f"[q] {self.translated[self.exit]}",
+                f"[s] {self.translated[self.searcha]}",
+                f"[d] {self.translated[self.download]}",
+                f"[p] {self.translated[self.sprovider]}",
+                f"[sd] {self.translated[self.dshow]}",
+                f"[ds] {self.translated[self.dseason]}",
+                f"[c] {self.translated[self.change]}",
+            ]
+        )
         r = r[::-1]
         choice = ""
         while choice not in range(len(result) + 1):
             pre = fzf_prompt(r)
-            choice = (
-                re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
-            )
+            choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
             if choice == "q":
                 sys.exit()
             elif choice == "s":
@@ -138,7 +166,9 @@ class WebScraper:
             elif choice == "d":
                 try:
                     pre = fzf_prompt(r)
-                    choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    choice = (
+                        re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    )
                     mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
                         self.TV_PandDP(mov_or_tv, "d")
@@ -146,7 +176,7 @@ class WebScraper:
                         self.MOV_PandDP(mov_or_tv, "d")
                 except ValueError as e:
                     print(
-                        f"[!]  Invalid Choice Entered! | ",
+                        "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
                     sys.exit(1)
@@ -159,7 +189,9 @@ class WebScraper:
             elif choice == "sd":
                 try:
                     pre = fzf_prompt(r)
-                    choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    choice = (
+                        re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    )
                     mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
                         self.TV_PandDP(mov_or_tv, "sd")
@@ -168,7 +200,7 @@ class WebScraper:
                         exit(0)
                 except ValueError as e:
                     print(
-                        f"[!]  Invalid Choice Entered! | ",
+                        "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
                     sys.exit(1)
@@ -181,7 +213,9 @@ class WebScraper:
             elif choice == "ds":
                 try:
                     pre = fzf_prompt(r)
-                    choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    choice = (
+                        re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                    )
                     mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
                         self.TV_PandDP(mov_or_tv, "ds")
@@ -190,7 +224,7 @@ class WebScraper:
                         exit(0)
                 except ValueError as e:
                     print(
-                        f"[!]  Invalid Choice Entered! | ",
+                        "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
                     sys.exit(1)
@@ -207,17 +241,20 @@ class WebScraper:
                 else:
                     self.MOV_PandDP(mov_or_tv, "p")
 
+    def doodstream(self, url: str):
+        return dood(url)
+
     def redo(self, search: str = None, result: int = None):
         print(result)
         return self.display(search, result)
-    
+
     def askseason(self, seasons: int):
         texts = []
         for i in range(seasons):
             texts.append(f"{self.translated[self.tse]} {i+1}")
         choice = fzf_prompt(texts).split(" ")[-1]
         return choice
-    
+
     def askepisode(self, episodes: int):
         texts = []
         for i in range(episodes):

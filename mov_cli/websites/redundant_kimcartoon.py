@@ -2,19 +2,16 @@ from bs4 import BeautifulSoup as BS
 from ..utils.scraper import WebScraper
 import re
 
+
 class kimcartoon(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
 
-    def search(self, q: str):
-        q = (
-            input(f"[!] {self.translated[self.task]}")
-            if q is None
-            else q
-        )
+    def search(self, q: str = None) -> str:
+        q = input(f"[!] {self.translated[self.task]}") if q is None else q
         return q
-    
+
     def results(self, q):
         res = self.client.post(f"{self.base_url}/Search/Cartoon", data={"keyword": q})
         soup = BS(res.text, "lxml")
@@ -34,7 +31,7 @@ class kimcartoon(WebScraper):
         episode = int(self.askepisode(len(episodes)))
         url = episodes[len(episodes) - episode]["href"]
         return url, episode
-    
+
     def download(self, t: list):
         res = self.client.get(self.base_url + t[self.url])
         soup = BS(res, "lxml")
@@ -45,13 +42,17 @@ class kimcartoon(WebScraper):
             link = episodes[len(episodes) - epi]["href"]
             url = self.cdn_url(link)
             self.dl(url, t[self.title], episode=e + 1)
-    
+
     def cdn_url(self, url):
-        res = self.client.get(self.base_url + url + "&s=fe").text
-        iframe_id = re.findall('''src="https://www.luxubu.review/v/(.*?)"''',res)[0]
-        r = self.client.post(f"https://www.luxubu.review/api/source/{iframe_id}", data=None).json()['data']
+        res = self.client.get(self.base_url + url + "&s=sb").text
+        iframe_id = re.findall('''src="https:\/\/www.luxubu.review\/v\/(.*?)\"''', res)[
+            0
+        ]
+        r = self.client.post(
+            f"https://www.luxubu.review/api/source/{iframe_id}", data=None
+        ).json()["data"]
         return r[-1]["file"]
-    
+
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
         if state == "sd":
             self.download(t)
@@ -63,5 +64,3 @@ class kimcartoon(WebScraper):
             self.dl(url, name, season=".", episode=episode)
             return
         self.play(url, name)
-
-
