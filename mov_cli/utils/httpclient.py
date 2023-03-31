@@ -16,10 +16,10 @@ class HttpClient:
             headers = default_header
         self.session = httpx.Client(timeout=10.0, headers=headers, cookies=cookies)
 
-    def get(self, page: str) -> httpx.Response:
+    def get(self, page: str, redirects: bool = False) -> httpx.Response:
         print(page)
         try:
-            req = self.session.get(page)
+            req = self.session.get(page, follow_redirects=redirects)
             self.session.headers["Referer"] = page
         except Exception as e:
             print(

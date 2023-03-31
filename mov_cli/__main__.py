@@ -24,6 +24,7 @@ from .websites.scdn import scdn
 from .websites.openloadmov import openloadmov
 from .websites.remotestream import RemoteStream
 from .websites.kisscartoon import kisscartoon
+from .websites.yoturkish import yoturkish
 
 calls = {
     "eja": [eja, "https://eja.tv"],
@@ -46,6 +47,7 @@ calls = {
     "openloadmov": [openloadmov, "https://openloadmov.com"],
     "remotestream": [RemoteStream, "https://remotestre.am"],
     "kisscartoon": [kisscartoon, "https://thekisscartoon.com"],
+    "yoturkish": [yoturkish, "https://www1.yoturkish.com"],
 }
 
 if platform.system() == "Windows":

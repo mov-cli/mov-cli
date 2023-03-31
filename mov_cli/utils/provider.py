@@ -22,11 +22,11 @@ tv = ["eja"]
 
 cartoons = ["kisscartoon"]
 
-turkish = ["turkish123"]
+turkish = ["turkish123", "yoturkish"]
 
 sports = ["scdn"]
 
-update = ["pip install mov-cli"]
+update = ["pip install mov-cli -U"]
 
 inter = [
     "wlext",
