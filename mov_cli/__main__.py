@@ -35,7 +35,7 @@ calls = {
     "dopebox": [DopeBox, "https://dopebox.to"],
     "viewasian": [viewasian, "https://viewasian.co"],
     "gogoanime": [gogoanime, "https://gogoanime.gr"],
-    "watchasian": [watchasian, "https://watchasian.id"],
+    "watchasian": [watchasian, "https://watchasian.ai"],
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.pro"],
     "kinox": [kinox, "https://ww17.kinox.to"],
