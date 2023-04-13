@@ -35,7 +35,8 @@ class kisscartoon(WebScraper):
             "p"
         ]
         print(season_id)
-        last_page = soup.select("ul.episode_list > li")[-1].text
+        try: last_page = soup.select("ul.episode_list > li")[-1].text
+        except IndexError: last_page = 0
         self.client.add_elem({"referer": url})
         self.client.add_elem({"x-requested-with": "XMLHttpRequest"})
         num_eps = BS(
