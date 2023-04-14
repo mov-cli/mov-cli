@@ -212,7 +212,8 @@ class Actvid(WebScraper):
 
     def get_key(self, salt, key):
         x = self.md5(key + salt)
-        while len(currentkey := x) < 48:
+        currentkey = x
+        while len(currentkey) < 48:
             x = self.md5(x + key + salt)
             currentkey += x
         return currentkey
