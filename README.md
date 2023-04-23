@@ -112,6 +112,13 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
     ```
     pip install pycryptodome
     ```
+<!-- WINDOWS -->
+### Windows
+  - If the above command results in an error, install `tldextract`
+    ```
+    pip install tldextract
+    ```
+
 <!-- ANDROID -->
 ### Android
   - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
@@ -185,7 +192,7 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 Author: Poseidon444 | ```Discord: P A I N 4 4 4#4736```
 
-Maintainer: R3tr0Ananas | ```Discord: </Ananas>#1000```
+Maintainer: R3tr0Ananas | ```Discord: Ananas#2000```
 
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 
