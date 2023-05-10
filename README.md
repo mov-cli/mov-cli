@@ -71,9 +71,6 @@
 </ol>
 
 
-## Preview
-https://user-images.githubusercontent.com/83706294/220458059-5d61cdad-7c99-4031-a320-ceed5c660a4e.mov
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -191,8 +188,6 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 ## Contact
 
 Author: Poseidon444 | ```Discord: P A I N 4 4 4#4736```
-
-Maintainer: R3tr0Ananas | ```Discord: Ananas#2000```
 
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 
