@@ -189,6 +189,8 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 Author: Poseidon444 | ```Discord: P A I N 4 4 4#4736```
 
+Maintainer: HLOAnanas | ```Discord: Ananas#2000```
+
 Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
