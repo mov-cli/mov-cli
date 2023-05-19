@@ -8,7 +8,7 @@ def get_link(url):
     soup = BS(req, "html.parser")
     iframe = soup.find("iframe", {"class": "video"}).get("src")
     iframe1 = httpx.get(iframe).text
-    soup = BS(iframe1, self.parser)
+    soup = BS(iframe1, "html.parser")
     iframe = soup.find("iframe", {"id": "thatframe"}).get("src")
     iframe2 = httpx.get(iframe).text
     m3u8 = re.findall(r"source: \"(.*?)\"", iframe2)[0]
