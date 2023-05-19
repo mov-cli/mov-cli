@@ -14,7 +14,7 @@ class tamilyogi(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         items = soup.findAll("div", {"class": "cover"})
         urls = [items[i].find("a")["href"] for i in range(len(items))]
         title = [items[i].find("a")["title"] for i in range(len(items))]
@@ -24,7 +24,7 @@ class tamilyogi(WebScraper):
 
     def cdn_url(self, url):
         req = self.client.get(url).text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         iframe = soup.find("iframe")["src"]
         q = self.client.get(iframe).text
         url = re.findall('file:"(.*?)"', q)[0]

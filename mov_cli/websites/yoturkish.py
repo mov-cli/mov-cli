@@ -14,7 +14,7 @@ class yoturkish(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         items = []
         mlitem = soup.findAll("div", {"class": "item"})
         for i in range(len(mlitem)):
@@ -26,7 +26,7 @@ class yoturkish(WebScraper):
             pagination = soup.find("ul", {"class": "pagination"}).findAll("li")[1:]
             for page in pagination:
                 req = self.client.get(page.find("a")["href"]).text
-                soup = BS(req, "lxml")
+                soup = BS(req, self.parser)
                 pageitem = soup.findAll("div", {"class": "item"})
                 for i in range(len(pageitem)):
                     if str(pageitem[i]).__contains__("episode"):
@@ -41,7 +41,7 @@ class yoturkish(WebScraper):
 
     def ask(self, url):
         req = self.client.get(url, True).text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         episodes = soup.findAll("a", {"class": "episod"})
         episode = int(self.askepisode(len(episodes)))
         req = self.client.get(episodes[episode - 1]["href"], True).text
@@ -54,7 +54,7 @@ class yoturkish(WebScraper):
 
     def download(self, t):
         req = self.client.get(t[self.url]).text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         episodes = soup.findAll("a", {"class": "episod"})
         for e in range(len(episodes)):
             req = self.client.get(episodes[e]["href"]).text

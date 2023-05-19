@@ -40,7 +40,7 @@ class kinox(WebScraper):
             "https://kinox.to", redirects=False
         ).headers.get("location")[:-1]
         request = self.client.get(f"{self.base_url}/Search.html?q={data}").text
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         streams = soup.find("tbody").findAll("tr")
         urls = [streams[i].find("a")["href"] for i in range(len(streams))]
         title = [self.comp(streams[i]) for i in range(len(streams))]
@@ -119,7 +119,7 @@ class kinox(WebScraper):
 
     def ask(self, url):
         req = self.client.get(f"{self.base_url}{url}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         select = soup.find("select", {"id": "SeasonSelection"}).findAll("option")
         rel = soup.find("select", {"id": "SeasonSelection"})["rel"]
         season = int(self.askseason(len(select)))
@@ -146,7 +146,7 @@ class kinox(WebScraper):
 
     def movie(self, url):
         req = self.client.get(f"{self.base_url}{url}").text
-        BS(req, "lxml")
+        BS(req, self.parser)
         name = re.findall("\/Stream\/(.*)\.", url)[0]
         try:
             if re.search("Hoster_92", req):

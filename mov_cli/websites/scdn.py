@@ -65,7 +65,7 @@ class scdn(WebScraper):
         req = self.client.get(
             f"https://scdn.dev/main-assets/{id}/{self.sport}?origin=sportsurge.club&="
         )
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         print(soup.prettify())
         ts = []
         tr = soup.find("tbody").find_all("tr")  #

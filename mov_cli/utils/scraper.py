@@ -12,8 +12,7 @@ from fzf import fzf_prompt
 from .httpclient import HttpClient
 from .lang import getlang, setlang
 from .player import PlayerNotFound
-from ..players.mpv import Mpv
-from ..players.vlc import Vlc
+from ..players.player import ply
 from ..extractors.doodstream import dood
 
 # import shlex
@@ -35,7 +34,7 @@ class WebScraper:
     def __init__(self, base_url: str) -> None:
         self.client = HttpClient()
         self.base_url = base_url
-        self.title, self.url, self.aid, self.mv_tv = 0, 1, 2, 3
+        (self.title, self.url, self.aid, self.mv_tv) = (0, 1, 2, 3)
         self.translated = getlang()
         (
             self.task,
@@ -49,8 +48,16 @@ class WebScraper:
             self.tep,
             self.change,
         ) = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+        self.scraper = self.parser()
         pass
 
+    def parser(self):
+        try:
+            import lxml
+            return "lxml"
+        except ModuleNotFoundError:
+            return self.parser
+        
     @staticmethod
     def parse(txt: str) -> str:
         return re.sub(r"\W+", "-", txt.lower())
@@ -87,7 +94,6 @@ class WebScraper:
             "copy",
             f"{fixname}.mp4",
         ]
-        print(str(args))
 
         if subtitle:
             # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
@@ -101,18 +107,12 @@ class WebScraper:
         if referrer is None:
             referrer = self.base_url
         try:
-            try:
-                mpv_process = Mpv(self).play(url, referrer, name)
-                mpv_process.wait()
-            except (
-                PlayerNotFound
-            ):  # why do you even exist if you don't have MPV installed? WHY?
-                vlc_process = Vlc(self).play(url, referrer, name)
-                vlc_process.wait()
-        except Exception as e:
-            txt = f"{self.red('[!]')} Could not play {name}: MPV not found | {e}"
-            logging.log(logging.ERROR, txt)
-            # print(txt)  # TODO implement logging to a file
+            ply_process = ply(self).play(url, referrer, name)
+            ply_process.wait()
+        except PlayerNotFound as e:
+            txt = f"{self.red('[!]')} Could not play {name}: Correct Player for your OS was not found| {e}"
+            # logging.log(logging.ERROR, txt)
+            print(txt)  # TODO implement logging to a file
             sys.exit(1)
 
     def search(self, q: str = None) -> str:
@@ -139,7 +139,6 @@ class WebScraper:
             r.append(f"[{ix + 1}] {vl[self.title]} {vl[self.mv_tv]}")
         r.extend(
             [
-                "",
                 f"[q] {self.translated[self.exit]}",
                 f"[s] {self.translated[self.searcha]}",
                 f"[d] {self.translated[self.download]}",

@@ -18,6 +18,8 @@ class Player:
         self.__display_name = display_name
 
         self.__os = platform.system()
+        
+        self.__platform = platform.platform()
 
     @property
     def display_name(self) -> str:
@@ -34,6 +36,8 @@ class Player:
         if self.__os == "Linux":
             if hasattr(sys, "getandroidapilevel"):
                 return "Android"
+            elif "ish" in self.__platform:
+                return "iOS"
             return self.__os
         else:
             return self.__os

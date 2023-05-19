@@ -1,14 +1,16 @@
 import sys
 import subprocess
+import time
+
 
 from ..utils.player import Player, PlayerNotFound
 
 
-class Mpv(Player):
-    """A class to interface with Mpv cross platform. [Also supports android, OwO!]"""
+class ply(Player):
+    """A class to start the Player."""
 
     def __init__(self, webscraper_class: object) -> None:
-        super().__init__("MPV")
+        super().__init__("PlAYER")
 
         self.webscraper = webscraper_class
 
@@ -16,10 +18,6 @@ class Mpv(Player):
         if self.os == "Android":  # Android Support
             print("[!] Detected your using Android.")
 
-            # if "theflix" in url:
-            #    raise Exception(self.webscraper.red("'theflix' is not supported on ") + self.webscraper.green("Android!")) as theflix is removed its not required
-
-            # Now open mpv with url.
             return subprocess.Popen(
                 [
                     "am",
@@ -31,6 +29,13 @@ class Mpv(Player):
                     f"{url}",
                 ]
             )
+    
+        elif self.os == "iOS":
+            print("[!] Detected your using iOS. \r\n")
+            
+            print(f'\033]8;;outplayer://{url}\033\\-------------------------\n- Tap to open Outplayer -\n-------------------------\033]8;;\033\\\n')
+
+            sys.exit(1)
 
         else:  # Windows, Linux and Other
             try:

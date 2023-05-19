@@ -28,7 +28,7 @@ class einthusan(WebScraper):
         req = self.client.get(
             f"{self.base_url}/movie/results/?lang={lang}&query={data}"
         )
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         items = soup.findAll("div", {"class": "block2"})
         urls = [items[i].find("a")["href"] for i in range(len(items))]
         title = [
@@ -42,7 +42,7 @@ class einthusan(WebScraper):
     def cdn_url(self, url):
         domain = "https://cdn4.einthusan.io"
         req = self.client.get(f"{self.base_url}{url}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         etv = soup.find("section", {"id": "UIVideoPlayer"})["data-mp4-link"].replace(
             "amp;", ""
         )

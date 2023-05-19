@@ -14,7 +14,7 @@ class viewasian(WebScraper):
 
     def results(self, data: str):
         request = self.client.get(f"{self.base_url}/movie/search/{data}")
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         streams = soup.findAll("a", {"class": "ml-mask jt"})
         urls = [streams[i]["href"] for i in range(len(streams))]
         title = [streams[i]["title"] for i in range(len(streams))]
@@ -24,14 +24,14 @@ class viewasian(WebScraper):
 
     def ask(self, url):
         request = self.client.get(f"{self.base_url}{url}")
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         href = soup.find("a", {"class": "bwac-btn"})["href"]
         request = self.client.get(f"{self.base_url}{href}")
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         episodes = soup.findAll("li", {"class": "ep-item"})
         episode = int(self.askepisode(len(episodes)))
         request = self.client.get(f"{self.base_url}{href}?ep={episode}").text
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         if re.search("doodstream", request):
             dood = soup.find("li", {"class": "doodstream"})["data-video"]
             li = self.doodstream(dood)
@@ -74,14 +74,14 @@ class viewasian(WebScraper):
 
     def download(self, t):
         request = self.client.get(f"{self.base_url}{t[self.url]}")
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         href = soup.find("a", {"class": "bwac-btn"})["href"]
         request = self.client.get(f"{self.base_url}{href}")
-        soup = BS(request, "lxml")
+        soup = BS(request, self.parser)
         episodes = soup.findAll("li", {"class": "ep-item"})
         for e in range(len(episodes)):
             request = self.client.get(f"{self.base_url}{href}?ep={e+1}").text
-            soup = BS(request, "lxml")
+            soup = BS(request, self.parser)
             if re.search("doodstream", request):
                 dood = soup.find("li", {"class": "doodstream"})["data-video"]
                 li = self.doodstream(dood)

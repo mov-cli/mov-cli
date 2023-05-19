@@ -1,5 +1,4 @@
 beautifulsoup4
-lxml
 httpx
 pycryptodome
 six

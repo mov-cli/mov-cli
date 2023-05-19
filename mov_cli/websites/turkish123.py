@@ -14,7 +14,7 @@ class turkish123(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         mlitem = soup.findAll("div", {"class": "ml-item"})
         items = []
         for i in range(len(mlitem)):
@@ -30,7 +30,7 @@ class turkish123(WebScraper):
 
     def ask(self, url):
         req = self.client.get(url).text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         episodes = soup.findAll("a", {"class": "episodi"})
         episode = int(self.askepisode(len(episodes)))
         req = self.client.get(episodes[episode - 1]["href"]).text
@@ -43,7 +43,7 @@ class turkish123(WebScraper):
 
     def download(self, t):
         req = self.client.get(t[self.url]).text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         episodes = soup.findAll("a", {"class": "episodi"})
         for e in range(len(episodes)):
             req = self.client.get(episodes[e]["href"]).text

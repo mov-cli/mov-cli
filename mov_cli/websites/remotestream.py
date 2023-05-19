@@ -3,7 +3,7 @@ from ..utils.scraper import WebScraper
 import re
 
 
-class RemoteStream(WebScraper):
+class remotestream(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
@@ -23,11 +23,10 @@ class RemoteStream(WebScraper):
             self.movdb + f"/search/movie?query={data}&language=en"
         ).text
         # MOVIE
-        soupm = BS(movie, "lxml")
+        soupm = BS(movie, self.parser)
         mcards = soupm.findAll("div", {"class": "card v4 tight"})
         if mcards is not []:
             title.extend([mcards[i].find("h2").text for i in range(len(mcards))])
-            print(title)
             urls.extend(["" for i in range(len(mcards))])
             ids.extend(
                 [
@@ -36,7 +35,7 @@ class RemoteStream(WebScraper):
                 ]
             )
             mov_or_tv.extend(["MOVIE" for i in range(len(mcards))])
-        soups = BS(tv, "lxml")
+        soups = BS(tv, self.parser)
         scards = soups.findAll("div", {"class": "card v4 tight"})
         if scards is not []:
             title.extend([scards[i].find("h2").text for i in range(len(scards))])
@@ -53,7 +52,7 @@ class RemoteStream(WebScraper):
     def ask(self, id):
         rlurl = self.client.head(f"{self.movdb}/tv/{id}", redirects=True).url
         res = self.client.get(f"{rlurl}/seasons")
-        soup = BS(res, "lxml")
+        soup = BS(res, self.parser)
         seasons = soup.findAll("div", {"class": "season"})
         s = []
         for season in seasons:
@@ -66,7 +65,7 @@ class RemoteStream(WebScraper):
                 s.append(season)
         season = self.askseason(len(s))
         req = self.client.get(f"{rlurl}/season/{season}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         episodes = soup.find("h3", {"class": "episode_sort"}).find("span").text
         episode = self.askepisode(int(episodes))
         return season, episode
@@ -78,13 +77,17 @@ class RemoteStream(WebScraper):
             res = self.client.get(
                 f"{self.base_url}/e/?tmdb={id}&s={season}&e={episode}"
             ).text
-        file = re.findall('"file":"(.*?)"', res)[0]
+        try:
+            file = re.findall('"file":"(.*?)"', res)[0]
+        except IndexError as e:
+            print("This show or movie is not available.")
+            exit(1)
         return file
 
     def sd(self, name, id):
         rlurl = self.client.head(f"{self.movdb}/tv/{id}", redirects=True).url
         res = self.client.get(f"{rlurl}/seasons")
-        soup = BS(res, "lxml")
+        soup = BS(res, self.parser)
         seasons = soup.findAll("div", {"class": "season"})
         for s in range(len(seasons)):
             title = seasons[s].find("h2").find("a").text
@@ -92,7 +95,7 @@ class RemoteStream(WebScraper):
                 pass
             else:
                 req = self.client.get(f"{rlurl}/season/{s+1}").text
-                soup = BS(req, "lxml")
+                soup = BS(req, self.parser)
                 episodes = soup.find("h3", {"class": "episode_sort"}).find("span").text
                 for e in range(int(episodes)):
                     url = self.cdn_url(id, s + 1, e + 1)

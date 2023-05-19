@@ -1,8 +1,8 @@
-from .actvid import Actvid
+from .actvid import actvid
 from bs4 import BeautifulSoup as BS
 
 
-class Solar(Actvid):
+class solar(actvid):
     def __init__(self, base_url) -> None:
         super().__init__(base_url)
         self.base_url = base_url
@@ -11,12 +11,12 @@ class Solar(Actvid):
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, "lxml").select(".dropdown-item")]
+        season_ids = [i["data-id"] for i in BS(r, self.parser).select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
-        episodes = [i["data-id"] for i in BS(rf, "lxml").select(".eps-item")]
+        episodes = [i["data-id"] for i in BS(rf, self.parser).select(".eps-item")]
         episode = episodes[int(self.askepisode(len(episodes))) - 1]
         ep = self.getep(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
@@ -27,7 +27,7 @@ class Solar(Actvid):
     def getep(self, url, data_id):
         source = self.client.get(f"{url}").text
 
-        soup = BS(source, "lxml")
+        soup = BS(source, self.parser)
 
         unformated = soup.find("a", {"data-id": f"{data_id}"})["title"]
 

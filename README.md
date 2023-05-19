@@ -80,7 +80,7 @@ Shows and Movies are scraped from Streaming Sites.
 
 mov-cli currently scrapes 15 Providers:
 ```
-Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · TamilYogi · Einthusan · ViewAsian · Watchasian · Gogoanime · Eja · KimCartoon · Turkish123
+Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · TamilYogi · Einthusan · ViewAsian · Watchasian · GogoAnime · Eja · KimCartoon · Turkish123
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
@@ -99,37 +99,44 @@ Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · Tamil
 
 ## Installation
 <!-- WIN AND LINUX -->
-<div id="win-and-linux"></div>
-
 ### Windows / Linux
+  - Run this Command inside your Terminal
+    ``` 
     pip install mov-cli
-<!-- LINUX -->
-### Linux
-  - If the above command results in an error, install `pycryptodome` before installing mov-cli.
     ```
-    pip install pycryptodome
+  - Optional 
     ```
-<!-- WINDOWS -->
-### Windows
-  - If the above command results in an error, install `tldextract`
-    ```
-    pip install tldextract
+    pip install lxml
     ```
 
-<!-- ANDROID -->
-### Android
-  - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) from Play Store is installed.
+
+<!-- ANDROID --> 
+### Android               
+  - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) are installed.
   
-  - Install ``libxml2`` and ``libxslt`` in Termux.
-    ```
-    apt-get install libxml2 libxslt
-    ```
-
   - Install ``mov-cli``.
     ```
     pip install mov-cli
     ```
+  
+  - Optional
+    ```
+    apt-get install libxml2 libxslt
+    pip install lxml
+    ```
 
+
+<!-- IOS -->
+### iOS
+  - Make sure [Outplayer](https://apps.apple.com/us/app/outplayer/id1449923287) and [iSH](https://apps.apple.com/us/app/ish-shell/id1436902243) are installed.
+
+  - Run following commands (Note: this may take a while, it's iSH fault.)
+    ```
+    apk update && apk upgrade
+    apk add python3 fzf
+    python3 -m ensurepip
+    pip3 install mov-cli
+    ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 

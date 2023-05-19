@@ -13,7 +13,7 @@ def get_link(url):
         re.compile(r"(eval\(function\(p,a,c,k,e,d\).+?{}\)\))").findall(r3)[0]
     )
     m3u8 = re.findall(r"src=\"(.*?)\"", re_js)[0]
-    # soup = BeautifulSoup(r, 'html.parser')
+    # soup = BeautifulSoup(r, 'self.parser')
     # iframe = soup.iframe
     # src = iframe['src']
     # r_src = httpx.get(src).text

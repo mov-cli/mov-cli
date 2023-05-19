@@ -19,9 +19,9 @@ class wlext(WebScraper):
         s = self.client.get(
             f"{self.base_url}/ptb-search/?f=search_series_1&ptb-search=1&title={data}"
         )
-        show = BS(s, "lxml")
+        show = BS(s, self.parser)
         shows = show.findAll("h5", {"class": "ptb_post_title"})
-        movie = BS(m, "lxml")
+        movie = BS(m, self.parser)
         movies = movie.findAll("h5", {"class": "ptb_post_title"})
         urls = [movies[i].find("a")["href"] for i in range(len(movies))] + [
             shows[i].find("a")["href"] for i in range(len(shows))
@@ -37,7 +37,7 @@ class wlext(WebScraper):
 
     def ask(self, url):
         req = self.client.get(url)
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         t = soup.find("select", {"id": "loadepisode"})
         try:
             episodes = len(t.findAll("option"))
@@ -45,7 +45,7 @@ class wlext(WebScraper):
             return print("Episode unavailable")
         episode = int(self.askepisode(episodes))
         req = self.client.get(f"{url}?server=cajitatop&episode={episode}").text
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         try:
             t = soup.find("iframe", {"loading": "lazy"})["src"]
             print(t)
@@ -70,7 +70,7 @@ class wlext(WebScraper):
 
     def download(self, t):
         req = self.client.get(t[self.url])
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         t = soup.find("select", {"id": "loadepisode"})
         try:
             episodes = len(t.findAll("option"))
@@ -78,7 +78,7 @@ class wlext(WebScraper):
             return print("Episode unavailable")
         for e in range(len(episodes)):
             req = self.client.get(f"{[self.url]}?server=cajitatop&episode={e+1}").text
-            soup = BS(req, "lxml")
+            soup = BS(req, self.parser)
             try:
                 t = soup.find("iframe", {"loading": "lazy"})["src"]
             except:

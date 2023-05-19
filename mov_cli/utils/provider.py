@@ -1,5 +1,4 @@
 from fzf import fzf_prompt
-from getpass import getuser
 
 english = ["actvid", "sflix", "solar", "dopebox", "openloadmov", "remotestream"]
 
@@ -43,8 +42,6 @@ preselction = {
     "Anime Providers": [anime],
     "Sports Providers": [sports],
     "International Providers": [inter],
-    "": [],
-    f"Hi, {getuser()}": [],
 }
 
 

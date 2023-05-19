@@ -14,7 +14,7 @@ class openloadmov(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}")
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         items = soup.findAll("div", {"class": "result-item"})
         title = [items[i].find("img")["alt"] for i in range(len(items))]
         urls = [items[i].find("a")["href"] for i in range(len(items))]
@@ -27,7 +27,7 @@ class openloadmov(WebScraper):
 
     def ask(self, url):
         req = self.client.get(url)
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         seasons = soup.findAll("div", {"class": "se-c"})
         season = int(self.askseason(len(seasons)))
         se_c = seasons[season - 1]
@@ -38,7 +38,7 @@ class openloadmov(WebScraper):
 
     def cdn_url(self, url):
         req = self.client.get(url)
-        soup = BS(req, "lxml")
+        soup = BS(req, self.parser)
         iframe = soup.find("iframe")["src"]
         vidhash = iframe.split("/")[-1]
         self.client.set_headers({"x-requested-with": "XMLHttpRequest"})
