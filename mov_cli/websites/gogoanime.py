@@ -14,7 +14,7 @@ class gogoanime(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/search.html?keyword={data}")
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         items = soup.find("ul", {"class": "items"}).findAll("li")
         urls = [items[i].find("a")["href"] for i in range(len(items))]
         title = [items[i].find("a")["title"] for i in range(len(items))]
@@ -24,12 +24,12 @@ class gogoanime(WebScraper):
 
     def ask(self, url):
         req = self.client.get(f"{self.base_url}{url}")
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = soup.find("ul", {"id": "episode_page"}).find_all("a")[-1]["ep_end"]
         episode = self.askepisode(int(episodes))
         url = url.split("/")[-1]
         request = self.client.get(f"{self.base_url}/{url}-episode-{episode}")
-        soup = BS(request, self.parser)
+        soup = BS(request, self.scraper)
         url = self.doodstream(
             soup.find("li", {"class": "doodstream"}).find("a")["data-video"]
         )
@@ -54,12 +54,12 @@ class gogoanime(WebScraper):
 
     def download(self, t):
         req = self.client.get(f"{self.base_url}{t[self.url]}")
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = soup.find("ul", {"id": "episode_page"}).find("a")["ep_end"]
         for e in range(len(episodes)):
             url = url.split("/")[-1]
             request = self.client.get(f"{self.base_url}/{url}-episode-{e+1}")
-            soup = BS(request, self.parser)
+            soup = BS(request, self.scraper)
             url = self.doodstream(
                 soup.find("li", {"class": "doodstream"}).find("a")["data-video"]
             )

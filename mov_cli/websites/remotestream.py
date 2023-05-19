@@ -23,7 +23,7 @@ class remotestream(WebScraper):
             self.movdb + f"/search/movie?query={data}&language=en"
         ).text
         # MOVIE
-        soupm = BS(movie, self.parser)
+        soupm = BS(movie, self.scraper)
         mcards = soupm.findAll("div", {"class": "card v4 tight"})
         if mcards is not []:
             title.extend([mcards[i].find("h2").text for i in range(len(mcards))])
@@ -35,7 +35,7 @@ class remotestream(WebScraper):
                 ]
             )
             mov_or_tv.extend(["MOVIE" for i in range(len(mcards))])
-        soups = BS(tv, self.parser)
+        soups = BS(tv, self.scraper)
         scards = soups.findAll("div", {"class": "card v4 tight"})
         if scards is not []:
             title.extend([scards[i].find("h2").text for i in range(len(scards))])
@@ -52,7 +52,7 @@ class remotestream(WebScraper):
     def ask(self, id):
         rlurl = self.client.head(f"{self.movdb}/tv/{id}", redirects=True).url
         res = self.client.get(f"{rlurl}/seasons")
-        soup = BS(res, self.parser)
+        soup = BS(res, self.scraper)
         seasons = soup.findAll("div", {"class": "season"})
         s = []
         for season in seasons:
@@ -65,7 +65,7 @@ class remotestream(WebScraper):
                 s.append(season)
         season = self.askseason(len(s))
         req = self.client.get(f"{rlurl}/season/{season}").text
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = soup.find("h3", {"class": "episode_sort"}).find("span").text
         episode = self.askepisode(int(episodes))
         return season, episode
@@ -87,7 +87,7 @@ class remotestream(WebScraper):
     def sd(self, name, id):
         rlurl = self.client.head(f"{self.movdb}/tv/{id}", redirects=True).url
         res = self.client.get(f"{rlurl}/seasons")
-        soup = BS(res, self.parser)
+        soup = BS(res, self.scraper)
         seasons = soup.findAll("div", {"class": "season"})
         for s in range(len(seasons)):
             title = seasons[s].find("h2").find("a").text
@@ -95,7 +95,7 @@ class remotestream(WebScraper):
                 pass
             else:
                 req = self.client.get(f"{rlurl}/season/{s+1}").text
-                soup = BS(req, self.parser)
+                soup = BS(req, self.scraper)
                 episodes = soup.find("h3", {"class": "episode_sort"}).find("span").text
                 for e in range(int(episodes)):
                     url = self.cdn_url(id, s + 1, e + 1)

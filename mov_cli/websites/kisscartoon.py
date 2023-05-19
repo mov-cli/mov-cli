@@ -17,7 +17,7 @@ class kisscartoon(WebScraper):
 
     def results(self, q):
         res = self.client.get(f"{self.base_url}/?s={q}")
-        soup = BS(res.text, self.parser)
+        soup = BS(res.text, self.scraper)
         cartoon_name = [i.text for i in soup.select("div.title > a")]
         urls = [i["href"] for i in soup.select("div.title > a")]
         discrim = [httpx.URL(i).path for i in urls]
@@ -30,7 +30,7 @@ class kisscartoon(WebScraper):
 
     def ask(self, url):
         res = httpx.get(url).text
-        soup = BS(res, self.parser)
+        soup = BS(res, self.scraper)
         season_id = httpx.URL(soup.find("link", {"rel": "shortlink"})["href"]).params[
             "p"
         ]
@@ -45,7 +45,7 @@ class kisscartoon(WebScraper):
             self.client.get(
                 f"https://thekisscartoon.com/ajax-episode/?page_sele={last_page}&id={season_id}"
             ).text,
-            self.parser,
+            self.scraper,
         )
         num_eps = num_eps.select("div.numerando")[-1].text
         episode = int(self.askepisode(int(num_eps)))

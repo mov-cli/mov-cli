@@ -11,12 +11,12 @@ class solar(actvid):
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.parser).select(".dropdown-item")]
+        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
-        episodes = [i["data-id"] for i in BS(rf, self.parser).select(".eps-item")]
+        episodes = [i["data-id"] for i in BS(rf, self.scraper).select(".eps-item")]
         episode = episodes[int(self.askepisode(len(episodes))) - 1]
         ep = self.getep(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
@@ -27,7 +27,7 @@ class solar(actvid):
     def getep(self, url, data_id):
         source = self.client.get(f"{url}").text
 
-        soup = BS(source, self.parser)
+        soup = BS(source, self.scraper)
 
         unformated = soup.find("a", {"data-id": f"{data_id}"})["title"]
 

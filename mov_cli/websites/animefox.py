@@ -14,7 +14,7 @@ class animefox(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"https://animefox.to/search?keyword={data}")
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         items = soup.findAll("a", {"class": "film-poster-ahref"})
         urls = [items[i]["href"] for i in range(len(items))]
         title = [items[i]["title"] for i in range(len(items))]
@@ -27,30 +27,30 @@ class animefox(WebScraper):
 
     def ask(self, url):
         a = self.client.get(f"{self.base_url}{url}")
-        soup = BS(a, self.parser)
+        soup = BS(a, self.scraper)
         url = soup.find("div", {"class": "film-buttons"}).find("a")["href"]
         req = self.client.get(self.base_url + url)
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = len(soup.find("div", {"id": "episodes-page-1"}).findAll("a"))
         episode = self.askepisode(episodes)
         return self.base_url + url[:-1] + episode, episode
 
     def mov(self, url):
         a = self.client.get(f"{self.base_url}{url}")
-        soup = BS(a, self.parser)
+        soup = BS(a, self.scraper)
         url = soup.find("div", {"class": "film-buttons"}).find("a")["href"]
         return self.base_url + url
 
     def cdn_url(self, url):
         req = self.client.get(url)
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         goload = soup.find("select", {"id": "select-iframe-to-display"}).findAll(
             "option"
         )[-1]["value"]
         url = f"https://{goload}".split("-")[0]
         a = self.client.head(url, redirects=False).headers["location"]
         a = self.client.get(a)
-        soup = BS(a, self.parser)
+        soup = BS(a, self.scraper)
         server = []
         servers = soup.findAll("li", {"class": "linkserver"})
         for video in servers:
@@ -77,10 +77,10 @@ class animefox(WebScraper):
 
     def download(self, t):
         a = self.client.get(f"{self.base_url}{t[self.url]}")
-        soup = BS(a, self.parser)
+        soup = BS(a, self.scraper)
         url = soup.find("div", {"class": "film-buttons"}).find("a")["href"]
         req = self.client.get(self.base_url + url)
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = len(soup.find("div", {"id": "episodes-page-1"}).findAll("a"))
         for e in range(episodes):
             url = self.cdn_url(self.base_url + url[:-1] + e + 1)

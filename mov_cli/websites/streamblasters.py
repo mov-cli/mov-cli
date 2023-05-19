@@ -14,7 +14,7 @@ class streamblasters(WebScraper):
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}")
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         items = soup.findAll("div", {"class": "title"})
         urls = [items[i].find("a")["href"] for i in range(len(items))]
         title = [items[i].find("a").text for i in range(len(items))]
@@ -24,7 +24,7 @@ class streamblasters(WebScraper):
 
     def doodext(self, url):
         req = self.client.get(url).text
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         ply = soup.find("li", {"id": "player-option-1"})
         post = ply["data-post"]
         self.client.set_headers(

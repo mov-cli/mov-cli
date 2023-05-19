@@ -14,7 +14,7 @@ class watchasian(WebScraper):
 
     def results(self, data: str):
         req = self.client.get(f"{self.base_url}/search?type=movies&keyword={data}").text
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         ul = soup.find("ul", {"class": "switch-block list-episode-item"}).findAll("li")
         urls = [ul[i].find("a")["href"] for i in range(len(ul))]
         title = [ul[i].find("h3").text for i in range(len(ul))]
@@ -24,7 +24,7 @@ class watchasian(WebScraper):
 
     def ask(self, url):
         req = self.client.get(f"{self.base_url}{url}").text
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = soup.find(
             "ul", {"class": "list-episode-item-2 all-episode"}
         ).findAll("li")
@@ -32,7 +32,7 @@ class watchasian(WebScraper):
         episodes = episodes[::-1]
         href = episodes[episode - 1].find("a")["href"]
         q = self.client.get(self.base_url + href).text
-        soup = BS(q, self.parser)
+        soup = BS(q, self.scraper)
         if re.search("doodstream", q):
             li = soup.find("li", {"class": "doodstream"})["data-video"]
         else:
@@ -58,7 +58,7 @@ class watchasian(WebScraper):
 
     def download(self, t):
         req = self.client.get(f"{self.base_url}{t[self.url]}").text
-        soup = BS(req, self.parser)
+        soup = BS(req, self.scraper)
         episodes = soup.find(
             "ul", {"class": "list-episode-item-2 all-episode"}
         ).findAll("li")
@@ -66,7 +66,7 @@ class watchasian(WebScraper):
         for e in range(len(episodes)):
             href = episodes[e].find("a")["href"]
             q = self.client.get(self.base_url + href).text
-            soup = BS(q, self.parser)
+            soup = BS(q, self.scraper)
             if re.search("doodstream", q):
                 li = soup.find("li", {"class": "doodstream"})["data-video"]
             else:
