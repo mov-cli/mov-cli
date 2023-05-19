@@ -56,7 +56,7 @@ class WebScraper:
             import lxml
             return "lxml"
         except ModuleNotFoundError:
-            return self.parser
+            return "html.parser"
         
     @staticmethod
     def parse(txt: str) -> str:
