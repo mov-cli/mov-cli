@@ -28,7 +28,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/mov-cli/mov-cli">
-    <img src="https://user-images.githubusercontent.com/83706294/194960059-a9202d72-f033-46b4-b756-3193dc54fb20.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/mov-cli/mov-cli/assets/132799819/a23bec13-881d-41b9-b596-b31c6698b89e" alt="Logo" width="80" height="80">
   </a>
 
   <p align="center">
