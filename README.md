@@ -32,7 +32,7 @@
   </a>
 
   <p align="center">
-    A cli tool to browse and watch movies/shows.
+ A cli tool to browse and watch Movies/Shows/TV/Sports. 
     <br />
     <br />
     <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
