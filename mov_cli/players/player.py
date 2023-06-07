@@ -46,9 +46,10 @@ class ply(Player):
                         "--no-terminal",
                     ]
 
-                    if CMD_ARGS.flatpak_mpv and self.os == "Linux": # Support for MPV on flatpak.
+                    if CMD_ARGS.flatpak_mpv and self.os == "Linux": # Support for MPV on Flatpak.
+                        print("Using flatpak installation of MPV.")
                         return subprocess.Popen(
-                            ["flatpak", "run", "io.mpv.Mpv/x86_64/stable"] + mpv_args
+                            ["flatpak", "run", "io.mpv.Mpv"] + mpv_args
                         )
 
                     return subprocess.Popen(
