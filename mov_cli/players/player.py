@@ -1,8 +1,7 @@
 import sys
 import subprocess
-import time
 
-
+from .. import CMD_ARGS
 from ..utils.player import Player, PlayerNotFound
 
 
@@ -40,14 +39,20 @@ class ply(Player):
         else:  # Windows, Linux and Other
             try:
                 if self.os == "Linux" or self.os == "Windows":
+                    mpv_args = [
+                        f"--referrer={referrer}",
+                        f"{url}",
+                        f"--force-media-title=mov-cli:{media_title}",
+                        "--no-terminal",
+                    ]
+
+                    if CMD_ARGS.flatpak_mpv and self.os == "Linux": # Support for MPV on flatpak.
+                        return subprocess.Popen(
+                            ["flatpak", "run", "io.mpv.Mpv/x86_64/stable"] + mpv_args
+                        )
+
                     return subprocess.Popen(
-                        [
-                            "mpv",
-                            f"--referrer={referrer}",
-                            f"{url}",
-                            f"--force-media-title=mov-cli:{media_title}",
-                            "--no-terminal",
-                        ]
+                        ["mpv"] + mpv_args
                     )
 
                 elif self.os == "Darwin":
