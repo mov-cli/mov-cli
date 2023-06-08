@@ -39,7 +39,7 @@ calls = {
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.pro"],
     "kinox": [kinox, "https://ww17.kinox.to"],
-    "tamilyogi": [tamilyogi, "https://tamilyogi.how"],
+    "tamilyogi": [tamilyogi, "https://tamilyogi.cash"],
     "einthusan": [einthusan, "https://einthusan.tv"],
     "turkish123": [turkish123, "https://turkish123.ac"],
     "animefox": [animefox, "https://animefox.to"],
