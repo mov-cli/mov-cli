@@ -4,3 +4,4 @@ __pycache__/
 dist/*
 build/*
 mov_cli.egg-info/*
+env
