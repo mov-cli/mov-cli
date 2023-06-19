@@ -2,7 +2,7 @@ from fzf import fzf_prompt
 
 english = ["actvid", "sflix", "solar", "dopebox", "openloadmov", "remotestream"]
 
-german = ["kinox"]
+# german = ["kinox"] kinox was removed, as it didn't function really.
 
 indian = [
     "streamblasters",
@@ -33,7 +33,6 @@ inter = [
 
 preselction = {
     "English Providers": [english],
-    "German Providers": [german],
     "Indian Providers": [indian],
     "Asian Providers": [asian],
     "LIVE TV Providers": [tv],

@@ -23,7 +23,9 @@ class dopebox(actvid):
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
@@ -65,7 +67,9 @@ class dopebox(actvid):
 
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
@@ -81,12 +85,16 @@ class dopebox(actvid):
 
     def sd(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         for s in range(len(season_ids)):
             rf = self.client.get(
                 f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
             )
-            episodes = [i["data-id"] for i in BS(rf, self.scraper).select(".episode-item")]
+            episodes = [
+                i["data-id"] for i in BS(rf, self.scraper).select(".episode-item")
+            ]
             for e in range(len(episodes)):
                 episode = episodes[e]
                 sid = self.ep_server_id(episode)

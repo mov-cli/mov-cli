@@ -15,7 +15,6 @@ from .websites.gogoanime import gogoanime
 from .websites.watchasian import watchasian
 from .websites.wlext import wlext
 from .websites.streamblasters import streamblasters
-from .websites.kinox import kinox
 from .websites.tamilyogi import tamilyogi
 from .websites.einthusan import einthusan
 from .websites.turkish123 import turkish123
@@ -38,7 +37,6 @@ calls = {
     "watchasian": [watchasian, "https://www1.watchasian.id"],
     "wlext": [wlext, "https://wlext.is"],
     "streamblasters": [streamblasters, "https://streamblasters.pro"],
-    "kinox": [kinox, "https://ww17.kinox.to"],
     "tamilyogi": [tamilyogi, "https://tamilyogi.cash"],
     "einthusan": [einthusan, "https://einthusan.tv"],
     "turkish123": [turkish123, "https://turkish123.ac"],

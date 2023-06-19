@@ -18,7 +18,7 @@ class Player:
         self.__display_name = display_name
 
         self.__os = platform.system()
-        
+
         self.__platform = platform.platform()
 
     @property

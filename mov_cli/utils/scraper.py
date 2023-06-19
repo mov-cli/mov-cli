@@ -54,10 +54,11 @@ class WebScraper:
     def parser(self):
         try:
             import lxml
+
             return "lxml"
         except ModuleNotFoundError:
             return "html.parser"
-        
+
     @staticmethod
     def parse(txt: str) -> str:
         return re.sub(r"\W+", "-", txt.lower())

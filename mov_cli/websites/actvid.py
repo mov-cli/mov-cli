@@ -96,7 +96,9 @@ class actvid(WebScraper):
 
     def ask(self, series_id: str) -> tuple:
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         season = self.askseason(len(season_ids))
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
@@ -157,12 +159,9 @@ class actvid(WebScraper):
     def cdn_url(self, final_link: str, rabb_id: str) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
         data = self.client.get(f"{final_link}getSources?id={rabb_id}").json()
-        source = data["sources"]
-        link = f"{source}"
-        if link.endswith("==") or link.endswith("="):
-            n = json.loads(self.decrypt(data["sources"], self.gh_key()))
-            return n[0]["file"]
-        return source[0]["file"]
+        n = json.loads(self.decrypt(data["sources"], self.gh_key()))
+        return n[0]["file"]
+        
 
     def server_id(self, mov_id: str) -> str:
         req = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
@@ -230,7 +229,9 @@ class actvid(WebScraper):
 
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         season = self.askseason(len(season_ids))
         z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
@@ -245,11 +246,15 @@ class actvid(WebScraper):
 
     def sd(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         for s in range(len(season_ids)):
             z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[s]}"
             rf = self.client.get(z)
-            episodes = [i["data-id"] for i in BS(rf, self.scraper).select(".nav-item > a")]
+            episodes = [
+                i["data-id"] for i in BS(rf, self.scraper).select(".nav-item > a")
+            ]
             for e in range(len(episodes)):
                 episode = episodes[e]
                 sid = self.ep_server_id(episode)

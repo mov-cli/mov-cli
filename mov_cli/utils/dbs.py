@@ -3,6 +3,7 @@ import re
 import httpx
 from bs4 import BeautifulSoup as BS
 
+
 def get_imdb_id(query: str) -> str:
     query = query.replace(" ", "_")
     req = httpx.get(

@@ -11,7 +11,9 @@ class solar(actvid):
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
-        season_ids = [i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")]
+        season_ids = [
+            i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
+        ]
         season = self.askseason(len(season_ids))
         rf = self.client.get(
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
