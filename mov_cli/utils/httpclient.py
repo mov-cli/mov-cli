@@ -24,7 +24,7 @@ class HttpClient:
         except Exception as e:
             print(
                 f"Error: {e}",
-                "\n Please open an issue if this is not due due to your internet connection",
+                "\n Please open an issue if this is not due to your internet connection",
             )
             sys.exit(-1)
         return req
@@ -38,7 +38,7 @@ class HttpClient:
             except Exception as e:
                 print(
                     f"Error: {e}",
-                    "\n Please open an issue if this is not due due to your internet connection",
+                    "\n Please open an issue if this is not due to your internet connection",
                 )
                 sys.exit(-1)
             return req
@@ -49,7 +49,7 @@ class HttpClient:
             except Exception as e:
                 print(
                     f"Error: {e}",
-                    "\n Please open an issue if this is not due due to your internet connection",
+                    "\n Please open an issue if this is not due to your internet connection",
                 )
                 sys.exit(-1)
             return req
@@ -62,7 +62,7 @@ class HttpClient:
         except Exception as e:
             print(
                 f"Error: {e}",
-                "\n Please open an issue if this is not due due to your internet connection",
+                "\n Please open an issue if this is not due to your internet connection",
             )
             sys.exit(-1)
         return req
