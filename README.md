@@ -53,11 +53,9 @@
       <li><a href="#prerequisites">Prerequisites</a></li>
       <li><a href="#installation">Installation</a></li>
       <ul>
-        <li><a href="#win-and-linux">Windows / Linux</a></li>
-        <ul>
-          <li><a href="#linux">Linux</a></li>
-        </ul>
+        <li><a href="#windows--linux">Windows / Linux</a></li>
         <li><a href="#android">Android</a></li>
+        <li><a href="#ios">iOS</a></li>
       </ul>
     </ul>
   </li>
