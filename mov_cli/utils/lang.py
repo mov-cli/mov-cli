@@ -1,9 +1,8 @@
 import httpx
 from fzf import fzf_prompt
-from .props import home
 import mov_cli.__main__ as mc
 from json import loads
-from .props import RestartNeeded, LanguageNotAOption
+from .props import RestartNeeded, LanguageNotAOption, home
 
 sel = eval(
     httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text
