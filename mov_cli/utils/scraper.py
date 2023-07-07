@@ -149,7 +149,7 @@ class WebScraper:
         r = r[::-1]
         choice = ""
         while choice not in range(len(result) + 1):
-            choice = fzf_prompt(r)[1] if not result_no else result_no
+            re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
             if choice == "q":
                 exit()
             elif choice == "s":
