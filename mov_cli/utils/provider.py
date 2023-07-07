@@ -1,8 +1,14 @@
 from fzf import fzf_prompt
+from importlib import import_module
 
-english = ["actvid", "sflix", "solar", "dopebox", "openloadmov", "remotestream"]
-
-# german = ["kinox"] kinox was removed, as it didn't function really.
+english = [
+    "actvid", 
+    "sflix", 
+    "solar", 
+    "dopebox", 
+    "openloadmov", 
+    "remotestream"
+]
 
 indian = [
     "streamblasters",
@@ -25,8 +31,6 @@ turkish = ["turkish123", "yoturkish"]
 
 sports = ["scdn"]
 
-update = ["pip install mov-cli -U"]
-
 inter = [
     "wlext",
 ]
@@ -43,9 +47,36 @@ preselction = {
     "International Providers": [inter],
 }
 
+calls = {
+    "eja": "https://eja.tv",
+    # "kimcartoon": [kimcartoon, "https://kimcartoon.li"],
+    "actvid": "https://www.actvid.com",
+    "sflix": "https://sflix.se",
+    "solar": "https://solarmovie.pe",
+    "dopebox": "https://dopebox.to",
+    "viewasian": "https://viewasian.co",
+    "gogoanime": "https://gogoanime.hu",
+    "watchasian": "https://watchasian.mx",
+    "wlext": "https://wlext.is",
+    "streamblasters": "https://streamblasters.pro",
+    "tamilyogi": "https://tamilyogi.bike",
+    "einthusan": "https://einthusan.tv",
+    "turkish123": "https://turkish123.ac",
+    "animefox": "https://animefox.to",
+    "scdn": "",
+    "openloadmov": "https://openloadmov.com",
+    "remotestream": "https://remotestre.am",
+    "kisscartoon": "https://thekisscartoon.com",
+    "yoturkish": "https://www1.yoturkish.com",
+}
+
+def export(provider: str):
+    module = f"mov_cli.websites.{provider}"
+    return import_module(module)
 
 def ask():
     init = fzf_prompt(preselction)
     get = preselction.get(init)[0]
     choice = fzf_prompt(get)
-    return choice
+    cl = export(choice)
+    return cl, calls.get(choice)

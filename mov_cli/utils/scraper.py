@@ -1,10 +1,8 @@
-import logging
-import os
-
-# import platform
+from os import environ
+from platform import system as pf
 import re
 import subprocess
-import sys
+from getpass import getuser
 
 import mov_cli.__main__ as movcli
 from fzf import fzf_prompt
@@ -27,7 +25,7 @@ from ..extractors.doodstream import dood
 #        return f"/home/{os.getlogin()}/Downloads"
 #    else:
 #        print("Please open an issue for your os")
-#        sys.exit(-2)
+#        exit(-2)
 
 
 class WebScraper:
@@ -54,7 +52,6 @@ class WebScraper:
     def parser(self):
         try:
             import lxml
-
             return "lxml"
         except ModuleNotFoundError:
             return "html.parser"
@@ -102,7 +99,7 @@ class WebScraper:
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
 
-        return print(f"Downloaded at {os.getcwd()}")
+        return
 
     def play(self, url: str, name: str, referrer=None):
         if referrer is None:
@@ -114,7 +111,7 @@ class WebScraper:
             txt = f"{self.red('[!]')} Could not play {name}: Correct Player for your OS was not found| {e}"
             # logging.log(logging.ERROR, txt)
             print(txt)  # TODO implement logging to a file
-            sys.exit(1)
+            exit(1)
 
     def search(self, q: str = None) -> str:
         pass
@@ -152,10 +149,9 @@ class WebScraper:
         r = r[::-1]
         choice = ""
         while choice not in range(len(result) + 1):
-            pre = fzf_prompt(r)
-            choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+            choice = fzf_prompt(r)[1] if not result_no else result_no
             if choice == "q":
-                sys.exit()
+                exit()
             elif choice == "s":
                 return self.redo()
             elif choice == "p":
@@ -179,13 +175,13 @@ class WebScraper:
                         "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
-                    sys.exit(1)
+                    exit(1)
                 except IndexError as e:
                     print(
                         "[!]  This Episode is coming soon! | ",
                         str(e),
                     )
-                    sys.exit(2)
+                    exit(2)
             elif choice == "sd":
                 try:
                     pre = fzf_prompt(r)
@@ -203,13 +199,13 @@ class WebScraper:
                         "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
-                    sys.exit(1)
+                    exit(1)
                 except IndexError as e:
                     print(
                         "[!]  This Episode is coming soon! | ",
                         str(e),
                     )
-                    sys.exit(2)
+                    exit(2)
             elif choice == "ds":
                 try:
                     pre = fzf_prompt(r)
@@ -227,13 +223,13 @@ class WebScraper:
                         "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
-                    sys.exit(1)
+                    exit(1)
                 except IndexError as e:
                     print(
                         "[!]  This Episode is coming soon! | ",
                         str(e),
                     )
-                    sys.exit(2)
+                    exit(2)
             else:
                 mov_or_tv = result[int(choice) - 1]
                 if mov_or_tv[self.mv_tv] == "TV":

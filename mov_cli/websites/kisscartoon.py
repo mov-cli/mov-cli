@@ -6,7 +6,7 @@ import httpx
 cdn_url_re = r"/\\\/cdn\\\/hls\\\/([a-fA-F\d]{32})\\\/master\.txt/gm"
 
 
-class kisscartoon(WebScraper):
+class Provider(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url

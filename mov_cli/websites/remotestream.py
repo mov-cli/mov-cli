@@ -3,7 +3,7 @@ from ..utils.scraper import WebScraper
 import re
 
 
-class remotestream(WebScraper):
+class Provider(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url

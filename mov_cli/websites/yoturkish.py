@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as BS
 import re
 
 
-class yoturkish(WebScraper):
+class Provider(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url

@@ -2,7 +2,7 @@ from .actvid import actvid
 from bs4 import BeautifulSoup as BS
 
 
-class sflix(actvid):
+class Provider(actvid):
     def __init__(self, base_url) -> None:
         super().__init__(base_url)
         self.base_url = base_url

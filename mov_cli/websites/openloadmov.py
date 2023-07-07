@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup as BS
 from ..utils.scraper import WebScraper
 
 
-class openloadmov(WebScraper):
+class Provider(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url

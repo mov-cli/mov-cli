@@ -17,7 +17,7 @@ def x(d):
     return base64.b64encode(d.encode()).decode().replace("\n", "").replace("=", ".")
 
 
-class actvid(WebScraper):
+class Provider(WebScraper):
     def __init__(self, base_url) -> None:
         super().__init__(base_url)
         self.userinput = None
@@ -85,7 +85,7 @@ class actvid(WebScraper):
         ]
         title = [
             re.sub(
-                pattern="full|/tv/|/movie/|hd|watch|[0-9]{2,}",
+                pattern="full|/tv/|/movie/|hd|watch|[0-9]{2,}|free",
                 repl="",
                 string=" ".join(i.split("-")),
             )

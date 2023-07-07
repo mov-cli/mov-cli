@@ -13,7 +13,7 @@ Rewritten for mov-cli
 """
 
 
-class scdn(WebScraper):
+class Provider(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url

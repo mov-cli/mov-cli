@@ -2,7 +2,7 @@ import sys
 
 import httpx
 
-default_header: dict = {
+DEFAULT_HEADERS: dict = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/80.0.3987.163 "
     "Safari/537.36",
@@ -13,7 +13,7 @@ default_header: dict = {
 class HttpClient:
     def __init__(self, headers: dict = None, cookies: dict = None):
         if headers is None:
-            headers = default_header
+            headers = DEFAULT_HEADERS
         self.session = httpx.Client(timeout=10.0, headers=headers, cookies=cookies)
 
     def get(self, page: str, redirects: bool = False) -> httpx.Response:
@@ -21,9 +21,9 @@ class HttpClient:
         try:
             req = self.session.get(page, follow_redirects=redirects)
             self.session.headers["Referer"] = page
-        except Exception as e:
+        except httpx.TimeoutException:
             print(
-                f"Error: {e}",
+                f"Error: Timeout",
                 "\n Please open an issue if this is not due to your internet connection",
             )
             sys.exit(-1)
@@ -35,9 +35,9 @@ class HttpClient:
             try:
                 req = self.session.post(page, data=data)
                 self.session.headers["Referer"] = page
-            except Exception as e:
+            except httpx.TimeoutException:
                 print(
-                    f"Error: {e}",
+                    f"Error: Timeout",
                     "\n Please open an issue if this is not due to your internet connection",
                 )
                 sys.exit(-1)
@@ -46,22 +46,22 @@ class HttpClient:
             try:
                 req = self.session.post(page, json=json)
                 self.session.headers["Referer"] = page
-            except Exception as e:
+            except httpx.TimeoutException:
                 print(
-                    f"Error: {e}",
+                    f"Error: Timeout",
                     "\n Please open an issue if this is not due to your internet connection",
                 )
                 sys.exit(-1)
             return req
 
-    def head(self, page: str, redirects: False) -> httpx.Response:
+    def head(self, page: str, redirects: bool = False) -> httpx.Response:
         print(page)
         try:
             req = self.session.head(page, follow_redirects=redirects)
             self.session.headers["Referer"] = page
-        except Exception as e:
+        except httpx.TimeoutException:
             print(
-                f"Error: {e}",
+                f"Error: Timeout",
                 "\n Please open an issue if this is not due to your internet connection",
             )
             sys.exit(-1)
