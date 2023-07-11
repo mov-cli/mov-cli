@@ -28,11 +28,13 @@ class ply(Player):
                     f"{url}",
                 ]
             )
-    
+
         elif self.os == "iOS":
             print("[!] Detected your using iOS. \r\n")
-            
-            print(f'\033]8;;outplayer://{url}\033\\-------------------------\n- Tap to open Outplayer -\n-------------------------\033]8;;\033\\\n')
+
+            print(
+                f"\033]8;;outplayer://{url}\033\\-------------------------\n- Tap to open Outplayer -\n-------------------------\033]8;;\033\\\n"
+            )
 
             sys.exit(1)
 
@@ -46,15 +48,15 @@ class ply(Player):
                         "--no-terminal",
                     ]
 
-                    if CMD_ARGS.flatpak_mpv and self.os == "Linux": # Support for MPV on Flatpak.
+                    if (
+                        CMD_ARGS.flatpak_mpv and self.os == "Linux"
+                    ):  # Support for MPV on Flatpak.
                         print("Using flatpak installation of MPV.")
                         return subprocess.Popen(
                             ["flatpak", "run", "io.mpv.Mpv"] + mpv_args
                         )
 
-                    return subprocess.Popen(
-                        ["mpv"] + mpv_args
-                    )
+                    return subprocess.Popen(["mpv"] + mpv_args)
 
                 elif self.os == "Darwin":
                     return subprocess.Popen(

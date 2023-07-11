@@ -6,8 +6,8 @@ class Provider(actvid):
     def __init__(self, base_url) -> None:
         super().__init__(base_url)
         self.base_url = base_url
-        self.rep_key = "6LeWLCYeAAAAAL1caYzkrIY-M59Vu41vIblXQZ48"
-        self.redo()
+        self.dseasonp = True
+        self.dshowp = True
 
     def ask(self, series_id):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")

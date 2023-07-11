@@ -5,11 +5,12 @@ from fzf import fzf_prompt
 from datetime import datetime
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup as BS
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 
 """
 Original Code from https://github.com/edl2/sportsapi
 Rewritten for mov-cli
+Needs a rework
 """
 
 
@@ -118,7 +119,7 @@ class Provider(WebScraper):
                 f"..extractors.scdn.{extracted_url}.get_link"
             )
         except ImportError:
-            from ..extractors.scdn.ripple import get_link
+            from ...extractors.scdn.ripple import get_link
 
         m3u8 = get_link(url)
         return m3u8, A
@@ -127,6 +128,6 @@ class Provider(WebScraper):
         name = m[self.title]
         url, domain = self.cdn_url(m[self.aid])
         if state == "d":
-            self.dl(url, name)
+            self.dl(url, name, referrer=f"https://{domain}/")
             return
         self.play(url, name, referrer=f"https://{domain}/")

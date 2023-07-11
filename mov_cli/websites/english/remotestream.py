@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as BS
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 import re
+from ...utils.props import SelectedNotAvailable, NoSupportedProvider
 
 
 class Provider(WebScraper):
@@ -8,6 +9,8 @@ class Provider(WebScraper):
         super().__init__(base_url)
         self.base_url = base_url
         self.movdb = "https://www.themoviedb.org"
+        self.dseasonp = False
+        self.dshowp = True
 
     def search(self, q: str):
         q = input(f"[!] {self.translated[self.task]}") if q is None else q
@@ -18,35 +21,26 @@ class Provider(WebScraper):
         urls = []
         ids = []
         mov_or_tv = []
-        tv = self.client.get(self.movdb + f"/search/tv?query={data}&language=en").text
-        movie = self.client.get(
-            self.movdb + f"/search/movie?query={data}&language=en"
-        ).text
-        # MOVIE
-        soupm = BS(movie, self.scraper)
-        mcards = soupm.findAll("div", {"class": "card v4 tight"})
-        if mcards is not []:
-            title.extend([mcards[i].find("h2").text for i in range(len(mcards))])
-            urls.extend(["" for i in range(len(mcards))])
-            ids.extend(
-                [
-                    mcards[i].find("a")["href"].split("/")[-1].split("?")[0]
-                    for i in range(len(mcards))
-                ]
-            )
-            mov_or_tv.extend(["MOVIE" for i in range(len(mcards))])
-        soups = BS(tv, self.scraper)
-        scards = soups.findAll("div", {"class": "card v4 tight"})
-        if scards is not []:
-            title.extend([scards[i].find("h2").text for i in range(len(scards))])
-            urls.extend(["" for i in range(len(scards))])
-            ids.extend(
-                [
-                    scards[i].find("a")["href"].split("/")[-1].split("?")[0]
-                    for i in range(len(scards))
-                ]
-            )
-            mov_or_tv.extend(["TV" for i in range(len(scards))])
+        for i in range(2):
+            if i == 0:
+                get = "movie"
+            else:
+                get = "tv"
+            req = self.client.get(
+                self.movdb + f"/search/{get}?query={data}&language=en"
+            ).text
+            soup = BS(req, self.scraper)
+            cards = soup.findAll("div", {"class": "card v4 tight"})
+            if cards is not []:
+                title.extend([cards[i].find("h2").text for i in range(len(cards))])
+                urls.extend(["" for i in range(len(cards))])
+                ids.extend(
+                    [
+                        cards[i].find("a")["href"].split("/")[-1].split("?")[0]
+                        for i in range(len(cards))
+                    ]
+                )
+                mov_or_tv.extend([get.upper() for i in range(len(cards))])
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def ask(self, id):
@@ -80,8 +74,7 @@ class Provider(WebScraper):
         try:
             file = re.findall('"file":"(.*?)"', res)[0]
         except IndexError as e:
-            print("This show or movie is not available.")
-            exit(1)
+            raise SelectedNotAvailable()
         return file
 
     def sd(self, name, id):
@@ -109,14 +102,14 @@ class Provider(WebScraper):
             return
         self.play(url, name)
 
-    def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
-        if state == "sd":
+    def TV_PandDP(self, t: list, state: str):
+        if state == "s":
             self.sd(t[self.title], t[self.aid])
             return
         name = t[self.title]
         season, episode = self.ask(t[self.aid])
         url = self.cdn_url(t[self.aid], season, episode)
         if state == "d":
-            self.dl(url, name, season=".", episode=episode)
+            self.dl(url, name, season=season, episode=episode)
             return
         self.play(url, name)

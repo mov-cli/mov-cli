@@ -1,6 +1,6 @@
-import httpx
 from bs4 import BeautifulSoup as BS
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
+from re import findall
 
 
 class Provider(WebScraper):
@@ -28,13 +28,9 @@ class Provider(WebScraper):
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def get_hls(self, url):
-        link = str(httpx.get(f"https://eja.tv/?{url}", follow_redirects=True).url)
-        print(link)
-        link = "".join(link)
-        link = link.split("?")[1]
-        link = link.split("#")[0]
-        print(link)
-        return link
+        link = self.client.get(f"https://eja.tv/?{url}", redirects=True)
+        link = link.url
+        return findall("\?(.*)#", link)[0]
 
     def MOV_PandDP(self, m: list, state: str = "d" or "p"):
         name = m[self.title]
@@ -43,6 +39,3 @@ class Provider(WebScraper):
             self.dl(url, name)
             return
         self.play(url, name)
-
-    def SandR(self, q: str = None):
-        return self.results(self.search(q))

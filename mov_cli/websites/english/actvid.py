@@ -6,7 +6,7 @@ import hashlib
 # import chardet
 from Crypto.Cipher import AES
 from urllib import parse as p
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import json
 
@@ -20,60 +20,12 @@ def x(d):
 class Provider(WebScraper):
     def __init__(self, base_url) -> None:
         super().__init__(base_url)
-        self.userinput = None
         self.base_url = base_url
-        self.rep_key = (
-            "6LfV6aAaAAAAAC-irCKNuIS5Nf5ocl5r0K3Q0cdz"  # Google Recaptcha key
-        )
-        self.rab_domain = x("https://rabbitstream.net:443")
-        # encoding and then decoding the url
-        # self.redo()
-        # IMP: self.client.get/post always returns a response object
-        # self.client.post/get -> httpx.response
-
-    """def key_num(self, iframe_link: str) -> tuple:
-        self.client.add_elem(
-            {"Referer": self.base_url}
-        )  # adding referer to the headers
-        # self.client.headers['Referer'] = self.base_url
-        req = self.client.get(iframe_link).text
-        soup = BS(req, self.scraper)
-        k = list([i.text for i in soup.find_all("script")][-3].replace("var", ""))
-        key, num = "".join(k[21:61]), k[-3]
-        return key, num  # returns a tuple
-
-    def auth_token(self, key: str) -> str:
-        self.client.add_elem({"Referer": self.base_url})
-        self.client.add_elem({"cacheTime": "0"})  # adding referer to the headers
-        r = self.client.get(
-            f"https://www.google.com/recaptcha/api.js?render={self.rep_key}"
-        )
-        s = r.text.replace("/* PLEASE DO NOT COPY AND PASTE THIS CODE. */", "")
-        s = s.split(";")
-        v_token = s[10].replace("po.src=", "").split("/")[-2]
-        r = self.client.get(
-            f"https://www.google.com/recaptcha/api2/anchor?ar=1&hl=en&size=invisible&cb=xxmovclix&k={key}&co={self.rab_domain}&v={v_token}"
-        ).text
-        soup = BS(r, self.scraper)
-        recap_token = [i["value"] for i in soup.select("#recaptcha-token")][0]
-        data = {
-            "v": v_token,
-            "k": self.rep_key,
-            "c": recap_token,
-            "co": self.rab_domain,
-            "sa": "",
-            "reason": "q",
-        }
-        self.client.add_elem({"cacheTime": "0"})
-        return json.loads(
-            self.client.post(
-                f"https://www.google.com/recaptcha/api2/reload?k={key}", data=data
-            ).text.replace(")]}'", "")
-        )"""
+        self.dseasonp = True
+        self.dshowp = True
 
     def search(self, q: str = None) -> str:
         q = input(f"[!] {self.translated[self.task]}") if q is None else q
-        self.userinput = q
         return self.client.get(f"{self.base_url}/search/{self.parse(q)}").text
 
     def results(self, html: str) -> list:
@@ -83,14 +35,7 @@ class Provider(WebScraper):
             "MOVIE" if i["href"].__contains__("/movie/") else "TV"
             for i in soup.select(".film-poster-ahref")
         ]
-        title = [
-            re.sub(
-                pattern="full|/tv/|/movie/|hd|watch|[0-9]{2,}|free",
-                repl="",
-                string=" ".join(i.split("-")),
-            )
-            for i in urls
-        ]
+        title = [i.text for i in soup.select(".film-name > a")]
         ids = [i.split("-")[-1] for i in urls]
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
@@ -122,46 +67,11 @@ class Provider(WebScraper):
 
         return formated
 
-    """    def websocket(self, iframe_id):
-        # Thanks to Twilight for fixing it.
-        '''
-        will return decryption key, sources and tracks
-        '''
-        ws = create_connection("wss://wsx.dokicloud.one/socket.io/?EIO=4&transport=websocket")
-        p = ws.recv()
-        code = re.findall(self.CODE_REGEX, p)[0]
-
-        # dirty impleamentation
-        if code == "0":
-            ws.send("40")
-            p = ws.recv()
-
-            code = re.findall(self.CODE_REGEX, p)[0]
-
-            if code == "40":
-                key = re.findall(self.SID_REGEX, p)[0]
-
-                ws.send(
-                    '42["getSources",{"id":"' + iframe_id + '"}]'
-                )
-                p = ws.recv()
-                x = json.loads(re.findall(self.SOURCE_REGEX, p)[0])
-
-        return key, x["sources"], x["tracks"]
-
-    def cdn_url(self, rabb_id: str) -> str:
-        key, source, track = self.websocket(rabb_id)
-        predata = self.decrypt(source, bytes(key, "utf-8"))
-        data = json.loads(predata)
-        print(predata)
-        return data[0]['file']"""
-
     def cdn_url(self, final_link: str, rabb_id: str) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
         data = self.client.get(f"{final_link}getSources?id={rabb_id}").json()
         n = json.loads(self.decrypt(data["sources"], self.gh_key()))
         return n[0]["file"]
-        
 
     def server_id(self, mov_id: str) -> str:
         req = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
@@ -190,15 +100,6 @@ class Provider(WebScraper):
             ),
             parts[-1],
         )
-
-    ## decryption
-    ## Thanks to Twilight
-
-    # def determine_char_enc(self, value):
-    #    result = chardet.detect(value)['encoding']
-    #    return result
-
-    # websocket simulation
 
     def gh_key(self):
         u = self.client.get(
@@ -265,10 +166,10 @@ class Provider(WebScraper):
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd" or "ds"):
         name = t[self.title]
-        if state == "sd":
+        if state == "s":
             self.sd(t[self.aid], name)
             return
-        if state == "ds":
+        if state == "e":
             self.ds(t[self.aid], name)
             return
         episode, season, ep = self.ask(t[self.aid])
@@ -289,9 +190,6 @@ class Provider(WebScraper):
         url = self.cdn_url(iframe_link, iframe_id)
         if state == "d":
             self.dl(url, name)
-            return
-        if state == "sd":
-            print("You can download only Shows with 'sd'")
             return
         self.play(url, name)
 

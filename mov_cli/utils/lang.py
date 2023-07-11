@@ -1,19 +1,21 @@
 import httpx
 from fzf import fzf_prompt
+from .props import home
 import mov_cli.__main__ as mc
 from json import loads
-from .props import RestartNeeded, LanguageNotAOption, home
+from .props import RestartNeeded, LanguageNotAOption
 
 sel = eval(
     httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text
 )
+
 
 def getlang():
     try:
         with open(home() + ".mov_cli_lang", "r") as f:
             lang = f.read()
         existing(lang)
-        t = httpx.get(        
+        t = httpx.get(
             f"https://raw.githubusercontent.com/mov-cli/translations/main/languages/{lang}.json"
         ).json()
         ask = t["ASK"]
@@ -30,6 +32,7 @@ def getlang():
         return t
     except FileNotFoundError:
         import locale
+
         localLang = locale.getdefaultlocale()[0][:2]
         check = existing(localLang, True)
         if check is True:
@@ -41,8 +44,13 @@ def getlang():
         print(f"[?] Your Language was set to {lang}")
         raise RestartNeeded()
 
-def existing(language: str, g = False):
-    js = loads(httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text)
+
+def existing(language: str, g=False):
+    js = loads(
+        httpx.get(
+            "https://raw.githubusercontent.com/mov-cli/translations/main/langs"
+        ).text
+    )
 
     exist = False
 
@@ -50,13 +58,14 @@ def existing(language: str, g = False):
         for _, value in js.items():
             if value == language:
                 exist = True
-        if not exist:    
+        if not exist:
             raise LanguageNotAOption(language)
     else:
         for _, value in js.items():
             if value == language:
                 exist = True
         return exist
+
 
 def setlang():
     s = fzf_prompt(sel)

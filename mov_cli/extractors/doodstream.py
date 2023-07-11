@@ -13,7 +13,6 @@ def dood(url):
         f"https://dood.to/e/{video_id}", headers=headers, follow_redirects=True
     )
     webpage_html = webpage_html.text
-    print(webpage_html)
     pass_md5 = re.search(r"/pass_md5/[^']*", webpage_html).group()
     urlh = f"https://dood.to{pass_md5}"
     headers = {

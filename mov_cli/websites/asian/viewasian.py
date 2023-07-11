@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup as BS
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 import re
 
 
@@ -54,23 +54,6 @@ class Provider(WebScraper):
             li = f"https:{url}{rest[3:]}"
             return li
         raise Exception("Video not found or removed")
-
-    #    def doodstream(self, url):
-    #        domain = re.findall("""([^"']*)\/e""", url)[0]
-    #        req = self.client.get(url).text
-    #        pass_md = re.findall(r"/pass_md5/[^']*", req)[0]
-    #        token = pass_md.split("/")[-1]
-    #        self.client.set_headers(
-    #            {
-    #                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0",
-    #                "Referer": f"{url}",
-    #                "Accept-Language": "en-GB,en;q=0.5",
-    #            }
-    #        )
-    #        drylink = self.client.get(f"{domain}{pass_md}").text
-    #        streamlink = f"{drylink}zUEJeL3mUN?token={token}"
-    #        print(streamlink)
-    #        return streamlink
 
     def download(self, t):
         request = self.client.get(f"{self.base_url}{t[self.url]}")

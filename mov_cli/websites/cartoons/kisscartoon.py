@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup as BS
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 import re
 import httpx
 

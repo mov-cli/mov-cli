@@ -1,4 +1,4 @@
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
 
@@ -8,33 +8,44 @@ class Provider(WebScraper):
         super().__init__(base_url)
         self.base_url = base_url
 
-    def search(self, q: str = None) -> str:
+    def search(self, q: str):
         q = input(f"[!] {self.translated[self.task]}") if q is None else q
         return q.replace(" ", "+")
 
     def results(self, data: str) -> list:
         req = self.client.get(f"{self.base_url}/?s={data}").text
         soup = BS(req, self.scraper)
-        mlitem = soup.findAll("div", {"class": "ml-item"})
         items = []
+        mlitem = soup.findAll("div", {"class": "item"})
         for i in range(len(mlitem)):
             if str(mlitem[i]).__contains__("episode"):
                 pass
             else:
                 items.append(mlitem[i])
+        if soup.find_all("ul", {"class": "pagination"}):
+            pagination = soup.find("ul", {"class": "pagination"}).findAll("li")[1:]
+            for page in pagination:
+                req = self.client.get(page.find("a")["href"]).text
+                soup = BS(req, self.scraper)
+                pageitem = soup.findAll("div", {"class": "item"})
+                for i in range(len(pageitem)):
+                    if str(pageitem[i]).__contains__("episode"):
+                        pass
+                    else:
+                        items.append(pageitem[i])
         urls = [items[i].find("a")["href"] for i in range(len(items))]
-        title = [items[i].find("a")["oldtitle"] for i in range(len(items))]
+        title = [items[i].find("a")["title"] for i in range(len(items))]
         ids = [items[i]["class"] for i in range(len(items))]
         mov_or_tv = ["TV" for i in range(len(items))]
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def ask(self, url):
-        req = self.client.get(url).text
+        req = self.client.get(url, True).text
         soup = BS(req, self.scraper)
-        episodes = soup.findAll("a", {"class": "episodi"})
+        episodes = soup.findAll("a", {"class": "episod"})
         episode = int(self.askepisode(len(episodes)))
-        req = self.client.get(episodes[episode - 1]["href"]).text
-        regex = r'''var copyTexti= \['<iframe width="100%" height="100%" src="https:\/\/tukipasti\.com(.*?)"'''
+        req = self.client.get(episodes[episode - 1]["href"], True).text
+        regex = r'''<iframe width="100%" height="100%" src="https:\/\/tukipasti\.com(.*?)"'''
         s = re.findall(regex, req)[0]
         req = self.client.get(f"https://tukipasti.com{s}").text
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
@@ -44,10 +55,10 @@ class Provider(WebScraper):
     def download(self, t):
         req = self.client.get(t[self.url]).text
         soup = BS(req, self.scraper)
-        episodes = soup.findAll("a", {"class": "episodi"})
+        episodes = soup.findAll("a", {"class": "episod"})
         for e in range(len(episodes)):
             req = self.client.get(episodes[e]["href"]).text
-            regex = r'''var copyTexti= \['<iframe width="100%" height="100%" src="https:\/\/tukipasti\.com(.*?)"'''
+            regex = r'''<iframe width="100%" height="100%" src="https:\/\/tukipasti\.com(.*?)"'''
             s = re.findall(regex, req)[0]
             req = self.client.get(f"https://tukipasti.com{s}").text
             url = re.findall("var urlPlay = '(.*?)'", req)[0]

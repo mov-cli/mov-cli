@@ -1,4 +1,4 @@
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
 

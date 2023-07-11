@@ -1,4 +1,4 @@
-from ..utils.scraper import WebScraper
+from ...utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
 import re
 
@@ -16,15 +16,20 @@ class Provider(WebScraper):
         results = []
         page = 1
         while True:
-            req = self.client.get(f"{self.base_url}/search.html?keyword={data}&page={page}")
+            req = self.client.get(
+                f"{self.base_url}/search.html?keyword={data}&page={page}"
+            )
             soup = BS(req, self.scraper)
             items = soup.find("ul", {"class": "items"}).findAll("li")
-            if len(items) == 0: break
+            if len(items) == 0:
+                break
             urls = [items[i].find("a")["href"] for i in range(len(items))]
             title = [items[i].find("a")["title"] for i in range(len(items))]
             ids = [items[i].find("a")["title"] for i in range(len(items))]
             mov_or_tv = ["TV" for i in range(len(items))]
-            results.extend([list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)])
+            results.extend(
+                [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
+            )
             page += 1
         return results
 
