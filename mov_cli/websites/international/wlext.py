@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as BS
 from ...utils.scraper import WebScraper
+from ...utils.props import NoSupportedProvider, SelectedNotAvailable
 import re
 
 
@@ -42,7 +43,7 @@ class Provider(WebScraper):
         try:
             episodes = len(t.findAll("option"))
         except:
-            return print("Episode unavailable")
+            raise SelectedNotAvailable
         episode = int(self.askepisode(episodes))
         req = self.client.get(f"{url}?server=cajitatop&episode={episode}").text
         soup = BS(req, self.scraper)
@@ -50,7 +51,7 @@ class Provider(WebScraper):
             t = soup.find("iframe", {"loading": "lazy"})["src"]
             print(t)
         except:
-            return print("Couldn't find cajita.to provider.")
+            raise NoSupportedProvider
         return t, episode
 
     def cdn_url(self, url):
@@ -62,8 +63,7 @@ class Provider(WebScraper):
         ).json()
         file = request["data"]
         if file == "Video not found or has been removed":
-            print("Video not found or has been removed")
-            exit(1)
+            raise SelectedNotAvailable
         else:
             file = request["data"][-1]["file"]
         return file
@@ -82,7 +82,7 @@ class Provider(WebScraper):
             try:
                 t = soup.find("iframe", {"loading": "lazy"})["src"]
             except:
-                return print("Couldn't find cajita.to provider.")
+                raise SelectedNotAvailable
             url = str(self.cdn_url(t))
             self.dl(url, t[self.title], episode=e + 1)
 

@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as BS
 from ...utils.scraper import WebScraper
 import re
-from ...utils.props import SelectedNotAvailable, NoSupportedProvider
+from ...utils.props import SelectedNotAvailable
 
 
 class Provider(WebScraper):
@@ -74,7 +74,7 @@ class Provider(WebScraper):
         try:
             file = re.findall('"file":"(.*?)"', res)[0]
         except IndexError as e:
-            raise SelectedNotAvailable()
+            raise SelectedNotAvailable
         return file
 
     def sd(self, name, id):

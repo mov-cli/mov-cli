@@ -12,6 +12,7 @@ from .lang import getlang, setlang
 from .player import PlayerNotFound
 from ..players.player import ply
 from ..extractors.doodstream import dood
+from ..extractors.tukipasti import tukipasti
 
 # import shlex
 # required for development
@@ -204,6 +205,9 @@ class WebScraper:
                     self.TV_PandDP(mov_or_tv, "p")
                 else:
                     self.MOV_PandDP(mov_or_tv, "p")
+
+    def tuki(self, html: str):
+        return tukipasti(html)
 
     def doodstream(self, url: str):
         return dood(url)

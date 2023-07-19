@@ -11,16 +11,14 @@ if platform.system() == "Windows":
 
 def movcli():  # TODO add regex
     try:
-        if CMD_ARGS.p:
-            cl, url = ask(CMD_ARGS.p)
-        else:
-            cl, url = ask()
+        cl, url = ask(CMD_ARGS.p)
         provider: WebScraper = cl.Provider(url)
         provider.redo(CMD_ARGS.s)
     except UnicodeDecodeError:
         print("[!] The Current Key is not correct, please wait.")
     except Exception as e:
         print(f"[!] An Exception has occurred | {e}")
+
 
 if __name__ == "__main__":
     movcli()

@@ -1,8 +1,8 @@
-from .actvid import actvid
+from .actvid import Provider as pv
 from bs4 import BeautifulSoup as BS
 
 
-class Provider(actvid):
+class Provider(pv):
     def __init__(self, base_url) -> None:
         super().__init__(base_url)
         self.base_url = base_url

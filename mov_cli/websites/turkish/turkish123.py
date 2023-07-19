@@ -34,12 +34,8 @@ class Provider(WebScraper):
         episodes = soup.findAll("a", {"class": "episodi"})
         episode = int(self.askepisode(len(episodes)))
         req = self.client.get(episodes[episode - 1]["href"]).text
-        regex = r'''var copyTexti= \['<iframe width="100%" height="100%" src="https:\/\/tukipasti\.com(.*?)"'''
-        s = re.findall(regex, req)[0]
-        req = self.client.get(f"https://tukipasti.com{s}").text
-        url = re.findall("var urlPlay = '(.*?)'", req)[0]
-        print(url)
-        return url, episode, f"https://tukipasti.com{s}"
+        url, tukibase = self.tuki(req)
+        return url, episode, tukibase
 
     def download(self, t):
         req = self.client.get(t[self.url]).text
@@ -47,17 +43,14 @@ class Provider(WebScraper):
         episodes = soup.findAll("a", {"class": "episodi"})
         for e in range(len(episodes)):
             req = self.client.get(episodes[e]["href"]).text
-            regex = r'''var copyTexti= \['<iframe width="100%" height="100%" src="https:\/\/tukipasti\.com(.*?)"'''
-            s = re.findall(regex, req)[0]
-            req = self.client.get(f"https://tukipasti.com{s}").text
-            url = re.findall("var urlPlay = '(.*?)'", req)[0]
+            url, tukibase = self.tuki(req)
             print(url)
             self.dl(
                 url,
                 t[self.title],
                 season="",
                 episode=e + 1,
-                referrer=f"https://tukipasti.com{s}",
+                referrer=tukibase,
             )
 
     def TV_PandDP(self, t: list, state: str):

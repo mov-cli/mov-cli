@@ -9,6 +9,7 @@ english = ["actvid", "sflix", "solar", "dopebox", "remotestream"]
 indian = [
     "tamilyogi",
     "einthusan",
+    "streamblasters",
 ]
 
 asian = [
@@ -65,6 +66,7 @@ calls = {
     "gogoanime": "https://gogoanime.hu",
     "watchasian": "https://watchasian.mx",
     "wlext": "https://wlext.is",
+    "streamblasters": "https://streamblasters.pro",
     "tamilyogi": "https://tamilyogi.bike",
     "einthusan": "https://einthusan.tv",
     "turkish123": "https://turkish123.ac",
@@ -82,18 +84,16 @@ def export(provider: str, typ: str):
 
 def ask(provider: str = None):
     if provider:
-        provider = str(provider).replace(" ", "")
+        provider = provider.replace(" ", "")
         get = calls.get(provider)
-        print(provider)
         if get is None:
-            raise ArgumentError("-p", "No such provider was found")
+            raise Exception("-p: No such provider was found")
         else:
             typ = ""
             for main, sub in ep.items():
                 try:
-                    a = sub.index(provider)
+                    sub.index(provider)
                     typ = main
-                    print(a, typ)
                     break
                 except ValueError:
                     continue

@@ -56,6 +56,18 @@ class ply(Player):
                             ["flatpak", "run", "io.mpv.Mpv"] + mpv_args
                         )
 
+                    if CMD_ARGS.vlc:
+                        vlc_args = [
+                            "vlc",
+                            f'--http-referrer="{referrer}"',
+                            f'"{url}"',
+                            f'--meta-title="mov-cli:{media_title}"',
+                            "--no-terminal",
+                        ]
+                        try:
+                            return subprocess.Popen(vlc_args)
+                        except:
+                            raise PlayerNotFound(self)
                     return subprocess.Popen(["mpv"] + mpv_args)
 
                 elif self.os == "Darwin":
@@ -71,8 +83,9 @@ class ply(Player):
                     )
 
                 else:
-                    print("[!] Could not determine what Player to use on your OS")
-                    sys.exit(1)
+                    raise Exception(
+                        "[!] Could not determine what Player to use on your OS"
+                    )
 
             except ModuleNotFoundError:
                 raise PlayerNotFound(self)
