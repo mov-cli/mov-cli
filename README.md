@@ -72,6 +72,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+The new and improved mov-cli is here.
+
 mov-cli is a Commandline Tool to watch and download shows and movies.
 
 Shows and Movies are sourced from Streaming Sites.
