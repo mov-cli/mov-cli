@@ -46,6 +46,13 @@ class Provider(pv):
         soup = BS(rem, self.scraper)
         return [i["data-id"] for i in soup.select(".link-item")][0]
 
+    def get_link(self, thing_id: str) -> tuple:
+        req = self.client.get(f"{self.base_url}/ajax/sources/{thing_id}").json()[
+            "link"
+        ]
+        print(req)
+        return req, self.rabbit_id(req)
+
     def ep_server_id(self, ep_id):
         rem = self.client.get(
             f"{self.base_url}/ajax/v2/episode/servers/{ep_id}/#servers-list"

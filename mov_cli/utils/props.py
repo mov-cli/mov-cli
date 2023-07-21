@@ -29,7 +29,7 @@ class LanguageNotAOption(Exception):
 
 
 class SelectedNotAvailable(Exception):
-    """Raise when the Movie or Show is not Available."""
+    """Raise when the selected item is not Available or was removed."""
 
     def __init__(self) -> None:
         super().__init__("Not available or it was removed")

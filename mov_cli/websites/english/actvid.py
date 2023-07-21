@@ -40,17 +40,17 @@ class Provider(WebScraper):
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def ask(self, series_id: str) -> tuple:
-        r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
+        r = self.client.get(f"{self.base_url}/ajax/season/list/{series_id}") # self.ajax_season
         season_ids = [
             i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
         ]
         season = self.askseason(len(season_ids))
-        z = f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
+        z = f"{self.base_url}/ajax/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
         episodes = [i["data-id"] for i in BS(rf, self.scraper).select(".nav-item > a")]
         episode = episodes[int(self.askepisode(len(episodes))) - 1]
         ep = self.getep(
-            url=f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
+            url=f"{self.base_url}/ajax/season/episodes/{season_ids[int(season) - 1]}",
             data_id=f"{episode}",
         )
         return episode, season, ep
@@ -74,19 +74,19 @@ class Provider(WebScraper):
         return n[0]["file"]
 
     def server_id(self, mov_id: str) -> str:
-        req = self.client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
+        req = self.client.get(f"{self.base_url}/ajax/episode/list/{mov_id}")
         soup = BS(req, self.scraper)
         return [i["data-linkid"] for i in soup.select(".nav-item > a")][0]
 
     def ep_server_id(self, ep_id: str) -> str:
         req = self.client.get(
-            f"{self.base_url}/ajax/v2/episode/servers/{ep_id}/#servers-list"
+            f"{self.base_url}/ajax/episode/servers/{ep_id}"
         )
         soup = BS(req, self.scraper)
         return [i["data-id"] for i in soup.select(".nav-item > a")][0]
 
     def get_link(self, thing_id: str) -> tuple:
-        req = self.client.get(f"{self.base_url}/ajax/get_link/{thing_id}").json()[
+        req = self.client.get(f"{self.base_url}/ajax/episode/sources/{thing_id}").json()[
             "link"
         ]
         print(req)
@@ -103,7 +103,7 @@ class Provider(WebScraper):
 
     def gh_key(self):
         u = self.client.get(
-            "https://raw.githubusercontent.com/enimax-anime/key/e4/key.txt"
+            "https://raw.githubusercontent.com/enimax-anime/key/e6/key.txt"
         ).text
         return bytes(u, "utf-8")
 
@@ -122,10 +122,12 @@ class Provider(WebScraper):
         return s[: -ord(s[len(s) - 1 :])]
 
     def decrypt(self, data, key):
+        print(data)
         k = self.get_key(base64.b64decode(data)[8:16], key)
         dec_key = k[:32]
         iv = k[32:]
-        p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(base64.b64decode(data)[16:])
+        p = AES.new(dec_key, AES.MODE_CBC, iv=iv)
+        print(p)
         return self.unpad(p).decode()
 
     def ds(self, series_id: str, name):

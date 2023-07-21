@@ -1,8 +1,8 @@
 from fzf import fzf_prompt
 from importlib import import_module
-from .. import CMD_ARGS
-from argparse import ArgumentError
-
+from .props import home, RestartNeeded
+from httpx import get
+import json
 
 english = ["actvid", "sflix", "solar", "dopebox", "remotestream"]
 
@@ -25,11 +25,14 @@ cartoons = ["kisscartoon"]
 
 turkish = ["turkish123", "yoturkish"]
 
+
 sports = ["scdn"]
 
 inter = [
     "wlext",
 ]
+
+ph = []
 
 ep = {
     "english": english,
@@ -41,51 +44,55 @@ ep = {
     "turkish": turkish,
     "sports": sports,
     "international": inter,
+    "porn": ph,
 }
 
 
 preselction = {
-    "English Providers": [english],
-    "Indian Providers": [indian],
-    "Asian Providers": [asian],
-    "LIVETV Providers": [tv],
-    "Cartoons Providers": [cartoons],
-    "Turkish Providers": [turkish],
-    "Anime Providers": [anime],
-    "Sports Providers": [sports],
-    "International Providers": [inter],
-}
-
-calls = {
-    "eja": "https://eja.tv",
-    "actvid": "https://actvid.rs",
-    "sflix": "https://sflix.se",
-    "solar": "https://solarmovie.pe",
-    "dopebox": "https://dopebox.to",
-    "viewasian": "https://viewasian.co",
-    "gogoanime": "https://gogoanime.hu",
-    "watchasian": "https://watchasian.mx",
-    "wlext": "https://wlext.is",
-    "streamblasters": "https://streamblasters.pro",
-    "tamilyogi": "https://tamilyogi.bike",
-    "einthusan": "https://einthusan.tv",
-    "turkish123": "https://turkish123.ac",
-    "scdn": "",
-    "remotestream": "https://remotestre.am",
-    "kisscartoon": "https://thekisscartoon.com",
-    "yoturkish": "https://www1.yoturkish.com",
+    "English Providers": english,
+    "Indian Providers": indian,
+    "Asian Providers": asian,
+    "LIVETV Providers": tv,
+    "Cartoons Providers": cartoons,
+    "Turkish Providers": turkish,
+    "Anime Providers": anime,
+    "Sports Providers": sports,
+    "International Providers": inter,
 }
 
 
-def export(provider: str, typ: str):
-    module = f"mov_cli.websites.{typ}.{provider}"
+def export(provider: str, typ: str, version: str = "mov_cli"):
+    module = f"{version}.websites.{typ}.{provider}"
     return import_module(module)
 
 
+def p():
+    try:
+        js = open(f"{home()}/provider.mov-cli")
+        calls = json.load(js)
+    except FileNotFoundError:
+        online = get("https://raw.githubusercontent.com/mov-cli/provider.mov-cli/main/provider.mov-cli").text
+        open(f"{home()}/provider.mov-cli", "w").write(online)
+        raise RestartNeeded
+
+    from porn_cli.__main__ import websites
+    if ph != []:
+        return dict(calls)
+    for main, sub in websites.items():
+        calls[main] = sub
+        ph.append(str(main))
+        preselction["Porn Providers"] = ph
+    return dict(calls)
+
+
+
 def ask(provider: str = None):
+    updateProvider()
+    calls = p()
     if provider:
         provider = provider.replace(" ", "")
         get = calls.get(provider)
+        print(get)
         if get is None:
             raise Exception("-p: No such provider was found")
         else:
@@ -97,12 +104,41 @@ def ask(provider: str = None):
                     break
                 except ValueError:
                     continue
-            cl = export(provider, typ)
+            if typ.__contains__("porn"):
+                version = "porn_cli"
+            else:
+                version = "mov_cli"
+            cl = export(provider, typ, version)
             return cl, get
     else:
-        init = fzf_prompt(preselction)
-        get = preselction.get(init)[0]
-        choice = fzf_prompt(get)
+        init = fzf_prompt(preselction, header="Select:")
+        if init is None: exit(1)
+        get = preselction.get(init)
+        choice = fzf_prompt(get, header="Select:")
         typ = init.split(" ")[0].lower()
-        cl = export(choice, typ)
+        if typ.__contains__("porn"):
+            version = "porn_cli"
+        else:
+            version = "mov_cli"
+        cl = export(choice, typ, version)
         return cl, calls.get(choice)
+
+
+def updateProvider():
+    from filecmp import cmp
+
+    online = get(
+        "https://raw.githubusercontent.com/mov-cli/provider.mov-cli/main/provider.mov-cli"
+    ).text
+    open(f"{home()}/provider.mov-cli_temp", "w").write(online)
+    check = cmp(f"{home()}/provider.mov-cli", f"{home()}/provider.mov-cli_temp")
+    if check:
+        from os import remove
+
+        remove(f"{home()}/provider.mov-cli_temp")
+    else:
+
+        from os import rename, remove
+
+        remove(f"{home()}/provider.mov-cli")
+        rename(f"{home()}/provider.mov-cli_temp", f"{home()}/provider.mov-cli")

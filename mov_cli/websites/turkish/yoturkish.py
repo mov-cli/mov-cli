@@ -55,7 +55,6 @@ class Provider(WebScraper):
         for e in range(len(episodes)):
             req = self.client.get(episodes[e]["href"]).text
             url, tukibase = self.tuki(req)
-
             print(url)
             self.dl(
                 url,

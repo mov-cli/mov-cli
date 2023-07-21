@@ -26,6 +26,14 @@ class Provider(pv):
         )
         return episode, season, ep
 
+    def get_link(self, thing_id: str) -> tuple:
+        req = self.client.get(f"{self.base_url}/ajax/sources/{thing_id}").json()[
+            "link"
+        ]
+        print(req)
+        return req, self.rabbit_id(req)
+
+
     def getep(self, url, data_id):
         source = self.client.get(f"{url}").text
         soup = BS(source, self.scraper)

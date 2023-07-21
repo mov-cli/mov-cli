@@ -1,8 +1,6 @@
-from os import environ
 from platform import system as pf
 import re
 import subprocess
-from getpass import getuser
 
 import mov_cli.__main__ as movcli
 from fzf import fzf_prompt
@@ -87,7 +85,6 @@ class WebScraper:
         ]
 
         if subtitle:
-            # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(["-vf", f"subtitle={subtitle}", f"{fixname}.mp4"])
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
@@ -100,7 +97,7 @@ class WebScraper:
             ply_process = ply(self).play(url, referrer, name)
             ply_process.wait()
         except PlayerNotFound as e:
-            txt = f"{self.red('[!]')} Could not play {name}: Correct Player for your OS was not found| {e}"
+            txt = f"[!] Could not play: Correct Player for your OS was not found | {e}"
             # logging.log(logging.ERROR, txt)
             print(txt)  # TODO implement logging to a file
             exit(1)
@@ -113,17 +110,16 @@ class WebScraper:
         pass
         # return NotImplementedError()
 
-    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+    def TV_PandDP(self, t: list, state: str):
         pass
 
-    def MOV_PandDP(self, m: list, state: str = "d" or "p"):
+    def MOV_PandDP(self, m: list, state: str):
         pass
 
     def SandR(self, q: str = None):
         return self.results(self.search(q))
 
     def display(self, q: str = None, result_no: int = None):
-        print(q)
         result = self.SandR(q)
         r = []
         for ix, vl in enumerate(result):
@@ -171,7 +167,7 @@ class WebScraper:
                     else:
                         pass
                     modes = modes[::-1]
-                    mode = fzf_prompt(modes)[1]
+                    mode = fzf_prompt(modes, header="Select a mode:")[1]
                     choice = (
                         re.findall(r"\[(.*?)\]", fzf_prompt(r))[0]
                         if not result_no
