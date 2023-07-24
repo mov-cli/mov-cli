@@ -127,11 +127,12 @@ Shows and Movies are sourced from Streaming Sites.
 ### iOS
   - Make sure [Outplayer](https://apps.apple.com/us/app/outplayer/id1449923287) and [iSH](https://apps.apple.com/us/app/ish-shell/id1436902243) are installed.
 
-  - Run following commands (Note: this may take a while, it's iSH fault.)
+  - Run following commands (Note: this may take a while)
     ```
     apk update && apk upgrade
     apk add python3 fzf
     python3 -m ensurepip
+    mkdir /home/root
     pip3 install mov-cli
     ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
