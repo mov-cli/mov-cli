@@ -103,7 +103,7 @@ class Provider(WebScraper):
 
     def gh_key(self):
         u = self.client.get(
-            "https://raw.githubusercontent.com/enimax-anime/key/e6/key.txt"
+            "https://raw.githubusercontent.com/enimax-anime/key/e4/key.txt"
         ).text
         return bytes(u, "utf-8")
 
@@ -122,13 +122,11 @@ class Provider(WebScraper):
         return s[: -ord(s[len(s) - 1 :])]
 
     def decrypt(self, data, key):
-        print(data)
         k = self.get_key(base64.b64decode(data)[8:16], key)
         dec_key = k[:32]
         iv = k[32:]
-        p = AES.new(dec_key, AES.MODE_CBC, iv=iv)
-        print(p)
-        return self.unpad(p).decode()
+        p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(base64.b64decode(data)[16:])
+        return self.unpad(p).decode()   
 
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")

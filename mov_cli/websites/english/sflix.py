@@ -19,11 +19,8 @@ class Provider(pv):
             f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}"
         )
         episodes = [i["data-id"] for i in BS(rf, self.scraper).select(".episode-item")]
-        episode = episodes[int(self.askepisode(len(episodes))) - 1]
-        ep = self.getep(
-            f"{self.base_url}/ajax/v2/season/episodes/{season_ids[int(season) - 1]}",
-            data_id=episode,
-        )
+        ep = self.askepisode(len(episodes))
+        episode = episodes[int(ep) - 1]
         return episode, season, ep
 
     def get_link(self, thing_id: str) -> tuple:

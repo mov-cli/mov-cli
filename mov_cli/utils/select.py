@@ -4,6 +4,8 @@ from .props import home, RestartNeeded
 from httpx import get
 import json
 
+base = {"eja": "https://eja.tv", "actvid": "https://actvid.rs", "sflix": "https://sflix.se", "solar": "https://solarmovie.pe", "dopebox": "https://dopebox.to", "viewasian": "https://viewasian.co", "gogoanime": "https://gogoanimehd.to/", "watchasian": "https://watchasian.mx", "wlext": "https://wlext.is", "streamblasters": "https://streamblasters.pro", "tamilyogi": "https://tamilyogi.email", "einthusan": "https://einthusan.tv", "turkish123": "https://turkish123.ac", "scdn": "", "remotestream": "https://remotestre.am", "kisscartoon": "https://thekisscartoon.com", "yoturkish": "https://www1.yoturkish.com"}
+
 english = ["actvid", "sflix", "solar", "dopebox", "remotestream"]
 
 indian = [
@@ -71,8 +73,7 @@ def p():
         js = open(f"{home()}/provider.mov-cli")
         calls = json.load(js)
     except FileNotFoundError:
-        online = get("https://raw.githubusercontent.com/mov-cli/provider.mov-cli/main/provider.mov-cli").text
-        open(f"{home()}/provider.mov-cli", "w").write(online)
+        open(f"{home()}/provider.mov-cli", "w").write(json.dumps(base))
         raise RestartNeeded
 
     from porn_cli.__main__ import websites
@@ -87,7 +88,6 @@ def p():
 
 
 def ask(provider: str = None):
-    updateProvider()
     calls = p()
     if provider:
         provider = provider.replace(" ", "")
@@ -125,20 +125,33 @@ def ask(provider: str = None):
 
 
 def updateProvider():
-    from filecmp import cmp
+    import tldextract
+    DEFAULT_HEADERS: dict = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/80.0.3987.163 "
+        "Safari/537.36",
+        "Accept-Language": "en-GB,en;q=0.5",
+    }
 
-    online = get(
-        "https://raw.githubusercontent.com/mov-cli/provider.mov-cli/main/provider.mov-cli"
-    ).text
-    open(f"{home()}/provider.mov-cli_temp", "w").write(online)
-    check = cmp(f"{home()}/provider.mov-cli", f"{home()}/provider.mov-cli_temp")
-    if check:
-        from os import remove
-
-        remove(f"{home()}/provider.mov-cli_temp")
-    else:
-
-        from os import rename, remove
-
-        remove(f"{home()}/provider.mov-cli")
-        rename(f"{home()}/provider.mov-cli_temp", f"{home()}/provider.mov-cli")
+    calls = json.loads(open(f"{home()}/provider.mov-cli").read())
+    for main, sub in dict(calls).items():
+        if sub == "":
+            continue
+        try:
+            check = get(sub, follow_redirects=True, headers=DEFAULT_HEADERS, timeout=10)
+        except:
+            continue
+        checkext = tldextract.extract(str(check.url))
+        subext = tldextract.extract(sub)
+        if checkext.registered_domain == subext.registered_domain:
+            print(f"Checked: {main}")
+        else:
+            if checkext.subdomain:
+                updatedurl = "https://" + checkext.subdomain + "." + checkext.registered_domain
+            else:
+                updatedurl = "https://" +  checkext.registered_domain
+            calls[main] = updatedurl
+            print(f"Updated: {main} from {sub} to {updatedurl}")
+    open(f"{home()}/provider.mov-cli", "w").write(json.dumps(calls))
+    print("Provider Check: Done")
+    exit(0)

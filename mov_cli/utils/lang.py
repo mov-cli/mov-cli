@@ -4,8 +4,9 @@ from .props import home
 import mov_cli.__main__ as mc
 from json import loads
 from .props import RestartNeeded, LanguageNotAOption
+from pkgutil import get_data
 
-langsfile = httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text
+langsfile = get_data(__name__, "lang/langs")
 
 sel = eval(langsfile)
 
@@ -31,9 +32,7 @@ def getlang():
         with open(home() + "lang.mov-cli", "r") as f:
             lang = f.read()
         existing(lang)
-        t = httpx.get(
-            f"https://raw.githubusercontent.com/mov-cli/translations/main/languages/{lang}.json"
-        ).json()
+        t = loads(get_data(__name__, f"lang/{lang}.json"))
         ask = t["ASK"]
         ex = t["EXIT"]
         searcha = t["SEARCHA"]

@@ -209,7 +209,6 @@ class WebScraper:
         return dood(url)
 
     def redo(self, search: str = None, result: int = None):
-        print(search)
         return self.display(search, result)
 
     def askseason(self, seasons: int):

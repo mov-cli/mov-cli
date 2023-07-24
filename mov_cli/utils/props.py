@@ -24,7 +24,7 @@ class LanguageNotAOption(Exception):
 
     def __init__(self, lang) -> None:
         super().__init__(
-            f"This language '{lang}' is not available Option in the Language's tab. \r\nPlease delete .mov_cli_lang in your home directory."
+            f"This language '{lang}' is not available Option in the Language's tab. \r\nPlease delete provider.mov-cli in your home directory."
         )
 
 
