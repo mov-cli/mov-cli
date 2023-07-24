@@ -1,4 +1,3 @@
-import httpx
 from fzf import fzf_prompt
 from .props import home
 import mov_cli.__main__ as mc
@@ -8,21 +7,20 @@ from pkgutil import get_data
 
 langsfile = get_data(__name__, "lang/langs")
 
-sel = eval(langsfile)
+langsfile = loads(langsfile)
 
 def existing(language: str, g=False):
-    js = loads(langsfile)
 
     exist = False
 
     if g is False:
-        for _, value in js.items():
+        for _, value in langsfile.items():
             if value == language:
                 exist = True
         if not exist:
             raise LanguageNotAOption(language)
     else:
-        for _, value in js.items():
+        for _, value in langsfile.items():
             if value == language:
                 exist = True
         return exist
@@ -59,6 +57,6 @@ def getlang():
         raise RestartNeeded
 
 def setlang():
-    s = fzf_prompt(sel)
-    selection = sel.get(s)
+    s = fzf_prompt(langsfile)
+    selection = langsfile.get(s)
     open(home() + "lang.mov-cli", "w").write(selection)
