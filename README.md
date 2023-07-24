@@ -32,7 +32,7 @@
   </a>
 
   <p align="center">
- A cli tool to browse and watch Movies/Shows/TV/Sports. 
+    A cli tool to browse and watch Movies/Shows/TV/Sports. 
     <br />
     <br />
     <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
@@ -72,14 +72,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+The new and improved mov-cli is here.
+
 mov-cli is a Commandline Tool to watch and download shows and movies.
 
-Shows and Movies are scraped from Streaming Sites.
+Shows and Movies are sourced from Streaming Sites.
 
-mov-cli currently scrapes 15 Providers:
-```
-Actvid · SFlix · Solar · DopeBox · WLEXT · KinoX · StreamBlasters · TamilYogi · Einthusan · ViewAsian · Watchasian · GogoAnime · Eja · KimCartoon · Turkish123
-```
 <p align="right">(<a href="#readme-top">back to top</a>)</p
 
 <!-- GETTING STARTED -->

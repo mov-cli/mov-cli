@@ -1,28 +1,38 @@
 import httpx
-import platform as pf
-import os
-from os import environ
-import json
 from fzf import fzf_prompt
+from .props import home
+import mov_cli.__main__ as mc
+from json import loads
+from .props import RestartNeeded, LanguageNotAOption
+from pkgutil import get_data
 
-sel = eval(
-    httpx.get("https://raw.githubusercontent.com/mov-cli/translations/main/langs").text
-)
+langsfile = get_data(__name__, "lang/langs")
 
+sel = eval(langsfile)
 
-def homepath() -> str:
-    plt = pf.system()
-    if plt == "Windows":
-        username = environ["username"]
-        return f"C:/Users/{username}/"
-    elif (plt == "Linux") or (plt == "Darwin"):
-        return f"/home/{os.getlogin()}/"
+def existing(language: str, g=False):
+    js = loads(langsfile)
 
+    exist = False
+
+    if g is False:
+        for _, value in js.items():
+            if value == language:
+                exist = True
+        if not exist:
+            raise LanguageNotAOption(language)
+    else:
+        for _, value in js.items():
+            if value == language:
+                exist = True
+        return exist
 
 def getlang():
     try:
-        with open(homepath() + "lang.json", "r") as f:
-            t = json.load(f)
+        with open(home() + "lang.mov-cli", "r") as f:
+            lang = f.read()
+        existing(lang)
+        t = loads(get_data(__name__, f"lang/{lang}.json"))
         ask = t["ASK"]
         ex = t["EXIT"]
         searcha = t["SEARCHA"]
@@ -36,42 +46,19 @@ def getlang():
         t = [ask, ex, searcha, download, spro, dshow, dseason, season, episode, change]
         return t
     except FileNotFoundError:
-        t = httpx.get(
-            "https://raw.githubusercontent.com/mov-cli/translations/main/languages/en.json"
-        ).json()
-        ask = t["ASK"]
-        ex = t["EXIT"]
-        searcha = t["SEARCHA"]
-        download = t["DOWNLOAD"]
-        spro = t["SPROVIDER"]
-        dshow = t["DSHOW"]
-        dseason = t["DSEASON"]
-        season = t["SEASON"]
-        episode = t["EPISODE"]
-        change = t["CHANGE"]
-        t = [ask, ex, searcha, download, spro, dshow, dseason, season, episode, change]
-        return t
-    except json.decoder.JSONDecodeError:
-        plt = pf.system()
-        if plt == "Windows":
-            username = environ["username"]
-            print(
-                rf"Please delete the lang.json in this directory: C:\Users\{username}"
-            )
-            exit(0)
-        elif (plt == "Linux") or (plt == "Darwin"):
-            print(
-                f"Please delete the lang.json in this directory: /home/{os.getlogin()}/"
-            )
-            exit(0)
+        import locale
 
+        localLang = locale.getdefaultlocale()[0][:2]
+        check = existing(localLang, True)
+        if check is True:
+            lang = localLang
+        else:
+            lang = "en"
+        open(home() + "lang.mov-cli", "w").write(lang)
+        print(f"[?] Your Language was set to {lang}")
+        raise RestartNeeded
 
 def setlang():
     s = fzf_prompt(sel)
     selection = sel.get(s)
-    print(selection)
-    txt = httpx.get(
-        f"https://raw.githubusercontent.com/mov-cli/translations/main/languages/{selection}.json"
-    ).text
-    with open(homepath() + "lang.json", "w") as f:
-        f.write(txt)
+    open(home() + "lang.mov-cli", "w").write(selection)

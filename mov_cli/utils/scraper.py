@@ -1,10 +1,6 @@
-import logging
-import os
-
-# import platform
+from platform import system as pf
 import re
 import subprocess
-import sys
 
 import mov_cli.__main__ as movcli
 from fzf import fzf_prompt
@@ -14,20 +10,10 @@ from .lang import getlang, setlang
 from .player import PlayerNotFound
 from ..players.player import ply
 from ..extractors.doodstream import dood
+from ..extractors.tukipasti import tukipasti
 
 # import shlex
 # required for development
-
-# Not needed
-# def determine_path() -> str:
-#    plt = platform.system()
-#    if plt == "Windows":
-#        return f"C://Users//{os.getenv('username')}//Downloads"
-#    elif (plt == "Linux") or (plt == "Darwin"):
-#        return f"/home/{os.getlogin()}/Downloads"
-#    else:
-#        print("Please open an issue for your os")
-#        sys.exit(-2)
 
 
 class WebScraper:
@@ -49,6 +35,8 @@ class WebScraper:
             self.change,
         ) = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
         self.scraper = self.parser()
+        self.dseasonp = False
+        self.dshowp = False
         pass
 
     def parser(self):
@@ -73,7 +61,7 @@ class WebScraper:
         referrer: str = None,
     ):
         name = self.parse(name)
-        fixname = re.sub(r"-+", " ", name)
+        fixname = re.sub(r"-+ +", " ", name)
         if episode:
             fixname = f"{fixname} S{season}E{episode}"
 
@@ -97,12 +85,10 @@ class WebScraper:
         ]
 
         if subtitle:
-            # args.extend(f'-vf subtitle="{subtitle}" {self.parse(name)}.mp4')
             args.extend(["-vf", f"subtitle={subtitle}", f"{fixname}.mp4"])
         ffmpeg_process = subprocess.Popen(args)
         ffmpeg_process.wait()
-
-        return print(f"Downloaded at {os.getcwd()}")
+        return
 
     def play(self, url: str, name: str, referrer=None):
         if referrer is None:
@@ -111,10 +97,10 @@ class WebScraper:
             ply_process = ply(self).play(url, referrer, name)
             ply_process.wait()
         except PlayerNotFound as e:
-            txt = f"{self.red('[!]')} Could not play {name}: Correct Player for your OS was not found| {e}"
+            txt = f"[!] Could not play: Correct Player for your OS was not found | {e}"
             # logging.log(logging.ERROR, txt)
             print(txt)  # TODO implement logging to a file
-            sys.exit(1)
+            exit(1)
 
     def search(self, q: str = None) -> str:
         pass
@@ -124,10 +110,10 @@ class WebScraper:
         pass
         # return NotImplementedError()
 
-    def TV_PandDP(self, t: list, state: str = "d" or "p"):
+    def TV_PandDP(self, t: list, state: str):
         pass
 
-    def MOV_PandDP(self, m: list, state: str = "d" or "p"):
+    def MOV_PandDP(self, m: list, state: str):
         pass
 
     def SandR(self, q: str = None):
@@ -144,18 +130,19 @@ class WebScraper:
                 f"[s] {self.translated[self.searcha]}",
                 f"[d] {self.translated[self.download]}",
                 f"[p] {self.translated[self.sprovider]}",
-                f"[sd] {self.translated[self.dshow]}",
-                f"[ds] {self.translated[self.dseason]}",
                 f"[c] {self.translated[self.change]}",
             ]
         )
         r = r[::-1]
         choice = ""
         while choice not in range(len(result) + 1):
-            pre = fzf_prompt(r)
-            choice = re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+            choice = (
+                re.findall(r"\[(.*?)\]", fzf_prompt(r))[0]
+                if not result_no
+                else result_no
+            )
             if choice == "q":
-                sys.exit()
+                exit()
             elif choice == "s":
                 return self.redo()
             elif choice == "p":
@@ -165,75 +152,49 @@ class WebScraper:
                 return movcli.movcli()
             elif choice == "d":
                 try:
-                    pre = fzf_prompt(r)
+                    modes = [f"[d] {self.translated[self.download]}"]
+                    if self.dshowp and self.dseasonp:
+                        modes.extend(
+                            [
+                                f"[s] {self.translated[self.dshow]}",
+                                f"[e] {self.translated[self.dseason]}",
+                            ]
+                        )
+                    elif self.dseasonp is True:
+                        modes.append(f"[e] {self.translated[self.dseason]}")
+                    elif self.dshowp is True:
+                        modes.append(f"[s] {self.translated[self.dshow]}")
+                    else:
+                        pass
+                    modes = modes[::-1]
+                    mode = fzf_prompt(modes, header="Select a mode:")[1]
                     choice = (
-                        re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
+                        re.findall(r"\[(.*?)\]", fzf_prompt(r))[0]
+                        if not result_no
+                        else result_no
                     )
                     mov_or_tv = result[int(choice) - 1]
                     if mov_or_tv[self.mv_tv] == "TV":
-                        self.TV_PandDP(mov_or_tv, "d")
+                        self.TV_PandDP(mov_or_tv, mode)
                     else:
-                        self.MOV_PandDP(mov_or_tv, "d")
+                        if mode == "e" or mode == "s":
+                            print(
+                                "Those options are not unavailable for movies. Using d."
+                            )
+                            mode = "d"
+                        self.MOV_PandDP(mov_or_tv, mode)
                 except ValueError as e:
                     print(
                         "[!]  Invalid Choice Entered! | ",
                         str(e),
                     )
-                    sys.exit(1)
+                    exit(1)
                 except IndexError as e:
                     print(
                         "[!]  This Episode is coming soon! | ",
                         str(e),
                     )
-                    sys.exit(2)
-            elif choice == "sd":
-                try:
-                    pre = fzf_prompt(r)
-                    choice = (
-                        re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
-                    )
-                    mov_or_tv = result[int(choice) - 1]
-                    if mov_or_tv[self.mv_tv] == "TV":
-                        self.TV_PandDP(mov_or_tv, "sd")
-                    else:
-                        print("You selected a Movie")
-                        exit(0)
-                except ValueError as e:
-                    print(
-                        "[!]  Invalid Choice Entered! | ",
-                        str(e),
-                    )
-                    sys.exit(1)
-                except IndexError as e:
-                    print(
-                        "[!]  This Episode is coming soon! | ",
-                        str(e),
-                    )
-                    sys.exit(2)
-            elif choice == "ds":
-                try:
-                    pre = fzf_prompt(r)
-                    choice = (
-                        re.findall(r"\[(.*?)\]", pre)[0] if not result_no else result_no
-                    )
-                    mov_or_tv = result[int(choice) - 1]
-                    if mov_or_tv[self.mv_tv] == "TV":
-                        self.TV_PandDP(mov_or_tv, "ds")
-                    else:
-                        print("You selected a Movie")
-                        exit(0)
-                except ValueError as e:
-                    print(
-                        "[!]  Invalid Choice Entered! | ",
-                        str(e),
-                    )
-                    sys.exit(1)
-                except IndexError as e:
-                    print(
-                        "[!]  This Episode is coming soon! | ",
-                        str(e),
-                    )
-                    sys.exit(2)
+                    exit(2)
             else:
                 mov_or_tv = result[int(choice) - 1]
                 if mov_or_tv[self.mv_tv] == "TV":
@@ -241,11 +202,13 @@ class WebScraper:
                 else:
                     self.MOV_PandDP(mov_or_tv, "p")
 
+    def tuki(self, html: str):
+        return tukipasti(html)
+
     def doodstream(self, url: str):
         return dood(url)
 
     def redo(self, search: str = None, result: int = None):
-        print(result)
         return self.display(search, result)
 
     def askseason(self, seasons: int):
