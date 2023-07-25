@@ -62,7 +62,6 @@
   <li><a href="#usage">Usage</a></li>
   <li><a href="#disclaimer">Disclaimer</a></li>
   <li><a href="#contributing">Contributing</a></li>
-  <li><a href="#add-a-language">Adding Languages</a></li>
   <li><a href="#license">License</a></li>
   <li><a href="#contact">Contact</a></li>
   <li><a href="#inspiration">inspiration</a></li>
@@ -173,18 +172,6 @@ Contributors:
 <a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
 </a>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<!-- ADDING LANGUAGES -->
-## Add a Language
-Please go to [mov-cli/translations](https://github.com/mov-cli/translations) there are instructions on how to add a Language.
-
-<!-- LICENSE -->
-## License
-
-Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
