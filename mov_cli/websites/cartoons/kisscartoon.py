@@ -82,14 +82,11 @@ class Provider(WebScraper):
         return hls, inter_1
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):
-        if state == "sd":
-            self.download(t)
-            return
         name = t[self.title]
         link, episode = self.ask(t[self.url])
         url, ref = self.cdn_url(link)
         if state == "d":
-            self.dl(url, name, season=".", episode=episode)
+            self.dl(url, name, episode=episode)
             return
         self.play(url, name, referrer=ref)
 
@@ -98,8 +95,5 @@ class Provider(WebScraper):
         url, ref = self.cdn_url(m[self.url])
         if state == "d":
             self.dl(url, name)
-            return
-        if state == "sd":
-            print("You can download only Shows with 'sd'")
             return
         self.play(url, name, referrer=ref)

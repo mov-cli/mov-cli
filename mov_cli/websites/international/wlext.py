@@ -91,7 +91,7 @@ class Provider(WebScraper):
         url, episode = self.ask(t[self.url])
         url = str(self.cdn_url(url))
         if state == "d":
-            self.dl(url, name, season=".", episode=episode)
+            self.dl(url, name, episode=episode)
             return
         self.play(url, name)
 

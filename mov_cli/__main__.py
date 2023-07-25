@@ -8,7 +8,7 @@ if platform.system() == "Windows":
     os.system("color FF")  # Fixes colour in Windows 10 CMD terminal
 
 
-def movcli(): # TODO add regex
+def movcli():  # TODO add regex
     if CMD_ARGS.debug:
         cl, url = ask(CMD_ARGS.p)
         provider: WebScraper = cl.Provider(url)

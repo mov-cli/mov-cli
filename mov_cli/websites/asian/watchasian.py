@@ -82,6 +82,6 @@ class Provider(WebScraper):
         link, episode = self.ask(t[self.url])
         url = self.doodstream(link)
         if state == "d":
-            self.dl(url, name, season=".", episode=episode)
+            self.dl(url, name, episode=episode)
             return
         self.play(url, name)

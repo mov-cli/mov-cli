@@ -12,6 +12,7 @@ CMD_ARGS = args_parser.parse_args()
 
 if CMD_ARGS.pupdate:
     from .utils.select import updateProvider
+
     updateProvider()
 
 """Arguments parsed from the command line via argparse."""

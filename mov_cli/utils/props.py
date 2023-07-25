@@ -1,5 +1,5 @@
 from platform import system as pf
-from os import environ
+from os import environ, mkdir, path
 from getpass import getuser
 
 
@@ -7,10 +7,13 @@ def home():
     plt = pf()
     if plt == "Windows":
         username = environ["username"]
-        return f"C:/Users/{username}/"
+        return f"C:/Users/{username}/AppData/Roaming/mov-cli"
     elif (plt == "Linux") or (plt == "Darwin"):
-        return f"/home/{getuser()}/"
+        return f"/home/{getuser()}/.config/mov-cli"
 
+def firstStart():
+    if not path.exists(home()):
+        mkdir(home())
 
 class RestartNeeded(Exception):
     """Raise when mov-cli is needed to restart."""
@@ -24,7 +27,7 @@ class LanguageNotAOption(Exception):
 
     def __init__(self, lang) -> None:
         super().__init__(
-            f"This language '{lang}' is not available Option in the Language's tab. \r\nPlease delete lang.mov-cli in your home directory."
+            f"This language '{lang}' is not available Option in the Language's tab. \r\nPlease delete lang.mov-cli in {home()}"
         )
 
 

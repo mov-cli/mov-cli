@@ -40,7 +40,9 @@ class Provider(WebScraper):
         return [list(sublist) for sublist in zip(title, urls, ids, mov_or_tv)]
 
     def ask(self, series_id: str) -> tuple:
-        r = self.client.get(f"{self.base_url}/ajax/season/list/{series_id}") # self.ajax_season
+        r = self.client.get(
+            f"{self.base_url}/ajax/season/list/{series_id}"
+        )  # self.ajax_season
         season_ids = [
             i["data-id"] for i in BS(r, self.scraper).select(".dropdown-item")
         ]
@@ -48,25 +50,10 @@ class Provider(WebScraper):
         z = f"{self.base_url}/ajax/season/episodes/{season_ids[int(season) - 1]}"
         rf = self.client.get(z)
         episodes = [i["data-id"] for i in BS(rf, self.scraper).select(".nav-item > a")]
-        episode = episodes[int(self.askepisode(len(episodes))) - 1]
-        ep = self.getep(
-            url=f"{self.base_url}/ajax/season/episodes/{season_ids[int(season) - 1]}",
-            data_id=f"{episode}",
-        )
+        ep = self.askepisode(len(episodes))
+        episode = episodes[int(ep) - 1]
         return episode, season, ep
-
-    def getep(self, url, data_id):
-        source = self.client.get(f"{url}").text
-
-        soup = BS(source, self.scraper)
-
-        unformated = soup.find("a", {"data-id": f"{data_id}"})["title"]
-
-        formated = unformated.split("Eps")[1]
-        formated = formated.split(":")[0]
-
-        return formated
-
+    
     def cdn_url(self, final_link: str, rabb_id: str) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
         data = self.client.get(f"{final_link}getSources?id={rabb_id}").json()
@@ -79,16 +66,14 @@ class Provider(WebScraper):
         return [i["data-linkid"] for i in soup.select(".nav-item > a")][0]
 
     def ep_server_id(self, ep_id: str) -> str:
-        req = self.client.get(
-            f"{self.base_url}/ajax/episode/servers/{ep_id}"
-        )
+        req = self.client.get(f"{self.base_url}/ajax/episode/servers/{ep_id}")
         soup = BS(req, self.scraper)
         return [i["data-id"] for i in soup.select(".nav-item > a")][0]
 
     def get_link(self, thing_id: str) -> tuple:
-        req = self.client.get(f"{self.base_url}/ajax/episode/sources/{thing_id}").json()[
-            "link"
-        ]
+        req = self.client.get(
+            f"{self.base_url}/ajax/episode/sources/{thing_id}"
+        ).json()["link"]
         print(req)
         return req, self.rabbit_id(req)
 
@@ -126,7 +111,7 @@ class Provider(WebScraper):
         dec_key = k[:32]
         iv = k[32:]
         p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(base64.b64decode(data)[16:])
-        return self.unpad(p).decode()   
+        return self.unpad(p).decode()
 
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")

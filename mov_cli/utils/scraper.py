@@ -62,8 +62,11 @@ class WebScraper:
     ):
         name = self.parse(name)
         fixname = re.sub(r"-+ +", " ", name)
-        if episode:
+        if episode and season:
             fixname = f"{fixname} S{season}E{episode}"
+        
+        if episode:
+            fixname = f"{fixname} E{episode}"
 
         if referrer:
             referrer = referrer

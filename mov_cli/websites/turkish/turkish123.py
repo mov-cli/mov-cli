@@ -60,6 +60,6 @@ class Provider(WebScraper):
         name = t[self.title]
         url, episode, ref = self.ask(t[self.url])
         if state == "d":
-            self.dl(url, name, season=".", episode=episode)
+            self.dl(url, name, episode=episode)
             return
         self.play(url, name, referrer=ref)
