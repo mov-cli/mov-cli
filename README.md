@@ -131,7 +131,7 @@ Shows and Movies are sourced from Streaming Sites.
     apk update && apk upgrade
     apk add python3 fzf
     python3 -m ensurepip
-    mkdir /home/root
+    mkdir /home/root && mkdir /home/root/.config
     pip3 install mov-cli
     ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
