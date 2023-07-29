@@ -7,7 +7,6 @@ from .props import firstStart
 
 base = {
     "eja": "https://eja.tv",
-    "actvid": "https://actvid.rs",
     "sflix": "https://sflix.se",
     "solar": "https://solarmovie.pe",
     "dopebox": "https://dopebox.to",
@@ -25,7 +24,7 @@ base = {
     "yoturkish": "https://www1.yoturkish.com",
 }
 
-english = ["actvid", "sflix", "solar", "dopebox", "remotestream"]
+english = ["sflix", "solar", "dopebox", "remotestream"] # actvid is not using dokicloud
 
 indian = [
     "tamilyogi",
