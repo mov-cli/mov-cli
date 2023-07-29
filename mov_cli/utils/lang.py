@@ -2,7 +2,7 @@ from fzf import fzf_prompt
 from .props import home
 import mov_cli.__main__ as mc
 from json import loads
-from .props import RestartNeeded, LanguageNotAOption
+from .props import LanguageNotAOption
 from pkgutil import get_data
 
 langsfile = get_data(__name__, "lang/langs")

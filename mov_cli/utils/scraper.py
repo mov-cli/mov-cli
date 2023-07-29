@@ -1,4 +1,3 @@
-from platform import system as pf
 import re
 import subprocess
 

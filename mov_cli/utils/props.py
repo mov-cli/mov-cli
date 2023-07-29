@@ -1,17 +1,24 @@
-from platform import system as pf
 from os import environ, mkdir, path
 from getpass import getuser
+from .player import Player
 
 
 def home():
-    plt = pf()
+    plt = Player().os
     if plt == "Windows":
         username = environ["username"]
         return f"C:/Users/{username}/AppData/Roaming/mov-cli"
-    elif (plt == "Linux") or (plt == "Darwin"):
+    elif plt == "Linux":
         return f"/home/{getuser()}/.config/mov-cli"
+    elif plt == "Android":
+        return "/storage/emulated/0/mov-cli"
+    elif plt == "iOS":
+        return "/root/mov-cli_config"
+    elif plt == "Darwin":
+        return f"/Users/{getuser()}/Library/Application Support/mov-cli"
 
 def firstStart():
+    print(home())
     if not path.exists(home()):
         mkdir(home())
 

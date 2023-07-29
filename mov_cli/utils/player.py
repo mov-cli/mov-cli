@@ -14,7 +14,7 @@ import sys
 class Player:
     """A base class for players in mov-cli."""
 
-    def __init__(self, display_name: str) -> None:
+    def __init__(self, display_name: str = None) -> None:
         self.__display_name = display_name
 
         self.__os = platform.system()

@@ -1,5 +1,4 @@
 import argparse
-from .utils.props import home
 
 args_parser = argparse.ArgumentParser()
 args_parser.add_argument("--flatpak-mpv", action="store_true")

@@ -91,12 +91,15 @@ def p():
     firstStart()
     try:
         js = open(f"{home()}/provider.mov-cli")
+        calls = json.load(js)
     except FileNotFoundError:
         with open(f"{home()}/provider.mov-cli", "w") as f:
             f.write(json.dumps(base))
-            js = f.read()
-    calls = json.load(js)
-
+        raise RestartNeeded
+    except json.decoder.JSONDecodeError:
+        with open(f"{home()}/provider.mov-cli", "w") as f:
+            f.write(json.dumps(base))
+        raise RestartNeeded
     try:
         from porn_cli.__main__ import websites
 

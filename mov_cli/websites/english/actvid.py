@@ -5,6 +5,7 @@ import hashlib
 
 # import chardet
 from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
 from urllib import parse as p
 from ...utils.scraper import WebScraper
 from bs4 import BeautifulSoup as BS
@@ -80,17 +81,25 @@ class Provider(WebScraper):
     def rabbit_id(self, url: str) -> tuple:
         parts = p.urlparse(url, allow_fragments=True, scheme="/").path.split("/")
         return (
-            re.findall(r"(https:\/\/.*\/embed-4)", url)[0].replace(
-                "embed-4", "ajax/embed-4/"
+            re.findall(r"(https:\/\/.*\/embed-1)", url)[0].replace(
+                "embed-1", "embed-1/ajax/e-1/"
             ),
             parts[-1],
         )
 
+    ## Decrypting the sources
+
+    def repair_base64(self, s):
+        missing_padding = len(s) % 4
+        if missing_padding != 0:
+            s += '=' * (4 - missing_padding)
+        return s
+
     def gh_key(self):
-        u = self.client.get(
-            "https://raw.githubusercontent.com/enimax-anime/key/e4/key.txt"
-        ).text
-        return bytes(u, "utf-8")
+        response_key = self.client.get('https://github.com/enimax-anime/key/blob/e6/key.txt').json()
+        key = response_key["payload"]["blob"]["rawLines"][0]
+        key = eval(key)
+        return key
 
     def md5(self, data):
         return hashlib.md5(data).digest()
@@ -102,16 +111,36 @@ class Provider(WebScraper):
             x = self.md5(x + key + salt)
             currentkey += x
         return currentkey
+    
+    def decrypt_aes(self, encrypted_data, key):
+        dec_key = key[:32]
+        iv = key[32:]
+        print(iv, dec_key)
+        cipher = AES.new(dec_key, AES.MODE_CBC, iv=iv)
+        decrypted_data = unpad(cipher.decrypt(encrypted_data[16:]), AES.block_size)
+        return decrypted_data.decode('utf-8')
 
-    def unpad(self, s):
-        return s[: -ord(s[len(s) - 1 :])]
+    def decrypt(self, data, key): # dokicloud = pain :'(
+        data = self.repair_base64(data)
+        sources_array = list(data)
+        extracted_key = ""
 
-    def decrypt(self, data, key):
-        k = self.get_key(base64.b64decode(data)[8:16], key)
-        dec_key = k[:32]
-        iv = k[32:]
-        p = AES.new(dec_key, AES.MODE_CBC, iv=iv).decrypt(base64.b64decode(data)[16:])
-        return self.unpad(p).decode()
+        for index in key:
+            for i in range(index[0], index[1]):
+                extracted_key += data[i]
+                sources_array[i] = ""
+        
+        extracted_key = self.get_key(base64.b64decode(data)[8:16], bytes(extracted_key, "utf-8"))
+            
+        data_source = "".join(sources_array)
+
+        key = extracted_key
+
+        decrypted = self.decrypt_aes(base64.b64decode(data_source), key)
+        
+        return decrypted
+
+    ## End of decrypting the sources
 
     def ds(self, series_id: str, name):
         r = self.client.get(f"{self.base_url}/ajax/v2/tv/seasons/{series_id}")
@@ -177,9 +206,3 @@ class Provider(WebScraper):
             self.dl(url, name)
             return
         self.play(url, name)
-
-    def SandR(self, q: str = None):
-        return self.results(self.search(q))
-
-    def redo(self, query: str = None, result: int = None):
-        return self.display(query)
