@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mov-cli"
-version = "1.4.8"
+version = "1.4.9"
 description = "A cli tool to browse and watch Movies/Shows/TV/Sports."
 authors = ["Pain <painedposeidon444@gmail.com>"]
 maintainers = ["Ananas <ananas@r3tr0ananas.lol>"]

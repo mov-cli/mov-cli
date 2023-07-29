@@ -98,7 +98,7 @@ class Provider(WebScraper):
     def gh_key(self):
         response_key = self.client.get('https://github.com/enimax-anime/key/blob/e6/key.txt').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
-        key = eval(key)
+        key = json.loads(key)
         return key
 
     def md5(self, data):
