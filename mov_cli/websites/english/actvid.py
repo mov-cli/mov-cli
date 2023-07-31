@@ -89,6 +89,12 @@ class Provider(WebScraper):
 
     ## Decrypting the sources
 
+    def is_base64(self, s):
+        try:
+            base64.b64encode(s)
+        except Exception:
+            return False
+
     def repair_base64(self, s):
         missing_padding = len(s) % 4
         if missing_padding != 0:
@@ -115,9 +121,8 @@ class Provider(WebScraper):
     def decrypt_aes(self, encrypted_data, key):
         dec_key = key[:32]
         iv = key[32:]
-        print(iv, dec_key)
         cipher = AES.new(dec_key, AES.MODE_CBC, iv=iv)
-        decrypted_data = unpad(cipher.decrypt(encrypted_data[16:]), AES.block_size)
+        decrypted_data = unpad(cipher.decrypt(encrypted_data[16:]), cipher.block_size)
         return decrypted_data.decode('utf-8')
 
     def decrypt(self, data, key): # dokicloud = pain :'(

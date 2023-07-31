@@ -2,6 +2,7 @@ from .actvid import Provider as pv
 from bs4 import BeautifulSoup as BS
 from urllib import parse as p
 import re
+import json
 
 class Provider(pv):
     def __init__(self, base_url) -> None:
@@ -36,7 +37,7 @@ class Provider(pv):
     def gh_key(self):
         response_key = self.client.get('https://github.com/enimax-anime/key/blob/e4/key.txt').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
-        key = eval(key)
+        key = json.loads(key)
         return key
 
     def server_id(self, mov_id):
