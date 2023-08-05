@@ -15,7 +15,7 @@ base = {
     "watchasian": "https://watchasian.mx",
     "wlext": "https://wlext.is",
     "streamblasters": "https://streamblasters.pro",
-    "tamilyogi": "https://tamilyogi.email",
+    "tamilyogi": "https://tamilyogi.ninja",
     "einthusan": "https://einthusan.tv",
     "turkish123": "https://turkish123.ac",
     "scdn": "",
