@@ -11,7 +11,7 @@ base = {
     "solar": "https://solarmovie.pe",
     "dopebox": "https://dopebox.to",
     "viewasian": "https://viewasian.co",
-    "gogoanime": "https://gogoanimehd.to",
+    "gogoanime": "https://gogoanimehd.io",
     "watchasian": "https://watchasian.mx",
     "wlext": "https://wlext.is",
     "streamblasters": "https://streamblasters.pics",
