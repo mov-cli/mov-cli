@@ -32,7 +32,7 @@ class Provider(WebScraper):
         items = soup.findAll("div", {"class": "block2"})
         urls = [items[i].find("a")["href"] for i in range(len(items))]
         title = [
-            items[i].find("h3").text + " | " + items[i].find("span").text
+            items[i].find("h3").text + " | " + items[i].find("span").text + " | " + str(items[i].find("div", {"class": "info"}).find("p")).split("<p>")[1].split("<span>")[0]
             for i in range(len(items))
         ]
         ids = [i for i in range(len(items))]
