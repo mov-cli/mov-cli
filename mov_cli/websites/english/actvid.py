@@ -58,7 +58,7 @@ class Provider(WebScraper):
     def cdn_url(self, final_link: str, rabb_id: str) -> str:
         self.client.set_headers({"X-Requested-With": "XMLHttpRequest"})
         data = self.client.get(f"{final_link}getSources?id={rabb_id}").json()
-        n = json.loads(self.decrypt(data["sources"], self.gh_key()))
+        n = self.decryption(data["sources"])
         return n[0]["file"]
 
     def server_id(self, mov_id: str) -> str:
@@ -89,61 +89,58 @@ class Provider(WebScraper):
 
     ## Decrypting the sources
 
-    def is_base64(self, s):
-        try:
-            base64.b64encode(s)
-        except Exception:
-            return False
-
-    def repair_base64(self, s):
-        missing_padding = len(s) % 4
-        if missing_padding != 0:
-            s += '=' * (4 - missing_padding)
-        return s
-
     def gh_key(self):
         response_key = self.client.get('https://github.com/enimax-anime/key/blob/e6/key.txt').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)
         return key
 
-    def md5(self, data):
-        return hashlib.md5(data).digest()
+    def key_extraction(self, string, table):
+        decrypted_key = []
+        offset = 0
+        encrypted_string = string
 
-    def get_key(self, salt, key):
-        x = self.md5(key + salt)
-        currentkey = x
-        while len(currentkey) < 48:
-            x = self.md5(x + key + salt)
-            currentkey += x
-        return currentkey
-    
-    def decrypt_aes(self, encrypted_data, key):
-        dec_key = key[:32]
-        iv = key[32:]
-        cipher = AES.new(dec_key, AES.MODE_CBC, iv=iv)
-        decrypted_data = unpad(cipher.decrypt(encrypted_data[16:]), cipher.block_size)
-        return decrypted_data.decode('utf-8')
+        for start, end in table:
+            decrypted_key.append(encrypted_string[start - offset:end - offset])
+            encrypted_string = (
+                encrypted_string[:start - offset] + encrypted_string[end - offset:]
+            )
+            offset += end - start
 
-    def decrypt(self, data, key): # dokicloud = pain :'(
-        data = self.repair_base64(data)
-        sources_array = list(data)
-        extracted_key = ""
+        return "".join(decrypted_key), encrypted_string
 
-        for index in key:
-            for i in range(index[0], index[1]):
-                extracted_key += data[i]
-                sources_array[i] = ""
-        
-        extracted_key = self.get_key(base64.b64decode(data)[8:16], bytes(extracted_key, "utf-8"))
-            
-        data_source = "".join(sources_array)
+    def md5(self, input_bytes):
+        return hashlib.md5(input_bytes).digest()
 
-        key = extracted_key
+    def gen_key(self, salt, secret):
+        key = self.md5(secret + salt)
+        current_key = key
+        while len(current_key) < 48:
+            key = self.md5(key + secret + salt)
+            current_key += key
+        return current_key
 
-        decrypted = self.decrypt_aes(base64.b64decode(data_source), key)
-        
-        return decrypted
+    def aes_decrypt(self, decryption_key, source_url):
+        cipher_data = self.base64_decode_array(source_url)
+        encrypted = cipher_data[16:]
+        AES_CBC = AES.new(
+            decryption_key[:32], AES.MODE_CBC, iv=decryption_key[32:]
+        )
+        decrypted_data = unpad(
+            AES_CBC.decrypt(encrypted), AES.block_size
+        )
+        return decrypted_data.decode("utf-8")
+
+    def base64_decode_array(self, encoded_str):
+        return bytearray(base64.b64decode(encoded_str))
+
+    def decryption(self, string):
+        key, new_string = self.key_extraction(string, self.gh_key())
+        decryption_key = self.gen_key(
+            self.base64_decode_array(new_string)[8:16], key.encode("utf-8")
+        )
+        main_decryption = self.aes_decrypt(decryption_key, new_string)
+        return json.loads(main_decryption)
 
     ## End of decrypting the sources
 

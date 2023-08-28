@@ -2,14 +2,13 @@ from bs4 import BeautifulSoup as BS
 from ...utils.scraper import WebScraper
 import re
 import httpx
-
-cdn_url_re = r"/\\\/cdn\\\/hls\\\/([a-fA-F\d]{32})\\\/master\.txt/gm"
-
+import json
 
 class Provider(WebScraper):
     def __init__(self, base_url):
         super().__init__(base_url)
         self.base_url = base_url
+        self.get_video = "https://comedyshow.to/player/index.php?data={}&do=getVideo"
 
     def search(self, q: str = None) -> str:
         q = input(f"[!] {self.translated[self.task]}") if q is None else q
@@ -65,20 +64,10 @@ class Provider(WebScraper):
             inter_1 = self.client.get(
                 f"{self.base_url}/ajax-get-link-stream/?server=streamango&filmId={film_id}"
             ).text
-        self.client.add_elem({"Referer": self.base_url})
-        inter_2 = self.client.get(inter_1).text
-        hls = re.findall("\\\/cdn\\\/hls\\\/([a-fA-F\d]*)\\\/master\.txt", inter_2)[0]
-        videoServer = re.findall('"videoServer":"(.*?)"', inter_2)[0]
-        hls = (
-            "https://comedyshow.to"
-            + "/cdn/hls/"
-            + hls
-            + "/master.txt"
-            + "?s="
-            + videoServer
-            + "&d="
-        )
-        print(hls)
+        self.client.add_elem({"X-Requested-With": "XMLHttpRequest"})
+        hls = re.findall("\/video\/(.*)", inter_1)[0]
+        post_req = self.client.post(self.get_video.format(hls), {"hash": hls, "r": "https://thekisscartoon.com/"})
+        hls = json.loads(post_req.text)["videoSource"].replace("\/", "/")
         return hls, inter_1
 
     def TV_PandDP(self, t: list, state: str = "d" or "p" or "sd"):

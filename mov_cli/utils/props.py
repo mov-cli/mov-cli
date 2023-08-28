@@ -11,7 +11,7 @@ def home():
     elif plt == "Linux":
         return f"/home/{getuser()}/.config/mov-cli"
     elif plt == "Android":
-        return "/storage/emulated/0/mov-cli"
+        return f"/home/{getuser()}/storage/mov-cli"
     elif plt == "iOS":
         return "/root/mov-cli_config"
     elif plt == "Darwin":
@@ -21,6 +21,7 @@ def firstStart():
     print(home())
     if not path.exists(home()):
         mkdir(home())
+
 
 class RestartNeeded(Exception):
     """Raise when mov-cli is needed to restart."""
