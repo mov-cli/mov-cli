@@ -54,6 +54,7 @@
       <li><a href="#installation">Installation</a></li>
       <ul>
         <li><a href="#windows--linux">Windows / Linux</a></li>
+        <li><a href="#linux">Linux Builds</a></li>
         <li><a href="#android">Android</a></li>
         <li><a href="#ios">iOS</a></li>
       </ul>
@@ -62,7 +63,6 @@
   <li><a href="#usage">Usage</a></li>
   <li><a href="#disclaimer">Disclaimer</a></li>
   <li><a href="#contributing">Contributing</a></li>
-  <li><a href="#license">License</a></li>
   <li><a href="#contact">Contact</a></li>
   <li><a href="#inspiration">inspiration</a></li>
 </ol>
@@ -104,6 +104,14 @@ Shows and Movies are sourced from Streaming Sites.
     ```
     pip install lxml
     ```
+<!-- LINUX -->
+### Linux
+There are MPR and AUR Builds.
+
+- [MPR Build](https://mpr.makedeb.org/packages/mov-cli)
+- [AUR Build](https://aur.archlinux.org/packages/mov-cli-git)
+
+Disclaimer: They are not maintained by us. It's Community Builds
 
 
 <!-- ANDROID --> 
