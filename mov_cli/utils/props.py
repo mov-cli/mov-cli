@@ -11,7 +11,7 @@ def home():
     elif plt == "Linux":
         return f"/home/{getuser()}/.config/mov-cli"
     elif plt == "Android":
-        return f"/home/{getuser()}/storage/mov-cli"
+        return f"/data/data/com.termux/files/home"
     elif plt == "iOS":
         return "/root/mov-cli_config"
     elif plt == "Darwin":
