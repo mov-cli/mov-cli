@@ -3,18 +3,22 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..media import Media
+    from ..config import Config
 
 import sys
 import subprocess
 from devgoldyutils import Colours
 
+from .. import Config
 from .player import Player, PlayerNotFound, PlayerNotSupported
+
+__all__ = ("MPV",)
 
 # NOTE: Incomplete code.
 
 class MPV(Player):
-    def __init__(self) -> None:
-        super().__init__(Colours.PURPLE.apply("MPV"))
+    def __init__(self, config: Config) -> None:
+        super().__init__(Colours.PURPLE.apply("MPV"), config)
 
     def play(self, media: Media) -> subprocess.Popen:
         if self.platform == "Android":
@@ -52,7 +56,7 @@ class MPV(Player):
                         "--no-terminal",
                     ]
 
-                    if CMD_ARGS.flatpak_mpv and self.platform == "Linux":  # Support for MPV on Flatpak.
+                    if self.config.flatpak_mpv and self.platform == "Linux":  # Support for MPV on Flatpak.
                         self.logger.info("Using flatpak installation of MPV.")
                         return subprocess.Popen(
                             ["flatpak", "run", "io.mpv.Mpv"] + mpv_args
@@ -61,7 +65,7 @@ class MPV(Player):
                     return subprocess.Popen(["mpv"] + mpv_args)
 
                 elif self.platform == "Darwin":
-                    return subprocess.Popen( # TODO: Move this to it's own player class.
+                    return subprocess.Popen(
                         [
                             "iina",
                             "--no-stdin",

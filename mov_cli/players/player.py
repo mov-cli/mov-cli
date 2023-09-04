@@ -3,19 +3,24 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..media import Media
+    from ..config import Config
     from ..utils.platform import SUPPORTED_PLATFORMS
 
 import subprocess
-from .. import utils
-from .. import mov_cli_logger
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
+from .. import utils, mov_cli_logger
+
+__all__ = ("Player", "PlayerNotFound", "PlayerNotSupported")
+
 class Player(ABC):
     """A base class for all players in mov-cli."""
-    def __init__(self, display_name: str) -> None:
+    def __init__(self, display_name: str, config: Config) -> None:
         self.display_name = display_name
         """Display name of player."""
+        self.config = config
+        """Mov-cli configuration."""
         self.platform: SUPPORTED_PLATFORMS = utils.what_platform() # TODO: I might move this somewhere more centralized in the future. I'm not sure at the moment.
         """Operating system this device is running."""
 
