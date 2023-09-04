@@ -139,7 +139,7 @@ Pull requests are welcome and _appreciated_. For major changes, please open an i
 
 ## Contact
 - Author: **Poseidon444** | Discord: ``pain444``
-- Maintainer: **HLOAnanas** | Discord: ``r3tr0ananas``
+- Maintainer: **R3tr0Ananas** | Discord: ``r3tr0ananas``
 - Maintainer: **Goldy** | Discord: ``g0ldy_``
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
