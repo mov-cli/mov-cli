@@ -1,47 +1,24 @@
-
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
 
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
-
-<!-- PROJECT LOGO -->
-<br />
 <div align="center">
+
+  [![Stargazers][stars-shield]][stars-url]
+  [![Issues][issues-shield]][issues-url]
+  [![MIT License][license-shield]][license-url]
+
   <a href="https://github.com/mov-cli/mov-cli">
-    <img src="https://github.com/mov-cli/mov-cli/assets/132799819/a23bec13-881d-41b9-b596-b31c6698b89e" alt="Logo" width="80" height="80">
+    <img src="https://github.com/mov-cli/mov-cli/assets/132799819/a23bec13-881d-41b9-b596-b31c6698b89e" alt="Logo" width="200">
   </a>
 
-  <p align="center">
-    A cli tool to browse and watch Movies/Shows/TV/Sports. 
-    <br />
-    <br />
-    <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
-  </p>
+  <sub>A cli tool to stream Movies, Shows, LIVE-TV and Sports.</sub>
+  <br>
+  <br>
+  <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
+  ·
+  <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
+
 </div>
 
-<!-- TABLE OF CONTENTS -->
 ### Table of Contents
 <ol>
   <li>
@@ -67,8 +44,6 @@
   <li><a href="#inspiration">inspiration</a></li>
 </ol>
 
-
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
 The new and improved mov-cli is here.
@@ -77,13 +52,10 @@ mov-cli is a Commandline Tool to watch and download shows and movies.
 
 Shows and Movies are sourced from Streaming Sites.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
+
 ## Getting Started
-
-
-
 ### Prerequisites
 
 - [`mpv`](https://mpv.io) - player used for Windows, Linux and Android
@@ -94,7 +66,6 @@ Shows and Movies are sourced from Streaming Sites.
 
 
 ## Installation
-<!-- WIN AND LINUX -->
 ### Windows / Linux
   - Run this Command inside your Terminal
     ``` 
@@ -104,7 +75,7 @@ Shows and Movies are sourced from Streaming Sites.
     ```
     pip install lxml
     ```
-<!-- LINUX -->
+
 ### Linux
 There are MPR and AUR Builds.
 
@@ -113,8 +84,6 @@ There are MPR and AUR Builds.
 
 #### Disclaimer: They are not maintained by us.
 
-
-<!-- ANDROID --> 
 ### Android               
   - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) are installed.
   
@@ -129,8 +98,6 @@ There are MPR and AUR Builds.
     pip install lxml
     ```
 
-
-<!-- IOS -->
 ### iOS
   - Make sure [Outplayer](https://apps.apple.com/us/app/outplayer/id1449923287) and [iSH](https://apps.apple.com/us/app/ish-shell/id1436902243) are installed.
 
@@ -144,38 +111,25 @@ There are MPR and AUR Builds.
     ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- USAGE EXAMPLES -->
 ## Usage
-
-Type: ```mov-cli``` into your Commandline.
+Type: ``mov-cli`` into your command line.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- DISCLAIMER -->
 ## Disclaimer
-
 This project is to be used at the user’s own risk, based on their government and laws.
 
 This project has no control on the content it is serving, using copyrighted content from the providers is not going to be accounted for by the developer. It is the user’s own risk.
 
-[More on That](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
+[[More on That]](./disclaimer.md)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- Feature -->
 ## Feature
-
 If you want a feature, create an [issue](https://github.com/mov-cli/mov-cli/issues/new) or create the feature and make a pull request.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTRIBUTING -->
+
 ## Contributing
-
-
 Pull requests are welcome and _appreciated_. For major changes, please open an issue first to discuss what you would like to change.
-
-Contributors:
 
 <a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
@@ -183,25 +137,18 @@ Contributors:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- CONTACT -->
 ## Contact
-
-Author: Poseidon444 | ```Discord: pain444```
-
-Maintainer: HLOAnanas | ```Discord: r3tr0ananas```
-
-Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
+- Author: **Poseidon444** | Discord: ``pain444``
+- Maintainer: **HLOAnanas** | Discord: ``r3tr0ananas``
+- Maintainer: **Goldy** | Discord: ``g0ldy_``
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- Inspiration -->
-## Inspiration
 
+## Inspiration
 Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
