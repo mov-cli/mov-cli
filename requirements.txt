@@ -1,6 +1,0 @@
-beautifulsoup4
-httpx
-pycryptodome
-six
-krfzf-py
-tldextract

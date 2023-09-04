@@ -1,7 +1,7 @@
-__pycache__/
-.idea/*
+__pycache__
 .DS_Store
-dist/*
-build/*
+dist
+build
 mov_cli.egg-info/*
 env
+venv

@@ -1,6 +1,0 @@
-include LICENSE
-include requirements.txt
-include mov_cli/utils/*
-include mov_cli/websites/*
-include mov_cli/extractors/*
-include mov_cli/extractors/sportcentral/*

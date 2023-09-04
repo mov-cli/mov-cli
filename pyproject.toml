@@ -1,29 +1,53 @@
-[tool.poetry]
+[project]
 name = "mov-cli"
-version = "1.5.4"
-description = "A cli tool to browse and watch Movies/Shows/TV/Sports."
-authors = ["Pain <painedposeidon444@gmail.com>"]
-maintainers = ["Ananas <ananas@r3tr0ananas.lol>"]
-license = "GPLv3"
-readme = "README.md"
-packages = [{include = "mov_cli"}]
-repository = "https://github.com/mov-cli/mov-cli"
+description = "A cli tool to stream Movies, Shows, LIVE-TV and Sports."
+authors = [
+    {name = "Pain", email = "painedposeidon444@gmail.com"},
+    {name = "Ananas", email = "ananas@r3tr0ananas.lol"},
+    {name = "Goldy", email = "goldy@devgoldy.xyz"}
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+keywords = [
+    "movie-cli", "mov_cli"
+]
+classifiers = [
+	'Operating System :: Microsoft :: Windows :: Windows 11',
+    'Operating System :: Microsoft :: Windows :: Windows 10',
+    'Operating System :: POSIX :: Linux',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+	'Programming Language :: Python :: 3.11'
+]
+dependencies = [
+    "requests",
+    "importlib-metadata; python_version<'3.8'"
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-beautifulsoup4 = "^4.11.2"
-httpx = "^0.24.0"
-pycryptodome = "^3.17"
-six = "^1.16.0"
-krfzf-py = ">=0.0.4,<0.0.7"
-tldextract = "^3.4.3"
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "build"
+]
+
+[project.urls]
+GitHub = "https://github.com/mov-cli/mov-cli"
+BugTracker = "https://github.com/mov-cli/mov-cli/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "mov_cli.__version__" }
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
 
-[tool.poetry.scripts]
-mov-cli = "mov_cli.__main__:movcli"
+[tool.setuptools]
+packages = ["mov_cli"]
 
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/mov-cli/mov-cli/issues"
+[project.scripts]
+mov-cli = "mov_cli.cli.__main__:mov_cli"
