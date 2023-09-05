@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 import sys
 import subprocess
 from devgoldyutils import Colours
+from time import sleep
 
 from .. import Config
 from .player import Player, PlayerNotFound, PlayerNotSupported
@@ -43,7 +44,10 @@ class MPV(Player):
                 f"\033]8;;outplayer://{media.url}\033\\-------------------------\n- Tap to open Outplayer -\n-------------------------\033]8;;\033\\\n"
             )
 
-            sys.exit(1) # NOTE: Is this needed? ~ Goldy
+            self.logger.info("Sleeping for 10 Seconds.")
+
+            sleep(10)
+            
 
         else: # Windows, Linux and Other
 

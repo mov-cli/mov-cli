@@ -17,7 +17,7 @@ __all__ = ("Config",)
 class Config():
     """Class that wraps the mov-cli configuration file."""
     def __init__(self, config_path: Path = None) -> None:
-        mov_cli_data_path = platformdirs.user_data_path("mov_cli", ensure_exists = True) # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
+        mov_cli_data_path = platformdirs.site_data_dir("mov_cli", ensure_exists = True) # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
 
         if config_path is None:
             config_path = Path.joinpath(mov_cli_data_path, "mov_cli.toml")
@@ -48,3 +48,9 @@ class Config():
     def flatpak_mpv(self) -> bool:
         """Returns whether we should use the flatpak version of mpv on Linux."""
         return self.data.get("flatpak_mpv", False)
+
+    @property
+    def dl_location(self) -> str:
+        """Returns download loaction. Defaults to OS's Download loaction."""
+        return self.data.get("dl_loaction", platformdirs.user_downloads_dir())
+
