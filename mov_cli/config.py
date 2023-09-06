@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .players import Player
-    from typing import Type, Dict
+    from typing import Type, Dict, Union
+
+    JSON_VALUES = Union[str, bool, int, dict]
 
 import os
 import toml
@@ -30,7 +32,7 @@ class Config():
 
             config_file.close()
 
-        self.data: Dict[str, str | bool | int] = toml.load(config_path)
+        self.data: Dict[str, JSON_VALUES] = toml.load(config_path)
 
     @property
     def player(self) -> Type[Player]:
@@ -50,7 +52,12 @@ class Config():
         return self.data.get("flatpak_mpv", False)
 
     @property
-    def dl_location(self) -> str:
-        """Returns download loaction. Defaults to OS's Download loaction."""
-        return self.data.get("dl_loaction", platformdirs.user_downloads_dir())
+    def download_location(self) -> str:
+        """Returns download location. Defaults to OS's download location."""
+        default_location = platformdirs.user_downloads_dir()
+        downloads_config = self.data.get("downloads")
 
+        if downloads_config is not None:
+            return downloads_config.get("download_location", default_location)
+
+        return default_location

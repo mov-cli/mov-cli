@@ -47,7 +47,7 @@ class MPV(Player):
             self.logger.info("Sleeping for 10 Seconds.")
 
             sleep(10)
-            
+
 
         else: # Windows, Linux and Other
 
