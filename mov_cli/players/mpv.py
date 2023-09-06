@@ -5,12 +5,10 @@ if TYPE_CHECKING:
     from ..media import Media
     from ..config import Config
 
-import sys
 import subprocess
-from devgoldyutils import Colours
 from time import sleep
+from devgoldyutils import Colours
 
-from .. import Config
 from .player import Player, PlayerNotFound, PlayerNotSupported
 
 __all__ = ("MPV",)

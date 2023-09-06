@@ -4,12 +4,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Literal
 
+    SUPPORTED_PLATFORMS = Literal["Windows", "Linux", "Android", "Darwin", "iOS"]
+
 import sys
 import platform
 
-__all__ = ("what_platform", "SUPPORTED_PLATFORMS")
-
-SUPPORTED_PLATFORMS = Literal["Windows", "Linux", "Android", "Darwin", "iOS"]
+__all__ = ("what_platform",)
 
 def what_platform() -> SUPPORTED_PLATFORMS:
     """

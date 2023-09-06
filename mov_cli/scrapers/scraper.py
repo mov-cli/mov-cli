@@ -9,7 +9,7 @@ DEFAULT_HEADERS: dict = {
 __all__ = ("Scraper",)
 
 class Scraper():
-    def __init__(self, base_url) -> None:
+    def __init__(self, base_url: str) -> None:
         """Anything HTTP/HTTPS related for mov-cli"""   
         self.http = httpx.Client(timeout=15.0, headers=DEFAULT_HEADERS, cookies=None)
         self.base_url = base_url

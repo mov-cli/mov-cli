@@ -27,7 +27,9 @@ dependencies = [
     "importlib-metadata; python_version<'3.8'",
     "toml",
     "devgoldyutils>=2.5.6",
-    "platformdirs>=3.10.0"
+    "platformdirs>=3.10.0",
+    "click",
+    "pyfzf"
 ]
 
 dynamic = ["version"]
