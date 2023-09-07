@@ -87,7 +87,7 @@ class Scraper():
         ...
     
     def getMedia(self, season: int = None, episode: int = None) -> Media: # TODO: Find better name
-        """Get URL. Returns Media Object."""
+        """Gets Media. Returns Media Object."""
         ...
 
     def __movie(self) -> dict:
