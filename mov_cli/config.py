@@ -61,3 +61,38 @@ class Config():
             return downloads_config.get("download_location", default_location)
 
         return default_location
+    
+    @property
+    def debug(self) -> bool:
+        """Returns a Logging Setting. Defaults to Logging.INFO"""
+        from logging import DEBUG, INFO
+        debug = self.data.get("debug") 
+        if debug:
+            return DEBUG
+        else:
+            return INFO
+
+    @property
+    def proxy(self) -> dict:
+        """Returns proxy data. Defaults to None"""
+        
+        proxy_config = self.data.get("proxy")
+
+        if proxy_config is not None:
+            proxy = None
+
+            username = proxy_config.get("username")
+            password = proxy_config.get("password")
+
+            scheme = proxy_config.get("scheme")
+            ip = proxy_config.get("ip")
+            port = proxy_config.get("port")
+            
+            if username and password:
+                proxy = f"{scheme}://{username}:{password}@{ip}:{port}"
+            else:
+                proxy = f"{scheme}://{ip}:{port}"
+
+            return {"all://": proxy}
+        else:
+            return None

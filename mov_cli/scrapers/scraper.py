@@ -1,4 +1,15 @@
 import httpx
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from httpx import Response
+    from ..config import Config
+    from ..media import Media
+
+from devgoldyutils import LoggerAdapter
+
+from .. import mov_cli_logger
+
 
 DEFAULT_HEADERS: dict = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0",
@@ -9,24 +20,33 @@ DEFAULT_HEADERS: dict = {
 __all__ = ("Scraper",)
 
 class Scraper():
-    def __init__(self, base_url: str) -> None:
+    def __init__(self, base_url: str, config: Config) -> None:
         """Anything HTTP/HTTPS related for mov-cli"""   
-        self.http = httpx.Client(timeout=15.0, headers=DEFAULT_HEADERS, cookies=None)
+        self.config = config
+        
+        self.__http = httpx.Client(timeout=15.0, headers=DEFAULT_HEADERS, cookies=None, proxies=self.config.proxy)
+
         self.base_url = base_url
 
-    def get(self, url: str, redirect: bool = False) -> httpx.Response:
-        """Makes a GET request and returns httpx.Response"""
-        self.http.headers["Referer"] = url
+        self.logger = LoggerAdapter(mov_cli_logger, prefix = "Scraper")
 
-        get = self.http.get(url, follow_redirects=redirect)
+    def get(self, url: str, redirect: bool = False) -> Response:
+        """Makes a GET request and returns httpx.Response"""
+        self.logger.debug(f"GET: {url}")
+
+        self.__http.headers["Referer"] = url
+
+        get = self.__http.get(url, follow_redirects=redirect)
 
         return get
 
-    def post(self, url: str, data: dict = None, json: dict = None) -> httpx.Response:
+    def post(self, url: str, data: dict = None, json: dict = None) -> Response:
         """Makes a POST request and returns httpx.Response"""
-        self.http.headers["Referer"] = url
+        self.logger.debug(f"POST: {url}")
 
-        post = self.http.post(url, data=data, json=json)
+        self.__http.headers["Referer"] = url
+
+        post = self.__http.post(url, data=data, json=json)
 
         return post
 
@@ -36,29 +56,44 @@ class Scraper():
         
         Not recommended
         """
-        self.http.headers = header
+        self.__http.headers = header
 
     def add_header_elem(self, header_elem: dict) -> None:
         """Add header elements to default header."""
         for elem in header_elem:
-            self.http.headers[elem[0]] = elem[1]
+            self.__http.headers[elem[0]] = elem[1]
 
     def set_cookies(self, cookies: dict) -> None:
         """Sets cookies."""
-        self.http.cookies = cookies
+        self.__http.cookies = cookies
 
-    def search(self, query: str) -> httpx.Response:
-        """Search anything. Returns httpx.Response"""
+    def search(self, query: str) -> dict:
+        """Search anything. Returns dict"""
         ...
 
-    def results(self, response: httpx.Response) -> list:
-        """Processes Search. Returns list"""
+    def __results(self, response: Response) -> dict:
+        """Processes Search. Returns dict"""
         ...
 
-    def movie(self, items: list) -> dict:
+    def select(self, selection: int) -> None:
+        """Select a dict. Returns None"""
+
+    def getSeasons(self) -> int:
+        """Get Season. Returns int"""
+        ...
+
+    def getEpisodes(self, season: int) -> int:
+        """Get Episodes. Return int"""
+        ...
+    
+    def getMedia(self, season: int = None, episode: int = None) -> Media: # TODO: Find better name
+        """Get URL. Returns Media Object."""
+        ...
+
+    def __movie(self) -> dict:
         """When a movie is selected, this will process it. Returns dict"""
         ...
 
-    def tv(self, items: list) -> dict:
+    def __tv(self, season: int, episode: int) -> dict:
         """When a show is selected, this will process it. Returns dict"""
         ...
