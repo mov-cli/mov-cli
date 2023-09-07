@@ -10,7 +10,8 @@ import subprocess
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
-from .. import utils, mov_cli_logger
+from .. import utils
+from ..logger import mov_cli_logger
 
 __all__ = ("Player", "PlayerNotFound", "PlayerNotSupported")
 
@@ -24,7 +25,7 @@ class Player(ABC):
         """Mov-cli configuration."""
         self.platform: SUPPORTED_PLATFORMS = (
             utils.what_platform()
-        )  # TODO: I might move this somewhere more centralized in the future. I'm not sure at the moment.
+        ) # TODO: I might move this somewhere more centralized in the future. I'm not sure at the moment.
         """Operating system this device is running."""
 
         self.logger = LoggerAdapter(mov_cli_logger, prefix=self.display_name)

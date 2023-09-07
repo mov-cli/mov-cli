@@ -26,8 +26,7 @@ DEFAULT_HEADERS: dict = {
 
 class Scraper(ABC): # TODO: Re-add the Configs.
     def __init__(self) -> None:
-        """Anything Provider related for mov-cli"""
-
+        """A base class for building scrapers from."""
         self.__http = httpx.Client(
             timeout = 15.0,
             headers = DEFAULT_HEADERS,
@@ -35,6 +34,8 @@ class Scraper(ABC): # TODO: Re-add the Configs.
         )
 
         self.logger = LoggerAdapter(mov_cli_logger, prefix = self.__class__.__name__)
+
+        super().__init__()
 
     @property
     def parser(self) -> Literal["lxml", "html.parser"]:

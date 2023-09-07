@@ -11,45 +11,46 @@ import os
 import toml
 import platformdirs
 from pathlib import Path
+from devgoldyutils import LoggerAdapter
 
-from . import players
+from . import players, mov_cli_logger
 
 __all__ = ("Config",)
 
 
-class Config:
-    """Class that wraps the mov-cli configuration file."""
-
+class Config():
+    """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
     def __init__(self, config_path: Path = None) -> None:
+        self.config_path = config_path
+        self.logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
+
+        template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}mov_cli.template.toml"
         # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
-        mov_cli_data_path = platformdirs.site_data_dir( 
-            "mov_cli", ensure_exists = True
-        )
+        mov_cli_data_path = platformdirs.site_data_dir("mov_cli", ensure_exists = True)
 
-        if config_path is None:
-            config_path = Path.joinpath(Path(mov_cli_data_path), "mov_cli.toml")
+        if self.config_path is None:
+            self.config_path = Path.joinpath(Path(mov_cli_data_path), "mov_cli.toml")
 
-        if not config_path.exists():
-            config_file = open(config_path, "w")
+        if not self.config_path.exists():
+            self.logger.debug("The 'mov-cli.toml' config doesn't exist so we're creating it...")
+            config_file = open(self.config_path, "w")
 
-            with open(
-                f"{Path(os.path.split(__file__)[0])}{os.sep}mov_cli.template.toml",
-                "r",
-            ) as config_file_template:
-                config_file.write(config_file_template)
+            with open(template_config_path, "r") as config_template:
+                config_file.write(config_template.read())
 
             config_file.close()
+            self.logger.debug(f"Config created at '{self.config_path}'.")
 
-        self.data: Dict[str, JSON_VALUES] = toml.load(config_path)
+        self.data: Dict[str, JSON_VALUES] = toml.load(self.config_path).get("mov-cli", {})
 
     @property
     def player(self) -> Type[Player]:
         """Returns the configured player class. Defaults to MPV."""
-        value = self.data.get("player", "mpv")
+        value = self.data.get("player", "mpv").lower()
 
-        if value.lower() == "mpv":
+        if value == "mpv":
             return players.MPV
-        elif value.lower() == "vlc":
+        elif value == "vlc":
             return players.VLC
 
         return players.MPV
@@ -71,20 +72,13 @@ class Config:
         return default_location
 
     @property
-    def debug(self) -> int:
-        """Returns a Logging Setting. Defaults to Logging.INFO"""
-        from logging import DEBUG, INFO
-
-        debug = self.data.get("debug")
-        if debug:
-            return DEBUG
-        else:
-            return INFO
+    def debug(self) -> bool:
+        """Returns whether debug should be enabled or not."""
+        return self.data.get("debug", False)
 
     @property
     def proxy(self) -> dict or None:
         """Returns proxy data. Defaults to None"""
-
         proxy_config = self.data.get("proxy")
 
         if proxy_config is not None:

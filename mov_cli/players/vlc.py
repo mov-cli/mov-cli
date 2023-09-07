@@ -18,8 +18,8 @@ class VLC(Player):
         super().__init__(Colours.ORANGE.apply("VLC"), config)
 
     def play(self, media: Media) -> subprocess.Popen:
-        try:
-            if self.platform == "Linux" or self.platform == "Windows":
+        if self.platform == "Linux" or self.platform == "Windows":
+            try:
                 return subprocess.Popen(
                     [
                         "vlc",
@@ -30,7 +30,7 @@ class VLC(Player):
                     ]
                 )
 
-            raise PlayerNotSupported(self, self.platform)
+            except ModuleNotFoundError:
+                raise PlayerNotFound(self)
 
-        except ModuleNotFoundError:
-            raise PlayerNotFound(self)
+        raise PlayerNotSupported(self, self.platform)
