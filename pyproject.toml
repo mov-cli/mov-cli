@@ -29,7 +29,8 @@ dependencies = [
     "devgoldyutils>=2.5.6",
     "platformdirs>=3.10.0",
     "click",
-    "pyfzf"
+    "pyfzf",
+    "beautifulsoup4"
 ]
 
 dynamic = ["version"]

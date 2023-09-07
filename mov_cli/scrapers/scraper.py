@@ -7,16 +7,16 @@ if TYPE_CHECKING:
     from httpx import Response
     from ..config import Config
 
-from bs4 import BeautifulSoup
-import httpx
-from importlib.util import find_spec
-
-from abc import ABC
-from devgoldyutils import LoggerAdapter
 import json
+import httpx
+from abc import ABC
+from bs4 import BeautifulSoup
+from importlib.util import find_spec
+from devgoldyutils import LoggerAdapter
 
 from .. import mov_cli_logger
 
+__all__ = ("Scraper",)
 
 DEFAULT_HEADERS: dict = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0",
@@ -24,20 +24,24 @@ DEFAULT_HEADERS: dict = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 }
 
-__all__ = ("Scraper",)
-
-
 class Scraper(ABC): # TODO: Re-add the Configs.
     def __init__(self) -> None:
         """Anything Provider related for mov-cli"""
 
         self.__http = httpx.Client(
-            timeout=15.0,
-            headers=DEFAULT_HEADERS,
-            cookies=None,
+            timeout = 15.0,
+            headers = DEFAULT_HEADERS,
+            cookies = None,
         )
 
-        self.logger = LoggerAdapter(mov_cli_logger, prefix="Scraper")
+        self.logger = LoggerAdapter(mov_cli_logger, prefix = self.__class__.__name__)
+
+    @property
+    def parser(self) -> Literal["lxml", "html.parser"]:
+        if find_spec("lxml"):
+            return "lxml"
+
+        return "html.parser"
 
     def get(self, url: str, redirect: bool = False) -> Response:
         """Makes a GET request and returns httpx.Response"""
@@ -76,44 +80,6 @@ class Scraper(ABC): # TODO: Re-add the Configs.
         """Sets cookies."""
         self.__http.cookies = cookies
 
-    def search(self, query: str) -> dict:
-        """Search anything. Returns dict"""
-        ...
-
-    def __results(self, response: Response) -> dict:
-        """Processes Search. Returns dict"""
-        ...
-
-    def select(self, selection: int) -> None:
-        """Select a dict. Returns None"""
-
-    def getSeasons(self) -> int:
-        """Get Season. Returns int"""
-        ...
-
-    def getEpisodes(self, season: int) -> int:
-        """Get Episodes. Return int"""
-        ...
-
-    def getMedia(self, season: int = None, episode: int = None) -> Media:
-        """Gets Media. Returns Media Object."""
-        ...
-
-    def __movie(self) -> dict:
-        """When a movie is selected, this will process it. Returns dict"""
-        ...
-
-    def __tv(self, season: int, episode: int) -> dict:
-        """When a show is selected, this will process it. Returns dict"""
-        ...
-
-    @property
-    def parser(self):
-        if find_spec("lxml"):
-            return "lxml"
-        else:
-            return "html.parser"
-
     def soup(self, html: str) -> BeautifulSoup:
         return BeautifulSoup(html, self.parser)        
 
@@ -140,3 +106,34 @@ class Scraper(ABC): # TODO: Re-add the Configs.
         js["episode"] = episode
         js["year"] = year
         return js
+
+    def search(self, query: str) -> dict:
+        """Search anything. Returns dict"""
+        ...
+
+    def __results(self, response: Response) -> dict:
+        """Processes Search. Returns dict"""
+        ...
+
+    def select(self, selection: int) -> None:
+        """Select a dict. Returns None"""
+
+    def get_seasons(self) -> int:
+        """Get Season. Returns int"""
+        ...
+
+    def get_episodes(self, season: int) -> int:
+        """Get Episodes. Return int"""
+        ...
+
+    def get_media(self, season: int = None, episode: int = None) -> Media:
+        """Gets Media. Returns Media Object."""
+        ...
+
+    def __movie(self) -> dict:
+        """When a movie is selected, this will process it. Returns dict"""
+        ...
+
+    def __tv(self, season: int, episode: int) -> dict:
+        """When a show is selected, this will process it. Returns dict"""
+        ...

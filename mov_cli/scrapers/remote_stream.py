@@ -1,14 +1,15 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from httpx import Response
     from ..config import Config
 
-from ..media import Media
 import re
-from ..scrapers import Scraper
 import json
+
+from . import Scraper
+from ..media import Media
 
 class RemoteStream(Scraper):
     def __init__(self) -> None:
@@ -67,7 +68,7 @@ class RemoteStream(Scraper):
     def select(self, selection: int) -> dict:
         self.__selected = self.__selections[selection]
     
-    def getMedia(self, season: int = None, episode: int = None) -> Media:
+    def get_media(self, season: int = None, episode: int = None) -> Media:
         if self.__selected.get("type") == "show":
             s = self.__tv(season, episode)
         else:
@@ -75,7 +76,7 @@ class RemoteStream(Scraper):
         
         return s
     
-    def getSeasons(self) -> int:
+    def get_seasons(self) -> int:
         if self.__selected.get("type") == "movie":
             return None
         
@@ -86,7 +87,7 @@ class RemoteStream(Scraper):
         seasons = len(soup.findAll("li", {"data-testid": "tab-season-entry"}))
         return seasons
     
-    def getEpisodes(self, season: int) -> int:
+    def get_episodes(self, season: int) -> int:
         if self.__selected.get("type") == "movie":
             return None
         
@@ -116,7 +117,7 @@ class RemoteStream(Scraper):
             "show",
             self.base_url,
             self.__selected.get("img"),
-            self.getSeasons(),
+            self.get_seasons(),
             season,
             episode,
             self.__selected.get("year")

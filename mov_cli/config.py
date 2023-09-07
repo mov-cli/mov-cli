@@ -21,18 +21,19 @@ class Config:
     """Class that wraps the mov-cli configuration file."""
 
     def __init__(self, config_path: Path = None) -> None:
-        mov_cli_data_path = platformdirs.site_data_dir(
-            "mov_cli", ensure_exists=True
-        )  # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
+        # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
+        mov_cli_data_path = platformdirs.site_data_dir( 
+            "mov_cli", ensure_exists = True
+        )
 
         if config_path is None:
-            config_path = Path.joinpath(mov_cli_data_path, "mov_cli.toml")
+            config_path = Path.joinpath(Path(mov_cli_data_path), "mov_cli.toml")
 
         if not config_path.exists():
             config_file = open(config_path, "w")
 
             with open(
-                f"{Path(os.path.split(__file__)[0]).parent}{os.sep}mov_cli.template.toml",
+                f"{Path(os.path.split(__file__)[0])}{os.sep}mov_cli.template.toml",
                 "r",
             ) as config_file_template:
                 config_file.write(config_file_template)

@@ -2,6 +2,6 @@ __pycache__
 .DS_Store
 dist
 build
-mov_cli.egg-info/*
 env
 venv
+mov_cli.egg-info
