@@ -12,6 +12,7 @@ from .player import Player, PlayerNotFound, PlayerNotSupported
 
 __all__ = ("VLC",)
 
+
 class VLC(Player):
     def __init__(self, config: Config) -> None:
         super().__init__(Colours.ORANGE.apply("VLC"), config)
@@ -19,14 +20,15 @@ class VLC(Player):
     def play(self, media: Media) -> subprocess.Popen:
         try:
             if self.platform == "Linux" or self.platform == "Windows":
-
-                return subprocess.Popen([
-                    "vlc",
-                    f'--http-referrer="{media.referrer}"',
-                    f'"{media.url}"',
-                    f'--meta-title="mov-cli:{media.title}"',
-                    "--no-terminal",
-                ])
+                return subprocess.Popen(
+                    [
+                        "vlc",
+                        f'--http-referrer="{media.referrer}"',
+                        f'"{media.url}"',
+                        f'--meta-title="mov-cli:{media.title}"',
+                        "--no-terminal",
+                    ]
+                )
 
             raise PlayerNotSupported(self, self.platform)
 

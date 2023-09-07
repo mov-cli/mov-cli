@@ -16,10 +16,14 @@ from . import players
 
 __all__ = ("Config",)
 
-class Config():
+
+class Config:
     """Class that wraps the mov-cli configuration file."""
+
     def __init__(self, config_path: Path = None) -> None:
-        mov_cli_data_path = platformdirs.site_data_dir("mov_cli", ensure_exists = True) # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
+        mov_cli_data_path = platformdirs.site_data_dir(
+            "mov_cli", ensure_exists=True
+        )  # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
 
         if config_path is None:
             config_path = Path.joinpath(mov_cli_data_path, "mov_cli.toml")
@@ -27,7 +31,10 @@ class Config():
         if not config_path.exists():
             config_file = open(config_path, "w")
 
-            with open(f"{Path(os.path.split(__file__)[0]).parent}{os.sep}mov_cli.template.toml", "r") as config_file_template:
+            with open(
+                f"{Path(os.path.split(__file__)[0]).parent}{os.sep}mov_cli.template.toml",
+                "r",
+            ) as config_file_template:
                 config_file.write(config_file_template)
 
             config_file.close()
@@ -61,21 +68,22 @@ class Config():
             return downloads_config.get("download_location", default_location)
 
         return default_location
-    
+
     @property
-    def debug(self) -> bool:
+    def debug(self) -> int:
         """Returns a Logging Setting. Defaults to Logging.INFO"""
         from logging import DEBUG, INFO
-        debug = self.data.get("debug") 
+
+        debug = self.data.get("debug")
         if debug:
             return DEBUG
         else:
             return INFO
 
     @property
-    def proxy(self) -> dict:
+    def proxy(self) -> dict or None:
         """Returns proxy data. Defaults to None"""
-        
+
         proxy_config = self.data.get("proxy")
 
         if proxy_config is not None:
@@ -87,7 +95,7 @@ class Config():
             scheme = proxy_config.get("scheme")
             ip = proxy_config.get("ip")
             port = proxy_config.get("port")
-            
+
             if username and password:
                 proxy = f"{scheme}://{username}:{password}@{ip}:{port}"
             else:

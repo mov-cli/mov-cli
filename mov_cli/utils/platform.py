@@ -11,16 +11,16 @@ import platform
 
 __all__ = ("what_platform",)
 
+
 def what_platform() -> SUPPORTED_PLATFORMS:
     """
     Returns what platform/OS this device is running on.
-    
+
     E.g. Windows, Linux, Android, Darwin, iOS
     """
     os = platform.system()
 
     if os == "Linux":
-
         if hasattr(sys, "getandroidapilevel"):
             return "Android"
         elif "ish" in platform.platform():

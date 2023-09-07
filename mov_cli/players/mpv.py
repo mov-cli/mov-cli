@@ -15,6 +15,7 @@ __all__ = ("MPV",)
 
 # NOTE: Incomplete code.
 
+
 class MPV(Player):
     def __init__(self, config: Config) -> None:
         super().__init__(Colours.PURPLE.apply("MPV"), config)
@@ -46,9 +47,7 @@ class MPV(Player):
 
             sleep(10)
 
-
-        else: # Windows, Linux and Other
-
+        else:  # Windows, Linux and Other
             try:
                 if self.platform == "Linux" or self.platform == "Windows":
                     mpv_args = [
@@ -58,7 +57,9 @@ class MPV(Player):
                         "--no-terminal",
                     ]
 
-                    if self.config.flatpak_mpv and self.platform == "Linux":  # Support for MPV on Flatpak.
+                    if (
+                        self.config.flatpak_mpv and self.platform == "Linux"
+                    ):  # Support for MPV on Flatpak.
                         self.logger.info("Using flatpak installation of MPV.")
                         return subprocess.Popen(
                             ["flatpak", "run", "io.mpv.Mpv"] + mpv_args
