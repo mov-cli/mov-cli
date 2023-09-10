@@ -4,12 +4,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import List
-    from ...config import Config
+    from ..config import Config
 
 import httpx
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
-from ...media import Metadata, MetadataType
+from ..media import Metadata, MetadataType
 
 __all__ = ("imdb_search", "IMDBMetadata")
 

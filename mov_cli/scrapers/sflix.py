@@ -9,7 +9,8 @@ if TYPE_CHECKING:
 
 import re
 
-from .. import Scraper, scraper_utils
+from .. import scraper_utils
+from ..scraper import Scraper
 from ..media import Series, Movie
 
 from Crypto.Cipher import AES
@@ -20,6 +21,8 @@ from ..media import Metadata, MetadataType
 import hashlib
 import json
 import base64
+
+__all__ = ("Sflix",)
 
 class Sflix(Scraper):
     def __init__(self, config: Config) -> None:

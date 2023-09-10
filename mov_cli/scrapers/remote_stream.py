@@ -7,8 +7,11 @@ if TYPE_CHECKING:
 
 import re
 
-from .. import Scraper, scraper_utils
+from .. import scraper_utils
+from ..scraper import Scraper
 from ..media import Series, Movie, MetadataType, Metadata
+
+__all__ = ("RemoteStream",)
 
 class RemoteStream(Scraper):
     def __init__(self, config: Config) -> None:
