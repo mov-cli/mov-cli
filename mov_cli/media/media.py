@@ -1,48 +1,31 @@
-__all__ = ("Media",)
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from typing import Dict
 
-class Media:
+from enum import Enum
+from dataclasses import dataclass
+
+__all__ = ("MetadataType", "Metadata", "Media")
+
+class MetadataType(Enum):
+    SERIES = 0
+    MOVIE = 1
+
+@dataclass
+class Metadata:
+    title: str
+    type: MetadataType | None
+    image_url: str | None
+    seasons: Dict[int, int] | None
+    year: str | None
+
+class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""
-
-    def __init__(self, data: dict = None) -> None:
-        self.data = data
-
-    @property
-    def url(self) -> str:
-        return self.data.get("url")
-
-    @property
-    def title(self) -> str:
-        return self.data.get("title")
-
-    @property
-    def type(self) -> str:
-        return self.data.get("type")
-
-    @property
-    def referrer(self) -> str:
-        return self.data.get("referrer")
-
-    @property
-    def img(self) -> dict:
-        return self.data.get("img", None)
-
-    @property
-    def id(self) -> str:
-        return self.data.get("id", None)
-
-    @property
-    def seasons(self) -> int:
-        return self.data.get("seasons", None)
-
-    @property
-    def season(self) -> int:
-        return self.data.get("season", None)
-
-    @property
-    def episode(self) -> int:
-        return self.data.get("episode", None)
-
-    @property
-    def year(self) -> str:
-        return self.data.get("year", None)
+    def __init__(self, url: str, title: str, referrer: str) -> None:
+        self.url = url
+        """The stream-able url."""
+        self.title = title
+        """A title to represent this stream-able media."""
+        self.referrer = referrer # TODO: Add docstring for this.

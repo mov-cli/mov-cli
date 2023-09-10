@@ -2,136 +2,97 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from httpx import Response
+    from typing import List
     from ..config import Config
+    from .scraper_utils.imdb import IMDBMetadata
 
 import re
-import json
 
-from . import Scraper
-from ..media import Media
+from . import Scraper, scraper_utils
+from ..media import Series, Movie, MetadataType
 
 class RemoteStream(Scraper):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, config: Config) -> None:
         self.base_url = "https://remotestre.am"
-        self.imdb_sug = "https://v2.sg.media-imdb.com/suggestion/{}/{}.json"
         self.catalogue = "https://remotestre.am/catalogue?display=plain"
         self.imdb_epi = "https://www.imdb.com/title/{}/episodes/"
 
-        self.__selected: dict = {}
-        self.__selections: dict = {}
+        super().__init__(config)
 
-    def search(self, query: str) -> dict:
-        imdb_sug = self.imdb_sug.format(query[0], query)
-        imdb = self.get(imdb_sug)
-        self.selection = self.__results(imdb)
-
-        return self.selection
-        
-    def __results(self, response: Response) -> dict:
-        js = response.json()["d"]
+    def search(self, query: str) -> List[IMDBMetadata]:
+        imdb_metadata_list = scraper_utils.imdb_search(query, self.config)
         catalogue = self.get(self.catalogue)
-        self.__selections = json.loads("{}")
 
-        i = 0
+        metadata_list = []
 
-        for item in js:
-            id = item.get("id", None)
+        for metadata in imdb_metadata_list:
+            id = metadata.id
+
             if id is not None:
                 if not id.startswith("tt"):
                     continue
                 if id not in catalogue.text:
                     continue
-                i += 1
 
-                title = item.get("l")
-                qid = item.get("qid")
-                if qid == "tvSeries":
-                    qid = "show"
-                
-                img = item.get("i")["imageUrl"]
-                    
-                year = item.get("yr", None)
-                if year is None:
-                    year = item.get("y")
-                
-                js_dict = self.__selections[i] = {}
-                js_dict["title"] = title
-                js_dict["id"] = id
-                js_dict["type"] = qid
-                js_dict["img"] = img
-                js_dict["year"] = year
-        
-        return self.__selections
-    
-    def select(self, selection: int) -> dict:
-        self.__selected = self.__selections[selection]
-    
-    def get_media(self, season: int = None, episode: int = None) -> Media:
-        if self.__selected.get("type") == "show":
-            s = self.__tv(season, episode)
-        else:
-            s = self.__movie()
-        
-        return s
-    
-    def get_seasons(self) -> int:
-        if self.__selected.get("type") == "movie":
-            return None
-        
-        id = self.__selected.get("id")
-        imdb_epi = self.imdb_epi.format(id)
-        imdb = self.get(imdb_epi)
-        soup = self.soup(imdb.text)
-        seasons = len(soup.findAll("li", {"data-testid": "tab-season-entry"}))
-        return seasons
-    
-    def get_episodes(self, season: int) -> int:
-        if self.__selected.get("type") == "movie":
-            return None
-        
-        id = self.__selected.get("id")
-        imdb_epi = self.imdb_epi.format(id) + f"?season={season}"
-        imdb = self.get(imdb_epi)
-        soup = self.soup(imdb.text)
-        episodes = len(soup.findAll("article", {"class": "episode-item-wrapper"}))
-        return episodes
+                metadata_list.append(
+                    metadata
+                )
 
-    def cdn(self, season: int = None, episode: int = None) -> str:
-        id = self.__selected.get("id")
-        if season:
-            url = f"https://remotestre.am/e/?imdb={id}&s={season}&e={episode}"
+        return metadata_list
+
+    def scrape(self, metadata: IMDBMetadata, episode: int = None, season: int = None) -> Series | Movie:
+        if metadata.type == MetadataType.SERIES:
+            media = self.__tv(metadata, season, episode)
         else:
-            url = f"https://remotestre.am/e/?imdb={id}"
-        
+            media = self.__movie(metadata)
+
+        return media
+
+    def cdn(self, metadata: IMDBMetadata, season: int = None, episode: int = None) -> str:
+        url = f"https://remotestre.am/e/?imdb={metadata.id}"
+
+        if season and episode:
+            url += f"&s={season}&e={episode}"
+
         req = self.get(url).text
-        file = re.findall('"file":"(.*?)"', req)[0]
-        return file
+        return re.findall('"file":"(.*?)"', req)[0]
 
-    def __tv(self, season: int, episode: int) -> dict:
-        url = self.cdn(season, episode)
-        __dict = self.make_json(
-            self.__selected.get("title"),
-            url,
-            "show",
-            self.base_url,
-            self.__selected.get("img"),
-            self.get_seasons(),
-            season,
-            episode,
-            self.__selected.get("year")
-        )
-        return Media(__dict)
+    def __tv(self, metadata: IMDBMetadata, season: int, episode: int) -> Series:
+        url = self.cdn(metadata, season, episode)
 
-    def __movie(self) -> dict:
-        url = self.cdn()
-        __dict = self.make_json(
-            self.__selected.get("title"),
-            url,
-            "movie",
-            self.base_url,
-            self.__selected.get("img"),
-            year=self.__selected.get("year")
+        #__dict = self.make_json(
+        #    self.__selected.get("title"),
+        #    url,
+        #    "show",
+        #    self.base_url,
+        #    self.__selected.get("img"),
+        #    self.get_seasons(),
+        #    season,
+        #    episode,
+        #    self.__selected.get("year")
+        #)
+
+        return Series(
+            url = url,
+            title = metadata.title,
+            referrer = self.base_url,
+            episode = episode,
+            season = season
         )
-        return Media(__dict)
+
+    def __movie(self, metadata: IMDBMetadata) -> Movie:
+        url = self.cdn(metadata)
+        #__dict = self.make_json(
+        #    self.__selected.get("title"),
+        #    url,
+        #    "movie",
+        #    self.base_url,
+        #    self.__selected.get("img"),
+        #    year=self.__selected.get("year")
+        #)
+        return Movie(
+            url = url,
+            title = metadata.title,
+            referrer = self.base_url,
+            year = metadata.year
+        )

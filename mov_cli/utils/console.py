@@ -21,7 +21,7 @@ def update_available() -> bool:
 
     return False
 
-def welcome_msg(logger: logging.Logger) -> str:  # Inspired by animdl: https://github.com/justfoolingaround/animdl
+def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://github.com/justfoolingaround/animdl
     """Returns cli welcome message."""
     now = datetime.now()
     user_name = random.choice(

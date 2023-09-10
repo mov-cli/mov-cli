@@ -2,67 +2,46 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..media import Media
     from typing import Literal
     from httpx import Response
     from ..config import Config
+    from ..media import Metadata, Series, Movie
 
 import json
 import httpx
-from abc import ABC
 from bs4 import BeautifulSoup
-from importlib.util import find_spec
+from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
 from .. import mov_cli_logger
 
 __all__ = ("Scraper",)
 
-DEFAULT_HEADERS: dict = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-}
-
 class Scraper(ABC): # TODO: Re-add the Configs.
-    def __init__(self) -> None:
+    def __init__(self, config: Config) -> None:
         """A base class for building scrapers from."""
+        self.config = config
+        self.logger = LoggerAdapter(mov_cli_logger, prefix = self.__class__.__name__)
+
         self.__http = httpx.Client(
             timeout = 15.0,
-            headers = DEFAULT_HEADERS,
+            headers = config.headers,
             cookies = None,
         )
 
-        self.logger = LoggerAdapter(mov_cli_logger, prefix = self.__class__.__name__)
-
         super().__init__()
 
-    @property
-    def parser(self) -> Literal["lxml", "html.parser"]:
-        if find_spec("lxml"):
-            return "lxml"
-
-        return "html.parser"
-
     def get(self, url: str, redirect: bool = False) -> Response:
-        """Makes a GET request and returns httpx.Response"""
+        """Makes a GET request and returns httpx.Response."""
         self.logger.debug(f"GET: {url}")
-
         self.__http.headers["Referer"] = url
-
-        get = self.__http.get(url, follow_redirects=redirect)
-
-        return get
+        return self.__http.get(url, follow_redirects = redirect)
 
     def post(self, url: str, data: dict = None, json: dict = None) -> Response:
-        """Makes a POST request and returns httpx.Response"""
+        """Makes a POST request and returns httpx.Response."""
         self.logger.debug(f"POST: {url}")
-
         self.__http.headers["Referer"] = url
-
-        post = self.__http.post(url, data=data, json=json)
-
-        return post
+        return self.__http.post(url, data = data, json = json)
 
     def set_header(self, header: dict) -> None:
         """
@@ -82,53 +61,16 @@ class Scraper(ABC): # TODO: Re-add the Configs.
         self.__http.cookies = cookies
 
     def soup(self, html: str) -> BeautifulSoup:
-        return BeautifulSoup(html, self.parser)        
+        return BeautifulSoup(html, self.config.parser)
 
-    def make_json(
-        self,
-        title: str,
-        url: str,
-        type: Literal["show", "movie"],
-        referrer: str,
-        img: str = None,
-        seasons: int = None,
-        season: int = None,
-        episode: int = None,
-        year: str = None,
-    ) -> dict:
-        js = json.loads("{}")
-        js["title"] = title
-        js["url"] = url
-        js["type"] = type
-        js["referrer"] = referrer
-        js["img"] = img
-        js["seasons"] = seasons
-        js["season"] = season
-        js["episode"] = episode
-        js["year"] = year
-        return js
-
-    def search(self, query: str) -> dict:
-        """Search anything. Returns dict"""
+    @abstractmethod
+    def search(self, query: str) -> Metadata:
+        """Where your searching should be done. This will be called upon search operation."""
         ...
 
-    def __results(self, response: Response) -> dict:
-        """Processes Search. Returns dict"""
-        ...
-
-    def select(self, selection: int) -> None:
-        """Select a dict. Returns None"""
-
-    def get_seasons(self) -> int:
-        """Get Season. Returns int"""
-        ...
-
-    def get_episodes(self, season: int) -> int:
-        """Get Episodes. Return int"""
-        ...
-
-    def get_media(self, season: int = None, episode: int = None) -> Media:
-        """Gets Media. Returns Media Object."""
+    @abstractmethod
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
+        """Where your scraping for the media should be done. Should return an instance of Media."""
         ...
 
     def __movie(self) -> dict:
