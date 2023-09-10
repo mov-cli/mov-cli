@@ -5,3 +5,4 @@ build
 env
 venv
 mov_cli.egg-info
+.ruff_cache
