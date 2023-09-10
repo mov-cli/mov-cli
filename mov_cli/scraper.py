@@ -3,15 +3,15 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from httpx import Response
-    from ..config import Config
-    from ..media import Metadata, Series, Movie
+    from .config import Config
+    from .media import Metadata, Series, Movie
 
 import httpx
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
-from .. import mov_cli_logger
+from . import mov_cli_logger
 
 __all__ = ("Scraper",)
 

@@ -3,20 +3,20 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import List
-    from ...config import Config
     from httpx import Response
+    from ..config import Config
     from bs4 import BeautifulSoup
 
 import re
 
 from .. import Scraper, scraper_utils
-from ...media import Series, Movie
+from ..media import Series, Movie
 
 from Crypto.Cipher import AES
 from abc import ABC
 from Crypto.Util.Padding import unpad
 from urllib import parse as p
-from ...media import Metadata, MetadataType
+from ..media import Metadata, MetadataType
 import hashlib
 import json
 import base64

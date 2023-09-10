@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import List
-    from ...config import Config
+    from ..config import Config
 
 import re
 
 from .. import Scraper, scraper_utils
-from ...media import Series, Movie, MetadataType, Metadata
+from ..media import Series, Movie, MetadataType, Metadata
 
 class RemoteStream(Scraper):
     def __init__(self, config: Config) -> None:

@@ -38,7 +38,8 @@ dynamic = ["version"]
 [project.optional-dependencies]
 dev = [
     "ruff",
-    "build"
+    "build",
+    "devgoldyutils[pprint]>=2.5.6"
 ]
 
 [project.urls]
