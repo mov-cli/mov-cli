@@ -2,12 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Literal
     from httpx import Response
     from ..config import Config
     from ..media import Metadata, Series, Movie
 
-import json
 import httpx
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
