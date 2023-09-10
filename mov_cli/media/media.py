@@ -16,6 +16,7 @@ class MetadataType(Enum):
 @dataclass
 class Metadata:
     title: str
+    id: str | None
     type: MetadataType | None
     image_url: str | None
     seasons: Dict[int, int] | None

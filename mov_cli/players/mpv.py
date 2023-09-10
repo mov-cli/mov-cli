@@ -18,6 +18,7 @@ __all__ = ("MPV",)
 
 class MPV(Player):
     def __init__(self, config: Config) -> None:
+        self.config = config
         super().__init__(Colours.PURPLE.apply("MPV"), config)
 
     def play(self, media: Media) -> subprocess.Popen:
@@ -35,17 +36,6 @@ class MPV(Player):
                     f"{media.url}",
                 ]
             )
-
-        elif self.platform == "iOS":
-            self.logger.info("Detected your using iOS. \r\n")
-
-            print(
-                f"\033]8;;outplayer://{media.url}\033\\-------------------------\n- Tap to open Outplayer -\n-------------------------\033]8;;\033\\\n"
-            )
-
-            self.logger.info("Sleeping for 10 Seconds.")
-
-            sleep(10)
 
         else:  # Windows, Linux and Other
             try:

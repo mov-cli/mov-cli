@@ -15,7 +15,7 @@ __all__ = ("imdb_search", "IMDBMetadata")
 
 @dataclass
 class IMDBMetadata(Metadata):
-    id: str | None # NOTE: Can this even be none? ~ Goldy
+    id: str # NOTE: Everything has a id ~ Ananas
 
 def imdb_search(query: str, config: Config) -> List[IMDBMetadata]:
     imdb_data = httpx.get(

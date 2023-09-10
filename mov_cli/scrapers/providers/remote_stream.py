@@ -3,13 +3,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import List
-    from ..config import Config
-    from .scraper_utils.imdb import IMDBMetadata
+    from ...config import Config
 
 import re
 
-from . import Scraper, scraper_utils
-from ..media import Series, Movie, MetadataType
+from .. import Scraper, scraper_utils
+from ...media import Series, Movie, MetadataType, Metadata
 
 class RemoteStream(Scraper):
     def __init__(self, config: Config) -> None:
@@ -19,7 +18,7 @@ class RemoteStream(Scraper):
 
         super().__init__(config)
 
-    def search(self, query: str) -> List[IMDBMetadata]:
+    def search(self, query: str) -> List[Metadata]:
         imdb_metadata_list = scraper_utils.imdb_search(query, self.config)
         catalogue = self.get(self.catalogue)
 
@@ -40,7 +39,7 @@ class RemoteStream(Scraper):
 
         return metadata_list
 
-    def scrape(self, metadata: IMDBMetadata, episode: int = None, season: int = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, episode: int = None, season: int = None) -> Series | Movie:
         if metadata.type == MetadataType.SERIES:
             media = self.__tv(metadata, season, episode)
         else:
@@ -48,7 +47,7 @@ class RemoteStream(Scraper):
 
         return media
 
-    def cdn(self, metadata: IMDBMetadata, season: int = None, episode: int = None) -> str:
+    def cdn(self, metadata: Metadata, season: int = None, episode: int = None) -> str:
         url = f"https://remotestre.am/e/?imdb={metadata.id}"
 
         if season and episode:
@@ -57,20 +56,8 @@ class RemoteStream(Scraper):
         req = self.get(url).text
         return re.findall('"file":"(.*?)"', req)[0]
 
-    def __tv(self, metadata: IMDBMetadata, season: int, episode: int) -> Series:
+    def __tv(self, metadata: Metadata, season: int, episode: int) -> Series:
         url = self.cdn(metadata, season, episode)
-
-        #__dict = self.make_json(
-        #    self.__selected.get("title"),
-        #    url,
-        #    "show",
-        #    self.base_url,
-        #    self.__selected.get("img"),
-        #    self.get_seasons(),
-        #    season,
-        #    episode,
-        #    self.__selected.get("year")
-        #)
 
         return Series(
             url = url,
@@ -80,16 +67,9 @@ class RemoteStream(Scraper):
             season = season
         )
 
-    def __movie(self, metadata: IMDBMetadata) -> Movie:
+    def __movie(self, metadata: Metadata) -> Movie:
         url = self.cdn(metadata)
-        #__dict = self.make_json(
-        #    self.__selected.get("title"),
-        #    url,
-        #    "movie",
-        #    self.base_url,
-        #    self.__selected.get("img"),
-        #    year=self.__selected.get("year")
-        #)
+
         return Movie(
             url = url,
             title = metadata.title,

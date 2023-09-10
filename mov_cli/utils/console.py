@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
+    from typing import Literal
 
 import random
 import getpass
@@ -21,6 +22,26 @@ def update_available() -> bool:
 
     return False
 
+def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
+    now = datetime.now()
+    p = now.strftime("%p")
+    I = int(now.strftime("%I"))
+
+    if p == "AM":
+        if I >= 6:
+            return "Good Morning"
+        else:
+            return "Good Night"
+    else:
+        if I <= 5:
+            return "Good Afternoon"
+        elif I > 5 and I <= 8:
+            return "Good Evening"
+        elif I > 8:
+            return "Good Night"
+
+
+
 def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://github.com/justfoolingaround/animdl
     """Returns cli welcome message."""
     now = datetime.now()
@@ -38,11 +59,9 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
             f"\nError >> {e}"
         )
 
-    greetings = random.choice(("Hello", "Welcome", "Greetings"))
-
-    text = f"{greetings}, {Colours.ORANGE.apply(user_name)}."
+    text = f"{greetings()}, {Colours.ORANGE.apply(user_name)}."
     text += now.strftime(
-        f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}gorgeous {Colours.PINK_GREY}%A!{Colours.RESET}" # removed 
+        f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}gorgeous {Colours.PINK_GREY}%A!{Colours.RESET}"
     )
 
     if update_available():

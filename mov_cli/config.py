@@ -92,7 +92,7 @@ class Config():
         return self.data.get("debug", False)
 
     @property
-    def proxy(self) -> dict or None:
+    def proxy(self) -> dict | None:
         """Returns proxy data. Defaults to None"""
         proxy_config = self.data.get("proxy")
 

@@ -19,10 +19,10 @@ class Download():
         season = media.season
 
         if season is not None:
-            title += f"S{season}"
+            title += f" S{season}"
 
         if episode is not None:
-            title += f"E{episode}"
+            title += f" E{episode}"
 
         file = self.config.download_location + title + ".mp4"
 

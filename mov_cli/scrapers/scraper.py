@@ -31,13 +31,13 @@ class Scraper(ABC): # TODO: Re-add the Configs.
 
     def get(self, url: str, redirect: bool = False) -> Response:
         """Makes a GET request and returns httpx.Response."""
-        self.logger.debug(f"GET: {url}")
+        self.logger.debug(f"GET >> {url}")
         self.__http.headers["Referer"] = url
         return self.__http.get(url, follow_redirects = redirect)
 
     def post(self, url: str, data: dict = None, json: dict = None) -> Response:
         """Makes a POST request and returns httpx.Response."""
-        self.logger.debug(f"POST: {url}")
+        self.logger.debug(f"POST >> {url}")
         self.__http.headers["Referer"] = url
         return self.__http.post(url, data = data, json = json)
 

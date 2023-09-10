@@ -28,7 +28,7 @@ class Player(ABC):
         ) # TODO: I might move this somewhere more centralized in the future. I'm not sure at the moment.
         """Operating system this device is running."""
 
-        self.logger = LoggerAdapter(mov_cli_logger, prefix=self.display_name)
+        self.logger = LoggerAdapter(mov_cli_logger, prefix = self.display_name)
 
         super().__init__()
 
@@ -51,5 +51,5 @@ class PlayerNotSupported(Exception):
     def __init__(self, player: Player, platform: SUPPORTED_PLATFORMS) -> None:
         super().__init__(
             f"The '{player.display_name}' player is not supported on '{platform}'. " \
-            "We recommend Outplayer for iOS and Mpv for every other platform."
+            "We recommend VLC for iOS and MPV for every other platform."
         )

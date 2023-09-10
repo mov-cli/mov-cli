@@ -15,4 +15,3 @@ def mov_cli():
         mov_cli_logger.setLevel(logging.DEBUG)
 
     click.echo(utils.welcome_msg(mov_cli_logger))
-    #test()
