@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from httpx import Response
     from .config import Config
-    from .media import Metadata, Series, Movie
+    from .media import Metadata, Series, Movie, TV
 
 import httpx
 from bs4 import BeautifulSoup
@@ -67,7 +67,7 @@ class Scraper(ABC): # TODO: Re-add the Configs.
         ...
 
     @abstractmethod
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie | TV:
         """Where your scraping for the media should be done. Should return an instance of Media."""
         ...
 

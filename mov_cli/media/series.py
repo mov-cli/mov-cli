@@ -12,12 +12,14 @@ class Series(Media):
         title: str, 
         referrer: str, 
         episode: int, 
-        season: int
+        season: int,
+        subtitles: dict | None
     ) -> None:
         self.season = season
         """The season this series belongs to."""
         self.episode = episode
         """The episode number of this series."""
+        self.subtitles = subtitles
 
         super().__init__(
             url, title, referrer
