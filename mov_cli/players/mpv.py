@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from ..config import Config
 
 import subprocess
-from time import sleep
 from devgoldyutils import Colours
 
 from .player import Player, PlayerNotFound, PlayerNotSupported

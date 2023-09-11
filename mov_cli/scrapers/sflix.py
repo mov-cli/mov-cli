@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Dict
+    from typing import List
     from httpx import Response
     from ..config import Config
     from bs4 import BeautifulSoup
@@ -14,7 +14,6 @@ from ..scraper import Scraper
 from ..media import Series, Movie
 
 from Crypto.Cipher import AES
-from abc import ABC
 from Crypto.Util.Padding import unpad
 from urllib import parse as p
 from ..media import Metadata, MetadataType

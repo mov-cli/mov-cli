@@ -44,7 +44,7 @@ class RemoteStream(Scraper):
 
     def scrape(self, metadata: Metadata, episode: int = None, season: int = None) -> Series | Movie:
         if metadata.type == MetadataType.SERIES:
-            url = self.cdn(metadata, season, episode)
+            url = self.__cdn(metadata, season, episode)
 
             return Series(
                 url = url,
@@ -54,7 +54,7 @@ class RemoteStream(Scraper):
                 season = season
             )
         else:       
-            url = self.cdn(metadata)
+            url = self.__cdn(metadata)
 
             return Movie(
                 url = url,
@@ -63,7 +63,7 @@ class RemoteStream(Scraper):
                 year = metadata.year
             )
 
-    def cdn(self, metadata: Metadata, season: int = None, episode: int = None) -> str:
+    def __cdn(self, metadata: Metadata, season: int = None, episode: int = None) -> str:
         url = f"https://remotestre.am/e/?imdb={metadata.id}"
 
         if season and episode:

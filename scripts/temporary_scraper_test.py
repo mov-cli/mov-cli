@@ -1,16 +1,15 @@
 from mov_cli.config import Config
-from mov_cli.scrapers import DopeBox, Sflix, SolarMovies, RemoteStream, eja
+from mov_cli.scrapers import DopeBox, Sflix, SolarMovies, RemoteStream, eja, Turkish123
 from devgoldyutils import pprint
 
 def show():
-    rs = SolarMovies(Config())    
-    shows = rs.search("Prison Break")
+    rs = Turkish123(Config())    
+    shows = rs.search("test")
     show = shows[1]
     seasons = show.seasons
-    episodes = show.seasons[1]
+    episodes = show.seasons[0]
     pprint((seasons, episodes))
-    media = rs.scrape(show, 1, 1)
-    print(media.subtitles.get("en"))
+    media = rs.scrape(show,  episode=1)
     pprint(media.url)
 
 def movie():
