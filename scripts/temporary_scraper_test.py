@@ -1,5 +1,5 @@
 from mov_cli.config import Config
-from mov_cli.scrapers import DopeBox, Sflix, SolarMovies, RemoteStream, eja, Turkish123
+from mov_cli.scrapers import DopeBox, Sflix, SolarMovies, RemoteStream, eja, Turkish123, gogoanime
 from devgoldyutils import pprint
 
 def show():
@@ -28,6 +28,15 @@ def tv():
     media = tv.scrape(stations[0])
     pprint(media.url)
 
+def anime():
+    print(Config().debug)
+    gogo = gogoanime(Config())
+    results = gogo.search("One Piece")
+    pprint(results)
+    media = gogo.scrape(results[1], episode = 1)
+    print(media.url)
+
+
 if __name__ == "__main__":
     print("To Test if Movies do work: m, for shows: s, for tv: t")
     a = input("Input: ")
@@ -35,6 +44,8 @@ if __name__ == "__main__":
         movie()
     elif a.lower() == "s":
         show()
+    elif a.lower() == "a":
+        anime()
     else:
         tv()
     

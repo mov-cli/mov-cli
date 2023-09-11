@@ -53,7 +53,7 @@ class Turkish123(Scraper):
 
             seasons = {}
 
-            seasons[0] = len(page_soup.findAll("a", {"class": "episodi"}))
+            seasons[1] = len(page_soup.findAll("a", {"class": "episodi"}))
             
             metadata_list.append(Metadata(
                 title = title,
@@ -82,7 +82,7 @@ class Turkish123(Scraper):
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
         return url, f"https://tukipasti.com{s}"
                 
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series:
+    def scrape(self, metadata: Metadata, episode: int = None) -> Series:
         href = self.__get_episode_url(metadata.id, episode)
         url, referrer = self.__tukipasti(href)
 
@@ -91,7 +91,7 @@ class Turkish123(Scraper):
             title = metadata.title,
             referrer = referrer,
             episode = episode,
-            season = 0,
+            season = 1,
             subtitles = None
         )
         
