@@ -1,5 +1,5 @@
 from mov_cli.config import Config
-from mov_cli.scrapers import DopeBox, Sflix, SolarMovies, RemoteStream, eja, Turkish123, gogoanime
+from mov_cli.scrapers import Sflix, SolarMovies, RemoteStream, eja, Turkish123, gogoanime
 from devgoldyutils import pprint
 
 def show():
