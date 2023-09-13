@@ -33,7 +33,7 @@ class eja(Scraper):
         result = self.__results(eja_req)
         return result
 
-    def __results(self, response: Response) -> list:
+    def __results(self, response: Response) -> list[MetadataEja]:
         soup = self.soup(response)
         col = soup.findAll("div", {"class": "col-sm-4"})
 
@@ -41,6 +41,7 @@ class eja(Scraper):
 
         for item in col:
             item: BeautifulSoup
+
             a = item.findAll("a")
             country = a[0].find("img")["alt"]
             title = a[1].text

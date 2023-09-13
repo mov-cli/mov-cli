@@ -51,7 +51,8 @@ class RemoteStream(Scraper):
                 title = metadata.title,
                 referrer = self.base_url,
                 episode = episode,
-                season = season
+                season = season,
+                subtitles = None
             )
         else:       
             url = self.__cdn(metadata)
@@ -60,7 +61,8 @@ class RemoteStream(Scraper):
                 url = url,
                 title = metadata.title,
                 referrer = self.base_url,
-                year = metadata.year
+                year = metadata.year,
+                subtitles = None
             )
 
     def __cdn(self, metadata: Metadata, season: int = None, episode: int = None) -> str:

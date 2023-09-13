@@ -32,6 +32,7 @@ class gogoanime(Scraper):
                 break
             for item in items:
                 item: BeautifulSoup
+                
                 id = item.find("a")["href"].split("/")[-1]
                 title = item.find("a")["title"]
                 img = item.find("img")["src"]
@@ -43,7 +44,7 @@ class gogoanime(Scraper):
                 episode_page = _soup.find("ul", {"id": "episode_page"})
                 li = episode_page.findAll("li")
                 last = li[-1].find("a")["ep_end"]
-                print(last)
+
                 seasons = {}
                 seasons[1] = last
                 
@@ -125,6 +126,5 @@ class gogoanime(Scraper):
     
     def streamwish(self, url):
         req = self.get(url).text
-        print(req)
         file = re.findall(r'file:"(.*?)"', req)[0]
         return file

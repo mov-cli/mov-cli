@@ -10,28 +10,28 @@ def show():
     episodes = show.seasons[0]
     pprint((seasons, episodes))
     media = rs.scrape(show,  episode=1)
-    pprint(media.url)
+    print(media.url)
 
 def movie():
-    rs = DopeBox(Config())
+    rs = Sflix(Config())
     results = rs.search("Hitman Agent 47")
     pprint(results)
     movie = results[0]
     media = rs.scrape(movie)
     print(media.subtitles.get("en"))
-    pprint(media.url)
+    print(media.url)
 
 def tv():
     tv = eja(Config())
     stations = tv.search("ZDF")
     pprint(stations)
     media = tv.scrape(stations[0])
-    pprint(media.url)
+    print(media.url)
 
 def anime():
     print(Config().debug)
     gogo = gogoanime(Config())
-    results = gogo.search("One Piece")
+    results = gogo.search("The Pet Girl of Sakurasou")
     pprint(results)
     media = gogo.scrape(results[1], episode = 1)
     print(media.url)

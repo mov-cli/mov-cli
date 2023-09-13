@@ -69,26 +69,22 @@ class Sflix(Scraper):
             seasons = None # 
 
             if type == MetadataType.SERIES:
-                print(MetadataType.SERIES)
                 seasons = {}
                 r = self.get(f"{self.base_url}/ajax/season/list/{id}").text
 
-                self.season_ids = [
+                season_ids = [
                     i[self._data_linkid] for i in self.soup(r).select(self._select_)
                 ]
-                print(self.season_ids)
 
-                for i in range(len(self.season_ids)):
+                for i in range(len(season_ids)):
                     rf = self.get(
                         f"{self.base_url}/ajax/season/episodes/{self.season_ids[i]}"
                     )
                     episodes = [i[self._data_linkid] for i in self.soup(rf).select(".episode-item")]
-                    print(episodes)
                     if len(episodes) >= 1:
                         seasons[i + 1] = len(episodes)
                     
             if seasons is not None and len(seasons) == 0:
-                print(seasons, len(seasons))
                 continue
 
             metadata_list.append(
@@ -121,7 +117,6 @@ class Sflix(Scraper):
             subtitles[prefix]["file"] = file
         
         n = self.__decryption(data["sources"])
-        pprint(subtitles)
         return n[0]["file"], subtitles
 
     def __server_id(self, mov_id):
@@ -147,7 +142,6 @@ class Sflix(Scraper):
 
     def __get_link(self, thing_id: str) -> tuple:
         req = self.get(f"{self.base_url}/ajax/sources/{thing_id}").json()["link"]
-        print(req)
         return req
 
     def __rabbit_id(self, url: str) -> tuple:

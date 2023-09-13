@@ -30,7 +30,8 @@ dependencies = [
     "platformdirs>=3.10.0",
     "click",
     "pyfzf",
-    "beautifulsoup4"
+    "beautifulsoup4",
+    "pycryptodome",
 ]
 
 dynamic = ["version"]

@@ -49,8 +49,6 @@ class Turkish123(Scraper):
             else:
                 year = year[0].text
             
-            print(year)
-
             seasons = {}
 
             seasons[1] = len(page_soup.findAll("a", {"class": "episodi"}))
@@ -70,7 +68,6 @@ class Turkish123(Scraper):
         req = self.get(self.base_url + "/" + id, redirect = True)
         soup = self.soup(req)
         episode = soup.findAll("a", {"class": "episodi"})[episode -1]["href"]
-        print(episode)
         return episode
             
     def __tukipasti(self, href: str):
@@ -78,7 +75,6 @@ class Turkish123(Scraper):
         regex = r'''"https:\/\/tukipasti\.com(.*?)"'''
         s = re.findall(regex, html)[0]
         req = self.get(f"https://tukipasti.com{s}").text
-        print(req)
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
         return url, f"https://tukipasti.com{s}"
                 
