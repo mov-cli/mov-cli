@@ -40,7 +40,7 @@ def anime():
 
 
 if __name__ == "__main__":
-    print("To Test if Movies do work: m, for shows: s, for tv: t")
+    print("To Test if Movies do work: m, for shows: s, for tv: t, for anime: a")
     a = input("Input: ")
     if a.lower() == "m":
         movie()
@@ -50,4 +50,3 @@ if __name__ == "__main__":
         anime()
     else:
         tv()
-    

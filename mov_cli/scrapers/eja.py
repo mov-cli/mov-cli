@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from ..media import Metadata, TV, MetadataType
 
 if TYPE_CHECKING:
+    from typing import List
     from ..config import Config
     from httpx import Response
     from bs4 import BeautifulSoup
@@ -33,7 +34,7 @@ class eja(Scraper):
         result = self.__results(eja_req)
         return result
 
-    def __results(self, response: Response) -> list[MetadataEja]:
+    def __results(self, response: Response) -> List[MetadataEja]:
         soup = self.soup(response)
         col = soup.findAll("div", {"class": "col-sm-4"})
 
