@@ -12,7 +12,7 @@ __all__ = ("MetadataType", "Metadata", "Media")
 class MetadataType(Enum):
     SERIES = 0
     MOVIE = 1
-    TV = 2
+    LIVE_TV = 2
 
 @dataclass
 class Metadata:

@@ -3,19 +3,19 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
    from typing import List
-   from httpx import Response
    from ..config import Config
    from bs4 import BeautifulSoup
+   from ..http_client import HTTPClient
 
-from ..media import Metadata, MetadataType, Series
 import re
-from .. import scraper_utils
+from ..media import Metadata, MetadataType, Series
+
 from ..scraper import Scraper
 
 class ViewAsian(Scraper):
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://viewasian.co"
-        super().__init__(config)
+        super().__init__(config, http_client)
 
     def search(self, query: str) -> List[Metadata]:
         query = query.replace(' ', '-')
@@ -29,7 +29,7 @@ class ViewAsian(Scraper):
 
         while True:
             page += 1
-            response = self.get(f"{self.base_url}/movie/search/{query}?page={page}")
+            response = self.http_client.get(f"{self.base_url}/movie/search/{query}?page={page}")
 
             soup = self.soup(response)
 
@@ -46,7 +46,7 @@ class ViewAsian(Scraper):
                 id = item["href"].split("/")[-1]
                 img = item.select(".mli-thumb")[0]["data-original"]
 
-                data_url_req = self.get(self.base_url + data_url)
+                data_url_req = self.http_client.get(self.base_url + data_url)
                 data_soup = self.soup(data_url_req)
 
                 year = data_soup.find("div", {"class": "jt-imdb"})
@@ -66,31 +66,32 @@ class ViewAsian(Scraper):
 
     def dood(self, url):
         video_id = url.split("/")[-1]
-        webpage_html = self.get(
+        webpage_html = self.http_client.get(
             f"https://dood.to/e/{video_id}", redirect = True
         )
         webpage_html = webpage_html.text
         try:
             pass_md5 = re.search(r"/pass_md5/[^']*", webpage_html).group()
-        except:
+        except Exception as e:
+            self.logger.error(e) # NOTE: Again does this even raise an exception and should we log it? ~ Goldy
             return None
         urlh = f"https://dood.to{pass_md5}"
         headers = {
             "referer": "https://dood.to",
         }
-        self.add_header_elem(headers)
-        res = self.get(urlh).text
+        self.http_client.add_header_elem(headers)
+        res = self.http_client.get(urlh).text
         md5 = pass_md5.split("/")
         true_url = res + "MovCli3oPi?token=" + md5[-1]
         return true_url
     
     def streamwish(self, url):
-        req = self.get(url).text
+        req = self.http_client.get(url).text
         file = re.findall(r'file:"(.*?)"', req)[0]
         return file
     
     def cdn(self, id: str, episode: int) -> str:
-        req = self.get(self.base_url + f"/watch/{id}/watching.html?ep={episode}")
+        req = self.http_client.get(self.base_url + f"/watch/{id}/watching.html?ep={episode}")
         soup = self.soup(req)
         
         base_url = soup.find("li", {"class": "doodstream"})["data-video"]

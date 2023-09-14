@@ -7,14 +7,17 @@ if TYPE_CHECKING:
     from typing import List
     from ..config import Config
     from bs4 import BeautifulSoup
+    from ..http_client import HTTPClient
 
 from ..scraper import Scraper
 import re
 
-class gogoanime(Scraper):
-    def __init__(self, config: Config) -> None:
+__all__ = ("Gogoanime",)
+
+class Gogoanime(Scraper):
+    def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://gogoanimehd.io"
-        super().__init__(config)
+        super().__init__(config, http_client)
 
     def search(self, query: str) -> List[Metadata]:
         query = query.replace(' ', '-')
@@ -25,7 +28,7 @@ class gogoanime(Scraper):
         metadata_list = []
         pagination = 1
         while True:
-            req = self.get(f"{self.base_url}/search.html?keyword={query}&page={pagination}")
+            req = self.http_client.get(f"{self.base_url}/search.html?keyword={query}&page={pagination}")
             soup = self.soup(req)
             items = soup.find("ul", {"class": "items"}).findAll("li")
             if len(items) == 0:
@@ -38,7 +41,7 @@ class gogoanime(Scraper):
                 img = item.find("img")["src"]
                 year = item.find("p", {"class": "released"}).text.split()[-1]
                 
-                page = self.get(f"https://gogoanimehd.io/category/{id}")
+                page = self.http_client.get(f"https://gogoanimehd.io/category/{id}")
                 _soup = self.soup(page)
 
                 episode_page = _soup.find("ul", {"id": "episode_page"})
@@ -71,7 +74,7 @@ class gogoanime(Scraper):
         return metadata_list
 
     def cdn(self, id, episode):
-        req = self.get(self.base_url + f"/{id}-episode-{episode}")
+        req = self.http_client.get(self.base_url + f"/{id}-episode-{episode}")
         soup = self.soup(req)
         dood = soup.find("li", {"class": "doodstream"}).find("a")["data-video"]
         url = self.dood(dood)
@@ -106,25 +109,26 @@ class gogoanime(Scraper):
 
     def dood(self, url):
         video_id = url.split("/")[-1]
-        webpage_html = self.get(
+        webpage_html = self.http_client.get(
             f"https://dood.to/e/{video_id}", redirect = True
         )
         webpage_html = webpage_html.text
         try:
             pass_md5 = re.search(r"/pass_md5/[^']*", webpage_html).group()
-        except:
+        except Exception as e:
+            self.logger.error(e) # NOTE: Does this even raise an exception and should we log it? ~ Goldy
             return None
         urlh = f"https://dood.to{pass_md5}"
         headers = {
             "referer": "https://dood.to",
         }
-        self.add_header_elem(headers)
-        res = self.get(urlh).text
+        self.http_client.add_header_elem(headers)
+        res = self.http_client.get(urlh).text
         md5 = pass_md5.split("/")
         true_url = res + "MovCli3oPi?token=" + md5[-1]
         return true_url
     
     def streamwish(self, url):
-        req = self.get(url).text
+        req = self.http_client.get(url).text
         file = re.findall(r'file:"(.*?)"', req)[0]
         return file

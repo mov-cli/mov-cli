@@ -10,7 +10,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
-from .. import utils
+from .. import utils, errors
 from ..logger import mov_cli_logger
 
 __all__ = ("Player", "PlayerNotFound", "PlayerNotSupported")
@@ -38,7 +38,7 @@ class Player(ABC):
         ...
 
 
-class PlayerNotFound(Exception):
+class PlayerNotFound(errors.MovCliException):
     """Raised when player is not found."""
     def __init__(self, player: Player) -> None:
         super().__init__(
@@ -46,7 +46,7 @@ class PlayerNotFound(Exception):
             "Are you sure the environment variable is set correctly?"
         )
 
-class PlayerNotSupported(Exception):
+class PlayerNotSupported(errors.MovCliException):
     """Raised when player is not supported on that specific platform."""
     def __init__(self, player: Player, platform: SUPPORTED_PLATFORMS) -> None:
         super().__init__(

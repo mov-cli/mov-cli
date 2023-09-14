@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from httpx import Response
     from ..config import Config
     from bs4 import BeautifulSoup
+    from ..http_client import HTTPClient
 
 import re
 
@@ -24,10 +25,10 @@ import base64
 __all__ = ("Sflix",)
 
 class Sflix(Scraper):
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://sflix.se"
 
-        super().__init__(config)
+        super().__init__(config, http_client)
 
 
     def __parse(self, q: str) -> str:
@@ -35,7 +36,7 @@ class Sflix(Scraper):
 
 
     def search(self, q: str) -> List[Metadata]:
-        search_req = self.get(f"{self.base_url}/search/{self.__parse(q)}")
+        search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(q)}")
         results = self.__results(search_req)
         return results
 
@@ -65,14 +66,14 @@ class Sflix(Scraper):
 
             if type == MetadataType.SERIES:
                 seasons = {}
-                r = self.get(f"{self.base_url}/ajax/season/list/{id}").text
+                r = self.http_client.get(f"{self.base_url}/ajax/season/list/{id}").text
 
                 season_ids = [
                     i["data-id"] for i in self.soup(r).select(".dropdown-item")
                 ]
 
                 for i in range(len(season_ids)):
-                    rf = self.get(
+                    rf = self.http_client.get(
                         f"{self.base_url}/ajax/season/episodes/{season_ids[i]}"
                     )
                     episodes = [i["data-id"] for i in self.soup(rf).select(".episode-item")]
@@ -97,8 +98,8 @@ class Sflix(Scraper):
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
         subtitles = json.loads("{}")
-        self.set_header({"X-Requested-With": "XMLHttpRequest"})
-        data = self.get(f"{final_link}getSources?id={rabb_id}").json()
+        self.http_client.set_header({"X-Requested-With": "XMLHttpRequest"})
+        data = self.http_client.get(f"{final_link}getSources?id={rabb_id}").json()
         for item in data["tracks"]:
             item : dict
             file = item.get("file")
@@ -115,19 +116,19 @@ class Sflix(Scraper):
         return n[0]["file"], subtitles
 
     def __server_id(self, mov_id):
-        rem = self.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
+        rem = self.http_client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
         soup = self.soup(rem)
         return [i["data-id"] for i in soup.select(".link-item")][0]
 
     def __ep_server_id(self, ep_id):
-        rem = self.get(
+        rem = self.http_client.get(
             f"{self.base_url}/ajax/episode/servers/{ep_id}"
         )
         soup = self.soup(rem)
         return [i["data-id"] for i in soup.select(".link-item")][0]
 
     def __get_epi_id(self, season_id: str, episode: int) -> str:
-        r = self.get(
+        r = self.http_client.get(
             f"{self.base_url}/ajax/season/episodes/{season_id}"
         )
         episodes = [i["data-id"] for i in self.soup(r).select(".episode-item")]
@@ -136,7 +137,7 @@ class Sflix(Scraper):
 
 
     def __get_link(self, thing_id: str) -> tuple:
-        req = self.get(f"{self.base_url}/ajax/sources/{thing_id}").json()["link"]
+        req = self.http_client.get(f"{self.base_url}/ajax/sources/{thing_id}").json()["link"]
         return req
 
     def __rabbit_id(self, url: str) -> tuple:
@@ -149,7 +150,7 @@ class Sflix(Scraper):
         )
     
     def __get_season_id(self, season: int, id : str) -> str:
-        r = self.get(f"{self.base_url}/ajax/season/list/{id}").text
+        r = self.http_client.get(f"{self.base_url}/ajax/season/list/{id}").text
 
         season_ids = [
             i["data-id"] for i in self.soup(r).select(".dropdown-item")
@@ -158,7 +159,7 @@ class Sflix(Scraper):
 
 
     def __gh_key(self):
-        response_key = self.get('https://github.com/enimax-anime/key/blob/e4/key.txt').json()
+        response_key = self.http_client.get('https://github.com/enimax-anime/key/blob/e4/key.txt').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)
         return key

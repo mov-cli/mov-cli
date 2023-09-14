@@ -7,9 +7,9 @@ if TYPE_CHECKING:
 
 import random
 import getpass
+from httpx import get
 from datetime import datetime
 from devgoldyutils import Colours
-from httpx import get
 
 import mov_cli
 
@@ -25,22 +25,20 @@ def update_available() -> bool:
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
     now = datetime.now()
     p = now.strftime("%p")
-    I = int(now.strftime("%I"))
+    i = int(now.strftime("%I"))
 
     if p == "AM":
-        if I >= 6:
+        if i >= 6:
             return "Good Morning"
         else:
             return "Good Night"
     else:
-        if I <= 5:
+        if i <= 5:
             return "Good Afternoon"
-        elif I > 5 and I <= 8:
+        elif i > 5 and i <= 8:
             return "Good Evening"
-        elif I > 8:
+        elif i > 8:
             return "Good Night"
-
-
 
 def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://github.com/justfoolingaround/animdl
     """Returns cli welcome message."""

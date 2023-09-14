@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from .media import Media
 
-__all__ = ("TV",)
+__all__ = ("LiveTV",)
 
-class TV(Media):
-    """Represents a TV Station."""
+class LiveTV(Media):
+    """Represents a live TV Station."""
     def __init__(
         self, 
         url: str, 

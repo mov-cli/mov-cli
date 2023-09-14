@@ -7,13 +7,13 @@ __all__ = ("Download",)
 
 if TYPE_CHECKING:
     from .config import Config
-    from .media import TV, Series, Movie
+    from .media import LiveTV, Series, Movie
 
 class Download():
     def __init__(self, config: Config) -> None:
         self.config = config
 
-    def download(self, media: TV | Series | Movie, subtitles: str = None):
+    def download(self, media: LiveTV | Series | Movie, subtitles: str = None):
         title = unicodedata.normalize('NFKD', media.title).encode('ascii', 'ignore').decode('ascii')
         episode = media.episode
         season = media.season

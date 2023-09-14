@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import List
     from ..config import Config
+    from ..http_client import HTTPClient
 
 import re
 
@@ -14,16 +15,16 @@ from ..media import Series, Movie, MetadataType, Metadata
 __all__ = ("RemoteStream",)
 
 class RemoteStream(Scraper):
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://remotestre.am"
         self.catalogue = "https://remotestre.am/catalogue?display=plain"
         self.imdb_epi = "https://www.imdb.com/title/{}/episodes/"
 
-        super().__init__(config)
+        super().__init__(config, http_client)
 
     def search(self, query: str) -> List[Metadata]:
         imdb_metadata_list = scraper_utils.imdb_search(query, self.config)
-        catalogue = self.get(self.catalogue)
+        catalogue = self.http_client.get(self.catalogue)
 
         metadata_list = []
 
@@ -71,5 +72,5 @@ class RemoteStream(Scraper):
         if season and episode:
             url += f"&s={season}&e={episode}"
 
-        req = self.get(url).text
+        req = self.http_client.get(url).text
         return re.findall('"file":"(.*?)"', req)[0]

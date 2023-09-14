@@ -2,11 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from httpx import Response
     from .config import Config
-    from .media import Metadata, Series, Movie, TV
+    from .http_client import HTTPClient
+    from .media import Metadata, Series, Movie, LiveTV
 
-import httpx
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
@@ -15,48 +14,14 @@ from . import mov_cli_logger
 
 __all__ = ("Scraper",)
 
-class Scraper(ABC): # TODO: Re-add the Configs.
-    def __init__(self, config: Config) -> None:
+class Scraper(ABC):
+    def __init__(self, config: Config, http_client: HTTPClient) -> None:
         """A base class for building scrapers from."""
         self.config = config
+        self.http_client = http_client
         self.logger = LoggerAdapter(mov_cli_logger, prefix = self.__class__.__name__)
 
-        self.__http = httpx.Client(
-            timeout = 15.0,
-            headers = config.headers,
-            cookies = None,
-        )
-
         super().__init__()
-
-    def get(self, url: str, redirect: bool = False) -> Response:
-        """Makes a GET request and returns httpx.Response."""
-        self.logger.debug(f"GET >> {url}")
-        self.__http.headers["Referer"] = url
-        return self.__http.get(url, follow_redirects = redirect)
-
-    def post(self, url: str, data: dict = None, json: dict = None) -> Response:
-        """Makes a POST request and returns httpx.Response."""
-        self.logger.debug(f"POST >> {url}")
-        self.__http.headers["Referer"] = url
-        return self.__http.post(url, data = data, json = json)
-
-    def set_header(self, header: dict) -> None:
-        """
-        Able to set custom headers
-
-        Not recommended
-        """
-        self.__http.headers = header
-
-    def add_header_elem(self, header_elem: dict) -> None:
-        """Add header elements to default header."""
-        for elem in header_elem:
-            self.__http.headers[elem[0]] = elem[1]
-
-    def set_cookies(self, cookies: dict) -> None:
-        """Sets cookies."""
-        self.__http.cookies = cookies
 
     def soup(self, html: str) -> BeautifulSoup:
         return BeautifulSoup(html, self.config.parser)
@@ -67,7 +32,7 @@ class Scraper(ABC): # TODO: Re-add the Configs.
         ...
 
     @abstractmethod
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie | TV:
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie | LiveTV:
         """Where your scraping for the media should be done. Should return an instance of Media."""
         ...
 

@@ -1,28 +1,26 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from mov_cli.media import Metadata, Series
-
-from ..media import Metadata, MetadataType
-
 if TYPE_CHECKING:
    from typing import List
    from ..config import Config
    from httpx import Response
    from bs4 import BeautifulSoup
-
+   from ..http_client import HTTPClient
 
 import re
+
 from ..scraper import Scraper
+from ..media import Series, Metadata, MetadataType
 
 class Turkish123(Scraper):
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://turkish123.ac"
-        super().__init__(config)
+        super().__init__(config, http_client)
 
     def search(self, query: str) -> List[Metadata]:
         query = query.replace(' ', '+')
-        req = self.get(f'{self.base_url}/?s={query}')
+        req = self.http_client.get(f'{self.base_url}/?s={query}')
         result = self.__results(req)
         return result
 
@@ -40,7 +38,7 @@ class Turkish123(Scraper):
             img = item.select(".mli-thumb")[0]["src"]
             
             year = None
-            page = self.get(self.base_url + "/" + id, redirect = True)
+            page = self.http_client.get(self.base_url + "/" + id, redirect = True)
             page_soup = self.soup(page)
             year = page_soup.find("div", {"class": "mvici-right"})
             year = year.findAll("a")
@@ -65,16 +63,16 @@ class Turkish123(Scraper):
         return metadata_list
 
     def __get_episode_url(self, id: str, episode: int):
-        req = self.get(self.base_url + "/" + id, redirect = True)
+        req = self.http_client.get(self.base_url + "/" + id, redirect = True)
         soup = self.soup(req)
         episode = soup.findAll("a", {"class": "episodi"})[episode -1]["href"]
         return episode
             
     def __tukipasti(self, href: str):
-        html = self.get(href).text
+        html = self.http_client.get(href).text
         regex = r'''"https:\/\/tukipasti\.com(.*?)"'''
         s = re.findall(regex, html)[0]
-        req = self.get(f"https://tukipasti.com{s}").text
+        req = self.http_client.get(f"https://tukipasti.com{s}").text
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
         return url, f"https://tukipasti.com{s}"
                 

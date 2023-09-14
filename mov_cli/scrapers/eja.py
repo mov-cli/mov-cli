@@ -1,13 +1,14 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from ..media import Metadata, TV, MetadataType
+from ..media import Metadata, LiveTV, MetadataType
 
 if TYPE_CHECKING:
     from typing import List
-    from ..config import Config
     from httpx import Response
+    from ..config import Config
     from bs4 import BeautifulSoup
+    from ..http_client import HTTPClient
 
 from ..scraper import Scraper
 from re import findall
@@ -20,17 +21,17 @@ class MetadataEja:
     type: str
     country: str
 
-__all__ = ("eja",)
+__all__ = ("Eja",)
 
-class eja(Scraper):
-    def __init__(self, config: Config):
-        super().__init__(config)
+class Eja(Scraper):
+    def __init__(self, config: Config, http_client: HTTPClient):
+        super().__init__(config, http_client)
+
         self.base_url = "https://eja.tv"
-
 
     def search(self, q: str = None):
         q = q.replace(" ", "+")
-        eja_req = self.get(f"{self.base_url}/?search={q}")
+        eja_req = self.http_client.get(f"{self.base_url}/?search={q}")
         result = self.__results(eja_req)
         return result
 
@@ -51,18 +52,18 @@ class eja(Scraper):
             metadata_eja.append(MetadataEja(
                 id = id, 
                 title = title, 
-                type = MetadataType.TV,
+                type = MetadataType.LIVE_TV,
                 country = country
                 ))
         
         return metadata_eja
 
     
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> TV:
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> LiveTV:
         url = self.__get_hls(metadata.id)
-        return TV(url, metadata.title, self.base_url)
+        return LiveTV(url, metadata.title, self.base_url)
 
     def __get_hls(self, url):
-        link = self.get(f"https://eja.tv/?{url}", redirect=True)
+        link = self.http_client.get(f"https://eja.tv/?{url}", redirect=True)
         link = str(link.url)    
         return findall("\?(.*)#", link)[0]
