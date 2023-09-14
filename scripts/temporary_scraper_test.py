@@ -1,15 +1,18 @@
 from mov_cli.config import Config
-from mov_cli.scrapers import Sflix, SolarMovies, RemoteStream, eja, Turkish123, gogoanime
+from mov_cli.scrapers import Sflix, SolarMovies, RemoteStream, eja, Turkish123, gogoanime, ViewAsian
+import logging
+from mov_cli import mov_cli_logger
 from devgoldyutils import pprint
 
+mov_cli_logger.setLevel(logging.DEBUG)
 def show():
-    rs = Turkish123(Config())    
-    shows = rs.search("test")
-    show = shows[1]
+    rs = ViewAsian(Config())    
+    shows = rs.search("tattooist")
+    show = shows[0]
     seasons = show.seasons
-    episodes = show.seasons[0]
+    episodes = show.seasons[1]
     pprint((seasons, episodes))
-    media = rs.scrape(show,  episode=1)
+    media = rs.scrape(show, episode=1)
     print(media.url)
 
 def movie():
@@ -29,7 +32,6 @@ def tv():
     print(media.url)
 
 def anime():
-    print(Config().debug)
     gogo = gogoanime(Config())
     results = gogo.search("The Pet Girl of Sakurasou")
     pprint(results)

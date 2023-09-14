@@ -3,3 +3,10 @@ iso_639 = {"abkhazian": "ab", "afar": "aa", "afrikaans": "af", "akan": "ak", "al
 def get_prefix(language) -> str:
     prefix = iso_639.get(language.lower(), None)
     return prefix
+
+def get_language(prefix):
+    key_list = list(iso_639.keys())
+    val_list = list(iso_639.values())
+
+    position = val_list.index("de")
+    print(key_list[position])

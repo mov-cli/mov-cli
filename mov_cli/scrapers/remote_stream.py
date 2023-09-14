@@ -42,7 +42,7 @@ class RemoteStream(Scraper):
 
         return metadata_list
 
-    def scrape(self, metadata: Metadata, episode: int = None, season: int = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None,) -> Series | Movie:
         if metadata.type == MetadataType.SERIES:
             url = self.__cdn(metadata, season, episode)
 

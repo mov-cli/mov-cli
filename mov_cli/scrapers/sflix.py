@@ -20,17 +20,12 @@ from ..media import Metadata, MetadataType
 import hashlib
 import json
 import base64
-from devgoldyutils import pprint
 
 __all__ = ("Sflix",)
 
 class Sflix(Scraper):
     def __init__(self, config: Config) -> None:
         self.base_url = "https://sflix.se"
-        self.season_ids = {}
-
-        self._data_linkid = "data-id"
-        self._select_ = ".dropdown-item"
 
         super().__init__(config)
 
@@ -73,14 +68,14 @@ class Sflix(Scraper):
                 r = self.get(f"{self.base_url}/ajax/season/list/{id}").text
 
                 season_ids = [
-                    i[self._data_linkid] for i in self.soup(r).select(self._select_)
+                    i["data-id"] for i in self.soup(r).select(".dropdown-item")
                 ]
 
                 for i in range(len(season_ids)):
                     rf = self.get(
-                        f"{self.base_url}/ajax/season/episodes/{self.season_ids[i]}"
+                        f"{self.base_url}/ajax/season/episodes/{season_ids[i]}"
                     )
-                    episodes = [i[self._data_linkid] for i in self.soup(rf).select(".episode-item")]
+                    episodes = [i["data-id"] for i in self.soup(rf).select(".episode-item")]
                     if len(episodes) >= 1:
                         seasons[i + 1] = len(episodes)
                     
@@ -122,20 +117,20 @@ class Sflix(Scraper):
     def __server_id(self, mov_id):
         rem = self.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
         soup = self.soup(rem)
-        return [i[self._data_linkid] for i in soup.select(".link-item")][0]
+        return [i["data-id"] for i in soup.select(".link-item")][0]
 
     def __ep_server_id(self, ep_id):
         rem = self.get(
             f"{self.base_url}/ajax/episode/servers/{ep_id}"
         )
         soup = self.soup(rem)
-        return [i[self._data_linkid] for i in soup.select(".link-item")][0]
+        return [i["data-id"] for i in soup.select(".link-item")][0]
 
     def __get_epi_id(self, season_id: str, episode: int) -> str:
         r = self.get(
             f"{self.base_url}/ajax/season/episodes/{season_id}"
         )
-        episodes = [i[self._data_linkid] for i in self.soup(r).select(".episode-item")]
+        episodes = [i["data-id"] for i in self.soup(r).select(".episode-item")]
         episode = episodes[episode - 1]
         return episode
 
@@ -152,6 +147,14 @@ class Sflix(Scraper):
             ),
             parts[-1],
         )
+    
+    def __get_season_id(self, season: int, id : str) -> str:
+        r = self.get(f"{self.base_url}/ajax/season/list/{id}").text
+
+        season_ids = [
+            i["data-id"] for i in self.soup(r).select(".dropdown-item")
+        ]
+        return season_ids[season - 1]
 
 
     def __gh_key(self):
@@ -207,9 +210,9 @@ class Sflix(Scraper):
         main_decryption = self.__aes_decrypt(decryption_key, new_string)
         return json.loads(main_decryption)
     
-    def scrape(self, metadata: Metadata, episode: int = None, season: int = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
         if metadata.type == MetadataType.SERIES:
-            season_id = self.season_ids[season - 1]
+            season_id = self.__get_season_id(season, metadata.id)
             epi_id = self.__get_epi_id(season_id, episode)
             sid = self.__ep_server_id(epi_id)
             iframe_url = self.__get_link(sid)
