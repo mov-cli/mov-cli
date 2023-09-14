@@ -9,4 +9,8 @@ def get_language(prefix):
     val_list = list(iso_639.values())
 
     position = val_list.index(prefix)
-    print(key_list[position])
+    try:
+        key = key_list[position]
+    except:
+        key = None
+    print(key)
