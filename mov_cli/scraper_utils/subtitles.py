@@ -8,5 +8,5 @@ def get_language(prefix):
     key_list = list(iso_639.keys())
     val_list = list(iso_639.values())
 
-    position = val_list.index("de")
+    position = val_list.index(prefix)
     print(key_list[position])
