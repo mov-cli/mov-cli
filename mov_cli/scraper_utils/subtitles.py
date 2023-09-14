@@ -13,4 +13,4 @@ def get_language(prefix):
         key = key_list[position]
     except:
         key = None
-    print(key)
+    return key
