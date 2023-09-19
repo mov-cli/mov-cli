@@ -43,12 +43,17 @@ class HTTPClient():
 
         try:
 
-            return self.__httpx_client.get(
+            req = self.__httpx_client.get(
                 url, follow_redirects = redirect, **kwargs
             )
 
+            self.__httpx_client.headers = self.config.headers
+
+            return req
+
         except httpx.ConnectError as e:
             raise SiteMaybeBlocked(url, e)
+    
 
     # NOTE: Are we even using post requests, like will they be used in the future? ~ Goldy
     def post(self, url: str, data: dict = None, json: dict = None, **kwargs) -> Response: 

@@ -35,15 +35,16 @@ class Sflix(Scraper):
         return q.replace(" ", "-").lower()
 
 
-    def search(self, q: str) -> List[Metadata]:
+    def search(self, q: str, limit: int = None) -> List[Metadata]:
         search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(q)}")
-        results = self.__results(search_req)
+        results = self.__results(search_req, limit)
         return results
 
-    def __results(self, html: Response) -> List[Metadata]:
+    def __results(self, html: Response, limit: int = None) -> List[Metadata]:
         soup = self.soup(html)
-        items = soup.findAll("div", {"class": "flw-item"})
+        items = soup.findAll("div", {"class": "flw-item"})[:limit]
         metadata_list = []
+
         for item in items:
             item: BeautifulSoup
             url = item.select(".film-poster-ahref")[0]["href"]
@@ -62,38 +63,53 @@ class Sflix(Scraper):
 
             img = item.select(".film-poster-img")[0]["data-src"]
 
-            seasons = None # 
+            page = self.http_client.get(self.base_url + url)
+            page_soup = self.soup(page)
 
-            if type == MetadataType.SERIES:
-                seasons = {}
-                r = self.http_client.get(f"{self.base_url}/ajax/season/list/{id}").text
+            row_line = page_soup.findAll("div", {"class": "row-line"})
 
-                season_ids = [
-                    i["data-id"] for i in self.soup(r).select(".dropdown-item")
-                ]
+            genre = [i.text for i in row_line[1].findAll("a")]
 
-                for i in range(len(season_ids)):
-                    rf = self.http_client.get(
-                        f"{self.base_url}/ajax/season/episodes/{season_ids[i]}"
-                    )
-                    episodes = [i["data-id"] for i in self.soup(rf).select(".episode-item")]
-                    if len(episodes) >= 1:
-                        seasons[i + 1] = len(episodes)
-                    
-            if seasons is not None and len(seasons) == 0:
-                continue
+            cast = [i.text for i in row_line[2].findAll("a")]
+
+            description = page_soup.find("div", {"class": "description"}).next_siblings
 
             metadata_list.append(
                 Metadata(
                     id = id,
                     title = title,
+                    url = self.base_url + url,
                     type = type,
-                    image_url= img,
-                    seasons = seasons,
-                    year = year
+                    image_url = img,
+                    year = year,
+                    genre = genre,
+                    cast = cast,
+                    description = description
                 )
             )
+
         return metadata_list
+    
+    def get_seasons_episodes(self, metadata: Metadata):
+        seasons = None # 
+
+        if type == MetadataType.SERIES:
+            seasons = {}
+            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{metadata.id}").text
+
+            season_ids = [
+                i["data-id"] for i in self.soup(r).select(".dropdown-item")
+            ]
+
+            for i in range(len(season_ids)):
+                rf = self.http_client.get(
+                    f"{self.base_url}/ajax/season/episodes/{season_ids[i]}"
+                )
+                episodes = [i["data-id"] for i in self.soup(rf).select(".episode-item")]
+                if len(episodes) >= 1:
+                    seasons[i + 1] = len(episodes)
+        else:
+            return None
     
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
@@ -159,6 +175,7 @@ class Sflix(Scraper):
 
 
     def __gh_key(self):
+        self.http_client.set_header({"X-Requested-With": "XMLHttpRequest"})
         response_key = self.http_client.get('https://github.com/enimax-anime/key/blob/e4/key.txt').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)

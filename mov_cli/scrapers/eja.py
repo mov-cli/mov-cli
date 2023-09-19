@@ -13,13 +13,15 @@ if TYPE_CHECKING:
 from ..scraper import Scraper
 from re import findall
 from dataclasses import dataclass
+from urllib.parse import unquote
 
 @dataclass
 class MetadataEja:
     id: str
-    title: str
-    type: str
-    country: str
+    url: str | None
+    title: str | None
+    type: str | None
+    country: str | None
 
 __all__ = ("Eja",)
 
@@ -29,15 +31,15 @@ class Eja(Scraper):
 
         self.base_url = "https://eja.tv"
 
-    def search(self, q: str = None):
+    def search(self, q: str = None, limit: int = None):
         q = q.replace(" ", "+")
         eja_req = self.http_client.get(f"{self.base_url}/?search={q}")
-        result = self.__results(eja_req)
+        result = self.__results(eja_req, limit)
         return result
 
-    def __results(self, response: Response) -> List[MetadataEja]:
+    def __results(self, response: Response, limit: int = None) -> List[MetadataEja]:
         soup = self.soup(response)
-        col = soup.findAll("div", {"class": "col-sm-4"})
+        col = soup.findAll("div", {"class": "col-sm-4"})[:limit]
 
         metadata_eja = []
 
@@ -47,10 +49,12 @@ class Eja(Scraper):
             a = item.findAll("a")
             country = a[0].find("img")["alt"]
             title = a[1].text
-            id = a[1]["href"][1:]
+            url = a[1]["href"]
+            id = url[1:]
         
             metadata_eja.append(MetadataEja(
-                id = id, 
+                id = id,
+                url = self.base_url + url,
                 title = title, 
                 type = MetadataType.LIVE_TV,
                 country = country
@@ -66,4 +70,4 @@ class Eja(Scraper):
     def __get_hls(self, url):
         link = self.http_client.get(f"https://eja.tv/?{url}", redirect=True)
         link = str(link.url)    
-        return findall("\?(.*)#", link)[0]
+        return unquote(findall("\?(.*)#", link)[0])

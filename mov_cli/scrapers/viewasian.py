@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-   from typing import List
+   from typing import List, Dict
    from ..config import Config
    from bs4 import BeautifulSoup
    from ..http_client import HTTPClient
@@ -17,12 +17,12 @@ class ViewAsian(Scraper):
         self.base_url = "https://viewasian.co"
         super().__init__(config, http_client)
 
-    def search(self, query: str) -> List[Metadata]:
+    def search(self, query: str, limit: int = None) -> List[Metadata]:
         query = query.replace(' ', '-')
-        result = self.__results(query)
+        result = self.__results(query, limit)
         return result
 
-    def __results(self, query: str) -> List[Metadata]:
+    def __results(self, query: str, limit: int = None) -> List[Metadata]:
         metadata_list = []
 
         page = 0
@@ -43,26 +43,45 @@ class ViewAsian(Scraper):
 
                 data_url = item["data-url"]
                 title = item["title"]
-                id = item["href"].split("/")[-1]
+                url = item["href"]
+                id = url.split("/")[-1]
                 img = item.select(".mli-thumb")[0]["data-original"]
+
+                self.http_client.set_header({"X-Requested-With": "XMLHttpRequest"})
 
                 data_url_req = self.http_client.get(self.base_url + data_url)
                 data_soup = self.soup(data_url_req)
 
+                description = data_soup.find("p", {"class": "f-desc"}).text
+
                 year = data_soup.find("div", {"class": "jt-imdb"})
 
-                episodes = item.find("span", {"class": "mli-eps raw"}).find("i").text
+                genre = data_soup.findAll("div", {"class": "block"})[1].findAll("a")
+
+                genre = [i.text.strip(", ") for i in genre]
 
                 metadata_list.append(Metadata(
                     title = title,
                     id = id,
+                    url = self.base_url + url,
                     type = MetadataType.SERIES,
                     image_url = img,
-                    seasons = {1: episodes},
-                    year = year  
+                    year = year,
+                    genre = genre,
+                    cast = None,
+                    description = description
                 ))
 
+                if len(metadata_list) == limit:
+                    break
+
         return metadata_list
+    
+    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
+        req = self.http_client.get(metadata.url)
+        soup = self.soup(req)
+        episodes = soup.findAll("li", {"class": "ep-item"})
+        return {1: len(episodes)}
 
     def dood(self, url):
         video_id = url.split("/")[-1]

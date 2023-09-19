@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Dict
     from ..config import Config
     from ..http_client import HTTPClient
 
@@ -22,8 +22,8 @@ class RemoteStream(Scraper):
 
         super().__init__(config, http_client)
 
-    def search(self, query: str) -> List[Metadata]:
-        imdb_metadata_list = scraper_utils.imdb_search(query, self.config)
+    def search(self, query: str, limit: int = None) -> List[Metadata]:
+        imdb_metadata_list = scraper_utils.imdb_search(query, self.config)[:limit]
         catalogue = self.http_client.get(self.catalogue)
 
         metadata_list = []
@@ -42,6 +42,23 @@ class RemoteStream(Scraper):
                 )
 
         return metadata_list
+
+    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
+        if metadata.type == MetadataType.SERIES:
+            seasons = {}
+            episodes_url = f"https://www.imdb.com/title/{metadata.id}/episodes/"
+            html = self.http_client.get(episodes_url).text
+            seasons_soup = self.soup(html)
+
+            for season in range(1, len(seasons_soup.findAll("li", {"data-testid": "tab-season-entry"}))):
+                seasons_response = self.http_client.get(episodes_url + f"?season={season}")
+                chicken_noodle_soup = self.soup(seasons_response)
+
+                seasons[season] = len(chicken_noodle_soup.findAll("article", {"class": "episode-item-wrapper"}))
+            
+            return seasons
+        
+        return None
 
     def scrape(self, metadata: Metadata, season: int = None, episode: int = None,) -> Series | Movie:
         if metadata.type == MetadataType.SERIES:

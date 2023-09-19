@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Dict
+    from typing import List
 
 from enum import Enum
 from dataclasses import dataclass
@@ -18,10 +18,14 @@ class MetadataType(Enum):
 class Metadata:
     title: str
     id: str | None
+    url: str | None
     type: MetadataType | None
+    # Extras
     image_url: str | None
-    seasons: Dict[int, int] | None
     year: str | None
+    genre: List[str] | None
+    cast: List[str] | None
+    description: str | None
 
 class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""

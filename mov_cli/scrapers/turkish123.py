@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-   from typing import List
+   from typing import List, Dict
    from ..config import Config
    from httpx import Response
    from bs4 import BeautifulSoup
@@ -18,16 +18,17 @@ class Turkish123(Scraper):
         self.base_url = "https://turkish123.ac"
         super().__init__(config, http_client)
 
-    def search(self, query: str) -> List[Metadata]:
+    def search(self, query: str, limit: int = None) -> List[Metadata]:
         query = query.replace(' ', '+')
         req = self.http_client.get(f'{self.base_url}/?s={query}')
-        result = self.__results(req)
+        result = self.__results(req, limit)
         return result
 
-    def __results(self, response: Response) -> List[Metadata]:
+    def __results(self, response: Response, limit: int = None) -> List[Metadata]:
         metadata_list = []
         soup = self.soup(response)
-        mlitem = soup.findAll("div", {"class": "ml-item"})
+        mlitem = soup.findAll("div", {"class": "ml-item"})[:limit]
+
         for item in mlitem:
             item: BeautifulSoup
             if item.select(".mli-quality")[0].text == "COMING SOON":
@@ -35,32 +36,55 @@ class Turkish123(Scraper):
             title = item.find("a")["oldtitle"]
             id = item.find("a")["href"].split("/")[:-1][-1]
 
+            url = item.find("a")["href"]
+
             img = item.select(".mli-thumb")[0]["src"]
             
             year = None
+
             page = self.http_client.get(self.base_url + "/" + id, redirect = True)
             page_soup = self.soup(page)
+            
             year = page_soup.find("div", {"class": "mvici-right"})
             year = year.findAll("a")
+
             if len(year) == 2:
                 year = year[0].text + "-" + year[1].text
             else:
                 year = year[0].text
             
-            seasons = {}
+            mvici = page_soup.find("div", {"class": "mvici-left"}).findAll("p")
 
-            seasons[1] = len(page_soup.findAll("a", {"class": "episodi"}))
-            
+            genre = [i.text for i in mvici[2].findAll("a")]
+
+            cast = [i.text for i in mvici[3].findAll("a")]
+
+            description = page_soup.find("p", {"class": "f-desc"}).text
+
             metadata_list.append(Metadata(
                 title = title,
                 id = id,
+                url = url,
                 type = MetadataType.SERIES,
                 image_url = img,
-                seasons = seasons,
-                year = year
+                year = year,
+                genre = genre,
+                cast = cast,
+                description = description
             ))
         
         return metadata_list
+
+    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
+            page = self.http_client.get(self.base_url + "/" + metadata.id, redirect = True)
+            page_soup = self.soup(page)
+            year = page_soup.find("div", {"class": "mvici-right"})
+            year = year.findAll("a")
+
+            seasons = {}
+
+            seasons[1] = len(page_soup.findAll("a", {"class": "episodi"}))
+            return seasons
 
     def __get_episode_url(self, id: str, episode: int):
         req = self.http_client.get(self.base_url + "/" + id, redirect = True)
