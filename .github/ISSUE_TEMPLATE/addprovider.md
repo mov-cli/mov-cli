@@ -4,13 +4,10 @@ about: Suggest a Provider
 title: '[Provider]'
 labels: provider
 assignees: ''
-
 ---
 
-**Website**
-
+**Website:**
 Website: 
 
-**Extras**
-
+**Extras:**
 If you wanna add something, here you can do it.

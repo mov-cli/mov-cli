@@ -11,6 +11,6 @@ def get_language(prefix):
     position = val_list.index(prefix)
     try:
         key = key_list[position]
-    except:
+    except IndexError: # NOTE: I think there's an easier way of doing this. Can't you just use .get on prefix? ~ Goldy
         key = None
     return key

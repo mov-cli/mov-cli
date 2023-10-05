@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 from devgoldyutils import pprint
 
 if TYPE_CHECKING:
-    from ..media import Media
     from ..media import Metadata
 
 def print_metadata(metadata: Metadata):
+    # TODO: You can pretty print metadata like normal btw if you just want a representation of it, so I would say remove this. ~ Goldy
     DICT = {}
 
     DICT["title"] = metadata.title

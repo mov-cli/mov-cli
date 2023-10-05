@@ -12,7 +12,6 @@ from devgoldyutils import pprint
 
 from mov_cli import mov_cli_logger, Config
 from mov_cli.http_client import HTTPClient
-from mov_cli.scraper_utils import print_metadata
 from mov_cli.scrapers import Sflix, Eja, Gogoanime, ViewAsian, Turkish123, SolarMovies
 
 

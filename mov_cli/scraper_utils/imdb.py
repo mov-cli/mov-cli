@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 
 import httpx
 from bs4 import BeautifulSoup
-from dataclasses import dataclass
 from ..media import Metadata, MetadataType
 
 __all__ = ("imdb_search",)
