@@ -2,8 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Callable, Dict
-    from ..scraper import Scraper
+    from typing import List
 
 from enum import Enum
 from dataclasses import dataclass, field
