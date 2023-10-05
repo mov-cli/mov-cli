@@ -44,7 +44,7 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
     """Returns cli welcome message."""
     now = datetime.now()
     user_name = random.choice(
-        ("buddy", "comrade", "co-worker", "human", "companion", "specimen")
+        ("buddy", "co-worker", "human", "companion", "specimen")
     )
 
     try:
@@ -57,12 +57,12 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
             f"\nError >> {e}"
         )
 
-    text = f"{greetings()}, {Colours.ORANGE.apply(user_name)}."
+    text = f"\n{greetings()}, {Colours.ORANGE.apply(user_name)}."
     text += now.strftime(
-        f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}gorgeous {Colours.PINK_GREY}%A!{Colours.RESET}"
+        f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}gorgeous {Colours.PINK_GREY}%A! {Colours.RESET}"
     )
 
     if update_available():
-        text += "\n       An update is available! --> pip install mov-cli -U"
+        text += f"\n\n {Colours.PURPLE}ツ {Colours.ORANGE}An update is available! --> {Colours.RESET}pip install mov-cli -U"
 
     return text

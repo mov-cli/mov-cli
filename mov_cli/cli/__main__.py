@@ -14,4 +14,4 @@ def mov_cli():
     if config.debug:
         mov_cli_logger.setLevel(logging.DEBUG)
 
-    click.echo(utils.welcome_msg(mov_cli_logger))
+    print(utils.welcome_msg(mov_cli_logger))
