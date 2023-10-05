@@ -48,8 +48,6 @@ class HTTPClient():
                 url, follow_redirects = redirect, **kwargs
             )
 
-            self.__httpx_client.headers = self.config.headers
-
             return req
 
         except httpx.ConnectError as e:

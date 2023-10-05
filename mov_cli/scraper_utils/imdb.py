@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 from ..http_client import HTTPClient
 from ..media import Metadata, MetadataType
 
+from devgoldyutils import pprint
+
 __all__ = ("imdb_search",)
 
 def imdb_search(query: str, config: Config, limit: int = 10) -> List[Metadata]:
@@ -49,7 +51,7 @@ def imdb_search(query: str, config: Config, limit: int = 10) -> List[Metadata]:
         cast = search_result.get("s").split(", ")
 
         imdb_soup = BeautifulSoup(
-            http_client.get(f"https://www.imdb.com/title/{id}").text, config.parser
+            http_client.get(f"https://www.imdb.com/title/{id}/").text, config.parser
         )
 
         description = imdb_soup.find("span", {"data-testid": "plot-xl"}).text
