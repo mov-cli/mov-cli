@@ -14,9 +14,9 @@ mov_cli_logger.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
     config = Config()
-    remote_stream = Sflix(config, HTTPClient(config))
+    remote_stream = Gogoanime(config, HTTPClient(config))
 
-    results = remote_stream.search(" ")
+    results = remote_stream.search("chuunibyou demo take on me")
     pprint(results)
 
     movie = remote_stream.scrape(results[0])

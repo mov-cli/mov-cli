@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from typing import List
 
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 __all__ = ("MetadataType", "Metadata", "Media")
 
@@ -15,18 +15,17 @@ class MetadataType(Enum):
     LIVE_TV = 2
 
 @dataclass
-class Metadata: # TODO: Fields that take None, set them to None by default.
+class Metadata:
     title: str
     id: str | None
-    url: str | None
     type: MetadataType
-
-    # Extras
     year: str | None
     image_url: str | None
-    cast: List[str] | None
-    description: str | None
-    genre: List[str] | None
+
+    url: str | None = field(default = None)
+    cast: List[str] | None = field(default = None)
+    description: str | None = field(default = None)
+    genre: List[str] | None = field(default = None)
 
 class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""
