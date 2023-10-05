@@ -30,15 +30,73 @@ class Sflix(Scraper):
 
         super().__init__(config, http_client)
 
+    def search(self, query: str, limit: int = 10) -> List[Metadata]:
+        search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(query)}")
+        results = self.__results(search_req, limit)
+        return results
+    
+    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
+        if season is None:
+            season = 1
+
+        if episode is None:
+            episode = 1
+
+        if metadata.type == MetadataType.SERIES:
+            season_id = self.__get_season_id(season, metadata.id)
+            epi_id = self.__get_epi_id(season_id, episode)
+            sid = self.__ep_server_id(epi_id)
+            iframe_url = self.__get_link(sid)
+            iframe_link, iframe_id = self.__rabbit_id(iframe_url)
+            url, subtitles = self.__cdn(iframe_link, iframe_id)
+            
+            return Series(
+                url = url,
+                title = metadata.title,
+                referrer = self.base_url,
+                episode = episode,
+                season = season,
+                subtitles = subtitles
+            )
+
+        else:
+            sid = self.__server_id(metadata.id)
+            iframe_url = self.__get_link(sid)
+            iframe_link, iframe_id = self.__rabbit_id(iframe_url)
+            url, subtitles = self.__cdn(iframe_link, iframe_id)
+            
+            return Movie(
+                url = url,
+                title = metadata.title,
+                referrer = self.base_url,
+                year = metadata.year,
+                subtitles = subtitles
+            )
+
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+        seasons = None
+
+        if type == MetadataType.SERIES:
+            seasons = {}
+            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{metadata.id}").text
+
+            season_ids = [
+                i["data-id"] for i in self.soup(r).select(".dropdown-item")
+            ]
+
+            for i in range(len(season_ids)):
+                rf = self.http_client.get(
+                    f"{self.base_url}/ajax/season/episodes/{season_ids[i]}"
+                )
+                episodes = [i["data-id"] for i in self.soup(rf).select(".episode-item")]
+                if len(episodes) >= 1:
+                    seasons[i + 1] = len(episodes)
+        else:
+            return {None: 1}
+
 
     def __parse(self, q: str) -> str:
         return q.replace(" ", "-").lower()
-
-
-    def search(self, q: str, limit: int = None) -> List[Metadata]:
-        search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(q)}")
-        results = self.__results(search_req, limit)
-        return results
 
     def __results(self, html: Response, limit: int = None) -> List[Metadata]:
         soup = self.soup(html)
@@ -89,33 +147,10 @@ class Sflix(Scraper):
             )
 
         return metadata_list
-    
-    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
-        seasons = None
-
-        if type == MetadataType.SERIES:
-            seasons = {}
-            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{metadata.id}").text
-
-            season_ids = [
-                i["data-id"] for i in self.soup(r).select(".dropdown-item")
-            ]
-
-            for i in range(len(season_ids)):
-                rf = self.http_client.get(
-                    f"{self.base_url}/ajax/season/episodes/{season_ids[i]}"
-                )
-                episodes = [i["data-id"] for i in self.soup(rf).select(".episode-item")]
-                if len(episodes) >= 1:
-                    seasons[i + 1] = len(episodes)
-        else:
-            return {None: 1}
-
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
         subtitles = json.loads("{}")
-        self.http_client.set_header({"X-Requested-With": "XMLHttpRequest"})
-        data = self.http_client.get(f"{final_link}getSources?id={rabb_id}").json()
+        data = self.http_client.get(f"{final_link}getSources?id={rabb_id}", headers = {"X-Requested-With": "XMLHttpRequest"}).json()
         for item in data["tracks"]:
             item : dict
             file = item.get("file")
@@ -173,10 +208,8 @@ class Sflix(Scraper):
         ]
         return season_ids[season - 1]
 
-
     def __gh_key(self):
-        self.http_client.set_header({"X-Requested-With": "XMLHttpRequest"})
-        response_key = self.http_client.get('https://github.com/enimax-anime/key/blob/e4/key.txt').json()
+        response_key = self.http_client.get('https://github.com/enimax-anime/key/blob/e4/key.txt', headers = {"X-Requested-With": "XMLHttpRequest"}).json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)
         return key
@@ -227,35 +260,3 @@ class Sflix(Scraper):
         )
         main_decryption = self.__aes_decrypt(decryption_key, new_string)
         return json.loads(main_decryption)
-    
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
-        if metadata.type == MetadataType.SERIES:
-            season_id = self.__get_season_id(season, metadata.id)
-            epi_id = self.__get_epi_id(season_id, episode)
-            sid = self.__ep_server_id(epi_id)
-            iframe_url = self.__get_link(sid)
-            iframe_link, iframe_id = self.__rabbit_id(iframe_url)
-            url, subtitles = self.__cdn(iframe_link, iframe_id)
-            
-            return Series(
-                url = url,
-                title = metadata.title,
-                referrer = self.base_url,
-                episode = episode,
-                season = season,
-                subtitles = subtitles
-            )
-        else:
-            sid = self.__server_id(metadata.id)
-            iframe_url = self.__get_link(sid)
-            iframe_link, iframe_id = self.__rabbit_id(iframe_url)
-            url, subtitles = self.__cdn(iframe_link, iframe_id)
-            
-            return Movie(
-                url = url,
-                title = metadata.title,
-                referrer = self.base_url,
-                year = metadata.year,
-                subtitles = subtitles
-            )
-

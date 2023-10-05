@@ -17,7 +17,7 @@ class ViewAsian(Scraper):
         self.base_url = "https://viewasian.co"
         super().__init__(config, http_client)
 
-    def search(self, query: str, limit: int = None) -> List[Metadata]:
+    def search(self, query: str, limit: int = 10) -> List[Metadata]:
         query = query.replace(' ', '-')
         result = self.__results(query, limit)
         return result
@@ -47,9 +47,7 @@ class ViewAsian(Scraper):
                 id = url.split("/")[-1]
                 img = item.select(".mli-thumb")[0]["data-original"]
 
-                self.http_client.set_header({"X-Requested-With": "XMLHttpRequest"})
-
-                data_url_req = self.http_client.get(self.base_url + data_url)
+                data_url_req = self.http_client.get(self.base_url + data_url, headers = {"X-Requested-With": "XMLHttpRequest"})
                 data_soup = self.soup(data_url_req)
 
                 description = data_soup.find("p", {"class": "f-desc"}).text
@@ -95,11 +93,7 @@ class ViewAsian(Scraper):
             self.logger.error(e) # NOTE: Again does this even raise an exception and should we log it? ~ Goldy
             return None
         urlh = f"https://dood.to{pass_md5}"
-        headers = {
-            "referer": "https://dood.to",
-        }
-        self.http_client.add_header_elem(headers)
-        res = self.http_client.get(urlh).text
+        res = self.http_client.get(urlh, headers = {"referer": "https://dood.to"}).text
         md5 = pass_md5.split("/")
         true_url = res + "MovCli3oPi?token=" + md5[-1]
         return true_url

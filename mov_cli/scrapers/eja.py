@@ -31,8 +31,8 @@ class Eja(Scraper): # TODO: Add scrape_metadata_episodes abstract method.
 
         self.base_url = "https://eja.tv"
 
-    def search(self, q: str = None, limit: int = None):
-        q = q.replace(" ", "+")
+    def search(self, query: str = None, limit: int = 10):
+        q = query.replace(" ", "+")
         eja_req = self.http_client.get(f"{self.base_url}/?search={q}")
         result = self.__results(eja_req, limit)
         return result

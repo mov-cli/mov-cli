@@ -19,7 +19,7 @@ class Gogoanime(Scraper):
         self.base_url = "https://gogoanimehd.io"
         super().__init__(config, http_client)
 
-    def search(self, query: str, limit: int = None) -> List[Metadata]:
+    def search(self, query: str, limit: int = 10) -> List[Metadata]:
         query = query.replace(' ', '-')
         results = self.__results(query, limit)
         return results    
@@ -141,11 +141,7 @@ class Gogoanime(Scraper):
             self.logger.error(e) # NOTE: Does this even raise an exception and should we log it? ~ Goldy
             return None
         urlh = f"https://dood.to{pass_md5}"
-        headers = {
-            "referer": "https://dood.to",
-        }
-        self.http_client.add_header_elem(headers)
-        res = self.http_client.get(urlh).text
+        res = self.http_client.get(urlh, headers = {"referer": "https://dood.to"}).text
         md5 = pass_md5.split("/")
         true_url = res + "MovCli3oPi?token=" + md5[-1]
         return true_url

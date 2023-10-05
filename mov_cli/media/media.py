@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from typing import List
 
 from enum import Enum
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 __all__ = ("MetadataType", "Metadata", "Media")
 

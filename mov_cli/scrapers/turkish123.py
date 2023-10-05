@@ -18,7 +18,7 @@ class Turkish123(Scraper):
         self.base_url = "https://turkish123.ac"
         super().__init__(config, http_client)
 
-    def search(self, query: str, limit: int = None) -> List[Metadata]:
+    def search(self, query: str, limit: int = 10) -> List[Metadata]:
         query = query.replace(' ', '+')
         req = self.http_client.get(f'{self.base_url}/?s={query}')
         result = self.__results(req, limit)
@@ -100,7 +100,12 @@ class Turkish123(Scraper):
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
         return url, f"https://tukipasti.com{s}"
                 
-    def scrape(self, metadata: Metadata, episode: int = None) -> Series:
+    def scrape(self, metadata: Metadata, episode: int = None, season: int = None) -> Series:
+        if episode is None:
+            episode = 1
+        if season is None:
+            season = 1
+
         href = self.__get_episode_url(metadata.id, episode)
         url, referrer = self.__tukipasti(href)
 
@@ -109,7 +114,7 @@ class Turkish123(Scraper):
             title = metadata.title,
             referrer = referrer,
             episode = episode,
-            season = 1,
+            season = season,
             subtitles = None
         )
         

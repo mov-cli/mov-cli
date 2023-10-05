@@ -45,4 +45,4 @@ max-complexity = 10
 
 [per-file-ignores]
 "__init__.py" = ["F403"]
-"scripts" = ["F401"]
+"scripts/*" = ["F401"]

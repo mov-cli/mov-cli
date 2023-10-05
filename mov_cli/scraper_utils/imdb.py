@@ -10,8 +10,6 @@ from bs4 import BeautifulSoup
 from ..http_client import HTTPClient
 from ..media import Metadata, MetadataType
 
-from devgoldyutils import pprint
-
 __all__ = ("imdb_search",)
 
 def imdb_search(query: str, config: Config, limit: int = 10) -> List[Metadata]:
