@@ -17,7 +17,8 @@ class SiteMaybeBlocked(errors.MovCliException):
     def __init__(self, url: str, error: httpx.ConnectError) -> None:
         super().__init__(
             f"A connection error occurred while making a GET request to '{url}'.\n" \
-            "There's most likely nothing wrong with mov-cli. Your ISP's DNS could be blocking this site or perhaps the site is down.\n" \
+            "There's most likely nothing wrong with mov-cli. Your ISP's DNS could be blocking this site or perhaps the site is down. " \
+            f"{Colours.GREEN}SOLUTION: Use a VPN or switch DNS!{Colours.RED}\n" \
             f"Actual Error >> {error}"
         )
 
@@ -37,7 +38,7 @@ class HTTPClient():
 
     def get(self, url: str, redirect: bool = False, **kwargs) -> Response:
         """Performs a GET request and returns httpx.Response."""
-        self.logger.debug(Colours.GREEN.apply("GET") + f": {url}")
+        self.logger.debug(Colours.GREEN.apply("GET") + f" -> {url}")
 
         self.__httpx_client.headers["Referer"] = url
 
@@ -53,7 +54,7 @@ class HTTPClient():
 
         except httpx.ConnectError as e:
             raise SiteMaybeBlocked(url, e)
-    
+
 
     # NOTE: Are we even using post requests, like will they be used in the future? ~ Goldy
     def post(self, url: str, data: dict = None, json: dict = None, **kwargs) -> Response: 

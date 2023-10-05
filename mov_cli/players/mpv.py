@@ -21,6 +21,8 @@ class MPV(Player):
         super().__init__(Colours.PURPLE.apply("MPV"), config)
 
     def play(self, media: Media) -> subprocess.Popen:
+        """Plays this media in the MPV media player."""
+
         if self.platform == "Android":
             self.logger.info("Detected you're using Android.")
 

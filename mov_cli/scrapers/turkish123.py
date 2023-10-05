@@ -75,16 +75,16 @@ class Turkish123(Scraper):
         
         return metadata_list
 
-    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
-            page = self.http_client.get(self.base_url + "/" + metadata.id, redirect = True)
-            page_soup = self.soup(page)
-            year = page_soup.find("div", {"class": "mvici-right"})
-            year = year.findAll("a")
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+        page = self.http_client.get(self.base_url + "/" + metadata.id, redirect = True)
+        page_soup = self.soup(page)
+        year = page_soup.find("div", {"class": "mvici-right"})
+        year = year.findAll("a")
 
-            seasons = {}
+        seasons = {}
 
-            seasons[1] = len(page_soup.findAll("a", {"class": "episodi"}))
-            return seasons
+        seasons[1] = len(page_soup.findAll("a", {"class": "episodi"}))
+        return seasons
 
     def __get_episode_url(self, id: str, episode: int):
         req = self.http_client.get(self.base_url + "/" + id, redirect = True)

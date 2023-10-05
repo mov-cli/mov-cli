@@ -19,6 +19,8 @@ class VLC(Player):
         super().__init__(Colours.ORANGE.apply("VLC"), config)
 
     def play(self, media: Media) -> subprocess.Popen:
+        """Plays this media in the VLC media player."""
+
         if self.platform == "Linux" or self.platform == "Windows":
             try:
                 return subprocess.Popen(

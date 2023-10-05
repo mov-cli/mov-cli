@@ -76,12 +76,12 @@ class ViewAsian(Scraper):
                     break
 
         return metadata_list
-    
-    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
+
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
         req = self.http_client.get(metadata.url)
         soup = self.soup(req)
         episodes = soup.findAll("li", {"class": "ep-item"})
-        return {1: len(episodes)}
+        return {None: len(episodes)}
 
     def dood(self, url):
         video_id = url.split("/")[-1]

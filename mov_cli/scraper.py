@@ -37,14 +37,7 @@ class Scraper(ABC):
         """Where your scraping for the media should be done. Should return an instance of Media."""
         ...
 
-    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
-        """Returns a dict with the season and episode. Returns Dict"""
-        ...
-
-    def __movie(self) -> dict:
-        """When a movie is selected, this will process it. Returns dict"""
-        ...
-
-    def __tv(self, season: int, episode: int) -> dict:
-        """When a show is selected, this will process it. Returns dict"""
+    @abstractmethod
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+        """Returns episode count for each season in that Movie/Series."""
         ...

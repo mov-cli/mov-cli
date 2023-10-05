@@ -9,8 +9,8 @@ if TYPE_CHECKING:
     from bs4 import BeautifulSoup
     from ..http_client import HTTPClient
 
-from ..scraper import Scraper
 import re
+from ..scraper import Scraper
 
 __all__ = ("Gogoanime",)
 
@@ -64,35 +64,36 @@ class Gogoanime(Scraper):
                 genres = _p[3].findAll("a")
 
                 genres = [i.text.split(" ")[-1] for i in genres]
-            
-                metadata_list.append(Metadata(
-                    title = title,
-                    id = id,
-                    url = self.base_url + f"/category/{id}",
-                    type = type,
-                    image_url = img,
-                    year = year,
-                    genre=genres,
-                    cast=None,
-                    description = description
-                ))
+
+                metadata_list.append(
+                    Metadata(
+                        title = title,
+                        id = id,
+                        url = self.base_url + f"/category/{id}",
+                        type = type,
+                        image_url = img,
+                        year = year,
+                        genre = genres,
+                        cast = None,
+                        description = description
+                    )
+                )
 
                 if len(metadata_list) == limit:
                     break
 
             pagination += 1
-        
+
         return metadata_list
 
-    def get_seasons_episodes(self, metadata: Metadata) -> Dict[int, int]:
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int, int]:
         page = self.http_client.get(f"https://gogoanimehd.io/category/{metadata.id}")
         _soup = self.soup(page)
 
         episode_page = _soup.find("ul", {"id": "episode_page"})
         li = episode_page.findAll("li")
         last = int(li[-1].find("a")["ep_end"])
-        return {1: last}
-
+        return {1: last} # TODO: Return multiple seasons.
 
     def cdn(self, id, episode):
         req = self.http_client.get(self.base_url + f"/{id}-episode-{episode}")
@@ -105,11 +106,11 @@ class Gogoanime(Scraper):
         return url
 
     def scrape(self, metadata: Metadata, episode: int = None) -> Series | Movie:
-        if metadata.type == MetadataType.MOVIE:
+        if episode is None or metadata.type == MetadataType.MOVIE:
             episode = 1
-        
+
         url = self.cdn(metadata.id, episode)
-        
+
         if metadata.type == MetadataType.MOVIE:
             return Movie(
                 url,
@@ -118,7 +119,7 @@ class Gogoanime(Scraper):
                 year = metadata.year,
                 subtitles = None
             )
-    
+
         return Series(
             url,
             title = metadata.title,

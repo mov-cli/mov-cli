@@ -6,21 +6,23 @@ if TYPE_CHECKING:
     from typing import List
     from ..config import Config
 
-import httpx
 from bs4 import BeautifulSoup
+from ..http_client import HTTPClient
 from ..media import Metadata, MetadataType
 
 __all__ = ("imdb_search",)
 
-def imdb_search(query: str, config: Config) -> List[Metadata]:
-    imdb_data = httpx.get(
+def imdb_search(query: str, config: Config, limit: int = 10) -> List[Metadata]:
+    http_client = HTTPClient(config)
+
+    imdb_data = http_client.get(
         f"https://v2.sg.media-imdb.com/suggestion/{query[0]}/{query}.json"
     )
     search_results: List[dict] = imdb_data.json()["d"]
 
     meta_data_list = []
 
-    for search_result in search_results:
+    for search_result in search_results[:limit]:
         id = search_result.get("id")
 
         if not id.startswith("tt"):
@@ -46,14 +48,14 @@ def imdb_search(query: str, config: Config) -> List[Metadata]:
 
         cast = search_result.get("s").split(", ")
 
-        imdb_page = f"https://www.imdb.com/title/{id}"
-        imdb_soup = BeautifulSoup(httpx.get(imdb_page, headers = config.headers).text, config.parser)
+        imdb_soup = BeautifulSoup(
+            http_client.get(f"https://www.imdb.com/title/{id}").text, config.parser
+        )
 
         description = imdb_soup.find("span", {"data-testid": "plot-xl"}).text
 
-        genre = imdb_soup.find("li", {"data-testid": "storyline-genres"}).findAll("li")
-
-        genre = [s.find("a").text for s in genre]
+        genres = imdb_soup.find("li", {"data-testid": "storyline-genres"}).findAll("li")
+        genres = [s.find("a").text for s in genres]
 
         meta_data_list.append(
             Metadata(
@@ -63,7 +65,7 @@ def imdb_search(query: str, config: Config) -> List[Metadata]:
                 type = imdb_type,
                 image_url = image_url,
                 year = year,
-                genre = genre,
+                genre = genres,
                 cast = cast,
                 description = description
             )

@@ -44,7 +44,7 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
     """Returns cli welcome message."""
     now = datetime.now()
     user_name = random.choice(
-        ("buddy", "co-worker", "human", "companion", "specimen")
+        ("buddy", "comrade", "co-worker", "human", "companion", "specimen")
     )
 
     try:

@@ -25,7 +25,7 @@ class MetadataEja:
 
 __all__ = ("Eja",)
 
-class Eja(Scraper):
+class Eja(Scraper): # TODO: Add scrape_metadata_episodes abstract method.
     def __init__(self, config: Config, http_client: HTTPClient):
         super().__init__(config, http_client)
 

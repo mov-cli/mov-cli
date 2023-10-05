@@ -109,10 +109,6 @@ def test(http_client: HTTPClient):
     pprint(test_js)
 
 
-
-
-
-
 if __name__ == "__main__":
     print("Testing Provider")
 

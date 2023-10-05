@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Dict
     from httpx import Response
     from ..config import Config
     from bs4 import BeautifulSoup
@@ -90,8 +90,8 @@ class Sflix(Scraper):
 
         return metadata_list
     
-    def get_seasons_episodes(self, metadata: Metadata):
-        seasons = None # 
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+        seasons = None
 
         if type == MetadataType.SERIES:
             seasons = {}
@@ -109,8 +109,8 @@ class Sflix(Scraper):
                 if len(episodes) >= 1:
                     seasons[i + 1] = len(episodes)
         else:
-            return None
-    
+            return {None: 1}
+
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
         subtitles = json.loads("{}")

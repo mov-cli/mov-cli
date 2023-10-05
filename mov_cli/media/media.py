@@ -2,10 +2,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List
+    from typing import List, Callable, Dict
+    from ..scraper import Scraper
 
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 __all__ = ("MetadataType", "Metadata", "Media")
 
@@ -15,17 +16,18 @@ class MetadataType(Enum):
     LIVE_TV = 2
 
 @dataclass
-class Metadata:
+class Metadata: # TODO: Fields that take None, set them to None by default.
     title: str
     id: str | None
     url: str | None
-    type: MetadataType | None
+    type: MetadataType
+
     # Extras
-    image_url: str | None
     year: str | None
-    genre: List[str] | None
+    image_url: str | None
     cast: List[str] | None
     description: str | None
+    genre: List[str] | None
 
 class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""
