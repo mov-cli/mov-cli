@@ -5,6 +5,7 @@ if TYPE_CHECKING:
     from ..media import Media
     from ..config import Config
 
+import time
 import subprocess
 from devgoldyutils import Colours
 
@@ -38,7 +39,19 @@ class MPV(Player):
                 ]
             )
 
+        elif self.platform == "iOS":
+            self.logger.info("Detected your using iOS. \r\n")
+
+            print(
+                f"\033]vlc-x-callback://x-callback-url/stream?url={media.url}\033\\-------------------------\n- Tap to open VLC -\n-------------------------\033]8;;\033\\\n"
+            )
+
+            self.logger.info("Sleeping for 10 Seconds.")
+
+            time.sleep(10)
+
         else:  # Windows, Linux and Other
+
             try:
                 if self.platform == "Linux" or self.platform == "Windows":
                     mpv_args = [

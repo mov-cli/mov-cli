@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 if TYPE_CHECKING:
     from .players import Player
-    from typing import Type, Dict, Union, Literal, Any
+    from typing import Dict, Union, Literal, Any
 
     JSON_VALUES = Union[str, bool, int, dict]
 
@@ -53,16 +53,16 @@ class Config():
             self.data = override_config
 
     @property
-    def player(self) -> Type[Player]:
+    def player(self) -> Player:
         """Returns the configured player class. Defaults to MPV."""
-        value = self.data.get("player", "mpv").lower()
+        value = self.data.get("player", "mpv")
 
-        if value == "mpv":
-            return players.MPV
-        elif value == "vlc":
-            return players.VLC
+        if value.lower() == "mpv":
+            return players.MPV(self)
+        elif value.lower() == "vlc":
+            return players.VLC(self)
 
-        return players.MPV
+        return players.CustomPlayer(self, value)
 
     @property
     def flatpak_mpv(self) -> bool:
