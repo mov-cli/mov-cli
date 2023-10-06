@@ -46,6 +46,9 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
     user_name = random.choice(
         ("buddy", "comrade", "co-worker", "human", "companion", "specimen")
     )
+    adjective = random.choice(
+        ("gorgeous", "wonderful", "beautiful", "magnificent")
+    )
 
     try:
         user_name = getpass.getuser()
@@ -59,7 +62,7 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
 
     text = f"\n{greetings()}, {Colours.ORANGE.apply(user_name)}."
     text += now.strftime(
-        f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}gorgeous {Colours.PINK_GREY}%A! {Colours.RESET}"
+        f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}{adjective} {Colours.PINK_GREY}%A! {Colours.RESET}"
     )
 
     if update_available():
