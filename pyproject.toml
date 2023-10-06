@@ -29,7 +29,8 @@ dependencies = [
     "devgoldyutils>=2.5.6",
     "platformdirs>=3.10.0",
     "click",
-    "pyfzf",
+    "inquirer",
+    "iterfzf",
     "beautifulsoup4",
     "pycryptodome",
 ]

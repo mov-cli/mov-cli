@@ -11,7 +11,6 @@ import platform
 
 __all__ = ("what_platform",)
 
-
 def what_platform() -> SUPPORTED_PLATFORMS:
     """
     Returns what platform/OS this device is running on.

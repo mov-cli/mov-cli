@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypedDict, final
 
 if TYPE_CHECKING:
     from .players import Player
     from typing import Dict, Union, Literal, Any
 
     JSON_VALUES = Union[str, bool, int, dict]
+    SUPPORTED_PARSERS = Literal["lxml", "html.parser"]
 
 import os
 import toml
@@ -18,8 +19,27 @@ from . import players, mov_cli_logger
 
 __all__ = ("Config",)
 
-class ConfigDict(TypedDict): # TODO: Complete this.
-    ...
+@final
+class ConfigDictUI(TypedDict):
+    fzf: bool
+
+@final
+class ConfigDictHTTP(TypedDict):
+    headers: Dict[str, str]
+
+@final
+class ConfigDictDownloads(TypedDict):
+    save_path: str
+
+@final
+class ConfigDict(TypedDict):
+    debug: bool
+    player: str
+    flatpak_mpv: bool
+    parser: SUPPORTED_PARSERS
+    ui: ConfigDictUI
+    http: ConfigDictHTTP
+    downloads: ConfigDictDownloads
 
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
@@ -27,18 +47,18 @@ class Config():
         self.config_path = config_path
         self.logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
 
-        self.data: Dict[str, JSON_VALUES] = {}
+        self.data: ConfigDict = {}
 
         if override_config is None:
-            template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}mov_cli.template.toml"
+            template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}config.template.toml"
             # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
             mov_cli_data_path = platformdirs.site_data_dir("mov_cli", ensure_exists = True)
 
             if self.config_path is None:
-                self.config_path = Path.joinpath(Path(mov_cli_data_path), "mov_cli.toml")
+                self.config_path = Path.joinpath(Path(mov_cli_data_path), "config.toml")
 
             if not self.config_path.exists():
-                self.logger.debug("The 'mov-cli.toml' config doesn't exist so we're creating it...")
+                self.logger.debug("The 'config.toml' file doesn't exist so we're creating it...")
                 config_file = open(self.config_path, "w")
 
                 with open(template_config_path, "r") as config_template:
@@ -70,7 +90,12 @@ class Config():
         return self.data.get("flatpak_mpv", False)
 
     @property
-    def parser(self) -> Literal["lxml", "html.parser"] | Any:
+    def fzf_enabled(self) -> bool:
+        """Returns whether fzf is allowed to be used."""
+        return self.data.get("ui", {}).get("fzf", True)
+
+    @property
+    def parser(self) -> SUPPORTED_PARSERS | Any:
         """Returns the parser type configured by the user else it just returns the default."""
         default_parser = "lxml" if find_spec("lxml") else "html.parser"
         return self.data.get("parser", default_parser)
@@ -79,12 +104,7 @@ class Config():
     def download_location(self) -> str:
         """Returns download location. Defaults to OS's download location."""
         default_location = platformdirs.user_downloads_dir()
-        downloads_config = self.data.get("downloads")
-
-        if downloads_config is not None:
-            return downloads_config.get("download_location", default_location)
-
-        return default_location
+        return self.data.get("downloads", {}).get("save_path", default_location)
 
     @property
     def debug(self) -> bool:
@@ -116,7 +136,7 @@ class Config():
             return None
 
     @property
-    def headers(self) -> dict:
+    def http_headers(self) -> dict:
         """Returns http headers."""
         default_headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0",
@@ -124,4 +144,4 @@ class Config():
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         }
 
-        return self.data.get("headers", default_headers)
+        return self.data.get("http", {}).get("headers", default_headers)

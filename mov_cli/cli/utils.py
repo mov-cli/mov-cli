@@ -7,20 +7,13 @@ if TYPE_CHECKING:
 
 import random
 import getpass
-from httpx import get
 from datetime import datetime
 from devgoldyutils import Colours
 
-import mov_cli
+from .. import utils
+from .. import __version__ as mov_cli_version
 
-def update_available() -> bool:
-    pypi = get("https://pypi.org/pypi/mov-cli/json").json()
-    pypi_ver = pypi["info"]["version"]
-
-    if pypi_ver > mov_cli.__version__:
-        return True
-
-    return False
+__all__ = ("greetings", "welcome_msg")
 
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
     now = datetime.now()
@@ -40,7 +33,7 @@ def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Go
         elif i > 8:
             return "Good Night"
 
-def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://github.com/justfoolingaround/animdl
+def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_version: bool = False) -> str: # Inspired by animdl: https://github.com/justfoolingaround/animdl
     """Returns cli welcome message."""
     now = datetime.now()
     user_name = random.choice(
@@ -65,7 +58,13 @@ def welcome_msg(logger: logging.Logger) -> str: # Inspired by animdl: https://gi
         f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}{adjective} {Colours.PINK_GREY}%A! {Colours.RESET}"
     )
 
-    if update_available():
+    if display_hint is True:
+        text += f"\n\n- Hint: {Colours.CLAY}mov-cli {Colours.ORANGE}spider man no way home{Colours.RESET}"
+
+    if display_version is True:
+        text += f"\n\n{Colours.CLAY}-> {Colours.RESET}Version: {Colours.BLUE}{mov_cli_version}{Colours.RESET}"
+
+    if utils.update_available():
         text += f"\n\n {Colours.PURPLE}ツ {Colours.ORANGE}An update is available! --> {Colours.RESET}pip install mov-cli -U"
 
     return text

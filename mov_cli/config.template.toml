@@ -1,0 +1,6 @@
+[mov-cli]
+player = "mpv"
+debug = false
+
+[mov-cli.ui]
+fzf = true

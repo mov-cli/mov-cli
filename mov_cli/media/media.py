@@ -16,15 +16,22 @@ class MetadataType(Enum):
 
 @dataclass
 class Metadata:
+    """Search metadata from TheTvDB."""
+    id: str
+    """TheTvDB or MyAnimeList ID."""
     title: str
-    id: str | None
+    """Title of the Series, Film or TV Station."""
     type: MetadataType
-    year: str | None
-    image_url: str | None
+    """The type of metadata. Is it a Series, Film or LIVE TV Station?"""
+    year: str
+    """Year the Series or Film was released."""
 
-    url: str | None = field(default = None)
+    image_url: str
+    """Url to high res image cover of Series, Film or TV Station."""
+    description: str
+    alternate_titles: List[str]
+
     cast: List[str] | None = field(default = None)
-    description: str | None = field(default = None)
     genre: List[str] | None = field(default = None)
 
 class Media():

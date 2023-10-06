@@ -1,2 +1,2 @@
-from .console import *
+from .version import *
 from .platform import *
