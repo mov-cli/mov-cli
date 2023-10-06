@@ -30,7 +30,7 @@ class HTTPClient():
 
         self.__httpx_client = httpx.Client(
             timeout = 15.0,
-            headers = config.headers,
+            headers = config.http_headers,
             cookies = None,
         )
 
@@ -44,10 +44,12 @@ class HTTPClient():
         try:
             response = self.__httpx_client.get(
                 url, 
-                headers = {**self.config.headers, **headers} if not headers == {} else None, 
+                headers = {**self.config.http_headers, **headers} if not headers == {} else None, 
                 follow_redirects = redirect, 
                 **kwargs
             )
+
+            self.logger.debug(f"Get request made to '{response.url}'. ({response})")
 
             return response
 

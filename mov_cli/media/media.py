@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List
+    ...
 
 from enum import Enum
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 __all__ = ("MetadataType", "Metadata", "Media")
 
@@ -17,22 +17,22 @@ class MetadataType(Enum):
 @dataclass
 class Metadata:
     """Search metadata from TheTvDB."""
-    id: str
-    """TheTvDB or MyAnimeList ID."""
+    id: str | None
     title: str
     """Title of the Series, Film or TV Station."""
+    description: str
+    """Description of Series, Film or TV Station."""
     type: MetadataType
     """The type of metadata. Is it a Series, Film or LIVE TV Station?"""
-    year: str
+    year: str | None
     """Year the Series or Film was released."""
-
-    image_url: str
+    image_url: str | None
     """Url to high res image cover of Series, Film or TV Station."""
-    description: str
-    alternate_titles: List[str]
 
-    cast: List[str] | None = field(default = None)
-    genre: List[str] | None = field(default = None)
+    #alternate_titles: List[str]
+
+    #cast: List[str] | None = field(default = None)
+    #genre: List[str] | None = field(default = None)
 
 class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""

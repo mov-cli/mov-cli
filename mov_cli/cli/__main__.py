@@ -7,10 +7,12 @@ if TYPE_CHECKING:
 import click
 import logging
 
-# from . import ui
+from . import ui
 from . import utils
 from ..config import Config
 from ..logger import mov_cli_logger
+from ..search_apis import TheMovieDB
+from ..http_client import HTTPClient
 
 __all__ = ("mov_cli",)
 
@@ -30,7 +32,13 @@ __all__ = ("mov_cli",)
     help = "Player you would like to stream with."
 )
 @click.option("--fzf/--no-fzf", default = None, help = "Toggle fzf for select prompts.")
-def mov_cli(query: Tuple[str], debug: bool, version: bool, player: str, fzf: bool):
+def mov_cli(
+    query: Tuple[str], 
+    debug: bool, 
+    version: bool, 
+    player: str, 
+    fzf: bool
+):
     config = Config()
 
     if debug is not None:
@@ -56,4 +64,7 @@ def mov_cli(query: Tuple[str], debug: bool, version: bool, player: str, fzf: boo
 
     # NOTE: Where searching will happen.
     if len(query) > 0:
-        ...
+        query: str = " ".join(query)
+        search_wrapper = TheMovieDB(HTTPClient(config))
+
+        ui.prompt("Test test: ", search_wrapper.search(query), config)
