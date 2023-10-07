@@ -57,7 +57,7 @@ class MPV(Player):
                     mpv_args = [
                         f"--referrer={media.referrer}",
                         f"{media.url}",
-                        f"--force-media-title=mov-cli:{media.title}",
+                        f"--force-media-title={media.title}",
                         "--no-terminal",
                     ]
 

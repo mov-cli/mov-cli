@@ -198,7 +198,6 @@ class Sflix(Scraper):
         episode = episodes[episode - 1]
         return episode
 
-
     def __get_link(self, thing_id: str) -> tuple:
         req = self.http_client.get(f"{self.base_url}/ajax/sources/{thing_id}").json()["link"]
         return req
@@ -221,8 +220,10 @@ class Sflix(Scraper):
         return season_ids[season - 1]
 
     def __gh_key(self):
-        response_key = self.http_client.custom_get(
-            "https://github.com/enimax-anime/key/blob/e4/key.txt", headers = {"X-Requested-With": "XMLHttpRequest"}
+        response_key = self.http_client.get(
+            "https://github.com/enimax-anime/key/blob/e4/key.txt", 
+            headers = {"X-Requested-With": "XMLHttpRequest"},
+            include_default_headers = False
         ).json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)

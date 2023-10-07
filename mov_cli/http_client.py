@@ -30,26 +30,38 @@ class HTTPClient():
 
         self.__httpx_client = httpx.Client(
             timeout = 15.0,
-            headers = config.http_headers,
-            cookies = None,
+            cookies = None
         )
 
         super().__init__()
 
-    def get(self, url: str, headers: dict = {}, redirect: bool = False, **kwargs) -> Response:
+    def get(
+        self, 
+        url: str, 
+        headers: dict = {}, 
+        include_default_headers: bool = True, 
+        redirect: bool = False, 
+        **kwargs
+    ) -> Response:
         """Performs a GET request and returns httpx.Response."""
         self.logger.debug(Colours.GREEN.apply("GET") + f" -> {url}")
-        headers.update({"Referer": url})
+
+        if include_default_headers is True:
+            headers.update({"Referer": url})
+            headers.update(self.config.http_headers)
 
         try:
             response = self.__httpx_client.get(
                 url, 
-                headers = {**self.config.http_headers, **headers} if not headers == {} else None, 
+                headers = headers, 
                 follow_redirects = redirect, 
                 **kwargs
             )
 
-            self.logger.debug(f"Get request made to '{response.url}'. ({response})")
+            if not response.is_success:
+                self.logger.error(
+                    f"GET Request to {response.url} failed! ({response})", self.logger
+                )
 
             return response
 
@@ -67,13 +79,6 @@ class HTTPClient():
         return self.__httpx_client.post(
             url, data = data, json = json, **kwargs
         )
-    
-    def custom_get(self, url: str, **kwargs):
-        """Performs a custom GET request and returns httpx.Response."""
-        self.logger.debug(Colours.GREEN.apply("C-GET") + f": {url}")
-
-        return httpx.get(url, **kwargs)
-
 
     def set_cookies(self, cookies: dict) -> None:
         """Sets cookies."""
