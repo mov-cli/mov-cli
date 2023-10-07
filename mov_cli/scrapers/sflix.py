@@ -13,13 +13,14 @@ from .. import scraper_utils
 from ..scraper import Scraper
 from ..media import Series, Movie
 
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import unpad
-from urllib import parse as p
-from ..media import Metadata, MetadataType
-import hashlib
 import json
 import base64
+import hashlib
+from Crypto.Cipher import AES
+from urllib import parse as p
+from Crypto.Util.Padding import unpad
+from ..media import Metadata, MetadataType
+
 
 __all__ = ("Sflix",)
 
@@ -28,11 +29,6 @@ class Sflix(Scraper):
         self.base_url = "https://sflix.se"
 
         super().__init__(config, http_client)
-
-    def search(self, query: str, limit: int = 10) -> List[Metadata]:
-        search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(query)}")
-        results = self.__search(search_req, limit)
-        return results
 
     def scrape(self, metadata: Metadata, limit: int = 10, season: int = None, episode: int = None) -> Series | Movie:
         if season is None:
@@ -50,7 +46,7 @@ class Sflix(Scraper):
             iframe_url = self.__get_link(sid)
             iframe_link, iframe_id = self.__rabbit_id(iframe_url)
             url, subtitles = self.__cdn(iframe_link, iframe_id)
-            
+
             return Series(
                 url = url,
                 title = metadata.title,
@@ -95,7 +91,6 @@ class Sflix(Scraper):
         else:
             return {None: 1}
 
-
     def __parse(self, q: str) -> str:
         return q.replace(" ", "-").lower()
 
@@ -112,51 +107,6 @@ class Sflix(Scraper):
         for item in items:
             url = item.select(".film-poster-ahref")[0]["href"]
             id_list.append(url.split("-")[-1])
-
-        """
-        for item in items:
-            item: BeautifulSoup
-            url = item.select(".film-poster-ahref")[0]["href"]
-            
-            type = None
-            if url.__contains__("/movie/"):
-                type = MetadataType.MOVIE
-            else:
-                type = MetadataType.SERIES
-            
-            title = item.select(".film-name > a")[0].text
-            
-            id = url.split("-")[-1]
-
-            year = item.find("span", {"class": "fdi-item"}).text
-
-            img = item.select(".film-poster-img")[0]["data-src"]
-
-            page = self.http_client.get(self.base_url + url)
-            page_soup = self.soup(page)
-
-            row_line = page_soup.findAll("div", {"class": "row-line"})
-
-            genre = [i.text for i in row_line[1].findAll("a")]
-
-            cast = [i.text for i in row_line[2].findAll("a")]
-
-            description = page_soup.find("div", {"class": "description"}).next_siblings
-
-            metadata_list.append(
-                Metadata(
-                    id = id,
-                    title = title,
-                    url = self.base_url + url,
-                    type = type,
-                    image_url = img,
-                    year = year,
-                    genre = genre,
-                    cast = cast,
-                    description = description
-                )
-            )
-        """
 
         return id_list
 
