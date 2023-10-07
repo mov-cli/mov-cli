@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
-from . import mov_cli_logger
+from . import mov_cli_logger, errors
 
 __all__ = ("Scraper",)
 
@@ -41,3 +41,10 @@ class Scraper(ABC):
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
         """Returns episode count for each season in that Movie/Series."""
         ...
+
+class MissingSeasonEpisode(errors.MovCliException):
+    """Raises if the given Metadata needs the Season or Episode."""
+    def __init__(self) -> None:
+        super().__init__(
+            f"Given Metadata needs Season and/or Episode\n"
+        )
