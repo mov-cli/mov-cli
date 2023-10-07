@@ -3,15 +3,18 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from bs4 import Tag
     from typing import List
     from ..config import Config
 
 from bs4 import BeautifulSoup
+# from urllib.parse import quote
 from ..http_client import HTTPClient
 from ..media import Metadata, MetadataType
 
 __all__ = ("imdb_search",)
 
+# NOTE: Will probably remove this as I don't think any other scraper will use it and it's not very stable :/
 def imdb_search(query: str, config: Config, limit: int = 10) -> List[Metadata]:
     http_client = HTTPClient(config)
 
@@ -48,14 +51,15 @@ def imdb_search(query: str, config: Config, limit: int = 10) -> List[Metadata]:
 
         cast = search_result.get("s").split(", ")
 
-        imdb_soup = BeautifulSoup(
+        soup = BeautifulSoup(
             http_client.get(f"https://www.imdb.com/title/{id}/").text, config.parser
         )
 
-        description = imdb_soup.find("span", {"data-testid": "plot-xl"}).text
+        description = soup.find("span", {"data-testid": "plot-xl"}).text
 
-        genres = imdb_soup.find("li", {"data-testid": "storyline-genres"}).findAll("li")
-        genres = [s.find("a").text for s in genres]
+        storyline_genres = soup.find("li", {"data-testid": "storyline-genres"})
+        li_genres: List[Tag] = storyline_genres.find_all("li", {"class": "ipc-inline-list__item"})
+        genres = [genre.find("a").text for genre in li_genres]
 
         meta_data_list.append(
             Metadata(

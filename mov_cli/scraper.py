@@ -28,13 +28,11 @@ class Scraper(ABC):
         return BeautifulSoup(html, self.config.parser)
 
     @abstractmethod
-    def search(self, query: str, limit: int = None) -> Metadata:
-        """Where your searching should be done. This will be called upon search operation."""
-        ...
-
-    @abstractmethod
     def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie | LiveTV:
-        """Where your scraping for the media should be done. Should return an instance of Media."""
+        """
+        Where your searching and scraping for the media should be performed done. 
+        Should return an instance of Media.
+        """
         ...
 
     @abstractmethod

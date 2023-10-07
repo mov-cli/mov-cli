@@ -8,8 +8,8 @@ if TYPE_CHECKING:
 
 import re
 
-from .. import scraper_utils
 from ..scraper import Scraper
+from urllib.parse import quote
 from ..media import Series, Movie, MetadataType, Metadata
 
 __all__ = ("RemoteStream",)
@@ -17,31 +17,36 @@ __all__ = ("RemoteStream",)
 class RemoteStream(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://remotestre.am"
-        self.catalogue = "https://remotestre.am/catalogue?display=plain"
+        self.catalogue = self.base_url + "/catalogue?display=plain"
         self.imdb_epi = "https://www.imdb.com/title/{}/episodes/"
+        self.imdb_media = "https://v2.sg.media-imdb.com"
 
         super().__init__(config, http_client)
 
-    def search(self, query: str, limit: int = 10) -> List[Metadata]:
-        imdb_metadata_list = scraper_utils.imdb_search(query, self.config, limit)
-        catalogue = self.http_client.get(self.catalogue)
+    def scrape(self, metadata: Metadata, limit: int = 10, season: int = None, episode: int = None) -> Series | Movie:
+        id = self.__search(metadata, limit = limit)[0]
 
-        metadata_list = []
+        if metadata.type == MetadataType.SERIES:
+            url = self.__cdn(id, season, episode)
 
-        for metadata in imdb_metadata_list:
-            id = metadata.id
+            return Series(
+                url = url,
+                title = metadata.title,
+                referrer = self.base_url,
+                episode = episode,
+                season = season,
+                subtitles = None
+            )
+        else:       
+            url = self.__cdn(id)
 
-            if id is not None:
-                if not id.startswith("tt"):
-                    continue
-                if id not in catalogue.text:
-                    continue
-
-                metadata_list.append(
-                    metadata
-                )
-
-        return metadata_list
+            return Movie(
+                url = url,
+                title = metadata.title,
+                referrer = self.base_url,
+                year = metadata.year,
+                subtitles = None
+            )
 
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
         if metadata.type == MetadataType.SERIES:
@@ -60,31 +65,32 @@ class RemoteStream(Scraper):
 
         return {None: 1}
 
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None,) -> Series | Movie:
-        if metadata.type == MetadataType.SERIES:
-            url = self.__cdn(metadata, season, episode)
+    def __search(self, metadata: Metadata, limit: int = 10) -> List[Metadata]:
+        query = f"{metadata.title} {metadata.year}"
 
-            return Series(
-                url = url,
-                title = metadata.title,
-                referrer = self.base_url,
-                episode = episode,
-                season = season,
-                subtitles = None
-            )
-        else:       
-            url = self.__cdn(metadata)
+        imdb_data = self.http_client.get(
+            self.imdb_media + f"/suggestion/{quote(query[0])}/{quote(query)}.json"
+        )
+        imdb_search_results: List[dict] = imdb_data.json()["d"]
 
-            return Movie(
-                url = url,
-                title = metadata.title,
-                referrer = self.base_url,
-                year = metadata.year,
-                subtitles = None
-            )
+        catalogue = self.http_client.get(self.catalogue)
 
-    def __cdn(self, metadata: Metadata, season: int = None, episode: int = None) -> str:
-        url = f"https://remotestre.am/e/?imdb={metadata.id}"
+        id_list = []
+
+        for id in imdb_search_results[:limit]:
+
+            if id is not None:
+                if not id.startswith("tt"):
+                    continue
+                if id not in catalogue.text:
+                    continue
+
+                id_list.append(id)
+
+        return id_list[0]
+
+    def __cdn(self, imdb_id: str, season: int = None, episode: int = None) -> str:
+        url = self.base_url + f"/e/?imdb={imdb_id}"
 
         if season and episode:
             url += f"&s={season}&e={episode}"
