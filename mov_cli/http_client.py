@@ -57,6 +57,7 @@ class HTTPClient():
             raise SiteMaybeBlocked(url, e)
 
     # NOTE: Are we even using post requests, like will they be used in the future? ~ Goldy
+    # NOTE: We likely need it at some point, when adding new providers ~ Ananas
     def post(self, url: str, data: dict = None, json: dict = None, **kwargs) -> Response: 
         """Performs a POST request and returns httpx.Response."""
         self.logger.debug(Colours.ORANGE.apply("POST") + f": {url}")
@@ -66,6 +67,13 @@ class HTTPClient():
         return self.__httpx_client.post(
             url, data = data, json = json, **kwargs
         )
+    
+    def custom_get(self, url: str, **kwargs):
+        """Performs a custom GET request and returns httpx.Response."""
+        self.logger.debug(Colours.GREEN.apply("C-GET") + f": {url}")
+
+        return httpx.get(url, **kwargs)
+
 
     def set_cookies(self, cookies: dict) -> None:
         """Sets cookies."""

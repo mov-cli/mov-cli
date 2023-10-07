@@ -221,7 +221,7 @@ class Sflix(Scraper):
         return season_ids[season - 1]
 
     def __gh_key(self):
-        response_key = self.http_client.get(
+        response_key = self.http_client.custom_get(
             "https://github.com/enimax-anime/key/blob/e4/key.txt", headers = {"X-Requested-With": "XMLHttpRequest"}
         ).json()
         key = response_key["payload"]["blob"]["rawLines"][0]
