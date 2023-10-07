@@ -3,9 +3,11 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..config import Config
-    from ..media import Metadata
-    from typing import List, Generator, Any
+    from typing import List, Generator, Any, Callable, TypeVar, Generic
 
+    T = TypeVar('T')
+
+import re
 import types
 import iterfzf
 import inquirer
@@ -26,16 +28,41 @@ class MovCliTheme(Default):
         self.List.selection_color = Colours.CLAY.value
         self.List.selection_cursor = "❯"
 
-def prompt(text: str, choices: List[str] | Generator[Metadata, Any, None], config: Config) -> str:
+def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], display: Callable[[T], str], config: Config) -> T:
     """Prompt the user to pick from a list choices."""
+    choice_picked: str = None
+    stream_choices = choices
+
+    if isinstance(choices, list):
+        stream_choices = lambda: choices
+
     if config.fzf_enabled:
         logger.debug("Launching fzf...")
-        return iterfzf.iterfzf((f"{metadata.title} ({metadata.year})" for metadata in choices), prompt = text)
+        # We pass this in as a generator to take advantage of iterfzf's streaming capabilities.
+        # You can find that explained as the second bullet point here: https://github.com/dahlia/iterfzf#key-features
+        choice_picked = iterfzf.iterfzf((display(choice) for choice in stream_choices()), prompt = text, ansi = True)
 
-    if isinstance(choices, types.GeneratorType):
-        logger.debug("Converting choices to list for inquirer...")
-        choices = [f"{metadata.title} ({metadata.year})" for metadata in choices]
+    else:
 
-    return inquirer.prompt(
-        [inquirer.List("choices", message = text, choices = choices)], theme = MovCliTheme()
-    )["choices"]
+        if isinstance(choices, types.GeneratorType):
+            logger.debug("Converting choices to list for inquirer...")
+            choices = [display(choice) for choice in stream_choices()]
+            stream_choices = lambda: choices
+
+        logger.debug("Launching inquirer (fallback ui)...")
+        choice_picked = inquirer.prompt(
+            [inquirer.List("choices", message = text, choices = [display(choice) for choice in stream_choices()])], theme = MovCliTheme()
+        )["choices"]
+
+    # Using this to remove ansi colours returned in the picked choice.
+    ansi_remover = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])') 
+
+    # Yes I know if this is a generator I'm running it twice which is inefficient but 
+    # this is the only solution I can think of to return the proper value and also 
+    # retain streaming search results straight to fzf (line 42).
+    for choice in stream_choices():
+
+        if ansi_remover.sub('', choice_picked) == ansi_remover.sub('', display(choice)):
+            return choice
+
+    return None # This should never happen hopefully. If it does, WE'RE FU#KED!

@@ -6,10 +6,12 @@ if TYPE_CHECKING:
 
 import click
 import logging
+from devgoldyutils import Colours
 
 from . import ui
 from . import utils
 from ..config import Config
+from ..media import MetadataType
 from ..logger import mov_cli_logger
 from ..search_apis import TheMovieDB
 from ..http_client import HTTPClient
@@ -67,4 +69,12 @@ def mov_cli(
         query: str = " ".join(query)
         search_wrapper = TheMovieDB(HTTPClient(config))
 
-        ui.prompt("Test test: ", search_wrapper.search(query), config)
+        choice = ui.prompt(
+            "Test test: ", 
+            choices = lambda: search_wrapper.search(query), 
+            display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
+                f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
+            config = config
+        )
+
+        print(">", choice)

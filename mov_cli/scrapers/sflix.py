@@ -34,7 +34,7 @@ class Sflix(Scraper):
         search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(query)}")
         results = self.__results(search_req, limit)
         return results
-    
+
     def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
         if season is None:
             season = 1
