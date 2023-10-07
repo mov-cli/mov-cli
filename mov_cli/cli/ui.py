@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..config import Config
-    from typing import List, Generator, Any, Callable, TypeVar, Generic
+    from typing import List, Generator, Any, Callable, TypeVar
 
     T = TypeVar('T')
 

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 from bs4 import BeautifulSoup, Tag
 
-from ..media import Metadata, MetadataType
+from ..media import Metadata, MetadataType, ExtraMetadata
 
 __all__ = ("TheMovieDB",)
 
@@ -26,13 +26,15 @@ class TheMovieDB():
         response = self.http_client.get(self.root_url + "/search", params = {"query": query})
         soup = BeautifulSoup(response.text, self.http_client.config.parser)
 
+        return self.__strip_media_items(soup)
+
+    def __strip_media_items(self, soup: BeautifulSoup) -> Generator[Metadata, Any, None]:
+        """Generator that strips 🙄 the media items."""
         movie_items = soup.find("div", {"class": "movie"}).find_all("div", {"class": "card v4 tight"})
         tv_items = soup.find("div", {"class": "tv"}).find_all("div", {"class": "card v4 tight"})
 
-        return self.__strip_media_items(movie_items + tv_items)
+        items: List[Tag] = movie_items + tv_items
 
-    def __strip_media_items(self, items: List[Tag]) -> Generator[Metadata, Any, None]:
-        """Generator that strips 🙄 the media items."""
         for item in items:
             description = item.find("div", {"class": "overview"}).find("p")
             release_date = item.find("span", {"class": "release_date"})
@@ -44,5 +46,10 @@ class TheMovieDB():
                 description = description.text if description is not None else "",
                 type = MetadataType.MOVIE if "movie" in item.parent.parent.attrs["class"] else MetadataType.SERIES,
                 year = release_date.text.split(" ")[-1] if release_date is not None else None,
-                image_url = self.root_url + image.attrs["src"].replace("w94_and_h141_bestv2", "w600_and_h900_bestv2") if image is not None else None
+                image_url = self.root_url + image.attrs["src"].replace("w94_and_h141_bestv2", "w600_and_h900_bestv2") if image is not None else None,
+                extra_func = self.__scrape_extra_metadata(item)
             )
+
+    # TODO: Complete this.
+    def __scrape_extra_metadata(self, item: Tag) -> ExtraMetadata:
+        ...

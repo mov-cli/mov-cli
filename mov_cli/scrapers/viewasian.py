@@ -12,6 +12,8 @@ from ..media import Metadata, MetadataType, Series
 
 from ..scraper import Scraper
 
+__all__ = ("ViewAsian",)
+
 class ViewAsian(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://viewasian.co"

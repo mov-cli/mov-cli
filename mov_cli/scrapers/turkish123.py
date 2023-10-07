@@ -13,6 +13,8 @@ import re
 from ..scraper import Scraper
 from ..media import Series, Metadata, MetadataType
 
+__all__ = ("Turkish123",)
+
 class Turkish123(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://turkish123.ac"

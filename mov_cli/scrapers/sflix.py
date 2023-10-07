@@ -2,10 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Dict
-    from httpx import Response
+    from bs4 import Tag
     from ..config import Config
-    from bs4 import BeautifulSoup
+    from typing import List, Dict
     from ..http_client import HTTPClient
 
 import re
@@ -32,18 +31,20 @@ class Sflix(Scraper):
 
     def search(self, query: str, limit: int = 10) -> List[Metadata]:
         search_req = self.http_client.get(f"{self.base_url}/search/{self.__parse(query)}")
-        results = self.__results(search_req, limit)
+        results = self.__search(search_req, limit)
         return results
 
-    def scrape(self, metadata: Metadata, season: int = None, episode: int = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, limit: int = 10, season: int = None, episode: int = None) -> Series | Movie:
         if season is None:
             season = 1
 
         if episode is None:
             episode = 1
 
+        id = self.__search(metadata, limit)[0]
+
         if metadata.type == MetadataType.SERIES:
-            season_id = self.__get_season_id(season, metadata.id)
+            season_id = self.__get_season_id(season, id)
             epi_id = self.__get_epi_id(season_id, episode)
             sid = self.__ep_server_id(epi_id)
             iframe_url = self.__get_link(sid)
@@ -60,11 +61,11 @@ class Sflix(Scraper):
             )
 
         else:
-            sid = self.__server_id(metadata.id)
+            sid = self.__server_id(id)
             iframe_url = self.__get_link(sid)
             iframe_link, iframe_id = self.__rabbit_id(iframe_url)
             url, subtitles = self.__cdn(iframe_link, iframe_id)
-            
+
             return Movie(
                 url = url,
                 title = metadata.title,
@@ -98,11 +99,21 @@ class Sflix(Scraper):
     def __parse(self, q: str) -> str:
         return q.replace(" ", "-").lower()
 
-    def __results(self, html: Response, limit: int = None) -> List[Metadata]:
-        soup = self.soup(html)
-        items = soup.findAll("div", {"class": "flw-item"})[:limit]
-        metadata_list = []
+    def __search(self, metadata: Metadata, limit: int = None) -> List[str]:
+        """Searches for show/movie and returns ID."""
+        response = self.http_client.get(
+            f"{self.base_url}/search/{self.__parse(f'{metadata.title} {metadata.year}')}"
+        )
+        soup = self.soup(response)
 
+        id_list = []
+        items: List[Tag] = soup.findAll("div", {"class": "flw-item"})[:limit]
+
+        for item in items:
+            url = item.select(".film-poster-ahref")[0]["href"]
+            id_list.append(url.split("-")[-1])
+
+        """
         for item in items:
             item: BeautifulSoup
             url = item.select(".film-poster-ahref")[0]["href"]
@@ -145,8 +156,9 @@ class Sflix(Scraper):
                     description = description
                 )
             )
+        """
 
-        return metadata_list
+        return id_list
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
         subtitles = json.loads("{}")
@@ -209,7 +221,9 @@ class Sflix(Scraper):
         return season_ids[season - 1]
 
     def __gh_key(self):
-        response_key = self.http_client.get('https://github.com/enimax-anime/key/blob/e4/key.txt', headers = {"X-Requested-With": "XMLHttpRequest"}).json()
+        response_key = self.http_client.get(
+            "https://github.com/enimax-anime/key/blob/e4/key.txt", headers = {"X-Requested-With": "XMLHttpRequest"}
+        ).json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)
         return key

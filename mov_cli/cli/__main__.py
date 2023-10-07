@@ -10,7 +10,9 @@ from devgoldyutils import Colours
 
 from . import ui
 from . import utils
+# from ..players import MPV
 from ..config import Config
+# from ..scrapers import Sflix
 from ..media import MetadataType
 from ..logger import mov_cli_logger
 from ..search_apis import TheMovieDB
@@ -67,10 +69,11 @@ def mov_cli(
     # NOTE: Where searching will happen.
     if len(query) > 0:
         query: str = " ".join(query)
-        search_wrapper = TheMovieDB(HTTPClient(config))
+        http_client = HTTPClient(config)
+        search_wrapper = TheMovieDB(http_client)
 
         choice = ui.prompt(
-            "Test test: ", 
+            "Test test", 
             choices = lambda: search_wrapper.search(query), 
             display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
                 f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 

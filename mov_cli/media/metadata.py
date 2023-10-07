@@ -1,9 +1,13 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import List, Callable
 
 from enum import Enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-__all__ = ("MetadataType", "Metadata")
+__all__ = ("MetadataType", "Metadata", "ExtraMetadata")
 
 class MetadataType(Enum):
     SERIES = 0
@@ -12,7 +16,7 @@ class MetadataType(Enum):
 
 @dataclass
 class Metadata:
-    """Search metadata from TheTvDB."""
+    """Search metadata from TheMovieDB or MyAnimeList."""
     id: str | None
     title: str
     """Title of the Series, Film or TV Station."""
@@ -25,7 +29,16 @@ class Metadata:
     image_url: str | None
     """Url to high res image cover of Series, Film or TV Station."""
 
-    #alternate_titles: List[str]
+    extra_func: Callable[[], ExtraMetadata]
 
-    #cast: List[str] | None = field(default = None)
-    #genre: List[str] | None = field(default = None)
+    def get_extra(self) -> ExtraMetadata:
+        """Returns extra metadata."""
+        return self.extra_func()
+
+@dataclass
+class ExtraMetadata():
+    """Extra metadata from TheMovieDB or MyAnimeList."""
+    alternate_titles: List[str]
+
+    cast: List[str] | None = field(default = None)
+    genre: List[str] | None = field(default = None)
