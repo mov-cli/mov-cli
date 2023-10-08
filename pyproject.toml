@@ -28,7 +28,7 @@ dependencies = [
     "toml",
     "devgoldyutils>=2.5.6",
     "platformdirs>=3.10.0",
-    "click",
+    "typer[all]",
     "inquirer",
     "iterfzf",
     "beautifulsoup4",
@@ -59,4 +59,4 @@ build-backend = "setuptools.build_meta"
 packages = ["mov_cli"]
 
 [project.scripts]
-mov-cli = "mov_cli.cli.__main__:mov_cli"
+mov-cli = "mov_cli.cli.__main__:app"

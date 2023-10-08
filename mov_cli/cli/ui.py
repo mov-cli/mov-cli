@@ -33,6 +33,8 @@ def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], 
     choice_picked: str = None
     stream_choices = choices
 
+    print("") # Whitespace
+
     if isinstance(choices, list):
         stream_choices = lambda: choices
 
@@ -40,7 +42,7 @@ def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], 
         logger.debug("Launching fzf...")
         # We pass this in as a generator to take advantage of iterfzf's streaming capabilities.
         # You can find that explained as the second bullet point here: https://github.com/dahlia/iterfzf#key-features
-        choice_picked = iterfzf.iterfzf((display(choice) for choice in stream_choices()), prompt = text, ansi = True)
+        choice_picked = iterfzf.iterfzf((display(choice) for choice in stream_choices()), prompt = text + ": ", ansi = True)
 
     else:
 

@@ -133,7 +133,7 @@ class Sflix(Scraper):
         server_ids = [i["data-id"] for i in soup.select(".link-item")]
 
         if len(server_ids) == 0:
-            raise MediaNotFound(f"No server id's were retrieved so we can't scrape for your media.", self)
+            raise MediaNotFound("No server id's were retrieved so we can't scrape for your media.", self)
 
         return server_ids[0]
 
