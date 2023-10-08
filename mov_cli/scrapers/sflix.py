@@ -8,19 +8,17 @@ if TYPE_CHECKING:
     from ..http_client import HTTPClient
 
 import re
-
-from .. import scraper_utils
-from ..scraper import Scraper
-from ..media import Series, Movie
-
 import json
 import base64
 import hashlib
-from Crypto.Cipher import AES
 from urllib import parse as p
+from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
-from ..media import Metadata, MetadataType
 
+from ..media import Series, Movie
+from .. import scraper_utils, utils
+from ..media import Metadata, MetadataType
+from ..scraper import Scraper, MediaNotFound
 
 __all__ = ("Sflix",)
 
@@ -30,20 +28,17 @@ class Sflix(Scraper):
 
         super().__init__(config, http_client)
 
-    def scrape(self, metadata: Metadata, limit: int = 10, season: int = None, episode: int = None) -> Series | Movie:
-        if season is None:
-            season = 1
-
-        if episode is None:
-            episode = 1
-
+    def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series | Movie:
         id, name = self.__search(metadata, limit)[0]
 
         self.logger.info(f"Found '{name}', scrapping for stream...")
 
+        if episode is None:
+            episode = utils.EpisodeSelector()
+
         if metadata.type == MetadataType.SERIES:
-            season_id = self.__get_season_id(season, id)
-            epi_id = self.__get_epi_id(season_id, episode)
+            season_id = self.__get_season_id(episode.season, id)
+            epi_id = self.__get_epi_id(season_id, episode.episode)
             sid = self.__ep_server_id(epi_id)
             iframe_url = self.__get_link(sid)
             iframe_link, iframe_id = self.__rabbit_id(iframe_url)
@@ -54,7 +49,7 @@ class Sflix(Scraper):
                 title = metadata.title,
                 referrer = self.base_url,
                 episode = episode,
-                season = season,
+                season = episode.season,
                 subtitles = subtitles
             )
 
@@ -99,7 +94,7 @@ class Sflix(Scraper):
     def __search(self, metadata: Metadata, limit: int = None) -> List[Tuple[str, str]]:
         """Searches for show/movie and returns ID."""
         response = self.http_client.get(
-            f"{self.base_url}/search/{self.__parse(f'{metadata.title} {metadata.year}')}"
+            f"{self.base_url}/search/{p.quote(self.__parse(f'{metadata.title} {metadata.year}'))}"
         )
         soup = self.soup(response)
 
@@ -135,7 +130,12 @@ class Sflix(Scraper):
     def __server_id(self, mov_id):
         rem = self.http_client.get(f"{self.base_url}/ajax/movie/episodes/{mov_id}")
         soup = self.soup(rem)
-        return [i["data-id"] for i in soup.select(".link-item")][0]
+        server_ids = [i["data-id"] for i in soup.select(".link-item")]
+
+        if len(server_ids) == 0:
+            raise MediaNotFound(f"No server id's were retrieved so we can't scrape for your media.", self)
+
+        return server_ids[0]
 
     def __ep_server_id(self, ep_id):
         rem = self.http_client.get(
@@ -164,7 +164,7 @@ class Sflix(Scraper):
             ),
             parts[-1],
         )
-    
+
     def __get_season_id(self, season: int, id : str) -> str:
         r = self.http_client.get(f"{self.base_url}/ajax/season/list/{id}").text
 

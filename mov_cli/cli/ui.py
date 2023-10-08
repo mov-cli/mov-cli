@@ -28,7 +28,7 @@ class MovCliTheme(Default):
         self.List.selection_color = Colours.CLAY.value
         self.List.selection_cursor = "❯"
 
-def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], display: Callable[[T], str], config: Config) -> T:
+def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], display: Callable[[T], str], config: Config) -> T | None:
     """Prompt the user to pick from a list choices."""
     choice_picked: str = None
     stream_choices = choices
@@ -65,4 +65,4 @@ def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], 
         if ansi_remover.sub('', choice_picked) == ansi_remover.sub('', display(choice)):
             return choice
 
-    return None # This should never happen hopefully. If it does, WE'RE FU#KED!
+    return None

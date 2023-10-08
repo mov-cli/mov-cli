@@ -50,6 +50,8 @@ class TheMovieDB():
                 extra_func = self.__scrape_extra_metadata(item)
             )
 
+        return None
+
     # TODO: Complete this.
     def __scrape_extra_metadata(self, item: Tag) -> ExtraMetadata:
         ...

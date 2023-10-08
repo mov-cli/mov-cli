@@ -2,10 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Dict
     from .config import Config
     from .http_client import HTTPClient
     from .media import Metadata, Series, Movie, LiveTV
-    from typing import Dict
 
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
@@ -13,7 +13,7 @@ from devgoldyutils import LoggerAdapter
 
 from . import mov_cli_logger, errors
 
-__all__ = ("Scraper",)
+__all__ = ("Scraper", "MediaNotFound")
 
 class Scraper(ABC):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
@@ -40,9 +40,11 @@ class Scraper(ABC):
         """Returns episode count for each season in that Movie/Series."""
         ...
 
-class MissingSeasonEpisode(errors.MovCliException):
-    """Raises if the given Metadata needs the Season or Episode."""
-    def __init__(self) -> None:
+
+class MediaNotFound(errors.MovCliException):
+    """Raises when a scraper fails to find a show/movie/tv-station."""
+    def __init__(self, message, scraper: Scraper) -> None:
         super().__init__(
-            "Given Metadata needs Season and/or Episode\n"
+            f"Failed to find media: {message}",
+            logger = scraper.logger
         )

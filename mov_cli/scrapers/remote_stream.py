@@ -7,9 +7,10 @@ if TYPE_CHECKING:
     from typing import List, Dict, Tuple
 
 import re
+from .. import utils
+from urllib.parse import quote
 
 from ..scraper import Scraper
-from urllib.parse import quote
 from ..media import Series, Movie, MetadataType, Metadata
 
 __all__ = ("RemoteStream",)
@@ -23,23 +24,26 @@ class RemoteStream(Scraper):
 
         super().__init__(config, http_client)
 
-    def scrape(self, metadata: Metadata, limit: int = 10, season: int = None, episode: int = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series | Movie:
         id, imdb_search_result  = self.__search(metadata, limit = limit)[0]
 
         self.logger.info(f"Found '{imdb_search_result.get('l')}', scrapping for stream...")
 
         if metadata.type == MetadataType.SERIES:
-            url = self.__cdn(id, season, episode)
+            if episode is None:
+                episode = utils.EpisodeSelector()
+
+            url = self.__cdn(id, episode)
 
             return Series(
                 url = url,
                 title = metadata.title,
                 referrer = self.base_url,
-                episode = episode,
-                season = season,
+                episode = episode.episode,
+                season = episode.season,
                 subtitles = None
             )
-        else:       
+        else:    
             url = self.__cdn(id)
 
             return Movie(
@@ -89,11 +93,11 @@ class RemoteStream(Scraper):
 
         return id_list
 
-    def __cdn(self, imdb_id: str, season: int = None, episode: int = None) -> str:
+    def __cdn(self, imdb_id: str, episode: utils.EpisodeSelector = None) -> str:
         url = self.base_url + f"/e/?imdb={imdb_id}"
 
-        if season and episode:
-            url += f"&s={season}&e={episode}"
+        if episode.season and episode:
+            url += f"&s={episode.season}&e={episode}"
 
         req = self.http_client.get(url).text
         return re.findall('"file":"(.*?)"', req)[0]
