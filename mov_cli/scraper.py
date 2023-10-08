@@ -44,5 +44,5 @@ class MissingSeasonEpisode(errors.MovCliException):
     """Raises if the given Metadata needs the Season or Episode."""
     def __init__(self) -> None:
         super().__init__(
-            f"Given Metadata needs Season and/or Episode\n"
+            "Given Metadata needs Season and/or Episode\n"
         )

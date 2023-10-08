@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from bs4 import Tag
     from ..config import Config
-    from typing import List, Dict
+    from typing import List, Dict, Tuple
     from ..http_client import HTTPClient
 
 import re
@@ -37,7 +37,9 @@ class Sflix(Scraper):
         if episode is None:
             episode = 1
 
-        id = self.__search(metadata, limit)[0]
+        id, name = self.__search(metadata, limit)[0]
+
+        self.logger.info(f"Found '{name}', scrapping for stream...")
 
         if metadata.type == MetadataType.SERIES:
             season_id = self.__get_season_id(season, id)
@@ -94,7 +96,7 @@ class Sflix(Scraper):
     def __parse(self, q: str) -> str:
         return q.replace(" ", "-").lower()
 
-    def __search(self, metadata: Metadata, limit: int = None) -> List[str]:
+    def __search(self, metadata: Metadata, limit: int = None) -> List[Tuple[str, str]]:
         """Searches for show/movie and returns ID."""
         response = self.http_client.get(
             f"{self.base_url}/search/{self.__parse(f'{metadata.title} {metadata.year}')}"
@@ -105,8 +107,10 @@ class Sflix(Scraper):
         items: List[Tag] = soup.findAll("div", {"class": "flw-item"})[:limit]
 
         for item in items:
+            title = item.select(".film-name > a")[0].text
             url = item.select(".film-poster-ahref")[0]["href"]
-            id_list.append(url.split("-")[-1])
+
+            id_list.append((url.split("-")[-1], title))
 
         return id_list
 

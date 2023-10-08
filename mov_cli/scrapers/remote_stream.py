@@ -2,9 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Dict
     from ..config import Config
     from ..http_client import HTTPClient
+    from typing import List, Dict, Tuple
 
 import re
 
@@ -24,7 +24,9 @@ class RemoteStream(Scraper):
         super().__init__(config, http_client)
 
     def scrape(self, metadata: Metadata, limit: int = 10, season: int = None, episode: int = None) -> Series | Movie:
-        id = self.__search(metadata, limit = limit)[0]
+        id, imdb_search_result  = self.__search(metadata, limit = limit)[0]
+
+        self.logger.info(f"Found '{imdb_search_result.get('l')}', scrapping for stream...")
 
         if metadata.type == MetadataType.SERIES:
             url = self.__cdn(id, season, episode)
@@ -65,7 +67,7 @@ class RemoteStream(Scraper):
 
         return {None: 1}
 
-    def __search(self, metadata: Metadata, limit: int = 10) -> List[Metadata]:
+    def __search(self, metadata: Metadata, limit: int = 10) -> List[Tuple[str, dict]]:
         query = f"{metadata.title} {metadata.year}"
 
         imdb_data = self.http_client.get(
@@ -77,17 +79,15 @@ class RemoteStream(Scraper):
 
         id_list = []
 
-        for id in imdb_search_results[:limit]:
+        for search_result in imdb_search_results[:limit]:
+            id = search_result.get("id")
 
-            if id is not None:
-                if not id.startswith("tt"):
-                    continue
-                if id not in catalogue.text:
-                    continue
+            if id is None or not id.startswith("tt") or id not in catalogue.text:
+                continue
 
-                id_list.append(id)
+            id_list.append((id, search_result))
 
-        return id_list[0]
+        return id_list
 
     def __cdn(self, imdb_id: str, season: int = None, episode: int = None) -> str:
         url = self.base_url + f"/e/?imdb={imdb_id}"
