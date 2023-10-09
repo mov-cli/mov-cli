@@ -49,7 +49,7 @@ class TheMovieDB():
                 type = MetadataType.MOVIE if "movie" in item.parent.parent.attrs["class"] else MetadataType.SERIES,
                 year = release_date.text.split(" ")[-1] if release_date is not None else None,
                 image_url = self.root_url + image.attrs["src"].replace("w94_and_h141_bestv2", "w600_and_h900_bestv2") if image is not None else None,
-                extra_func = self.__scrape_extra_metadata(item)
+                extra_func = lambda: self.__scrape_extra_metadata(item)
             )
 
         return None
@@ -67,7 +67,11 @@ class TheMovieDB():
 
         genre: List[Tag] = soup.find("span", {"class":"genres"}).findAll("a")
 
-        people: List[Tag] = soup_c.find("ol", {"class":"people credits"}).findAll("li")
+        people: List[Tag] = []
+        people_credits = soup_c.find("ol", {"class":"people credits"})
+
+        if people_credits is not None: # This doesn't always exists apparently.
+            people = people_credits.findAll("li")
 
         for g in genre:
             genres.append(g.text)
