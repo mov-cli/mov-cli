@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from typing import List, Generator, Any
 
 from bs4 import BeautifulSoup, Tag
+from urllib import parse as p
 
 from ..media import Metadata, MetadataType, ExtraMetadata
 
@@ -39,9 +40,10 @@ class TheMovieDB():
             description = item.find("div", {"class": "overview"}).find("p")
             release_date = item.find("span", {"class": "release_date"})
             image = item.find("img", {"class": "poster"})
+            id = item.find("a")["href"].split("/")[-1]
 
             yield Metadata(
-                id = None, # TODO: Return something other than None.
+                id = id,
                 title = item.find("h2").text,
                 description = description.text if description is not None else "",
                 type = MetadataType.MOVIE if "movie" in item.parent.parent.attrs["class"] else MetadataType.SERIES,
@@ -52,6 +54,35 @@ class TheMovieDB():
 
         return None
 
-    # TODO: Complete this.
     def __scrape_extra_metadata(self, item: Tag) -> ExtraMetadata:
-        ...
+        url = self.root_url + item.find("a")["href"]
+
+        soup = BeautifulSoup(self.http_client.get(url, redirect = True).text, self.http_client.config.parser)
+
+        soup_c = BeautifulSoup(self.http_client.get(url + "/cast", redirect = True).text, self.http_client.config.parser)
+
+        cast = []
+        alternate_titles = []
+        genres = []
+
+        genre: List[Tag] = soup.find("span", {"class":"genres"}).findAll("a")
+
+        people: List[Tag] = soup_c.find("ol", {"class":"people credits"}).findAll("li")
+
+        for g in genre:
+            genres.append(g.text)
+
+        if soup.find_all("p", {"class": "wrap"}):
+            alternate_titles.append(soup.find("p", {"class": "wrap"}).contents[-1].text)
+        
+        for i in people:
+            cast.append(i.select("p:nth-child(1) > a:nth-child(1)")[0].text)
+
+        return ExtraMetadata(
+            alternate_titles = alternate_titles,
+            cast = cast,
+            genre = genres
+        )
+
+
+

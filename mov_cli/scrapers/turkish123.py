@@ -2,16 +2,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-   from typing import List, Dict
+   from typing import List, Dict, Tuple
    from ..config import Config
    from httpx import Response
-   from bs4 import BeautifulSoup
+   from bs4 import BeautifulSoup, Tag
    from ..http_client import HTTPClient
 
 import re
-
+from .. import utils
 from ..scraper import Scraper
 from ..media import Series, Metadata, MetadataType
+from urllib import parse as p
 
 __all__ = ("Turkish123",)
 
@@ -19,63 +20,6 @@ class Turkish123(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://turkish123.ac"
         super().__init__(config, http_client)
-
-    def search(self, query: str, limit: int = 10) -> List[Metadata]:
-        query = query.replace(' ', '+')
-        req = self.http_client.get(f'{self.base_url}/?s={query}')
-        result = self.__results(req, limit)
-        return result
-
-    def __results(self, response: Response, limit: int = None) -> List[Metadata]:
-        metadata_list = []
-        soup = self.soup(response)
-        mlitem = soup.findAll("div", {"class": "ml-item"})[:limit]
-
-        for item in mlitem:
-            item: BeautifulSoup
-            if item.select(".mli-quality")[0].text == "COMING SOON":
-                continue
-            title = item.find("a")["oldtitle"]
-            id = item.find("a")["href"].split("/")[:-1][-1]
-
-            url = item.find("a")["href"]
-
-            img = item.select(".mli-thumb")[0]["src"]
-            
-            year = None
-
-            page = self.http_client.get(self.base_url + "/" + id, redirect = True)
-            page_soup = self.soup(page)
-            
-            year = page_soup.find("div", {"class": "mvici-right"})
-            year = year.findAll("a")
-
-            if len(year) == 2:
-                year = year[0].text + "-" + year[1].text
-            else:
-                year = year[0].text
-            
-            mvici = page_soup.find("div", {"class": "mvici-left"}).findAll("p")
-
-            genre = [i.text for i in mvici[2].findAll("a")]
-
-            cast = [i.text for i in mvici[3].findAll("a")]
-
-            description = page_soup.find("p", {"class": "f-desc"}).text
-
-            metadata_list.append(Metadata(
-                title = title,
-                id = id,
-                url = url,
-                type = MetadataType.SERIES,
-                image_url = img,
-                year = year,
-                genre = genre,
-                cast = cast,
-                description = description
-            ))
-        
-        return metadata_list
 
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
         page = self.http_client.get(self.base_url + "/" + metadata.id, redirect = True)
@@ -102,21 +46,48 @@ class Turkish123(Scraper):
         url = re.findall("var urlPlay = '(.*?)'", req)[0]
         return url, f"https://tukipasti.com{s}"
                 
-    def scrape(self, metadata: Metadata, episode: int = None, season: int = None) -> Series:
-        if episode is None:
-            episode = 1
-        if season is None:
-            season = 1
+    def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series:
+        id, name = self.__search(metadata, limit)[0]
 
-        href = self.__get_episode_url(metadata.id, episode)
+        self.logger.info(f"Found '{name}', scrapping for stream...")
+
+        if episode is None:
+            episode = utils.EpisodeSelector()
+
+        href = self.__get_episode_url(id, episode.episode)
         url, referrer = self.__tukipasti(href)
 
         return Series(
             url = url,
             title = metadata.title,
             referrer = referrer,
-            episode = episode,
-            season = season,
+            episode = episode.episode,
+            season = episode.season,
             subtitles = None
         )
-        
+    
+    def __search(self, metadata: Metadata, limit: int = None) -> List[Tuple[str, str]]:
+        """Searches for show/movie and returns ID."""
+
+        tv_mov = "tv" if metadata.type == MetadataType.SERIES else "movie"
+
+        req = self.http_client.get(f"https://www.themoviedb.org/{tv_mov}/{metadata.id}", redirect = True)
+
+        id = " ".join(str(req.url).split("-")[1:])
+
+        response = self.http_client.get(
+            f"{self.base_url}/?s={p.quote(id)}"
+        )
+        soup = self.soup(response)
+
+        id_list = []
+        items: List[Tag] = soup.findAll("div", {"class": "ml-item"})[:limit]
+
+        for item in items:
+            title = item.find("a")["oldtitle"]
+            id = item.find("a")["href"].split("/")[:-1][-1]
+
+            id_list.append((id, title))
+
+        return id_list
+
