@@ -15,7 +15,6 @@ from ..logger import mov_cli_logger
 
 __all__ = ("Player", "PlayerNotFound", "PlayerNotSupported")
 
-
 class Player(ABC):
     """A base class for all players in mov-cli."""
     def __init__(self, display_name: str, config: Config) -> None:

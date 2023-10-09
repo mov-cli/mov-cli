@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from typing import List, Generator, Any
 
 from bs4 import BeautifulSoup, Tag
-from urllib import parse as p
 
 from ..media import Metadata, MetadataType, ExtraMetadata
 

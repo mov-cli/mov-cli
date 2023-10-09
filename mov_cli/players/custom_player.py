@@ -12,7 +12,6 @@ from .player import Player, PlayerNotFound
 
 __all__ = ("CustomPlayer",)
 
-
 class CustomPlayer(Player):
     """
     This player is invoked if you set a player that is not supported by mov-cli in the config, allowing users to invoke their own players.
@@ -23,6 +22,8 @@ class CustomPlayer(Player):
 
     def play(self, media: Media) -> subprocess.Popen:
         """Plays this media in a custom player."""
+        self.logger.info(f"Launching your custom media player '{self.player_command}'...")
+
         try:
             return subprocess.Popen(
                 [f"{self.player_command}", f'"{media.url}"']

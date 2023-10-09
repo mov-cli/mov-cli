@@ -15,7 +15,6 @@ __all__ = ("MPV",)
 
 # NOTE: Incomplete code.
 
-
 class MPV(Player):
     def __init__(self, config: Config) -> None:
         self.config = config
@@ -23,6 +22,8 @@ class MPV(Player):
 
     def play(self, media: Media) -> subprocess.Popen:
         """Plays this media in the MPV media player."""
+
+        self.logger.info("Launching MPV Media Player...")
 
         if self.platform == "Android":
             self.logger.info("Detected you're using Android.")

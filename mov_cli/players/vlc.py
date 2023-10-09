@@ -12,13 +12,14 @@ from .player import Player, PlayerNotFound, PlayerNotSupported
 
 __all__ = ("VLC",)
 
-
 class VLC(Player):
     def __init__(self, config: Config) -> None:
         super().__init__(Colours.ORANGE.apply("VLC"), config)
 
     def play(self, media: Media) -> subprocess.Popen:
         """Plays this media in the VLC media player."""
+
+        self.logger.info("Launching VLC Media Player...")
 
         if self.platform == "Linux" or self.platform == "Windows":
             try:

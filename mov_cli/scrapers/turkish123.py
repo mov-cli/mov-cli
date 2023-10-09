@@ -4,8 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
    from typing import List, Dict, Tuple
    from ..config import Config
-   from httpx import Response
-   from bs4 import BeautifulSoup, Tag
+   from bs4 import Tag
    from ..http_client import HTTPClient
 
 import re
