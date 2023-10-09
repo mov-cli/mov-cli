@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 import re
 from .. import utils
-from ..scraper import Scraper
+from ..scraper import Scraper, MediaNotFound
 from ..media import Series, Metadata, MetadataType
 from urllib import parse as p
 
@@ -46,7 +46,12 @@ class Turkish123(Scraper):
         return url, f"https://tukipasti.com{s}"
                 
     def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series:
-        id, name = self.__search(metadata, limit)[0]
+        results = self.__search(metadata, limit)
+
+        if results == []:
+            raise MediaNotFound("No search results were found!", self)
+
+        id, name = results[0]
 
         self.logger.info(f"Found '{name}', scrapping for stream...")
 
