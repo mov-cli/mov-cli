@@ -16,7 +16,7 @@ httpx = "^0.24.0"
 pycryptodome = "^3.17"
 six = "^1.16.0"
 krfzf-py = ">=0.0.4,<0.0.7"
-tldextract = "^3.4.3"
+tldextract = ">=3.4.3,<6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
