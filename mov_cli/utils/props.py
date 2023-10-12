@@ -6,8 +6,8 @@ from .player import Player
 def home():
     plt = Player().os
     if plt == "Windows":
-        username = environ["username"]
-        return f"C:/Users/{username}/AppData/Roaming/mov-cli"
+        home = path.expanduser('~')
+        return f"{home}/AppData/Roaming/mov-cli"
     elif plt == "Linux":
         return f"/home/{getuser()}/.config/mov-cli"
     elif plt == "Android":
