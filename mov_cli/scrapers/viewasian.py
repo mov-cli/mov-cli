@@ -11,7 +11,6 @@ import re
 from ..media import Metadata, Series
 from .. import utils
 from ..scraper import Scraper, MediaNotFound
-from urllib import parse as p
 
 __all__ = ("ViewAsian",)
 
