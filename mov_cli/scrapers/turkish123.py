@@ -10,8 +10,9 @@ if TYPE_CHECKING:
 import re
 from .. import utils
 from ..scraper import Scraper, MediaNotFound
-from ..media import Series, Metadata, MetadataType
+from ..media import Series, Metadata
 from urllib import parse as p
+from unidecode import unidecode
 
 __all__ = ("Turkish123",)
 
@@ -21,10 +22,15 @@ class Turkish123(Scraper):
         super().__init__(config, http_client)
 
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
-        page = self.http_client.get(self.base_url + "/" + metadata.id, redirect = True)
+        results = self.__search(metadata, 1)
+
+        if results == []:
+            raise MediaNotFound("No search results were found!", self)
+
+        id, name = results[0]
+        
+        page = self.http_client.get(self.base_url + "/" + id, redirect = True)
         page_soup = self.soup(page)
-        year = page_soup.find("div", {"class": "mvici-right"})
-        year = year.findAll("a")
 
         seasons = {}
 
@@ -71,16 +77,11 @@ class Turkish123(Scraper):
         )
     
     def __search(self, metadata: Metadata, limit: int = None) -> List[Tuple[str, str]]:
-        """Searches for show/movie and returns ID."""
-
-        tv_mov = "tv" if metadata.type == MetadataType.SERIES else "movie"
-
-        req = self.http_client.get(f"https://www.themoviedb.org/{tv_mov}/{metadata.id}", redirect = True)
-
-        id = " ".join(str(req.url).split("-")[1:])
+        """Searches for drama and returns ID."""
+        search_title = unidecode(metadata.title)
 
         response = self.http_client.get(
-            f"{self.base_url}/?s={p.quote(id)}"
+            f"{self.base_url}/?s={p.quote(search_title)}"
         )
         soup = self.soup(response)
 
@@ -90,6 +91,7 @@ class Turkish123(Scraper):
         for item in items:
             title = item.find("a")["oldtitle"]
             id = item.find("a")["href"].split("/")[:-1][-1]
+
 
             id_list.append((id, title))
 

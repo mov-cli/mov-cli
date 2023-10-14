@@ -33,6 +33,7 @@ dependencies = [
     "iterfzf",
     "beautifulsoup4",
     "pycryptodome",
+    "Unidecode"
 ]
 
 dynamic = ["version"]

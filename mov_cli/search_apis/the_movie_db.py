@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 from bs4 import BeautifulSoup, Tag
 
-from ..media import Metadata, MetadataType, ExtraMetadata
+from ..media import Metadata, MetadataType, ExtraMetadata, AiringType
 
 __all__ = ("TheMovieDB",)
 
@@ -20,6 +20,7 @@ class TheMovieDB():
         self.http_client = http_client
 
         self.root_url = "https://www.themoviedb.org"
+        self.not_translated = "We don't have an overview translated in English. Help us expand our database by adding one."
 
     def search(self, query: str) -> Generator[Metadata, Any, None]:
         """Search for shows and films. Returns a generator btw."""
@@ -37,6 +38,9 @@ class TheMovieDB():
 
         for item in items:
             description = item.find("div", {"class": "overview"}).find("p")
+            if description == self.not_translated:
+                description = None
+                
             release_date = item.find("span", {"class": "release_date"})
             image = item.find("img", {"class": "poster"})
             id = item.find("a")["href"].split("/")[-1]
@@ -63,6 +67,18 @@ class TheMovieDB():
         cast = []
         alternate_titles = []
         genres = []
+        airing = None
+
+        airing_status = soup.find("section", {"class": "facts left_column"}).find("p").contents[-1].text
+
+        if airing_status.__contains__("Released"):
+            airing = AiringType.RELEASED
+        elif airing_status.__contains__("Production"):
+            airing = AiringType.PRODUCTION
+        elif airing_status.__contains__("Returning"):
+            airing = AiringType.ONGOING
+        else:
+            airing = AiringType.DONE
 
         genre: List[Tag] = soup.find("span", {"class":"genres"}).findAll("a")
 
@@ -84,7 +100,8 @@ class TheMovieDB():
         return ExtraMetadata(
             alternate_titles = alternate_titles,
             cast = cast,
-            genre = genres
+            genre = genres,
+            airing = airing
         )
 
 

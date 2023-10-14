@@ -2,15 +2,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-   from typing import List, Dict
+   from typing import List, Dict, Tuple
    from ..config import Config
-   from bs4 import BeautifulSoup
+   from bs4 import Tag
    from ..http_client import HTTPClient
 
 import re
-from ..media import Metadata, MetadataType, Series
-
-from ..scraper import Scraper
+from ..media import Metadata, Series
+from .. import utils
+from ..scraper import Scraper, MediaNotFound
+from urllib import parse as p
 
 __all__ = ("ViewAsian",)
 
@@ -19,66 +20,43 @@ class ViewAsian(Scraper):
         self.base_url = "https://viewasian.co"
         super().__init__(config, http_client)
 
-    def search(self, query: str, limit: int = 10) -> List[Metadata]:
-        query = query.replace(' ', '-')
-        result = self.__results(query, limit)
-        return result
+    def __search(self, metadata: Metadata, limit: int = None) -> List[Tuple[str, str]]:
+        id_list = []
 
-    def __results(self, query: str, limit: int = None) -> List[Metadata]:
-        metadata_list = []
+        search_title = metadata.title.replace(" ", "-")
 
         page = 0
 
         while True:
             page += 1
-            response = self.http_client.get(f"{self.base_url}/movie/search/{query}?page={page}")
+            response = self.http_client.get(f"{self.base_url}/movie/search/{search_title}?page={page}")
 
             soup = self.soup(response)
 
-            items = soup.findAll("a", {"class": "ml-mask"})
+            items: List[Tag] = soup.findAll("a", {"class": "ml-mask"})
 
             if len(items) == 0:
                 break
 
             for item in items:
-                item : BeautifulSoup
-
-                data_url = item["data-url"]
                 title = item["title"]
-                url = item["href"]
-                id = url.split("/")[-1]
-                img = item.select(".mli-thumb")[0]["data-original"]
+                id = item["href"].split("/")[-1]
 
-                data_url_req = self.http_client.get(self.base_url + data_url, headers = {"X-Requested-With": "XMLHttpRequest"})
-                data_soup = self.soup(data_url_req)
+                id_list.append((id, title))
 
-                description = data_soup.find("p", {"class": "f-desc"}).text
-
-                year = data_soup.find("div", {"class": "jt-imdb"})
-
-                genre = data_soup.findAll("div", {"class": "block"})[1].findAll("a")
-
-                genre = [i.text.strip(", ") for i in genre]
-
-                metadata_list.append(Metadata(
-                    title = title,
-                    id = id,
-                    url = self.base_url + url,
-                    type = MetadataType.SERIES,
-                    image_url = img,
-                    year = year,
-                    genre = genre,
-                    cast = None,
-                    description = description
-                ))
-
-                if len(metadata_list) == limit:
+                if len(id_list) == limit:
                     break
 
-        return metadata_list
+        return id_list
 
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
-        req = self.http_client.get(metadata.url)
+        results = self.__search(metadata, 1)
+
+        if results == []:
+            raise MediaNotFound("No search results were found!", self)
+
+        id, name = results[0]
+        req = self.http_client.get(self.base_url + f"/watch/{id}/watching.html")
         soup = self.soup(req)
         episodes = soup.findAll("li", {"class": "ep-item"})
         return {None: len(episodes)}
@@ -118,14 +96,24 @@ class ViewAsian(Scraper):
 
         return url, base_url
 
-    def scrape(self, metadata: Metadata, episode: int = None) -> Series:
-        url, referrer = self.cdn(metadata.id, episode)
+    def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series:
+        results = self.__search(metadata, limit)
+
+        if results == []:
+            raise MediaNotFound("No search results were found!", self)
+
+        id, name = results[0]
+
+        if episode is None:
+            episode = utils.EpisodeSelector()
+
+        url, referrer = self.cdn(id, episode)
 
         return Series(
             url = url,
             title = metadata.title,
             referrer = referrer,
             episode = episode,
-            season = 1,
+            season = None,
             subtitles = None
         )

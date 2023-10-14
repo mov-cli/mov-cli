@@ -13,6 +13,7 @@ import iterfzf
 import inquirer
 from inquirer.themes import Default
 from devgoldyutils import Colours, LoggerAdapter
+from .. import errors
 
 from ..logger import mov_cli_logger
 
@@ -27,6 +28,13 @@ class MovCliTheme(Default):
         self.Question.brackets_color = Colours.GREY.value
         self.List.selection_color = Colours.CLAY.value
         self.List.selection_cursor = "❯"
+
+class NothingSelected(errors.MovCliException):
+    """Raises when nothing is selected."""
+    def __init__(self) -> None:
+        super().__init__(
+            "You didn't select anything",
+        )
 
 def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], display: Callable[[T], str], config: Config) -> T | None:
     """Prompt the user to pick from a list choices."""
@@ -63,7 +71,9 @@ def prompt(text: str, choices: List[T] | Callable[[], Generator[T, Any, None]], 
     # this is the only solution I can think of to return the proper value and also 
     # retain streaming search results straight to fzf (line 42).
     for choice in stream_choices():
-
+        if choice_picked is None:
+            raise NothingSelected()
+        
         if ansi_remover.sub('', choice_picked) == ansi_remover.sub('', display(choice)):
             return choice
 

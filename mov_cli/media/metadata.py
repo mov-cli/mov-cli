@@ -7,12 +7,18 @@ if TYPE_CHECKING:
 from enum import Enum
 from dataclasses import dataclass, field
 
-__all__ = ("MetadataType", "Metadata", "ExtraMetadata")
+__all__ = ("MetadataType", "Metadata", "ExtraMetadata", "AiringType")
 
 class MetadataType(Enum):
     SERIES = 0
     MOVIE = 1
     LIVE_TV = 2
+
+class AiringType(Enum):
+    DONE = 0
+    ONGOING = 1
+    PRODUCTION = 2
+    RELEASED = 3
 
 @dataclass
 class Metadata:
@@ -42,3 +48,5 @@ class ExtraMetadata():
 
     cast: List[str] | None = field(default = None)
     genre: List[str] | None = field(default = None)
+
+    airing: AiringType | None = field(default = None)

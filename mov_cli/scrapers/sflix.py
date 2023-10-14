@@ -14,6 +14,7 @@ import hashlib
 from urllib import parse as p
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
+from ..scraper_utils import Fuzzy, FuzzyMatch
 
 from ..media import Series, Movie
 from .. import scraper_utils, utils
@@ -29,7 +30,12 @@ class Sflix(Scraper):
         super().__init__(config, http_client)
 
     def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series | Movie:
-        id, name = self.__search(metadata, limit)[0]
+        results = self.__search(metadata)
+
+        if results == []:
+            raise MediaNotFound("No search results were found!", self)
+
+        id, name = results[0]
 
         self.logger.info(f"Found '{name}', scrapping for stream...")
 
@@ -68,11 +74,18 @@ class Sflix(Scraper):
             )
 
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+        results = self.__search(metadata, 1)
+
+        if results == []:
+            raise MediaNotFound("No search results were found!", self)
+
+        id, name = results[0]
+
         seasons = None
 
         if type == MetadataType.SERIES:
             seasons = {}
-            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{metadata.id}").text
+            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{id}").text
 
             season_ids = [
                 i["data-id"] for i in self.soup(r).select(".dropdown-item")
@@ -103,20 +116,26 @@ class Sflix(Scraper):
 
         for item in items:
             title = item.select(".film-name > a")[0].text
+            fdi_items = item.findAll("span", {"class": "fdi-item"})
+            year = fdi_items[0].text
+            type = fdi_items[1].text
             url = item.select(".film-poster-ahref")[0]["href"]
 
-            id_list.append((url.split("-")[-1], title))
+            score = Fuzzy().check_score(metadata, title, year, type)
+
+            if score == FuzzyMatch.MATCH:
+                id_list.append((url.split("-")[-1], title))
 
         return id_list
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
-        subtitles = json.loads("{}")
+        subtitles = {}
         data = self.http_client.get(f"{final_link}getSources?id={rabb_id}", headers = {"X-Requested-With": "XMLHttpRequest"}).json()
         for item in data["tracks"]:
             item : dict
             file = item.get("file")
             label = item.get("label")
-            prefix = scraper_utils.get_prefix(label)
+            prefix = scraper_utils.iso_639.get(label, None)
             if label.__contains__("-") or label.__contains__(" "):
                 continue
 

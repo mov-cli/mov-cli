@@ -19,7 +19,7 @@ class Series(Media):
         title: str, 
         referrer: str, 
         episode: int, 
-        season: int,
+        season: int | None,
         subtitles: dict | None
     ) -> None:
         self.season = season
@@ -36,9 +36,9 @@ class Movie(Media):
     """Represents a Film/Movie."""
     def __init__(
         self, 
-        url: str, 
-        title: str, 
-        referrer: str, 
+        url: str,
+        title: str,
+        referrer: str,
         year: int,
         subtitles: dict | None
     ) -> None:
