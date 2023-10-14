@@ -23,7 +23,7 @@ class Fuzzy:
         TYPE = None
 
         type = type.lower()
-        if (type == "tv" or type == "show"):
+        if type == "tv" or type == "show":
             TYPE = MetadataType.SERIES
         else:
             TYPE = MetadataType.MOVIE
