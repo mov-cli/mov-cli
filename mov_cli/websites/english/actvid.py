@@ -90,24 +90,28 @@ class Provider(WebScraper):
     ## Decrypting the sources
 
     def gh_key(self):
-        response_key = self.client.get('https://github.com/enimax-anime/key/blob/e6/key.txt').json()
+        response_key = self.client.get('https://github.com/theonlymo/keys/blob/e6/key').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)
         return key
 
     def key_extraction(self, string, table):
-        decrypted_key = []
-        offset = 0
-        encrypted_string = string
+        sources_array = list(string)
 
-        for start, end in table:
-            decrypted_key.append(encrypted_string[start - offset:end - offset])
-            encrypted_string = (
-                encrypted_string[:start - offset] + encrypted_string[end - offset:]
-            )
-            offset += end - start
+        extracted_key = ""
+        current_index = 0
 
-        return "".join(decrypted_key), encrypted_string
+        for index in table:
+            start = index[0] + current_index
+            end = start + index[1]
+
+            for i in range(start, end):
+                extracted_key += sources_array[i]
+                sources_array[i] = ' '
+
+            current_index += index[1]
+
+        return extracted_key, ''.join(sources_array)
 
     def md5(self, input_bytes):
         return hashlib.md5(input_bytes).digest()
