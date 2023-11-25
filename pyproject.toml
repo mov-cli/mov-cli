@@ -3,9 +3,9 @@ name = "mov-cli"
 version = "1.5.6"
 description = "A cli tool to browse and watch Movies/Shows/TV/Sports."
 authors = [
-    {name = "Pain", email = "painedposeidon444@gmail.com"},
-    {name = "Ananas", email = "ananas@r3tr0ananas.lol"},
-    {name = "Goldy", email = "goldy@devgoldy.xyz"}
+    {name = "Pain <painedposeidon444@gmail.com>"},
+    {name = "Ananas <ananas@r3tr0ananas.lol>"},
+    {name = "Goldy <goldy@devgoldy.xyz>"}
 ]
 license = "GPLv3"
 readme = "README.md"
