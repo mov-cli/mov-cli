@@ -40,7 +40,7 @@ class Provider(pv):
         )
 
     def gh_key(self):
-        response_key = self.client.get('https://github.com/enimax-anime/key/blob/e4/key.txt').json()
+        response_key = self.client.get('https://github.com/theonlymo/keys/blob/e4/key').json()
         key = response_key["payload"]["blob"]["rawLines"][0]
         key = json.loads(key)
         return key
