@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Callable
+    from typing import List, Callable, Optional
 
 from enum import Enum
 from dataclasses import dataclass, field
@@ -22,31 +22,33 @@ class AiringType(Enum):
 
 @dataclass
 class Metadata:
-    """Search metadata from TheMovieDB or MyAnimeList."""
-    id: str | None
+    """Search results from the providers."""
+    id: str
     title: str
     """Title of the Series, Film or TV Station."""
-    description: str
-    """Description of Series, Film or TV Station."""
     type: MetadataType
     """The type of metadata. Is it a Series, Film or LIVE TV Station?"""
-    year: str | None
+    year: Optional[str] = field(default = None)
     """Year the Series or Film was released."""
-    image_url: str | None
-    """Url to high res image cover of Series, Film or TV Station."""
 
-    extra_func: Callable[[], ExtraMetadata]
+    extra_func: Callable[[], Optional[ExtraMetadata]] = field(default = lambda: None)
+    """Callback that returns extra metadata."""
 
-    def get_extra(self) -> ExtraMetadata:
+    def get_extra(self) -> Optional[ExtraMetadata]:
         """Returns extra metadata."""
         return self.extra_func()
 
 @dataclass
 class ExtraMetadata():
-    """Extra metadata from TheMovieDB or MyAnimeList."""
+    """More in-depth metadata about media."""
+    description: Optional[str]
+    """Description of Series, Film or TV Station."""
+    image_url: Optional[str]
+    """Url to high res image cover of Series, Film or TV Station."""
+
     alternate_titles: List[str]
 
     cast: List[str] | None = field(default = None)
-    genre: List[str] | None = field(default = None)
+    genres: List[str] | None = field(default = None)
 
     airing: AiringType | None = field(default = None)

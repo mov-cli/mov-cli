@@ -29,15 +29,11 @@ class Sflix(Scraper):
 
         super().__init__(config, http_client)
 
-    def scrape(self, metadata: Metadata, limit: int = 10, episode: utils.EpisodeSelector = None) -> Series | Movie:
-        results = self.__search(metadata)
+    def scrape(self, metadata: Metadata, episode: utils.EpisodeSelector = None) -> Series | Movie:
+        id = metadata.id
+        name = metadata.title
 
-        if results == []:
-            raise MediaNotFound("No search results were found!", self)
-
-        id, name = results[0]
-
-        self.logger.info(f"Found '{name}', scrapping for stream...")
+        self.logger.info(f"Got '{name}', scrapping for stream...")
 
         if episode is None:
             episode = utils.EpisodeSelector()
@@ -104,29 +100,30 @@ class Sflix(Scraper):
     def __parse(self, q: str) -> str:
         return q.replace(" ", "-").lower()
 
-    def __search(self, metadata: Metadata, limit: int = None) -> List[Tuple[str, str]]:
-        """Searches for show/movie and returns ID."""
+    def search(self, query: str, limit: int = None) -> List[Metadata]:
         response = self.http_client.get(
-            f"{self.base_url}/search/{p.quote(self.__parse(f'{metadata.title} {metadata.year}'))}"
+            f"{self.base_url}/search/{p.quote(self.__parse(query))}"
         )
         soup = self.soup(response)
 
-        id_list = []
-        items: List[Tag] = soup.findAll("div", {"class": "flw-item"})[:limit]
+        results = []
+        items: List[Tag] = soup.findAll("div", {"class": "flw-item"}, limit = limit)
 
         for item in items:
-            title = item.select(".film-name > a")[0].text
             fdi_items = item.findAll("span", {"class": "fdi-item"})
-            year = fdi_items[0].text
-            type = fdi_items[1].text
-            url = item.select(".film-poster-ahref")[0]["href"]
+            item_url = item.select(".film-poster-ahref")[0]["href"]
+            item_type = fdi_items[1].text
 
-            score = Fuzzy().check_score(metadata, title, year, type)
+            results.append(
+                Metadata(
+                    id = item_url.split("-")[-1],
+                    title = item.select(".film-name > a")[0].text,
+                    type = MetadataType.MOVIE if item_type.lower() == "movie" else MetadataType.SERIES, 
+                    year = fdi_items[0].text
+                )
+            )
 
-            if score == FuzzyMatch.MATCH:
-                id_list.append((url.split("-")[-1], title))
-
-        return id_list
+        return results
 
     def __cdn(self, final_link: str, rabb_id: str) -> str:
         subtitles = {}

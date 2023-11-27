@@ -60,13 +60,16 @@ class HTTPClient():
 
             if not response.is_success:
                 self.logger.error(
-                    f"GET Request to {response.url} failed! ({response})", self.logger
+                    f"GET Request to {response.url} failed! ({response})"
                 )
 
             return response
 
         except httpx.ConnectError as e:
-            raise SiteMaybeBlocked(url, e)
+            if "[SSL: CERTIFICATE_VERIFY_FAILED]" in str(e):
+                raise SiteMaybeBlocked(url, e)
+
+            raise e
 
     # NOTE: Are we even using post requests, like will they be used in the future? ~ Goldy
     # NOTE: We likely need it at some point, when adding new providers ~ Ananas

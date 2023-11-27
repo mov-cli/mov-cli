@@ -1,4 +1,8 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Optional
 
 __all__ = ("Media", "Series", "Movie", "LiveTV")
 
@@ -19,7 +23,7 @@ class Series(Media):
         title: str, 
         referrer: str, 
         episode: int, 
-        season: int | None,
+        season: int | None, # TODO: Change this to episode selector, maybe...
         subtitles: dict | None
     ) -> None:
         self.season = season
@@ -39,8 +43,8 @@ class Movie(Media):
         url: str,
         title: str,
         referrer: str,
-        year: int,
-        subtitles: dict | None
+        year: Optional[str],
+        subtitles: Optional[dict]
     ) -> None:
         self.year = year
         """The year this film was released."""

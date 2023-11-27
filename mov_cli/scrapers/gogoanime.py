@@ -1,8 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from ..media import Metadata, MetadataType, Series, Movie
-
 if TYPE_CHECKING:
     from typing import List, Dict
     from ..config import Config
@@ -10,19 +8,46 @@ if TYPE_CHECKING:
     from ..http_client import HTTPClient
 
 import re
+
 from ..scraper import Scraper
+from ..utils import EpisodeSelector
+from ..media import Metadata, MetadataType, Series, Movie, ExtraMetadata
 
 __all__ = ("Gogoanime",)
 
 class Gogoanime(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
-        self.base_url = "https://gogoanimehd.io"
+        self.base_url = "https://gogotaku.info"
         super().__init__(config, http_client)
 
     def search(self, query: str, limit: int = 10) -> List[Metadata]:
         query = query.replace(' ', '-')
         results = self.__results(query, limit)
-        return results    
+        return results
+
+    def scrape(self, metadata: Metadata, episode: EpisodeSelector = None) -> Series | Movie:
+        if episode is None:
+            episode = EpisodeSelector()
+
+        url = self.__cdn(metadata.id, episode)
+
+        if metadata.type == MetadataType.MOVIE:
+            return Movie(
+                url,
+                title = metadata.title,
+                referrer = self.base_url,
+                year = metadata.year,
+                subtitles = None
+            )
+
+        return Series(
+            url,
+            title = metadata.title,
+            referrer = self.base_url,
+            episode = episode,
+            season = episode.season,
+            subtitles = None
+        )
 
     def __results(self, query: str, limit: int = None) -> List[Metadata]:
         metadata_list = []
@@ -41,7 +66,6 @@ class Gogoanime(Scraper):
 
                 id = item.find("a")["href"].split("/")[-1]
                 title = item.find("a")["title"]
-                img = item.find("img")["src"]
                 year = item.find("p", {"class": "released"}).text.split()[-1]
 
                 page = self.http_client.get(self.base_url + f"/category/{id}")
@@ -60,21 +84,22 @@ class Gogoanime(Scraper):
 
                 _p = info_body.findAll("p")
 
-                description = [str.strip(x) for x in _p[2].strings if str.strip(x) != ''][1].replace(r"\r\n", "\r\n")
-
                 genres = _p[3].findAll("a")
-                genres = [i.text.split(" ")[-1] for i in genres]
 
                 metadata_list.append(
                     Metadata(
-                        title = title,
                         id = id,
-                        url = self.base_url + f"/category/{id}",
+                        title = title,
                         type = type,
-                        image_url = img,
                         year = year,
-                        genre = genres,
-                        description = description
+
+                        extra_func = lambda: ExtraMetadata(
+                            description = [str.strip(x) for x in _p[2].strings if str.strip(x) != ''][1].replace(r"\r\n", "\r\n"),
+                            image_url = item.find("img")["src"],
+                            alternate_titles = [],
+                            cast = None,
+                            genres = [i.text.split(" ")[-1] for i in genres]
+                        )
                     )
                 )
 
@@ -94,8 +119,8 @@ class Gogoanime(Scraper):
         last = int(li[-1].find("a")["ep_end"])
         return {1: last} # TODO: Return multiple seasons.
 
-    def __cdn(self, id, episode):
-        req = self.http_client.get(self.base_url + f"/{id}-episode-{episode}")
+    def __cdn(self, id, episode: EpisodeSelector):
+        req = self.http_client.get(self.base_url + f"/{id}-episode-{episode.episode}")
         soup = self.soup(req)
         dood = soup.find("li", {"class": "doodstream"}).find("a")["data-video"]
         url = self.__dood(dood)
@@ -103,30 +128,6 @@ class Gogoanime(Scraper):
             streamwish = soup.find("li", {"class": "streamwish"}).find("a")["data-video"]
             url = self.__streamwish(streamwish)
         return url
-
-    def scrape(self, metadata: Metadata, episode: int = None) -> Series | Movie:
-        if episode is None or metadata.type == MetadataType.MOVIE:
-            episode = 1
-
-        url = self.__cdn(metadata.id, episode)
-
-        if metadata.type == MetadataType.MOVIE:
-            return Movie(
-                url,
-                title = metadata.title,
-                referrer = self.base_url,
-                year = metadata.year,
-                subtitles = None
-            )
-
-        return Series(
-            url,
-            title = metadata.title,
-            referrer = self.base_url,
-            episode = episode,
-            season = 1,
-            subtitles = None
-        )
 
     def __dood(self, url):
         video_id = url.split("/")[-1]

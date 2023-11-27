@@ -14,6 +14,8 @@ from ..media import Metadata, MetadataType, ExtraMetadata, AiringType
 
 __all__ = ("TheMovieDB",)
 
+# NOTE: Search API's are getting removed!
+
 class TheMovieDB():
     """Wrapper for themoviedb.org"""
     def __init__(self, http_client: HTTPClient) -> None:

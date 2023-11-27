@@ -10,6 +10,8 @@ if TYPE_CHECKING:
 
 from ..media import Metadata, MetadataType, AiringType, ExtraMetadata
 
+# NOTE: Search API's are getting removed!
+
 class Jikan(): # NOTE: Might remove and scrap this in the future.
     """Api wrapper for the Jikan v4 anime api."""
     def __init__(self, http_client: HTTPClient) -> None:

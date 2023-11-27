@@ -13,6 +13,8 @@ from bs4 import BeautifulSoup
 
 __all__ = ("Dizilah",)
 
+# NOTE: Search API's are getting removed!
+
 class Dizilah():
     """Api wrapper for dizilah"""
     def __init__(self, http_client: HTTPClient) -> None:

@@ -6,6 +6,6 @@ __all__ = ("EpisodeSelector",)
 
 @dataclass
 class EpisodeSelector:
-    """Swift util to use when interfacing scrapers to select an episode of a show."""
+    """Swift util to use when asking the scraper which episode of a show to scrape."""
     episode: int = field(default = 1)
     season: int = field(default = 1)
