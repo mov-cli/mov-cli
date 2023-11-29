@@ -9,7 +9,8 @@ import time
 import subprocess
 from devgoldyutils import Colours
 
-from .player import Player, PlayerNotFound, PlayerNotSupported
+from .. import errors
+from .player import Player
 
 __all__ = ("MPV",)
 
@@ -84,7 +85,7 @@ class MPV(Player):
                         ]
                     )
 
-                raise PlayerNotSupported(self, self.platform)
+                raise errors.PlayerNotSupported(self, self.platform)
 
             except ModuleNotFoundError:
-                raise PlayerNotFound(self)
+                raise errors.PlayerNotFound(self)

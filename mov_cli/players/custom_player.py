@@ -8,7 +8,8 @@ if TYPE_CHECKING:
 import subprocess
 from devgoldyutils import Colours
 
-from .player import Player, PlayerNotFound
+from .. import errors
+from .player import Player
 
 __all__ = ("CustomPlayer",)
 
@@ -29,4 +30,4 @@ class CustomPlayer(Player):
                 [f"{self.player_command}", f'"{media.url}"']
             )
         except ModuleNotFoundError:
-            raise PlayerNotFound(self)
+            raise errors.PlayerNotFound(self)

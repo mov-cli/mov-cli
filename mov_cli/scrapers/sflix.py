@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from bs4 import Tag
     from ..config import Config
-    from typing import List, Dict, Tuple
+    from typing import List, Dict
     from ..http_client import HTTPClient
 
 import re
@@ -14,7 +14,6 @@ import hashlib
 from urllib import parse as p
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
-from ..scraper_utils import Fuzzy, FuzzyMatch
 
 from ..media import Series, Movie
 from .. import scraper_utils, utils

@@ -10,10 +10,10 @@ import subprocess
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
-from .. import utils, errors
+from .. import utils
 from ..logger import mov_cli_logger
 
-__all__ = ("Player", "PlayerNotFound", "PlayerNotSupported")
+__all__ = ("Player",)
 
 class Player(ABC):
     """A base class for all players in mov-cli."""
@@ -35,20 +35,3 @@ class Player(ABC):
     def play(self, media: Media) -> subprocess.Popen:
         """Method to be overridden with code to play media in that specific player."""
         ...
-
-
-class PlayerNotFound(errors.MovCliException):
-    """Raised when player is not found."""
-    def __init__(self, player: Player) -> None:
-        super().__init__(
-            f"The '{player.display_name}' player was not found. Are you sure you have it installed? " \
-            "Are you sure the environment variable is set correctly?"
-        )
-
-class PlayerNotSupported(errors.MovCliException):
-    """Raised when player is not supported on that specific platform."""
-    def __init__(self, player: Player, platform: SUPPORTED_PLATFORMS) -> None:
-        super().__init__(
-            f"The '{player.display_name}' player is not supported on '{platform}'. " \
-            "We recommend VLC for iOS and MPV for every other platform."
-        )

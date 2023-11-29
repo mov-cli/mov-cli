@@ -4,11 +4,10 @@ from typing import TYPE_CHECKING, TypedDict
 if TYPE_CHECKING:
     from ..config import Config
     from ..http_client import HTTPClient
-    from typing import List, Dict, Tuple
+    from typing import List, Dict
 
 import re
 from .. import utils
-from urllib.parse import quote
 
 from ..scraper import Scraper
 from ..media import Series, Movie, MetadataType, Metadata
@@ -18,17 +17,6 @@ __all__ = ("RemoteStream",)
 
 # Hinting for the IMDB result dictionary because no type hint drives me nuts!!! 😡💢
 IData = TypedDict("IData", {"height": int, "imageUrl": str, "width": int})
-
-class IMDBSearchResultData(TypedDict):
-    i: IData
-    id: str
-    l: str
-    q: str
-    qid: str
-    rank: int
-    s: str
-    y: int
-
 
 class RemoteStream(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:

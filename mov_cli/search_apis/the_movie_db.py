@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..http_client import HTTPClient
-    from typing import List, Generator, Any
+    from typing import List, Any
 
 from bs4 import BeautifulSoup, Tag
 
