@@ -191,7 +191,7 @@ class Sflix(Scraper):
 
     def __gh_key(self):
         response_key = self.http_client.get(
-            "https://github.com/enimax-anime/key/blob/e4/key.txt", 
+            "https://github.com/theonlymo/keys/blob/e4/key", 
             headers = {"X-Requested-With": "XMLHttpRequest"},
             include_default_headers = False
         ).json()
@@ -200,18 +200,22 @@ class Sflix(Scraper):
         return key
 
     def __key_extraction(self, string, table):
-        decrypted_key = []
-        offset = 0
-        encrypted_string = string
+        sources_array = list(string)
 
-        for start, end in table:
-            decrypted_key.append(encrypted_string[start - offset:end - offset])
-            encrypted_string = (
-                encrypted_string[:start - offset] + encrypted_string[end - offset:]
-            )
-            offset += end - start
+        extracted_key = ""
+        current_index = 0
 
-        return "".join(decrypted_key), encrypted_string
+        for index in table:
+            start = index[0] + current_index
+            end = start + index[1]
+
+            for i in range(start, end):
+                extracted_key += sources_array[i]
+                sources_array[i] = ' '
+
+            current_index += index[1]
+
+        return extracted_key, ''.join(sources_array)
 
     def __md5(self, input_bytes):
         return hashlib.md5(input_bytes).digest()

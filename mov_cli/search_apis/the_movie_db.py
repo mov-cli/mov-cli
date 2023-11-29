@@ -24,42 +24,49 @@ class TheMovieDB():
         self.root_url = "https://www.themoviedb.org"
         self.not_translated = "We don't have an overview translated in English. Help us expand our database by adding one."
 
-    def search(self, query: str) -> Generator[Metadata, Any, None]:
-        """Search for shows and films. Returns a generator btw."""
+    def search(self, query: str) -> List[Metadata]:
+        """Search for shows and films."""
         response = self.http_client.get(self.root_url + "/search", params = {"query": query})
         soup = BeautifulSoup(response.text, self.http_client.config.parser)
 
         return self.__strip_media_items(soup)
 
-    def __strip_media_items(self, soup: BeautifulSoup) -> Generator[Metadata, Any, None]:
-        """Generator that strips 🙄 the media items."""
+    def __strip_media_items(self, soup: BeautifulSoup) -> List[Metadata, Any, None]:
+        metadatas = []
+
         movie_items = soup.find("div", {"class": "movie"}).find_all("div", {"class": "card v4 tight"})
         tv_items = soup.find("div", {"class": "tv"}).find_all("div", {"class": "card v4 tight"})
 
         items: List[Tag] = movie_items + tv_items
 
         for item in items:
-            description = item.find("div", {"class": "overview"}).find("p")
-            if description == self.not_translated:
-                description = None
+
                 
             release_date = item.find("span", {"class": "release_date"})
-            image = item.find("img", {"class": "poster"})
             id = item.find("a")["href"].split("/")[-1]
 
-            yield Metadata(
+            metadatas.append(Metadata(
                 id = id,
                 title = item.find("h2").text,
-                description = description.text if description is not None else "",
                 type = MetadataType.MOVIE if "movie" in item.parent.parent.attrs["class"] else MetadataType.SERIES,
                 year = release_date.text.split(" ")[-1] if release_date is not None else None,
-                image_url = self.root_url + image.attrs["src"].replace("w94_and_h141_bestv2", "w600_and_h900_bestv2") if image is not None else None,
                 extra_func = lambda: self.__scrape_extra_metadata(item)
-            )
+            ))
 
-        return None
+        return metadatas
 
     def __scrape_extra_metadata(self, item: Tag) -> ExtraMetadata:
+
+        description = item.find("div", {"class": "overview"}).find("p")
+        if description == self.not_translated:
+            description = None
+
+        description = description.text if description is not None else "",
+
+        image = item.find("img", {"class": "poster"})
+
+        image_url = self.root_url + image.attrs["src"].replace("w94_and_h141_bestv2", "w600_and_h900_bestv2") if image is not None else None,
+
         url = self.root_url + item.find("a")["href"]
 
         soup = BeautifulSoup(self.http_client.get(url, redirect = True).text, self.http_client.config.parser)
@@ -79,6 +86,8 @@ class TheMovieDB():
             airing = AiringType.PRODUCTION
         elif airing_status.__contains__("Returning"):
             airing = AiringType.ONGOING
+        elif airing_status.__contains__("Canceled"):
+            airing = AiringType.CANCELED
         else:
             airing = AiringType.DONE
 
@@ -100,9 +109,11 @@ class TheMovieDB():
             cast.append(i.select("p:nth-child(1) > a:nth-child(1)")[0].text)
 
         return ExtraMetadata(
+            description = description,
+            image_url = image_url,
             alternate_titles = alternate_titles,
             cast = cast,
-            genre = genres,
+            genres = genres,
             airing = airing
         )
 

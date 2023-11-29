@@ -19,6 +19,7 @@ class AiringType(Enum):
     ONGOING = 1
     PRODUCTION = 2
     RELEASED = 3
+    CANCELED = 4
 
 @dataclass
 class Metadata:

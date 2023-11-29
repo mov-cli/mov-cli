@@ -12,6 +12,7 @@ from urllib.parse import quote
 
 from ..scraper import Scraper
 from ..media import Series, Movie, MetadataType, Metadata
+from ..search_apis import TheMovieDB
 
 __all__ = ("RemoteStream",)
 
@@ -32,9 +33,12 @@ class IMDBSearchResultData(TypedDict):
 class RemoteStream(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
         self.base_url = "https://remotestre.am"
-        self.catalogue = self.base_url + "/catalogue?display=plain"
+        self.mov_catalogue = self.base_url + "/listing?type=movie"
+        self.tv_catalogue = self.base_url + "/listing?type=serie"
         self.imdb_epi = "https://www.imdb.com/title/{}/episodes/"
         self.imdb_media = "https://v2.sg.media-imdb.com"
+        self.api_key = "fb7bb23f03b6994dafc674c074d01761"
+        self.search_api = TheMovieDB(http_client)
 
         super().__init__(config, http_client)
 
@@ -69,52 +73,45 @@ class RemoteStream(Scraper):
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
         if metadata.type == MetadataType.SERIES:
             seasons = {}
-            episodes_url = f"https://www.imdb.com/title/{metadata.id}/episodes/"
-            html = self.http_client.get(episodes_url).text
+            episodes_url = f"https://www.themoviedb.org/tv/{metadata.id}/seasons"
+            html = self.http_client.get(episodes_url, redirect=True).text
             seasons_soup = self.soup(html)
 
-            for season in range(1, len(seasons_soup.findAll("li", {"data-testid": "tab-season-entry"}))):
-                seasons_response = self.http_client.get(episodes_url + f"?season={season}")
+            for season in range(len(seasons_soup.findAll("div", {"class": "season_wrapper"}))):
+                seasons_response = self.http_client.get(f"https://www.themoviedb.org/tv/{metadata.id}/season={season + 1}")
+                
                 chicken_noodle_soup = self.soup(seasons_response)
 
-                seasons[season] = len(chicken_noodle_soup.findAll("article", {"class": "episode-item-wrapper"}))
+                if chicken_noodle_soup.find("div", {"class": "error_wrapper"}):
+                    break
+
+                seasons[season + 1] = len(chicken_noodle_soup.findAll("div", {"class": "card"}))
 
             return seasons
 
         return {None: 1}
 
     def search(self, query: str, limit: int = 10) -> List[Metadata]:
-        imdb_data = self.http_client.get(
-            self.imdb_media + f"/suggestion/{quote(query[0])}/{quote(query)}.json"
-        )
-        imdb_search_results: List[IMDBSearchResultData] = imdb_data.json()["d"]
+        catalogue = self.http_client.get(self.mov_catalogue).text + self.http_client.get(self.tv_catalogue).text
 
-        # TODO: This is returning internal server error. We need a fix.
-        catalogue = self.http_client.get(self.catalogue)
+        returnable_results = []
 
-        results = []
+        search_results = self.search_api.search(query)[:limit]
 
-        for search_result in imdb_search_results[:limit]:
-            id = search_result.get("id")
+        for search_result in search_results:
+            if search_result.id in catalogue:
+                returnable_results.append(search_result)
+        
+        return returnable_results
 
-            if id is None or not id.startswith("tt") or id not in catalogue.text:
-                continue
 
-            results.append(
-                Metadata(
-                    id, 
-                    title = search_result["l"],
-                    type = MetadataType.MOVIE if search_result["qid"].lower() in ["movie", "tvmovie"] else MetadataType.SERIES
-                )
-            )
 
-        return results
 
     def __cdn(self, imdb_id: str, episode: utils.EpisodeSelector = None) -> str:
-        url = self.base_url + f"/e/?imdb={imdb_id}"
+        url = self.base_url + f"/e/?tmdb={imdb_id}"
 
         if episode is not None and episode.season and episode:
-            url += f"&s={episode.season}&e={episode}"
+            url += f"&s={episode.season}&e={episode.episode}"
 
         req = self.http_client.get(url).text
         return re.findall('"file":"(.*?)"', req)[0]

@@ -2,7 +2,6 @@ import sys
 sys.path.insert(0, ".")
 
 import logging
-from devgoldyutils import pprint
 
 from mov_cli.players import MPV
 from mov_cli.config import Config
@@ -14,11 +13,14 @@ mov_cli_logger.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
     config = Config()
-    remote_stream = Gogoanime(config, HTTPClient(config))
+    remote_stream = RemoteStream(config, HTTPClient(config))
 
-    results = remote_stream.search("chuunibyou demo take on me")
-    pprint(results)
+    results = remote_stream.search("Breaking Bad")
 
-    movie = remote_stream.scrape(results[0])
+    print(results)
+
+    print(results[-1].get_extra())
+
+    movie = remote_stream.scrape(results[-1])
 
     MPV(config).play(movie)
