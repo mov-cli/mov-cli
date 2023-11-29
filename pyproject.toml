@@ -26,7 +26,7 @@ dependencies = [
     "httpx",
     "importlib-metadata; python_version<'3.8'",
     "toml",
-    "devgoldyutils>=2.5.6",
+    "devgoldyutils>=2.5.7",
     "platformdirs>=3.10.0",
     "typer[all]",
     "inquirer",
@@ -42,7 +42,7 @@ dynamic = ["version"]
 dev = [
     "ruff",
     "build",
-    "devgoldyutils[pprint]>=2.5.6"
+    "devgoldyutils[pprint]>=2.5.7"
 ]
 
 [project.urls]
