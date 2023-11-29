@@ -3,17 +3,24 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal
+    from typing import Literal, List, Type
+    from ..scraper import Scraper
 
 import random
 import getpass
 from datetime import datetime
 from devgoldyutils import Colours
 
-from .. import utils
+from .. import utils, scrapers
 from .. import __version__ as mov_cli_version
 
-__all__ = ("greetings", "welcome_msg")
+__all__ = ()
+
+SCRAPERS: List[Scraper] = [
+    scrapers.Sflix,
+    scrapers.Gogoanime,
+    scrapers.RemoteStream
+]
 
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
     now = datetime.now()
@@ -58,7 +65,7 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
         f"\n    It's {Colours.BLUE}%I:%M %p {Colours.RESET}on a {Colours.PURPLE}{adjective} {Colours.PINK_GREY}%A! {Colours.RESET}"
     )
 
-    if display_hint is True:
+    if display_hint is True and display_version is False:
         text += f"\n\n- Hint: {Colours.CLAY}mov-cli {Colours.ORANGE}spider man no way home{Colours.RESET}"
 
     if display_version is True:
@@ -68,3 +75,14 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
         text += f"\n\n {Colours.PURPLE}ツ {Colours.ORANGE}An update is available! --> {Colours.RESET}pip install mov-cli -U"
 
     return text
+
+def get_scraper(provider: str) -> Type[Scraper]:
+
+    for scraper in SCRAPERS:
+
+        if provider.lower() == scraper.__name__.lower():
+            return scraper
+
+    raise ValueError(
+        f"Could not find the provider '{provider}'! Make sure to check for typos."
+    )

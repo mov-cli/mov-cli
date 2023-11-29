@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..config import Config
@@ -11,12 +11,9 @@ from .. import utils
 
 from ..scraper import Scraper
 from ..media import Series, Movie, MetadataType, Metadata
-from ..search_apis import TheMovieDB
+from ..scraper_utils import TheMovieDB
 
 __all__ = ("RemoteStream",)
-
-# Hinting for the IMDB result dictionary because no type hint drives me nuts!!! 😡💢
-IData = TypedDict("IData", {"height": int, "imageUrl": str, "width": int})
 
 class RemoteStream(Scraper):
     def __init__(self, config: Config, http_client: HTTPClient) -> None:
@@ -81,6 +78,7 @@ class RemoteStream(Scraper):
 
     def search(self, query: str, limit: int = 10) -> List[Metadata]:
         catalogue = self.http_client.get(self.mov_catalogue).text + self.http_client.get(self.tv_catalogue).text
+        catalogue = catalogue.split("<br>")
 
         returnable_results = []
 
@@ -89,10 +87,8 @@ class RemoteStream(Scraper):
         for search_result in search_results:
             if search_result.id in catalogue:
                 returnable_results.append(search_result)
-        
+
         return returnable_results
-
-
 
 
     def __cdn(self, imdb_id: str, episode: utils.EpisodeSelector = None) -> str:

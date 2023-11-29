@@ -20,34 +20,39 @@ from . import players, mov_cli_logger
 __all__ = ("Config",)
 
 @final
-class ConfigDictUI(TypedDict):
+class ConfigUIData(TypedDict):
     fzf: bool
 
 @final
-class ConfigDictHTTP(TypedDict):
+class ConfigHTTPData(TypedDict):
     headers: Dict[str, str]
 
 @final
-class ConfigDictDownloads(TypedDict):
+class ConfigDownloadsData(TypedDict):
     save_path: str
 
 @final
-class ConfigDict(TypedDict):
+class ProviderData(TypedDict):
+    default: str
+
+@final
+class ConfigData(TypedDict):
     debug: bool
     player: str
     flatpak_mpv: bool
     parser: SUPPORTED_PARSERS
-    ui: ConfigDictUI
-    http: ConfigDictHTTP
-    downloads: ConfigDictDownloads
+    ui: ConfigUIData
+    http: ConfigHTTPData
+    downloads: ConfigDownloadsData
+    provider: ProviderData
 
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
-    def __init__(self, override_config: ConfigDict = None, config_path: Path = None) -> None:
+    def __init__(self, override_config: ConfigData = None, config_path: Path = None) -> None:
         self.config_path = config_path
         self.logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
 
-        self.data: ConfigDict = {}
+        self.data: ConfigData = {}
 
         if override_config is None:
             template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}config.template.toml"
@@ -83,6 +88,11 @@ class Config():
             return players.VLC(self)
 
         return players.CustomPlayer(self, value)
+
+    @property
+    def provider(self) -> str:
+        """Returns the provider that should be used to scraper by default."""
+        return self.data.get("provider", {}).get("default", "sflix")
 
     @property
     def flatpak_mpv(self) -> bool:

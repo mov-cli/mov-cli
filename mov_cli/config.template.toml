@@ -4,3 +4,6 @@ debug = false
 
 [mov-cli.ui]
 fzf = true
+
+[mov-cli.provider]
+default = "sflix"
