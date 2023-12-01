@@ -11,7 +11,7 @@ from .. import utils
 
 from ..scraper import Scraper
 from ..media import Series, Movie, MetadataType, Metadata
-from ..scraper_utils import TheMovieDB
+from ..utils.scraper import TheMovieDB
 
 __all__ = ("RemoteStream",)
 
@@ -28,7 +28,6 @@ class RemoteStream(Scraper):
         super().__init__(config, http_client)
 
     def scrape(self, metadata: Metadata, episode: utils.EpisodeSelector = None) -> Series | Movie:
-        self.logger.info(f"Got '{metadata.title}', scrapping for stream...")
 
         if metadata.type == MetadataType.SERIES:
             if episode is None:

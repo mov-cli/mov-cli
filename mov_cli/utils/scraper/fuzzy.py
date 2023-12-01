@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..media import Metadata
+    from ...media import Metadata
 
-from ..media import MetadataType
 from enum import Enum
+from ...media import MetadataType
 
 __all__ = ("Fuzzy", "FuzzyMatch",)
 

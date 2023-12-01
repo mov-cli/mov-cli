@@ -30,7 +30,7 @@ dependencies = [
     "platformdirs>=3.10.0",
     "typer[all]",
     "inquirer",
-    "iterfzf",
+    "iterfzf@git+https://github.com/THEGOLDENPRO/iterfzf",
     "beautifulsoup4",
     "pycryptodome",
     "Unidecode"

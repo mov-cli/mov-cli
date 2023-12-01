@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Dict, List
+    from typing import Dict, List, Literal
     from .config import Config
     from .http_client import HTTPClient
     from .media import Metadata, Series, Movie, LiveTV
@@ -41,7 +41,7 @@ class Scraper(ABC):
         ...
 
     @abstractmethod
-    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
+    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int, int] | Dict[None, Literal[1]]:
         """Returns episode count for each season in that Movie/Series."""
         ...
 

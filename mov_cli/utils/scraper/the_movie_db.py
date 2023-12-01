@@ -5,16 +5,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..http_client import HTTPClient
     from typing import List, Any
+    from ...http_client import HTTPClient
 
 from bs4 import BeautifulSoup, Tag
-
-from ..media import Metadata, MetadataType, ExtraMetadata, AiringType
+from ...media import Metadata, MetadataType, ExtraMetadata, AiringType
 
 __all__ = ("TheMovieDB",)
-
-# NOTE: Search API's are getting removed!
 
 class TheMovieDB():
     """Wrapper for themoviedb.org"""
@@ -40,8 +37,6 @@ class TheMovieDB():
         items: List[Tag] = movie_items + tv_items
 
         for item in items:
-
-                
             release_date = item.find("span", {"class": "release_date"})
             id = item.find("a")["href"].split("/")[-1]
 
@@ -116,6 +111,3 @@ class TheMovieDB():
             genres = genres,
             airing = airing
         )
-
-
-

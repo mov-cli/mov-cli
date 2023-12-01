@@ -9,8 +9,6 @@ if TYPE_CHECKING:
 from devgoldyutils import Colours
 from .logger import mov_cli_logger
 
-#__all__ = ("MovCliException",)
-
 class MovCliException(Exception):
     """Raises whenever there's a known error in mov-cli."""
     def __init__(self, message: str, logger: logging.Logger = None):
@@ -37,4 +35,10 @@ class PlayerNotSupported(MovCliException):
         super().__init__(
             f"The '{player.display_name}' player is not supported on '{platform}'. " \
             "We recommend VLC for iOS and MPV for every other platform."
+        )
+
+class ProviderNotFound(MovCliException):
+    def __init__(self, provider: str):
+        super().__init__(
+            f"Could not find the provider '{provider}'! Make sure to check for typos."
         )

@@ -15,9 +15,9 @@ from urllib import parse as p
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 
-from ..media import Series, Movie
-from .. import scraper_utils, utils
-from ..media import Metadata, MetadataType
+from .. import utils
+from ..utils.scraper import iso_639
+from ..media import Series, Movie, Metadata, MetadataType
 from ..scraper import Scraper, MediaNotFound
 
 __all__ = ("Sflix",)
@@ -30,9 +30,6 @@ class Sflix(Scraper):
 
     def scrape(self, metadata: Metadata, episode: utils.EpisodeSelector = None) -> Series | Movie:
         id = metadata.id
-        name = metadata.title
-
-        self.logger.info(f"Got '{name}', scrapping for stream...")
 
         if episode is None:
             episode = utils.EpisodeSelector()
@@ -69,18 +66,11 @@ class Sflix(Scraper):
             )
 
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
-        results = self.__search(metadata, 1)
-
-        if results == []:
-            raise MediaNotFound("No search results were found!", self)
-
-        id, name = results[0]
-
         seasons = None
 
         if type == MetadataType.SERIES:
             seasons = {}
-            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{id}").text
+            r = self.http_client.get(f"{self.base_url}/ajax/season/list/{metadata.id}").text
 
             season_ids = [
                 i["data-id"] for i in self.soup(r).select(".dropdown-item")
@@ -131,7 +121,7 @@ class Sflix(Scraper):
             item : dict
             file = item.get("file")
             label = item.get("label")
-            prefix = scraper_utils.iso_639.get(label, None)
+            prefix = iso_639.get(label, None)
             if label.__contains__("-") or label.__contains__(" "):
                 continue
 

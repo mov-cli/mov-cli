@@ -5,12 +5,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from bs4 import Tag
     from typing import List
-    from ..config import Config
+    from ...config import Config
 
 from bs4 import BeautifulSoup
-# from urllib.parse import quote
-from ..http_client import HTTPClient
-from ..media import Metadata, MetadataType
+from ...http_client import HTTPClient
+from ...media import Metadata, MetadataType
 
 __all__ = ("imdb_search",)
 

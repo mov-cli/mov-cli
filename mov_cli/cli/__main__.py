@@ -6,47 +6,36 @@ if TYPE_CHECKING:
 
 import typer
 import logging
-from typing import List, Union
+from typing import List, Optional, Dict
 from devgoldyutils import Colours
 
-from . import ui
-from . import utils
-#from ..players import MPV, VLC
+from . import ui, utils
 from ..config import Config
-# from ..scrapers import Sflix
 from ..media import MetadataType
 from ..logger import mov_cli_logger
 from ..http_client import HTTPClient
+from ..utils import EpisodeSelector
 
 __all__ = ("mov_cli",)
 
 def mov_cli(
-    query: Union[List[str], None] = typer.Argument(None, help = "The film, tv show or anime you would like to Query."), 
-    debug: bool = typer.Option(None, help = "Enable extra logging details."), 
-    version: bool = typer.Option(None, "--version", help = "Display what version mov-cli is currently on."), 
-    player: str = typer.Option(None, help = "Player you would like to stream with. E.g. mpv, vlc"), 
-    provider: str = typer.Option(None, help = "Provider you would like to stream from. E.g. RemoteStream, Sflix"), 
-    fzf: bool = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts.")
+    query: Optional[List[str]] = typer.Argument(None, help = "The film, tv show or anime you would like to Query."), 
+    debug: Optional[bool] = typer.Option(None, help = "Enable extra logging details."), 
+    version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
+    player: Optional[str] = typer.Option(None, help = "Player you would like to stream with. E.g. mpv, vlc"), 
+    provider: Optional[str] = typer.Option(None, help = "Provider you would like to stream from. E.g. RemoteStream, Sflix"), 
+    fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."),
+    episode: Optional[str] = typer.Option(None, help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
 ):
     config = Config()
 
-    if debug is not None:
-        config.data["debug"] = debug
-
-    if player is not None:
-        config.data["player"] = player
-
-    if provider is not None:
-        if config.data.get("provider") is None:
-            config.data["provider"] = {}
-
-        config.data["provider"]["default"] = provider
-
-    if fzf is not None:
-        if config.data.get("ui") is None:
-            config.data["ui"] = {}
-
-        config.data["ui"]["fzf"] = fzf
+    config = utils.set_cli_config(
+        config,
+        debug = debug,
+        player = player,
+        provider = provider,
+        fzf = fzf
+    )
 
     if config.debug:
         mov_cli_logger.setLevel(logging.DEBUG)
@@ -57,24 +46,63 @@ def mov_cli(
 
     mov_cli_logger.debug(f"Config -> {config.data}")
 
-    # NOTE: Where searching will happen.
     if len(query) > 0:
         query: str = " ".join(query)
         http_client = HTTPClient(config)
         scraper = utils.get_scraper(config.provider)
+        print(" ")
+        mov_cli_logger.info(f"Using the '{scraper.__name__}' scraper...")
         scraper = scraper(config, http_client)
 
         choice = ui.prompt(
             "Choose Result", 
-            choices = scraper.search(query), 
+            choices = (choice for choice in scraper.search(query)), 
             display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
                 f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
             config = config
         )
 
-        # TODO: Ask for episode if episode/season parameter is None.
+        if choice is None:
+            mov_cli_logger.error("You didn't select anything.")
+            return False
 
-        media = scraper.scrape(choice)
+        if episode is not None: # TODO: Move this into an individual method.
+            episode = episode.split(":")
+
+            if len(episode) < 2:
+                mov_cli_logger.error("Incorrect episode format!")
+                return False
+
+            # TODO: Confirm whether that episode is available.
+
+        else:
+            ep_metadata = scraper.scrape_metadata_episodes(choice)
+
+            if ep_metadata.get(None) == 1:
+                episode = None
+            else:
+                ep_metadata: Dict[int, int]
+
+                season = ui.prompt(
+                    "Select Season", 
+                    choices = [season for season in ep_metadata], 
+                    display = lambda x: f"Season {x}",
+                    config = config
+                ) # TODO: Remember to catch if it's None.
+
+                ep = ui.prompt(
+                    "Select Episode", 
+                    choices = [ep for ep in ep_metadata[season]], 
+                    display = lambda x: f"Episode {x}",
+                    config = config
+                ) # TODO: Remember to catch if it's None.
+
+                episode = season, ep
+
+        if episode is not None:
+            episode = EpisodeSelector(episode[0], episode[1])
+
+        media = scraper.scrape(choice, episode)
 
         # NOTE: This is all a work in progress.
 

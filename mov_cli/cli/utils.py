@@ -5,13 +5,14 @@ if TYPE_CHECKING:
     import logging
     from typing import Literal, List, Type
     from ..scraper import Scraper
+    from ..config import Config
 
 import random
 import getpass
 from datetime import datetime
 from devgoldyutils import Colours
 
-from .. import utils, scrapers
+from .. import utils, scrapers, errors
 from .. import __version__ as mov_cli_version
 
 __all__ = ()
@@ -83,6 +84,30 @@ def get_scraper(provider: str) -> Type[Scraper]:
         if provider.lower() == scraper.__name__.lower():
             return scraper
 
-    raise ValueError(
-        f"Could not find the provider '{provider}'! Make sure to check for typos."
-    )
+    raise errors.ProviderNotFound(provider)
+
+def set_cli_config(config: Config, **kwargs) -> Config:
+    debug = kwargs.get("debug")
+    player = kwargs.get("player")
+    provider = kwargs.get("provider")
+    fzf = kwargs.get("fzf")
+
+    if debug is not None:
+        config.data["debug"] = debug
+
+    if player is not None:
+        config.data["player"] = player
+
+    if provider is not None:
+        if config.data.get("provider") is None:
+            config.data["provider"] = {}
+
+        config.data["provider"]["default"] = provider
+
+    if fzf is not None:
+        if config.data.get("ui") is None:
+            config.data["ui"] = {}
+
+        config.data["ui"]["fzf"] = fzf
+
+    return config
