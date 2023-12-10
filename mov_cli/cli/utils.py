@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal, List, Type
+    from typing import Literal, List, Type, Optional, Any
     from ..scraper import Scraper
     from ..config import Config
 
@@ -79,14 +79,14 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
 def get_scraper(provider: str) -> Type[Scraper]:
 
-    for scraper in SCRAPERS:
+    for scraper in SCRAPERS: # TODO: when we add plugin providers to mov-cli we should add that to the list too.
 
         if provider.lower() == scraper.__name__.lower():
             return scraper
 
     raise errors.ProviderNotFound(provider)
 
-def set_cli_config(config: Config, **kwargs) -> Config:
+def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")
     player = kwargs.get("player")
     provider = kwargs.get("provider")

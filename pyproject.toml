@@ -20,14 +20,14 @@ classifiers = [
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
-	'Programming Language :: Python :: 3.11'
+	'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12'
 ]
 dependencies = [
     "httpx",
     "importlib-metadata; python_version<'3.8'",
     "toml",
     "devgoldyutils>=2.5.7",
-    "platformdirs>=3.10.0",
     "typer[all]",
     "inquirer",
     "iterfzf@git+https://github.com/THEGOLDENPRO/iterfzf",

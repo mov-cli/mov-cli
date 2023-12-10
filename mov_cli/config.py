@@ -15,7 +15,7 @@ from pathlib import Path
 from importlib.util import find_spec
 from devgoldyutils import LoggerAdapter
 
-from . import players, mov_cli_logger
+from . import players, mov_cli_logger, utils
 
 __all__ = ("Config",)
 
@@ -55,22 +55,7 @@ class Config():
         self.data: ConfigData = {}
 
         if override_config is None:
-            template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}config.template.toml"
-            # TODO: I might make platformdirs more accessible in the future. I'm not sure yet.
-            mov_cli_data_path = platformdirs.site_data_dir("mov_cli", ensure_exists = True)
-
-            if self.config_path is None:
-                self.config_path = Path.joinpath(Path(mov_cli_data_path), "config.toml")
-
-            if not self.config_path.exists():
-                self.logger.debug("The 'config.toml' file doesn't exist so we're creating it...")
-                config_file = open(self.config_path, "w")
-
-                with open(template_config_path, "r") as config_template:
-                    config_file.write(config_template.read())
-
-                config_file.close()
-                self.logger.info(f"Config created at '{self.config_path}'.")
+            self.config_path = self.__get_config_file()
 
             self.data = toml.load(self.config_path).get("mov-cli", {})
 
@@ -155,3 +140,40 @@ class Config():
         }
 
         return self.data.get("http", {}).get("headers", default_headers)
+
+    def __get_config_file(self) -> Path:
+        """Function that returns the path to the config file with multi platform support."""
+        platform = utils.what_platform()
+
+        appdata_dir = Path("./mov-cli-temp")
+
+        if platform == "Windows":
+            user_profile = Path(os.getenv("USERPROFILE"))
+            appdata_dir = user_profile.joinpath("AppData", "Local")
+
+        elif platform == "Darwin": # TODO: Implement MacOS appdata path.
+            ...
+
+        elif platform == "iOS": # TODO: Implement iOS appdata path.
+            ...
+
+        elif platform == "Linux" or platform == "Android":
+            user_profile = Path(os.getenv("HOME"))
+            appdata_dir = user_profile.joinpath(".config")
+
+        config_path = appdata_dir.joinpath("mov-cli", "config.toml")
+        config_path.parent.mkdir(exist_ok = True)
+
+        if not config_path.exists():
+            self.logger.debug("The 'config.toml' file doesn't exist so we're creating it...")
+            config_file = open(config_path, "w")
+
+            template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}config.template.toml"
+
+            with open(template_config_path, "r") as config_template:
+                config_file.write(config_template.read())
+
+            config_file.close()
+            self.logger.info(f"Config created at '{config_path}'.")
+
+        return config_path
