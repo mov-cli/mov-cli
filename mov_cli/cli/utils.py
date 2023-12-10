@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from ..scraper import Scraper
     from ..config import Config
 
+import os
 import random
 import getpass
 from datetime import datetime
@@ -41,7 +42,8 @@ def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Go
         elif i > 8:
             return "Good Night"
 
-def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_version: bool = False) -> str: # Inspired by animdl: https://github.com/justfoolingaround/animdl
+# This function below is inspired by animdl: https://github.com/justfoolingaround/animdl
+def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_version: bool = False) -> str:
     """Returns cli welcome message."""
     now = datetime.now()
     user_name = random.choice(
@@ -111,3 +113,21 @@ def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
         config.data["ui"]["fzf"] = fzf
 
     return config
+
+def open_config_file(config: Config):
+    """Opens the config file in the respectable editor for that platform."""
+    editor = config.editor
+
+    if editor is None:
+        platform = utils.what_platform()
+
+        if platform == "Windows":
+            editor = "notepad"
+        elif platform == "Darwin": # TODO: Implement MacOS and iOS.
+            ...
+        elif platform == "iOS":
+            ...
+        elif platform == "Linux" or platform == "Android":
+            editor = "nano"
+
+    os.system(f"{editor} {config.config_path}")

@@ -1,8 +1,4 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    ...
 
 import typer
 import logging
@@ -18,14 +14,18 @@ from ..utils import EpisodeSelector
 
 __all__ = ("mov_cli",)
 
+uwu_app = typer.Typer(pretty_exceptions_enable = False)
+
 def mov_cli(
     query: Optional[List[str]] = typer.Argument(None, help = "The film, tv show or anime you would like to Query."), 
     debug: Optional[bool] = typer.Option(None, help = "Enable extra logging details."), 
-    version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
     player: Optional[str] = typer.Option(None, help = "Player you would like to stream with. E.g. mpv, vlc"), 
     provider: Optional[str] = typer.Option(None, help = "Provider you would like to stream from. E.g. RemoteStream, Sflix"), 
     fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."),
     episode: Optional[str] = typer.Option(None, help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
+
+    version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
+    edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
 ):
     config = Config()
 
@@ -45,6 +45,9 @@ def mov_cli(
     )
 
     mov_cli_logger.debug(f"Config -> {config.data}")
+
+    if edit is True:
+        utils.open_config_file(config)
 
     if len(query) > 0:
         query: str = " ".join(query)
@@ -110,4 +113,5 @@ def mov_cli(
         popen.wait()
 
 def app():
-    typer.run(mov_cli)
+    uwu_app.command()(mov_cli)
+    uwu_app() # Wait whaaaaa.

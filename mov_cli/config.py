@@ -3,14 +3,13 @@ from typing import TYPE_CHECKING, TypedDict, final
 
 if TYPE_CHECKING:
     from .players import Player
-    from typing import Dict, Union, Literal, Any
+    from typing import Dict, Union, Literal, Any, Optional
 
     JSON_VALUES = Union[str, bool, int, dict]
     SUPPORTED_PARSERS = Literal["lxml", "html.parser"]
 
 import os
 import toml
-import platformdirs
 from pathlib import Path
 from importlib.util import find_spec
 from devgoldyutils import LoggerAdapter
@@ -75,14 +74,14 @@ class Config():
         return players.CustomPlayer(self, value)
 
     @property
+    def editor(self) -> Optional[str]:
+        """Returns the editor that should be opened while editing."""
+        return self.data.get("editor")
+
+    @property
     def provider(self) -> str:
         """Returns the provider that should be used to scraper by default."""
         return self.data.get("provider", {}).get("default", "sflix")
-
-    @property
-    def flatpak_mpv(self) -> bool:
-        """Returns whether we should use the flatpak version of mpv on Linux."""
-        return self.data.get("flatpak_mpv", False)
 
     @property
     def fzf_enabled(self) -> bool:
@@ -98,7 +97,7 @@ class Config():
     @property
     def download_location(self) -> str:
         """Returns download location. Defaults to OS's download location."""
-        default_location = platformdirs.user_downloads_dir()
+        default_location = platformdirs.user_downloads_dir() # TODO: Replace with custom paths class.
         return self.data.get("downloads", {}).get("save_path", default_location)
 
     @property
