@@ -29,10 +29,10 @@ def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Go
     i = int(now.strftime("%I"))
 
     if p == "AM":
-        if i >= 6:
-            return "Good Morning"
-        else:
+        if i <= 6 or i == 12:
             return "Good Night"
+        else:
+            return "Good Morning"
     else:
         if i <= 5:
             return "Good Afternoon"
