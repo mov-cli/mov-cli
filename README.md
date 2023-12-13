@@ -17,13 +17,40 @@
   ·
   <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
 
-  <br>
-
-  ### ```README Coming Soon...```
-
 </div>
 
 <br>
+
+## Installation 🛠️
+### Prerequisites
+- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional)
+- **[python](https://www.python.org/downloads/)** (required, with pip)
+- **[mpv](https://mpv.io/installation/)** (recommended & default media player)
+
+To get running these are all the prerequisites you'll need although you can find some nice extra ones over [here]().
+
+With the prerequisites installed, mov-cli can be installed via the pip command on python versions 3.8 and up.
+
+> [!WARNING]
+> As of right now mov-cli **v4** isn't avaible on pip. Use the command below if you would like to install the development version:
+> ```sh
+> pip install git+https://github.com/mov-cli/mov-cli
+> ```
+
+```sh
+pip install mov-cli -U
+```
+
+## Usage 🖱️
+mov-cli comes packaged with a CLI interface you can use via the `mov-cli` command in your respective terminal. Running the command below will search for `spider man no way home` on the `sflix` provider by default.
+```sh
+mov-cli spider man no way home
+```
+<img width="370px" src="https://github.com/mov-cli/mov-cli/assets/66202304/86189cab-b246-405e-a266-6c624bee2d36">
+
+<br>
+
+For in-depth instructions hit the wiki: https://github.com/mov-cli/mov-cli/wiki
 
 ## Contributing
 Pull requests are welcome and *appreciated*. For major changes, please open an issue first to discuss what you would like to change.
