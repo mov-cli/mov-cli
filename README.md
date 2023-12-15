@@ -34,7 +34,7 @@ With the prerequisites installed, mov-cli can be installed via the pip command o
 > [!WARNING]
 > As of right now mov-cli **v4** isn't avaible on pip. Use the command below if you would like to install the development version:
 > ```sh
-> pip install git+https://github.com/mov-cli/mov-cli
+> pip install git+https://github.com/mov-cli/mov-cli@v4
 > ```
 
 ```sh
