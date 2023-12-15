@@ -63,14 +63,6 @@ class MPV(Player):
                         "--no-terminal",
                     ]
 
-                    if (
-                        self.config.flatpak_mpv and self.platform == "Linux"
-                    ):  # Support for MPV on Flatpak.
-                        self.logger.info("Using flatpak installation of MPV.")
-                        return subprocess.Popen(
-                            ["flatpak", "run", "io.mpv.Mpv"] + mpv_args
-                        )
-
                     return subprocess.Popen(["mpv"] + mpv_args)
 
                 elif self.platform == "Darwin":
