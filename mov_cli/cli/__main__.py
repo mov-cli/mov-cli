@@ -69,14 +69,14 @@ def mov_cli(
             mov_cli_logger.error("You didn't select anything.")
             return False
 
-        if episode is not None: # TODO: Move this into an individual method.
+        # TODO: Move this all into an individual method.
+        # -----------------------------------------------
+        if episode is not None:
             episode = episode.split(":")
 
             if len(episode) < 2:
                 mov_cli_logger.error("Incorrect episode format!")
                 return False
-
-            # TODO: Confirm whether that episode is available.
 
         else:
             ep_metadata = scraper.scrape_metadata_episodes(choice)
@@ -104,6 +104,7 @@ def mov_cli(
 
         if episode is not None:
             episode = EpisodeSelector(episode[0], episode[1])
+        # -----------------------------------------------------
 
         media = scraper.scrape(choice, episode)
 
