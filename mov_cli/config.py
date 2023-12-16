@@ -97,7 +97,9 @@ class Config():
     @property
     def download_location(self) -> str:
         """Returns download location. Defaults to OS's download location."""
-        default_location = platformdirs.user_downloads_dir() # TODO: Replace with custom paths class.
+        # TODO: Replace with custom paths class.
+        # default_location = platformdirs.user_downloads_dir()
+        default_location = None # TODO: Remove this when default_location equals the path from the paths class.
         return self.data.get("downloads", {}).get("save_path", default_location)
 
     @property
