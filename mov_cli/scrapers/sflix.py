@@ -68,7 +68,7 @@ class Sflix(Scraper):
     def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int | None, int]:
         seasons = None
 
-        if type == MetadataType.SERIES:
+        if metadata.type == MetadataType.SERIES:
             seasons = {}
             r = self.http_client.get(f"{self.base_url}/ajax/season/list/{metadata.id}").text
 

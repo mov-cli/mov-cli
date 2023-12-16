@@ -14,7 +14,7 @@ from ..utils import EpisodeSelector
 
 __all__ = ("mov_cli",)
 
-uwu_app = typer.Typer(pretty_exceptions_enable = False)
+uwu_app = typer.Typer(pretty_exceptions_enable = False) # NOTE: goldy has an uwu complex.
 
 def mov_cli(
     query: Optional[List[str]] = typer.Argument(None, help = "The film, tv show or anime you would like to Query."), 

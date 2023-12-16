@@ -150,11 +150,13 @@ class Config():
             user_profile = Path(os.getenv("USERPROFILE"))
             appdata_dir = user_profile.joinpath("AppData", "Local")
 
-        elif platform == "Darwin": # TODO: Implement MacOS appdata path.
-            ...
+        elif platform == "Darwin": # NOTE: Path maybe incorrect
+            user_profile = Path.home()
+            appdata_dir = user_profile.joinpath("Library", "Application Support")
 
-        elif platform == "iOS": # TODO: Implement iOS appdata path.
-            ...
+        elif platform == "iOS":
+            user_profile = Path(os.getenv("HOME"))
+            appdata_dir = user_profile.joinpath("Library")
 
         elif platform == "Linux" or platform == "Android":
             user_profile = Path(os.getenv("HOME"))

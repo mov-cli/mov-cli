@@ -13,7 +13,8 @@ class Media():
         """The stream-able url."""
         self.title = title
         """A title to represent this stream-able media."""
-        self.referrer = referrer # TODO: Add docstring for this.
+        self.referrer = referrer
+        """The required referrer for streaming the media content."""
 
 class Series(Media):
     """Represents a TV Show. E.g an Anime or Cartoon"""
