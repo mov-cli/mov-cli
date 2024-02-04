@@ -1,12 +1,12 @@
 {
-	"ASK": "Oque voce gostaria de assistir: ",
+	"ASK": "O que você gostaria de assistir: ",
 	"EXIT": "Sair",
-	"SEARCHA": "Pesquisar Novamente",
+	"SEARCHA": "Pesquisar novamente",
 	"DOWNLOAD": "Baixar",
-	"SPROVIDER": "Trocar Provedor",
-	"DSHOW": "Baixar serie",
-	"DSEASON": "Baixar Temporada",
+	"SPROVIDER": "Trocar provedor",
+	"DSHOW": "Baixar série",
+	"DSEASON": "Baixar temporada",
 	"SEASON": "Temporada",
-	"EPISODE": "Episodio",
-	"CHANGE": "Trocar Idioma"
+	"EPISODE": "Episódio",
+	"CHANGE": "Trocar idioma"
 }
