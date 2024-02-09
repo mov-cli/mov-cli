@@ -92,20 +92,17 @@ def p():
     provider_file = join(home(), "provider.mov-cli")
     
     if not isfile(provider_file):
-        # Handle the case where the file does not exist
-        # You could create the file with default values or skip this step
         pass
     else:
         try:
             with open(provider_file, 'r') as f:
                 calls = json.load(f)
         except FileNotFoundError:
-            # Handle the case where the file was deleted after checking for existence
             print(f"File {provider_file} not found!")
-            calls = {}  # Default value in case the file was deleted
+            calls = {}
         except json.decoder.JSONDecodeError as e:
             print(f"Failed to decode JSON from {provider_file}: {e}")
-            calls = {}  # Default value in case of JSON decoding error
+            calls = {}
     try:
         from porn_cli.__main__ import websites
 
