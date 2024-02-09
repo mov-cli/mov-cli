@@ -7,6 +7,7 @@ However, we will keep the project's repository archived for future reference.
 
 We appreciate your support and encourage you to explore other available solutions. 
 
+---
 
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
