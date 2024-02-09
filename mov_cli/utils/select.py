@@ -2,6 +2,7 @@ from fzf import fzf_prompt
 from importlib import import_module
 from .props import home, RestartNeeded
 from httpx import get
+from os.path import join, isfile
 import json
 from .props import firstStart
 
@@ -88,17 +89,23 @@ def export(provider: str, typ: str, version: str = "mov_cli"):
 
 def p():
     firstStart()
-    try:
-        js = open(f"{home()}/provider.mov-cli")
-        calls = json.load(js)
-    except FileNotFoundError:
-        with open(f"{home()}/provider.mov-cli", "w") as f:
-            f.write(json.dumps(base))
-        raise RestartNeeded
-    except json.decoder.JSONDecodeError:
-        with open(f"{home()}/provider.mov-cli", "w") as f:
-            f.write(json.dumps(base))
-        raise RestartNeeded
+    provider_file = join(home(), "provider.mov-cli")
+    
+    if not isfile(provider_file):
+        # Handle the case where the file does not exist
+        # You could create the file with default values or skip this step
+        pass
+    else:
+        try:
+            with open(provider_file, 'r') as f:
+                calls = json.load(f)
+        except FileNotFoundError:
+            # Handle the case where the file was deleted after checking for existence
+            print(f"File {provider_file} not found!")
+            calls = {}  # Default value in case the file was deleted
+        except json.decoder.JSONDecodeError as e:
+            print(f"Failed to decode JSON from {provider_file}: {e}")
+            calls = {}  # Default value in case of JSON decoding error
     try:
         from porn_cli.__main__ import websites
 
