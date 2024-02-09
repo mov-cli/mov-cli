@@ -1,4 +1,4 @@
-from os import environ, mkdir, path
+from os import environ, mkdir, path, makedirs
 from getpass import getuser
 from .player import Player
 
@@ -18,9 +18,12 @@ def home():
         return f"/Users/{getuser()}/Library/Application Support/mov-cli"
 
 def firstStart():
-    print(home())
-    if not path.exists(home()):
-        mkdir(home())
+    dir_path = home()
+    print(dir_path)
+    try:
+        makedirs(dir_path, exist_ok=True)
+    except FileNotFoundError as e:
+        print(f"Error: Unable to create directory {dir_path}: {e}")
 
 
 class RestartNeeded(Exception):
