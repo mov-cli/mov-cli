@@ -90,7 +90,6 @@ def export(provider: str, typ: str, version: str = "mov_cli"):
 def p():
     firstStart()
     provider_file = join(home(), "provider.mov-cli")
-    
     if not isfile(provider_file):
         pass
     else:
