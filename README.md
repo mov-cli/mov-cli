@@ -1,11 +1,8 @@
-# The End
-We are sorry to inform you that we have made the decision to discontinue the mov-cli project.
+# The End?
+We are sorry, Not sorry
 
-Effective immediately we stop maintaining and offering support for mov-cli. 
-
-However, we will keep the project's repository archived for future reference.
-
-We appreciate your support and encourage you to explore other available solutions. 
+## PSYCH!!!
+WE are so back under new management. We will be Elon Musking it and bringing new features in the near future.
 
 ---
 
