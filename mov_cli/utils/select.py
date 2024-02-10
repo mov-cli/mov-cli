@@ -53,7 +53,6 @@ inter = [
     "wlext",
 ]
 
-ph = []
 
 ep = {
     "english": english,
@@ -65,7 +64,6 @@ ep = {
     "turkish": turkish,
     "sports": sports,
     "international": inter,
-    "porn": ph,
 }
 
 
@@ -90,30 +88,16 @@ def export(provider: str, typ: str, version: str = "mov_cli"):
 def p():
     firstStart()
     provider_file = join(home(), "provider.mov-cli")
-    if not isfile(provider_file):
-        pass
-    else:
+    calls = {}  # Initialize calls as an empty dictionary
+    if isfile(provider_file):
         try:
             with open(provider_file, 'r') as f:
                 calls = json.load(f)
         except FileNotFoundError:
             print(f"File {provider_file} not found!")
-            calls = {}
         except json.decoder.JSONDecodeError as e:
             print(f"Failed to decode JSON from {provider_file}: {e}")
-            calls = {}
-    try:
-        from porn_cli.__main__ import websites
-
-        if ph != []:
-            return dict(calls)
-        for main, sub in websites.items():
-            calls[main] = sub
-            ph.append(str(main))
-            preselction["Porn Providers"] = ph
-        return dict(calls)
-    except:
-        return dict(calls)
+    return dict(calls)
 
 
 def ask(provider: str = None):
