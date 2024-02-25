@@ -1,11 +1,3 @@
-# The End?
-We are sorry, Not sorry
-
-## PSYCH!!!
-WE are so back under new management. We will be Elon Musking it and bringing new features in the near future.
-
----
-
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 <!--
