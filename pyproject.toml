@@ -15,7 +15,7 @@ repository = "https://github.com/mov-cli/mov-cli"
 [tool.poetry.dependencies]
 python = "^3.9"
 beautifulsoup4 = "^4.11.2"
-httpx = "^0.24.0"
+httpx = ">=0.24,<0.28"
 pycryptodome = "^3.17"
 six = "^1.16.0"
 krfzf-py = ">=0.0.4,<0.0.7"
