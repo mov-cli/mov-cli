@@ -150,7 +150,42 @@ There are MPR and AUR Builds.
 
 Type: ```mov-cli``` into your Commandline.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+ 
+<!-- ON UPDATE -->
+## On update
+When you update the package, please delete the appdata folders:
+### On Windows
 
+It is located at
+```
+{home}/AppData/Roaming/mov-cli
+```
+### On Linux
+
+It is located at
+```
+/home/{getuser()}/.config/mov-cli
+```
+### On Android
+
+It is located at
+```
+/data/data/com.termux/files/home
+```
+### On iOS
+
+It is located at
+```
+/root/mov-cli_config
+```
+### On Darwin
+
+It is located at
+```
+/Users/{getuser()}/Library/Application Support/mov-cli
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- DISCLAIMER -->
 ## Disclaimer
