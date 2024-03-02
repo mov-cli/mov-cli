@@ -77,7 +77,7 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
     if utils.update_available():
         text += f"\n\n {Colours.PURPLE}ツ {Colours.ORANGE}An update is available! --> {Colours.RESET}pip install mov-cli -U"
 
-    return text
+    return text + "\n"
 
 def get_scraper(provider: str) -> Type[Scraper]:
 

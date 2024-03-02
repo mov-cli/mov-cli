@@ -53,8 +53,9 @@ def mov_cli(
         query: str = " ".join(query)
         http_client = HTTPClient(config)
         scraper = utils.get_scraper(config.provider)
-        print(" ")
+
         mov_cli_logger.info(f"Using the '{scraper.__name__}' scraper...")
+
         scraper = scraper(config, http_client)
 
         choice = ui.prompt(
