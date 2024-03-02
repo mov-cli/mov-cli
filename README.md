@@ -209,12 +209,9 @@ It is located at
 It is located at
 ```
 /Users/{getuser()}/Library/Application Support/mov-cli
+```
 <!-- DISCLAIMER -->
 ## Disclaimer
-
-Understood. Given that context, here's a disclaimer that emphasizes the legal implications of piracy:
-
----
 
 **Disclaimer:**
 Usage of this software is entirely at your own discretion and risk. Users are advised to comply with their government's laws and regulations regarding content consumption.
