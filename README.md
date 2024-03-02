@@ -209,3 +209,74 @@ It is located at
 It is located at
 ```
 /Users/{getuser()}/Library/Application Support/mov-cli
+<!-- DISCLAIMER -->
+## Disclaimer
+
+Understood. Given that context, here's a disclaimer that emphasizes the legal implications of piracy:
+
+---
+
+**Disclaimer:**
+Usage of this software is entirely at your own discretion and risk. Users are advised to comply with their government's laws and regulations regarding content consumption.
+We do not exercise control over the content served through this software. Any copyrighted material accessed is the sole responsibility of the user.
+
+**Legal Compliance:**
+Users are encouraged to respect intellectual property rights and comply with applicable copyright laws. The developer cannot be held liable for any unauthorized usage of copyrighted content.
+
+---
+[More on this](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Feature -->
+## Feature
+
+If you want a feature, create an [issue](https://github.com/mov-cli/mov-cli/issues/new) or create the feature and make a pull request.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+
+Pull requests are welcome and _appreciated_. For major changes, please open an issue first to discuss what you would like to change.
+
+Contributors:
+
+<a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
+</a>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- CONTACT -->
+## Contact
+
+Author: Poseidon444 | ```Discord: pain444```
+
+Maintainer: HLOAnanas | ```Discord: r3tr0ananas```
+
+Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Inspiration -->
+## Inspiration
+
+Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/mov-cli/mov-cli.svg?style=for-the-badge
+[contributors-url]: https://github.com/mov-cli/mov-cli/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/mov-cli/mov-cli.svg?style=for-the-badge
+[forks-url]: https://github.com/mov-cli/mov-cli/network/members
+[stars-shield]: https://img.shields.io/github/stars/mov-cli/mov-cli.svg?style=for-the-badge
+[stars-url]: https://github.com/mov-cli/mov-cli/stargazers
+[issues-shield]: https://img.shields.io/github/issues/mov-cli/mov-cli.svg?style=for-the-badge
+[issues-url]: https://github.com/mov-cli/mov-cli/issues
+[license-shield]: https://img.shields.io/github/license/mov-cli/mov-cli.svg?style=for-the-badge
+[license-url]: https://github.com/mov-cli/mov-cli/blob/master/LICENSE.txt
