@@ -33,7 +33,8 @@ dependencies = [
     "iterfzf@git+https://github.com/THEGOLDENPRO/iterfzf",
     "beautifulsoup4",
     "pycryptodome",
-    "Unidecode"
+    "Unidecode",
+    "mov-cli-test@git+https://github.com/THEGOLDENPRO/mov-cli-test"
 ]
 
 dynamic = ["version"]
