@@ -1,8 +1,10 @@
 [mov-cli]
+version = 1
 player = "mpv"
 debug = false
 # parser = "lxml"
 # editor = "nano"
+plugins = ["test"]
 
 [mov-cli.ui]
 fzf = true

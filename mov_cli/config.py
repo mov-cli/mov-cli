@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, TypedDict, final
 
 if TYPE_CHECKING:
     from .players import Player
-    from typing import Dict, Union, Literal, Any, Optional
+    from typing import Dict, Union, Literal, Any, Optional, List
 
     JSON_VALUES = Union[str, bool, int, dict]
     SUPPORTED_PARSERS = Literal["lxml", "html.parser"]
@@ -36,14 +36,15 @@ class ProviderData(TypedDict):
 
 @final
 class ConfigData(TypedDict):
+    version: int
     debug: bool
     player: str
-    flatpak_mpv: bool
     parser: SUPPORTED_PARSERS
     ui: ConfigUIData
     http: ConfigHTTPData
     downloads: ConfigDownloadsData
     provider: ProviderData
+    plugins: List[str]
 
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
@@ -62,6 +63,10 @@ class Config():
             self.data = override_config
 
     @property
+    def version(self) -> int:
+        return self.data.get("version", 1)
+
+    @property
     def player(self) -> Player:
         """Returns the configured player class. Defaults to MPV."""
         value = self.data.get("player", "mpv")
@@ -72,6 +77,10 @@ class Config():
             return players.VLC(self)
 
         return players.CustomPlayer(self, value)
+
+    @property
+    def plugins(self) -> List[str]:
+        return self.data.get("plugins", ["test"])
 
     @property
     def editor(self) -> Optional[str]:
