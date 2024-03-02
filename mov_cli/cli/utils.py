@@ -3,26 +3,21 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal, List, Type, Optional, Any
+    from typing import Literal, Type, Optional, Any, Tuple
     from ..scraper import Scraper
     from ..config import Config
 
 import os
 import random
 import getpass
+import importlib
 from datetime import datetime
 from devgoldyutils import Colours
 
-from .. import utils, scrapers, errors
+from .. import utils, errors
 from .. import __version__ as mov_cli_version
 
 __all__ = ()
-
-SCRAPERS: List[Scraper] = [
-    scrapers.Sflix,
-    scrapers.Gogoanime,
-    scrapers.RemoteStream
-]
 
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
     now = datetime.now()
@@ -79,14 +74,21 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
     return text + "\n"
 
-def get_scraper(provider: str) -> Type[Scraper]:
+# TODO: We should probably stick to one name instead of using provider and scraper interchangeably.
+def get_scraper(provider_name: str, config: Config) -> Type[Tuple[str, Scraper]]:
 
-    for scraper in SCRAPERS: # TODO: when we add plugin providers to mov-cli we should add that to the list too.
+    for _, plugin_module_name in config.plugins.items():
+        # TODO: Make this plugin loading stuff a separate util method.
+        plugin_module = importlib.import_module(plugin_module_name.replace("-", "_"))
 
-        if provider.lower() == scraper.__name__.lower():
-            return scraper
+        scrapers = plugin_module.plugin["scrapers"]
 
-    raise errors.ProviderNotFound(provider)
+        for scraper_name, scraper in scrapers.items():
+
+            if provider_name.lower() == scraper_name:
+                return scraper_name, scraper
+
+    raise errors.ProviderNotFound(provider_name)
 
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")

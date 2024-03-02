@@ -52,9 +52,9 @@ def mov_cli(
     if len(query) > 0:
         query: str = " ".join(query)
         http_client = HTTPClient(config)
-        scraper = utils.get_scraper(config.provider)
+        scraper_name, scraper = utils.get_scraper(config.provider, config)
 
-        mov_cli_logger.info(f"Using the '{scraper.__name__}' scraper...")
+        mov_cli_logger.info(f"Using the '{scraper_name}' scraper...")
 
         scraper = scraper(config, http_client)
 

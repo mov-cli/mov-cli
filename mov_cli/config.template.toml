@@ -4,13 +4,15 @@ player = "mpv"
 debug = false
 # parser = "lxml"
 # editor = "nano"
-plugins = ["test"]
 
 [mov-cli.ui]
 fzf = true
 
 [mov-cli.provider]
-default = "sflix"
+default = "test"
+
+[mov-cli.plugins] # E.g: plugin_name = "package-name"
+test = "mov-cli-test"
 
 # [mov-cli.http] # Don't mess with it if you don't know what you are doing!
 # headers = { User-Agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0" }

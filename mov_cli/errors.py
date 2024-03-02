@@ -38,7 +38,7 @@ class PlayerNotSupported(MovCliException):
         )
 
 class ProviderNotFound(MovCliException):
-    def __init__(self, provider: str):
+    def __init__(self, scraper_name: str):
         super().__init__(
-            f"Could not find the provider '{provider}'! Make sure to check for typos."
+            f"Could not find the provider '{scraper_name}'! Are you sure the plugin is installed?"
         )

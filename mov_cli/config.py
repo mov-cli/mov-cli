@@ -44,7 +44,7 @@ class ConfigData(TypedDict):
     http: ConfigHTTPData
     downloads: ConfigDownloadsData
     provider: ProviderData
-    plugins: List[str]
+    plugins: Dict[str, str]
 
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
@@ -79,8 +79,8 @@ class Config():
         return players.CustomPlayer(self, value)
 
     @property
-    def plugins(self) -> List[str]:
-        return self.data.get("plugins", ["test"])
+    def plugins(self) -> Dict[str, str]:
+        return self.data.get("plugins", {"test": "mov-cli-test"})
 
     @property
     def editor(self) -> Optional[str]:
@@ -90,7 +90,7 @@ class Config():
     @property
     def provider(self) -> str:
         """Returns the provider that should be used to scraper by default."""
-        return self.data.get("provider", {}).get("default", "sflix")
+        return self.data.get("provider", {}).get("default", "test")
 
     @property
     def fzf_enabled(self) -> bool:
