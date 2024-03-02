@@ -1,11 +1,14 @@
+pip = pip
+python = python
+
 build:
-	python -m build
+	${python} -m build
 
 install:
-	pip install . -U
+	${pip} install . -U
 
 install-editable:
-	pip install -e . --config-settings editable_mode=compat -U
+	${pip} install -e . --config-settings editable_mode=compat -U
 
 test:
 	ruff .
