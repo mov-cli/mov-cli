@@ -75,7 +75,7 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
     return text + "\n"
 
 # TODO: We should probably stick to one name instead of using provider and scraper interchangeably.
-def get_scraper(provider_name: str, config: Config) -> Type[Tuple[str, Scraper]]:
+def get_scraper(provider_name: str, config: Config) -> Tuple[str, Type[Scraper]]:
 
     for _, plugin_module_name in config.plugins.items():
         # TODO: Make this plugin loading stuff a separate util method.
