@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, TypedDict, final
 
 if TYPE_CHECKING:
     from .players import Player
-    from typing import Dict, Union, Literal, Any, Optional, List
+    from typing import Dict, Union, Literal, Any, Optional
 
     JSON_VALUES = Union[str, bool, int, dict]
     SUPPORTED_PARSERS = Literal["lxml", "html.parser"]
