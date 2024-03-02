@@ -104,10 +104,7 @@ To get started, make sure you have the following installed:
     ```
   - Restart cmd as admin, then run:
     ```
-    choco install -y python3
-    choco install -y ffmpeg-full
-    choco install -y fzf
-    choco install -y mpv
+    choco install -y fzf ffmpeg-full python3 mpv
     ```
   - Restart cmd as admin again, then:
     ```
@@ -210,6 +207,8 @@ It is located at
 ```
 /Users/{getuser()}/Library/Application Support/mov-cli
 ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- DISCLAIMER -->
 ## Disclaimer
 
