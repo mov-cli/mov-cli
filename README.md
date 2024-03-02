@@ -31,12 +31,12 @@
   </a>
 
   <p align="center">
-    A cli tool to browse and watch Movies/Shows/TV/Sports. 
+    Welcome to mov-cli! A CLI tool to browse and watch Movies, Shows, TV, and Sports.
     <br />
     <br />
-    <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
+    <a href="https://github.com/mov-cli/mov-cli/issues">Report a Bug</a>
     ·
-    <a href="https://github.com/mov-cli/mov-cli/issues">Request Feature</a>
+    <a href="https://github.com/mov-cli/mov-cli/issues">Request a Feature</a>
   </p>
 </div>
 
@@ -52,7 +52,7 @@
       <li><a href="#prerequisites">Prerequisites</a></li>
       <li><a href="#installation">Installation</a></li>
       <ul>
-        <li><a href="#windows--linux">Windows / Linux</a></li>
+        <li><a href="#windows">Windows</a></li>
         <li><a href="#linux">Linux Builds</a></li>
         <li><a href="#android">Android</a></li>
         <li><a href="#ios">iOS</a></li>
@@ -63,20 +63,20 @@
   <li><a href="#disclaimer">Disclaimer</a></li>
   <li><a href="#contributing">Contributing</a></li>
   <li><a href="#contact">Contact</a></li>
-  <li><a href="#inspiration">inspiration</a></li>
+  <li><a href="#inspiration">Inspiration</a></li>
 </ol>
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-The new and improved mov-cli is here.
+Welcome to the new and improved mov-cli!
 
-mov-cli is a Commandline Tool to watch and download shows and movies.
+mov-cli is your go-to Commandline Tool for streaming and downloading your favorite shows and movies.
 
-Shows and Movies are sourced from Streaming Sites.
+Shows and movies are sourced from various streaming sites.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -85,43 +85,54 @@ Shows and Movies are sourced from Streaming Sites.
 
 ### Prerequisites
 
-- [`mpv`](https://mpv.io) - player used for Windows, Linux and Android
-- [`iina`](https://iina.io) - player used for MacOS
-- [`Outplayer`](https://outplayer.app/) - player used for iOS
-- [`ffmpeg`](https://github.com/FFmpeg/FFmpeg) - For downloads 
-- [`fzf`](https://github.com/junegunn/fzf) - The selection Menu
+To get started, make sure you have the following installed:
+
+- [`mpv`](https://mpv.io) - Player for Windows, Linux, and Android
+- [`iina`](https://iina.io) - Player for MacOS
+- [`Outplayer`](https://outplayer.app/) - Player for iOS
+- [`ffmpeg`](https://github.com/FFmpeg/FFmpeg) - Media encoder
+- [`fzf`](https://github.com/junegunn/fzf) - Selection Menu
 
 
 ## Installation
-<!-- WIN AND LINUX -->
-### Windows / Linux
-  - Run this Command inside your Terminal
+<!-- WINDOWS -->
+### Windows
+(Recommended) Run the following commands (including mov-cli) on any Windows system using the latest modern build version of cmd from the Microsoft Store: [terminal](https://apps.microsoft.com/detail/9n0dx20hk701?hl=en-us&gl=US)
+  - Run as admin:
     ``` 
-    pip install mov-cli
+    powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"  
     ```
-  - Optional 
+  - Restart cmd as admin, then run:
+    ```
+    choco install -y fzf ffmpeg-full python3 mpv
+    ```
+  - Restart cmd as admin again, then:
+    ```
+    pip3 install mov-cli
+    ```
+  - Optional:
     ```
     pip install lxml
     ```
 <!-- LINUX -->
 ### Linux
-There are MPR and AUR Builds.
+We offer MPR and AUR Builds for Linux.
 
 - [MPR Build](https://mpr.makedeb.org/packages/mov-cli)
 - [AUR Build](https://aur.archlinux.org/packages/mov-cli-git)
 
-#### Disclaimer: They are not maintained by us.
+#### Disclaimer: These builds are not maintained by us.
 
 
 <!-- ANDROID --> 
 ### Android               
-  - Make sure [MPV](https://play.google.com/store/apps/details?id=is.xyz.mpv) and [Termux](https://play.google.com/store/apps/details?id=com.termux) are installed.
-  
-  - Install ``mov-cli``.
+Ensure you have [[MPV Android](https://play.google.com/store/apps/details?id=is.xyz.mpv) | [Termux](https://f-droid.org/en/packages/com.termux/)] installed on Android prior to mov-cli installation!
+  - In Termux, run the following commands:
     ```
-    pip install mov-cli
+    termux-setup-storage
+    yes | pkg update && pkg upgrade && yes | pkg install fzf ffmpeg python && pip3 install mov-cli
     ```
-  
+  then run mov-cli a cuple of times before useing it normally.
   - Optional
     ```
     apt-get install libxml2 libxslt
@@ -131,16 +142,15 @@ There are MPR and AUR Builds.
 
 <!-- IOS -->
 ### iOS
-  - Make sure [Outplayer](https://apps.apple.com/us/app/outplayer/id1449923287) and [iSH](https://apps.apple.com/us/app/ish-shell/id1436902243) are installed.
-
-  - Run following commands (Note: this may take a while)
-    ```
-    apk update && apk upgrade
-    apk add python3 fzf
-    python3 -m ensurepip
-    mkdir /home/root && mkdir /home/root/.config
-    pip3 install mov-cli
-    ```
+   Make sure [[Outplayer](https://apps.apple.com/us/app/outplayer/id1449923287) | [iSH](https://apps.apple.com/us/app/ish-shell/id1436902243)] are installed.
+   - Run the following commands (Note: this may take a while)
+   ```
+   apk update && apk upgrade
+   apk add python3 fzf
+   python3 -m ensurepip
+   mkdir /home/root && mkdir /home/root/.config
+   pip3 install mov-cli
+   ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -148,7 +158,18 @@ There are MPR and AUR Builds.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Type: ```mov-cli``` into your Commandline.
+You can type ```mov-cli``` in to youre terminal without any arguments
+  - Usage:
+  ```
+  mov-cli [-p 'providername' , -s 'search query' , --pupdate]
+    -p : for atomaticaly selecting the provider by typing its name out, skipping the provider selection menue.
+    -s : search query for the selected provider, ether prior to provider selection or after if -p was passed.
+    --pupdate : (provider update) used for provider urls addreses update, used if a provider not responding by defult urls in mov-cli.
+  
+  example:
+    mov-cli -p sflix -s "spider man"  :  will have mov-cli auto select sflix as youre provider and start searching
+                                         for "spider man" on sflix and return a list
+  ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
  
 <!-- ON UPDATE -->
@@ -171,6 +192,8 @@ It is located at
 It is located at
 ```
 /data/data/com.termux/files/home
+done by typing in termux:
+yes | rm -r /data/data/com.termux/files/home/mov-cli
 ```
 ### On iOS
 
@@ -184,17 +207,20 @@ It is located at
 ```
 /Users/{getuser()}/Library/Application Support/mov-cli
 ```
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- DISCLAIMER -->
 ## Disclaimer
 
-This project is to be used at the user’s own risk, based on their government and laws.
+**Disclaimer:**
+Usage of this software is entirely at your own discretion and risk. Users are advised to comply with their government's laws and regulations regarding content consumption.
+We do not exercise control over the content served through this software. Any copyrighted material accessed is the sole responsibility of the user.
 
-This project has no control on the content it is serving, using copyrighted content from the providers is not going to be accounted for by the developer. It is the user’s own risk.
+**Legal Compliance:**
+Users are encouraged to respect intellectual property rights and comply with applicable copyright laws. The developer cannot be held liable for any unauthorized usage of copyrighted content.
 
-[More on That](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
+---
+[More on this](https://github.com/mov-cli/mov-cli/blob/v3/disclaimer.org)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Feature -->
