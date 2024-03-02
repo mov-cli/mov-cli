@@ -8,7 +8,7 @@ debug = false
 [mov-cli.ui]
 fzf = true
 
-[mov-cli.provider]
+[mov-cli.scrapers]
 default = "test"
 
 [mov-cli.plugins] # E.g: plugin_name = "package-name"

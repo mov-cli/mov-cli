@@ -31,7 +31,7 @@ class ConfigDownloadsData(TypedDict):
     save_path: str
 
 @final
-class ProviderData(TypedDict):
+class ScrapersData(TypedDict):
     default: str
 
 @final
@@ -43,7 +43,7 @@ class ConfigData(TypedDict):
     ui: ConfigUIData
     http: ConfigHTTPData
     downloads: ConfigDownloadsData
-    provider: ProviderData
+    scrapers: ScrapersData
     plugins: Dict[str, str]
 
 class Config():
@@ -88,9 +88,9 @@ class Config():
         return self.data.get("editor")
 
     @property
-    def provider(self) -> str:
-        """Returns the provider that should be used to scraper by default."""
-        return self.data.get("provider", {}).get("default", "test")
+    def default_scraper(self) -> str:
+        """Returns the scraper that should be used to scrape by default."""
+        return self.data.get("scrapers", {}).get("default", "test")
 
     @property
     def fzf_enabled(self) -> bool:

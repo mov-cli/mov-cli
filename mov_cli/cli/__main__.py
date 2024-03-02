@@ -1,8 +1,11 @@
 from __future__ import annotations
+from typing import List, Optional, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..scraper import Scraper
 
 import typer
 import logging
-from typing import List, Optional, Dict
 from devgoldyutils import Colours
 
 from . import ui, utils
@@ -20,7 +23,7 @@ def mov_cli(
     query: Optional[List[str]] = typer.Argument(None, help = "The film, tv show or anime you would like to Query."), 
     debug: Optional[bool] = typer.Option(None, help = "Enable extra logging details."), 
     player: Optional[str] = typer.Option(None, help = "Player you would like to stream with. E.g. mpv, vlc"), 
-    provider: Optional[str] = typer.Option(None, help = "Provider you would like to stream from. E.g. RemoteStream, Sflix"), 
+    scraper: Optional[str] = typer.Option(None, help = "Scraper you would like to scrape with. E.g. remote_stream, sflix"), 
     fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."),
     episode: Optional[str] = typer.Option(None, help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
 
@@ -33,7 +36,7 @@ def mov_cli(
         config,
         debug = debug,
         player = player,
-        provider = provider,
+        scraper = scraper,
         fzf = fzf
     )
 
@@ -52,11 +55,11 @@ def mov_cli(
     if len(query) > 0:
         query: str = " ".join(query)
         http_client = HTTPClient(config)
-        scraper_name, scraper = utils.get_scraper(config.provider, config)
+        scraper_name, scraper_class = utils.get_scraper(config.default_scraper, config)
 
         mov_cli_logger.info(f"Using the '{scraper_name}' scraper...")
 
-        scraper = scraper(config, http_client)
+        scraper: Scraper = scraper_class(config, http_client)
 
         choice = ui.prompt(
             "Choose Result", 

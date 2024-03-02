@@ -93,7 +93,7 @@ def get_scraper(provider_name: str, config: Config) -> Tuple[str, Type[Scraper]]
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")
     player = kwargs.get("player")
-    provider = kwargs.get("provider")
+    default_scraper = kwargs.get("scraper")
     fzf = kwargs.get("fzf")
 
     if debug is not None:
@@ -102,11 +102,11 @@ def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     if player is not None:
         config.data["player"] = player
 
-    if provider is not None:
-        if config.data.get("provider") is None:
-            config.data["provider"] = {}
+    if default_scraper is not None:
+        if config.data.get("scrapers") is None:
+            config.data["scrapers"] = {}
 
-        config.data["provider"]["default"] = provider
+        config.data["scrapers"]["default"] = default_scraper
 
     if fzf is not None:
         if config.data.get("ui") is None:
