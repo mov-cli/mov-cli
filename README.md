@@ -193,7 +193,7 @@ It is located at
 ```
 /data/data/com.termux/files/home
 done by typing in termux:
-yes | rm -r /data/data/com.termux/files/home/mov-cli
+yes | rm -r mov-cli/
 ```
 ### On iOS
 
