@@ -9,7 +9,7 @@ debug = false
 fzf = true
 
 [mov-cli.scrapers]
-default = "test"
+default = "test.test"
 
 [mov-cli.plugins] # E.g: plugin_name = "package-name"
 test = "mov-cli-test"

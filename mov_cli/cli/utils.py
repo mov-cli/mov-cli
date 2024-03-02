@@ -75,9 +75,9 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
     return text + "\n"
 
 # TODO: We should probably stick to one name instead of using provider and scraper interchangeably.
-def get_scraper(provider_name: str, config: Config) -> Tuple[str, Type[Scraper]]:
+def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
 
-    for _, plugin_module_name in config.plugins.items():
+    for plugin_name, plugin_module_name in config.plugins.items():
         # TODO: Make this plugin loading stuff a separate util method.
         plugin_module = importlib.import_module(plugin_module_name.replace("-", "_"))
 
@@ -85,10 +85,10 @@ def get_scraper(provider_name: str, config: Config) -> Tuple[str, Type[Scraper]]
 
         for scraper_name, scraper in scrapers.items():
 
-            if provider_name.lower() == scraper_name:
+            if scraper_id.lower() == f"{plugin_name}.{scraper_name}":
                 return scraper_name, scraper
 
-    raise errors.ProviderNotFound(provider_name)
+    raise errors.ScraperNotFound(scraper_id)
 
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")

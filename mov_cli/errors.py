@@ -37,8 +37,8 @@ class PlayerNotSupported(MovCliException):
             "We recommend VLC for iOS and MPV for every other platform."
         )
 
-class ProviderNotFound(MovCliException):
-    def __init__(self, scraper_name: str):
+class ScraperNotFound(MovCliException):
+    def __init__(self, scraper_id: str):
         super().__init__(
-            f"Could not find the provider '{scraper_name}'! Are you sure the plugin is installed?"
+            f"Could not find a scraper by id '{scraper_id}'! Are you sure the plugin is installed and in your config?"
         )
