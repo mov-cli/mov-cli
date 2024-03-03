@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import List
+
     import logging
     from .players import Player
     from .utils.platform import SUPPORTED_PLATFORMS
@@ -37,8 +39,9 @@ class PlayerNotSupported(MovCliException):
             "We recommend VLC for iOS and MPV for every other platform."
         )
 
-class ProviderNotFound(MovCliException):
-    def __init__(self, provider: str):
+class ScraperNotFound(MovCliException):
+    def __init__(self, scraper_id: str, available_scrapers: List[str]):
         super().__init__(
-            f"Could not find the provider '{provider}'! Make sure to check for typos."
+            f"Could not find a scraper by id '{scraper_id}'! Are you sure the plugin is installed and in your config?" \
+                f"\n\n Available Scrapers -> {available_scrapers}"
         )

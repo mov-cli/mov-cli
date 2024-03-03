@@ -31,19 +31,20 @@ class ConfigDownloadsData(TypedDict):
     save_path: str
 
 @final
-class ProviderData(TypedDict):
+class ScrapersData(TypedDict):
     default: str
 
 @final
 class ConfigData(TypedDict):
+    version: int
     debug: bool
     player: str
-    flatpak_mpv: bool
     parser: SUPPORTED_PARSERS
     ui: ConfigUIData
     http: ConfigHTTPData
     downloads: ConfigDownloadsData
-    provider: ProviderData
+    scrapers: ScrapersData
+    plugins: Dict[str, str]
 
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
@@ -62,6 +63,10 @@ class Config():
             self.data = override_config
 
     @property
+    def version(self) -> int:
+        return self.data.get("version", 1)
+
+    @property
     def player(self) -> Player:
         """Returns the configured player class. Defaults to MPV."""
         value = self.data.get("player", "mpv")
@@ -74,14 +79,18 @@ class Config():
         return players.CustomPlayer(self, value)
 
     @property
+    def plugins(self) -> Dict[str, str]:
+        return self.data.get("plugins", {"test": "mov-cli-test"})
+
+    @property
     def editor(self) -> Optional[str]:
         """Returns the editor that should be opened while editing."""
         return self.data.get("editor")
 
     @property
-    def provider(self) -> str:
-        """Returns the provider that should be used to scraper by default."""
-        return self.data.get("provider", {}).get("default", "sflix")
+    def default_scraper(self) -> str:
+        """Returns the scraper that should be used to scrape by default."""
+        return self.data.get("scrapers", {}).get("default", "test")
 
     @property
     def fzf_enabled(self) -> bool:

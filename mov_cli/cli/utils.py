@@ -3,26 +3,33 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal, List, Type, Optional, Any
+    from typing import Literal, Type, Optional, Any, Tuple
+    from ..media import Metadata
     from ..scraper import Scraper
     from ..config import Config
 
 import os
 import random
 import getpass
+import importlib
 from datetime import datetime
 from devgoldyutils import Colours
 
-from .. import utils, scrapers, errors
+from .ui import prompt
+
+from .. import utils, errors
+from ..utils import EpisodeSelector
+from ..logger import mov_cli_logger
 from .. import __version__ as mov_cli_version
 
-__all__ = ()
-
-SCRAPERS: List[Scraper] = [
-    scrapers.Sflix,
-    scrapers.Gogoanime,
-    scrapers.RemoteStream
-]
+__all__ = (
+    "greetings", 
+    "welcome_msg", 
+    "handle_episode", 
+    "get_scraper", 
+    "set_cli_config", 
+    "open_config_file"
+)
 
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
     now = datetime.now()
@@ -79,19 +86,65 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
     return text + "\n"
 
-def get_scraper(provider: str) -> Type[Scraper]:
+def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, config: Config) -> utils.EpisodeSelector:
+    if episode is None:
+        mov_cli_logger.info(f"Scrapping episodes for '{Colours.CLAY.apply(choice.title)}'...")
+        metadata_episodes = scraper.scrape_metadata_episodes(choice)
 
-    for scraper in SCRAPERS: # TODO: when we add plugin providers to mov-cli we should add that to the list too.
+        if metadata_episodes.get(None) == 1:
+            return EpisodeSelector()
 
-        if provider.lower() == scraper.__name__.lower():
-            return scraper
+        season = prompt(
+            "Select Season", 
+            choices = [season for season in metadata_episodes], 
+            display = lambda x: f"Season {x}", 
+            config = config
+        ) # TODO: Remember to catch if it's None.
 
-    raise errors.ProviderNotFound(provider)
+        ep = prompt(
+            "Select Episode", 
+            choices = [ep for ep in range(1, metadata_episodes[season])], 
+            display = lambda x: f"Episode {x}",
+            config = config
+        ) # TODO: Remember to catch if it's None.
+
+        return EpisodeSelector(ep, season)
+
+    episode = episode.split(":")
+
+    if len(episode) < 2:
+        mov_cli_logger.error("Incorrect episode format!")
+        return False
+
+    return utils.EpisodeSelector(episode[0], episode[1])
+
+def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
+    available_scrapers = []
+
+    for plugin_name, plugin_module_name in config.plugins.items():
+        # TODO: Make this plugin loading stuff a separate method somewhere so library devs can take advantage of it.
+        plugin_module = importlib.import_module(plugin_module_name.replace("-", "_"))
+
+        scrapers = plugin_module.plugin["scrapers"]
+
+        for scraper_name, scraper in scrapers.items():
+
+            if scraper_id.lower() == f"{plugin_name}.{scraper_name}":
+                return scraper_name, scraper
+
+            elif plugin_name == scraper_name and scraper_id.lower() == plugin_name:
+                # if the plugin and scraper are the same name we will allow just scraper 
+                # name but "plugin.scraper" will take priority. E.g. you can use "owo" instead of "owo.owo".
+                return scraper_name, scraper
+
+            available_scrapers.append(f"{plugin_name}.{scraper_name}")
+
+    raise errors.ScraperNotFound(scraper_id, available_scrapers)
 
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")
     player = kwargs.get("player")
-    provider = kwargs.get("provider")
+    default_scraper = kwargs.get("scraper")
     fzf = kwargs.get("fzf")
 
     if debug is not None:
@@ -100,11 +153,11 @@ def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     if player is not None:
         config.data["player"] = player
 
-    if provider is not None:
-        if config.data.get("provider") is None:
-            config.data["provider"] = {}
+    if default_scraper is not None:
+        if config.data.get("scrapers") is None:
+            config.data["scrapers"] = {}
 
-        config.data["provider"]["default"] = provider
+        config.data["scrapers"]["default"] = default_scraper
 
     if fzf is not None:
         if config.data.get("ui") is None:

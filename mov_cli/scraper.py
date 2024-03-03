@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Dict, List, Literal
+    from typing import Dict, Literal, Optional, Iterable
     from .config import Config
     from .http_client import HTTPClient
     from .media import Metadata, Series, Movie, LiveTV
@@ -29,11 +29,11 @@ class Scraper(ABC):
         return BeautifulSoup(html, self.config.parser)
 
     @abstractmethod
-    def search(self, query: str, limit: int = 10) -> List[Metadata]:
+    def search(self, query: str, limit: int = 10) -> Iterable[Metadata]:
         ...
 
     @abstractmethod
-    def scrape(self, metadata: Metadata, episode: EpisodeSelector = None) -> Series | Movie | LiveTV:
+    def scrape(self, metadata: Metadata, episode: Optional[EpisodeSelector] = None) -> Series | Movie | LiveTV:
         """
         Where your searching and scraping for the media should be performed done. 
         Should return an instance of Media.
