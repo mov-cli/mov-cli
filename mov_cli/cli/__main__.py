@@ -20,12 +20,12 @@ __all__ = ("mov_cli",)
 uwu_app = typer.Typer(pretty_exceptions_enable = False) # NOTE: goldy has an uwu complex.
 
 def mov_cli(
-    query: Optional[List[str]] = typer.Argument(None, help = "The film, tv show or anime you would like to Query."), 
-    debug: Optional[bool] = typer.Option(None, help = "Enable extra logging details."), 
+    query: Optional[List[str]] = typer.Argument(None, help = "A film, tv show or anime you would like to Query."), 
+    debug: Optional[bool] = typer.Option(None, help = "Enable extra logging details. Useful for bug reporting."), 
     player: Optional[str] = typer.Option(None, help = "Player you would like to stream with. E.g. mpv, vlc"), 
     scraper: Optional[str] = typer.Option(None, help = "Scraper you would like to scrape with. E.g. remote_stream, sflix"), 
-    fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."),
-    episode: Optional[str] = typer.Option(None, help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
+    fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."), 
+    episode: Optional[str] = typer.Option(None, "-ep", help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
 
     version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
     edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
@@ -60,6 +60,8 @@ def mov_cli(
         mov_cli_logger.info(f"Using the '{scraper_name}' scraper...")
 
         scraper: Scraper = scraper_class(config, http_client)
+
+        mov_cli_logger.info(f"Searching for '{query}'...")
 
         choice = ui.prompt(
             "Choose Result", 
