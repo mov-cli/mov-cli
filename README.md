@@ -46,7 +46,7 @@ mov-cli comes packaged with a CLI interface via the `mov-cli` command you can us
 
 > [!NOTE]
 > You may notice v4 doesn't ship with many scrapers (or previously known as providers) by default, this is because v4 is plugin-based and scrapers are now part of plugins that must be choosen to be installed.
-> Find out how to do so at the [wiki](https://github.com/mov-cli/mov-cli/wiki).
+> Find out how to do so at the [wiki](https://github.com/mov-cli/mov-cli/wiki#plugins).
 
 Running the command below will search for `spider man no way home` on the `sflix` scraper.
 ```sh
