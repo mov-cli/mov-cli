@@ -1,8 +1,9 @@
 from __future__ import annotations
-from typing import List, Optional, Dict, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..scraper import Scraper
+    from ..utils import EpisodeSelector
 
 import typer
 import logging
@@ -13,7 +14,6 @@ from ..config import Config
 from ..media import MetadataType
 from ..logger import mov_cli_logger
 from ..http_client import HTTPClient
-from ..utils import EpisodeSelector
 
 __all__ = ("mov_cli",)
 
@@ -73,42 +73,12 @@ def mov_cli(
             mov_cli_logger.error("You didn't select anything.")
             return False
 
-        # TODO: Move this all into an individual method.
-        # -----------------------------------------------
-        if episode is not None:
-            episode = episode.split(":")
-
-            if len(episode) < 2:
-                mov_cli_logger.error("Incorrect episode format!")
-                return False
-
-        else:
-            ep_metadata = scraper.scrape_metadata_episodes(choice)
-
-            if ep_metadata.get(None) == 1:
-                episode = None
-            else:
-                ep_metadata: Dict[int, int]
-
-                season = ui.prompt(
-                    "Select Season", 
-                    choices = [season for season in ep_metadata], 
-                    display = lambda x: f"Season {x}",
-                    config = config
-                ) # TODO: Remember to catch if it's None.
-
-                ep = ui.prompt(
-                    "Select Episode", 
-                    choices = [ep for ep in ep_metadata[season]], 
-                    display = lambda x: f"Episode {x}",
-                    config = config
-                ) # TODO: Remember to catch if it's None.
-
-                episode = season, ep
-
-        if episode is not None:
-            episode = EpisodeSelector(episode[0], episode[1])
-        # -----------------------------------------------------
+        episode: EpisodeSelector = utils.handle_episode(
+            episode = episode, 
+            scraper = scraper, 
+            choice = choice, 
+            config = config
+        )
 
         media = scraper.scrape(choice, episode)
 

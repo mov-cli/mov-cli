@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     import logging
     from typing import Literal, Type, Optional, Any, Tuple
+    from ..media import Metadata
     from ..scraper import Scraper
     from ..config import Config
 
@@ -14,10 +15,21 @@ import importlib
 from datetime import datetime
 from devgoldyutils import Colours
 
+from .ui import prompt
+
 from .. import utils, errors
+from ..utils import EpisodeSelector
+from ..logger import mov_cli_logger
 from .. import __version__ as mov_cli_version
 
-__all__ = ()
+__all__ = (
+    "greetings", 
+    "welcome_msg", 
+    "handle_episode", 
+    "get_scraper", 
+    "set_cli_config", 
+    "open_config_file"
+)
 
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
     now = datetime.now()
@@ -74,7 +86,37 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
     return text + "\n"
 
-# TODO: We should probably stick to one name instead of using provider and scraper interchangeably.
+def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, config: Config) -> utils.EpisodeSelector:
+    if episode is None:
+        metadata_episodes = scraper.scrape_metadata_episodes(choice)
+
+        if metadata_episodes.get(None) == 1:
+            return EpisodeSelector()
+
+        season = prompt(
+            "Select Season", 
+            choices = [season for season in metadata_episodes], 
+            display = lambda x: f"Season {x}", 
+            config = config
+        ) # TODO: Remember to catch if it's None.
+
+        ep = prompt(
+            "Select Episode", 
+            choices = [ep for ep in metadata_episodes[season]], 
+            display = lambda x: f"Episode {x}",
+            config = config
+        ) # TODO: Remember to catch if it's None.
+
+        return EpisodeSelector(ep, season)
+
+    episode = episode.split(":")
+
+    if len(episode) < 2:
+        mov_cli_logger.error("Incorrect episode format!")
+        return False
+
+    return utils.EpisodeSelector(episode[0], episode[1])
+
 def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
 
     for plugin_name, plugin_module_name in config.plugins.items():
