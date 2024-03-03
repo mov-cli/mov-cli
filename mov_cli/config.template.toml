@@ -11,7 +11,7 @@ fzf = true
 [mov-cli.scrapers]
 default = "test.test"
 
-[mov-cli.plugins] # E.g: plugin_name = "package-name"
+[mov-cli.plugins] # E.g: namespace = "package-name"
 test = "mov-cli-test"
 
 # [mov-cli.http] # Don't mess with it if you don't know what you are doing!
