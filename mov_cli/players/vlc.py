@@ -26,11 +26,10 @@ class VLC(Player):
             try:
                 return subprocess.Popen(
                     [
-                        "vlc",
-                        f'--http-referrer="{media.referrer}"',
-                        f'"{media.url}"',
-                        f'--meta-title="mov-cli:{media.title}"',
-                        "--no-terminal",
+                        "vlc", 
+                        f'--http-referrer="{media.referrer}"', 
+                        f'--meta-title="mov-cli:{media.title}"', 
+                        media.url
                     ]
                 )
 
