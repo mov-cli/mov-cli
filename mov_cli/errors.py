@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import List
+
     import logging
     from .players import Player
     from .utils.platform import SUPPORTED_PLATFORMS
@@ -38,7 +40,8 @@ class PlayerNotSupported(MovCliException):
         )
 
 class ScraperNotFound(MovCliException):
-    def __init__(self, scraper_id: str):
+    def __init__(self, scraper_id: str, available_scrapers: List[str]):
         super().__init__(
-            f"Could not find a scraper by id '{scraper_id}'! Are you sure the plugin is installed and in your config?"
+            f"Could not find a scraper by id '{scraper_id}'! Are you sure the plugin is installed and in your config?" \
+                f"\n\n Available Scrapers -> {available_scrapers}"
         )

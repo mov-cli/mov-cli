@@ -118,9 +118,10 @@ def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, c
     return utils.EpisodeSelector(episode[0], episode[1])
 
 def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
+    available_scrapers = []
 
     for plugin_name, plugin_module_name in config.plugins.items():
-        # TODO: Make this plugin loading stuff a separate util method.
+        # TODO: Make this plugin loading stuff a separate method somewhere so library devs can take advantage of it.
         plugin_module = importlib.import_module(plugin_module_name.replace("-", "_"))
 
         scrapers = plugin_module.plugin["scrapers"]
@@ -130,7 +131,14 @@ def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
             if scraper_id.lower() == f"{plugin_name}.{scraper_name}":
                 return scraper_name, scraper
 
-    raise errors.ScraperNotFound(scraper_id)
+            elif plugin_name == scraper_name and scraper_id.lower() == plugin_name:
+                # if the plugin and scraper are the same name we will allow just scraper 
+                # name but "plugin.scraper" will take priority. E.g. you can use "owo" instead of "owo.owo".
+                return scraper_name, scraper
+
+            available_scrapers.append(f"{plugin_name}.{scraper_name}")
+
+    raise errors.ScraperNotFound(scraper_id, available_scrapers)
 
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")
