@@ -25,7 +25,7 @@ def mov_cli(
     player: Optional[str] = typer.Option(None, help = "Player you would like to stream with. E.g. mpv, vlc"), 
     scraper: Optional[str] = typer.Option(None, help = "Scraper you would like to scrape with. E.g. remote_stream, sflix"), 
     fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."), 
-    episode: Optional[str] = typer.Option(None, "-ep", help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
+    episode: Optional[str] = typer.Option(None, "--episode", "-ep", help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
 
     version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
     edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
