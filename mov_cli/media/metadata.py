@@ -11,8 +11,11 @@ __all__ = ("MetadataType", "Metadata", "ExtraMetadata", "AiringType")
 
 class MetadataType(Enum):
     SERIES = 0
+    """Media with multiple seasons and episodes."""
     MOVIE = 1
+    """Media with no seasons and episodes. Like a film or short animation."""
     LIVE_TV = 2
+    """Media that is live, like a tv channel or a live stream."""
 
 class AiringType(Enum):
     DONE = 0
