@@ -82,11 +82,14 @@ def mov_cli(
             config = config
         )
 
+        mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
         media = scraper.scrape(choice, episode)
 
         # NOTE: This is all a work in progress.
 
-        popen = config.player.play(media) 
+        popen = config.player.play(media)
+        mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
+
         popen.wait()
 
 def app():

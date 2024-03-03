@@ -32,8 +32,6 @@ def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Calla
     """Prompt the user to pick from a list choices."""
     choice_picked = None
 
-    print("") # Whitespace
-
     if config.fzf_enabled:
         logger.debug("Launching fzf...")
         # We pass this in as a generator to take advantage of iterfzf's streaming capabilities.

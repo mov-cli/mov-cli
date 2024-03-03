@@ -88,6 +88,7 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
 def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, config: Config) -> utils.EpisodeSelector:
     if episode is None:
+        mov_cli_logger.info(f"Scrapping episodes for '{Colours.CLAY.apply(choice.title)}'...")
         metadata_episodes = scraper.scrape_metadata_episodes(choice)
 
         if metadata_episodes.get(None) == 1:
@@ -102,7 +103,7 @@ def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, c
 
         ep = prompt(
             "Select Episode", 
-            choices = [ep for ep in metadata_episodes[season]], 
+            choices = [ep for ep in range(1, metadata_episodes[season])], 
             display = lambda x: f"Episode {x}",
             config = config
         ) # TODO: Remember to catch if it's None.
