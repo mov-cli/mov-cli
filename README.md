@@ -53,7 +53,7 @@ mov-cli comes packaged with a CLI interface via the `mov-cli` command you can us
 
 Running the command below will search for `spider man no way home` on the `sflix` scraper.
 ```sh
-mov-cli spider man no way home --provider sflix
+mov-cli -s sflix spider man no way home
 ```
 <img width="370px" src="https://github.com/mov-cli/mov-cli/assets/66202304/86189cab-b246-405e-a266-6c624bee2d36">
 
@@ -74,7 +74,7 @@ Pull requests are welcome and *appreciated*. For major changes, please open an i
 - Maintainer: **Goldy** | Discord: ``g0ldy_``
 
 ## Inspiration ✨
-Heavily inspired from [ani-cli](https://github.com/pystardust/ani-cli)
+Inspired by [ani-cli](https://github.com/pystardust/ani-cli), [lobster](https://github.com/justchokingaround/lobster) and [animdl](https://github.com/justfoolingaround/animdl)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
