@@ -19,7 +19,10 @@
 
 </div>
 
-<br>
+<be>
+
+> [!Note]
+> v4 is constantly changing so be sure to keep the tool up to date, with that said I would advise not using it as a library yet.
 
 ## Installation 🛠️
 ### Prerequisites
