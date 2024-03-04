@@ -18,6 +18,7 @@ from .ui import prompt
 
 from .. import utils, errors
 from ..plugins import load_plugin
+from ..media import MetadataType
 from ..utils import EpisodeSelector
 from ..logger import mov_cli_logger
 from .. import __version__ as mov_cli_version
@@ -87,6 +88,9 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
     return text + "\n"
 
 def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, config: Config) -> utils.EpisodeSelector:
+    if choice.type == MetadataType.MOVIE:
+        return EpisodeSelector()
+
     if episode is None:
         mov_cli_logger.info(f"Scrapping episodes for '{Colours.CLAY.apply(choice.title)}'...")
         metadata_episodes = scraper.scrape_metadata_episodes(choice)
