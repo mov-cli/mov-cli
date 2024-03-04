@@ -70,11 +70,11 @@ def mov_cli(
             return False
 
         scraper_class: Scraper = scraper_class_maybe
-        mov_cli_logger.info(f"Using '{scraper_name}' scraper...")
+        mov_cli_logger.info(f"Using '{Colours.BLUE.apply(scraper_name)}' scraper...")
 
         scraper: Scraper = scraper_class(config, http_client)
 
-        mov_cli_logger.info(f"Searching for '{query}'...")
+        mov_cli_logger.info(f"Searching for '{Colours.ORANGE.apply(query)}'...")
 
         choice = ui.prompt(
             "Choose Result", 
