@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 import os
 import random
 import getpass
-import importlib
 from datetime import datetime
 from devgoldyutils import Colours
 
 from .ui import prompt
 
 from .. import utils, errors
+from ..plugins import load_plugin
 from ..utils import EpisodeSelector
 from ..logger import mov_cli_logger
 from .. import __version__ as mov_cli_version
@@ -122,10 +122,12 @@ def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
     available_scrapers = []
 
     for plugin_name, plugin_module_name in config.plugins.items():
-        # TODO: Make this plugin loading stuff a separate method somewhere so library devs can take advantage of it.
-        plugin_module = importlib.import_module(plugin_module_name.replace("-", "_"))
+        plugin_data = load_plugin(plugin_module_name)
 
-        scrapers = plugin_module.plugin["scrapers"]
+        if plugin_data is None:
+            continue
+
+        scrapers = plugin_data["scrapers"]
 
         for scraper_name, scraper in scrapers.items():
 
