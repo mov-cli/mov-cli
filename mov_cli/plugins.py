@@ -1,10 +1,10 @@
 """
 Module containing mov-cli plugin related stuff.
 """
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypedDict, Dict
 
 if TYPE_CHECKING:
-    from typing import Dict, Optional
+    from typing import Optional
 
     from .scraper import Scraper
 
