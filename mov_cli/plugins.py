@@ -28,7 +28,7 @@ def load_plugin(module_name: str) -> Optional[PluginHookData]:
     try:
         plugin_module = importlib.import_module(module_name.replace("-", "_"))
     except ModuleNotFoundError as e:
-        logger.error(f"Failed to import a plugin from the module '{module_name}'! Error: {e}")
+        logger.error(f"Failed to import a plugin from the module '{module_name}'! Error --> {e}")
         return None
 
     plugin_data = getattr(plugin_module, "plugin", None)

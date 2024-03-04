@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal, Type, Optional, Any, Tuple
+    from typing import Literal, Type, Optional, Any, Tuple, List
     from ..media import Metadata
     from ..scraper import Scraper
     from ..config import Config
@@ -16,7 +16,7 @@ from devgoldyutils import Colours
 
 from .ui import prompt
 
-from .. import utils, errors
+from .. import utils
 from ..plugins import load_plugin
 from ..media import MetadataType
 from ..utils import EpisodeSelector
@@ -122,7 +122,7 @@ def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, c
 
     return utils.EpisodeSelector(episode[0], episode[1])
 
-def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
+def get_scraper(scraper_id: str, config: Config) -> Tuple[Optional[str], Type[Scraper] | List[str]]:
     available_scrapers = []
 
     for plugin_name, plugin_module_name in config.plugins.items():
@@ -145,7 +145,7 @@ def get_scraper(scraper_id: str, config: Config) -> Tuple[str, Type[Scraper]]:
 
             available_scrapers.append(f"{plugin_name}.{scraper_name}")
 
-    raise errors.ScraperNotFound(scraper_id, available_scrapers)
+    return None, available_scrapers
 
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")

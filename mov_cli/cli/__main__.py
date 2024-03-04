@@ -55,8 +55,21 @@ def mov_cli(
     if len(query) > 0:
         query: str = " ".join(query)
         http_client = HTTPClient(config)
-        scraper_name, scraper_class = utils.get_scraper(config.default_scraper, config)
 
+        scraper = config.default_scraper
+        scraper_name, scraper_class_maybe = utils.get_scraper(scraper, config)
+
+        if scraper_name is None:
+            available_scrapers: List[str] = scraper_class_maybe
+
+            mov_cli_logger.error(
+                f"Could not find a scraper by the id '{scraper}'! Are you sure the plugin is installed and in your config?" \
+                    f"\nAvailable Scrapers -> {available_scrapers}"
+            )
+
+            return False
+
+        scraper_class: Scraper = scraper_class_maybe
         mov_cli_logger.info(f"Using '{scraper_name}' scraper...")
 
         scraper: Scraper = scraper_class(config, http_client)
