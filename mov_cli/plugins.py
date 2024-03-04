@@ -1,10 +1,11 @@
 """
 Module containing mov-cli plugin related stuff.
 """
-from typing import TYPE_CHECKING, TypedDict, Dict
+from __future__ import annotations
+from typing import TYPE_CHECKING, TypedDict
 
 if TYPE_CHECKING:
-    from typing import Optional
+    from typing import Optional, Dict
 
     from .scraper import Scraper
 
@@ -15,6 +16,7 @@ from .logger import mov_cli_logger
 
 __all__ = (
     "load_plugin", 
+    "PluginHookData"
 )
 
 logger = LoggerAdapter(mov_cli_logger, prefix = "Plugins")
