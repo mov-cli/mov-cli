@@ -133,17 +133,16 @@ def get_scraper(scraper_id: str, config: Config) -> Tuple[Optional[str], Type[Sc
 
         scrapers = plugin_data["scrapers"]
 
+        if scraper_id.lower() == plugin_name.lower() and "DEFAULT" in scrapers:
+            return f"{plugin_name}.DEFAULT", scrapers["DEFAULT"]
+
         for scraper_name, scraper in scrapers.items():
+            id = f"{plugin_name}.{scraper_name}".lower()
 
-            if scraper_id.lower() == f"{plugin_name}.{scraper_name}":
-                return scraper_name, scraper
+            if scraper_id.lower() == id:
+                return id, scraper
 
-            elif plugin_name == scraper_name and scraper_id.lower() == plugin_name:
-                # if the plugin and scraper are the same name we will allow just scraper 
-                # name but "plugin.scraper" will take priority. E.g. you can use "owo" instead of "owo.owo".
-                return scraper_name, scraper
-
-            available_scrapers.append(f"{plugin_name}.{scraper_name}")
+            available_scrapers.append(id)
 
     return None, available_scrapers
 

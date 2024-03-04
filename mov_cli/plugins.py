@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, TypedDict
 
 if TYPE_CHECKING:
-    from typing import Optional, Dict
+    from typing import Optional, Dict, Literal
 
     from .scraper import Scraper
 
@@ -22,7 +22,8 @@ __all__ = (
 logger = LoggerAdapter(mov_cli_logger, prefix = "Plugins")
 
 class PluginHookData(TypedDict):
-    scrapers: Dict[str, Scraper]
+    version: int
+    scrapers: Dict[str, Scraper] | Dict[Literal["DEFAULT"], Scraper]
 
 def load_plugin(module_name: str) -> Optional[PluginHookData]:
     try:
