@@ -10,7 +10,7 @@
     <img src="https://github.com/mov-cli/mov-cli/assets/132799819/a23bec13-881d-41b9-b596-b31c6698b89e" alt="Logo" width="200">
   </a>
 
-  <sub>Watch anything from your terminal.</sub>
+  <sub>Watch everything from your terminal.</sub>
   <br>
   <br>
   <a href="https://github.com/mov-cli/mov-cli/issues">Report Bug</a>
