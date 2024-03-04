@@ -72,7 +72,7 @@ def mov_cli(
         )
 
         if choice is None:
-            mov_cli_logger.error("You didn't select anything.")
+            mov_cli_logger.error("There was no results or you didn't select anything.")
             return False
 
         episode: EpisodeSelector = utils.handle_episode(
