@@ -1,6 +1,6 @@
 [project]
 name = "mov-cli"
-description = "A cli tool to stream Movies, Shows, LIVE-TV and Sports."
+description = "Watch everything from your terminal."
 authors = [
     {name = "Pain", email = "painedposeidon444@gmail.com"},
     {name = "Ananas", email = "ananas@r3tr0ananas.lol"},
