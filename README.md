@@ -1,13 +1,15 @@
 <a name="readme-top"></a>
 
+[![Stargazers][stars-shield]][stars-url]
+[![Pypi Version][pypi-shield]][pypi-url]
+[![Python Versions][python-shield]][pypi-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
 <div align="center">
 
-  [![Stargazers][stars-shield]][stars-url]
-  [![Issues][issues-shield]][issues-url]
-  [![MIT License][license-shield]][license-url]
-
   <a href="https://github.com/mov-cli/mov-cli">
-    <img src="https://github.com/mov-cli/mov-cli/assets/132799819/a23bec13-881d-41b9-b596-b31c6698b89e" alt="Logo" width="200">
+    <img src="https://github.com/mov-cli/mov-cli/assets/132799819/a23bec13-881d-41b9-b596-b31c6698b89e" alt="Logo" width="250">
   </a>
 
   <sub>Watch everything from your terminal.</sub>
@@ -19,10 +21,14 @@
 
 </div>
 
-<be>
+<br>
 
 > [!Note]
-> v4 is constantly changing so be sure to keep the tool up to date, with that said I would advise not using it as a library yet.
+> v4 is constantly changing so be sure to keep the tool up to date and with that said I would advise not using it as a library yet.
+>
+> > Also we now have a discord:
+> >
+> > [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/BMzC7ePsBV)
 
 ## Installation 🛠️
 ### Prerequisites
@@ -68,8 +74,6 @@ mov-cli -s films spider man no way home
 
 > The above command should search for `spider man no way home` with the following scraper.
 
-<br>
-
 > [!TIP]
 > For in-depth instructions hit the wiki: https://github.com/mov-cli/mov-cli/wiki
 
@@ -79,11 +83,6 @@ Pull requests are welcome and *appreciated*. For major changes, please open an i
 <a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=mov-cli/mov-cli"/>
 </a>
-
-## Contact
-- Author: **Poseidon444** | Discord: ``pain444``
-- Maintainer: **R3tr0Ananas** | Discord: ``r3tr0ananas``
-- Maintainer: **Goldy** | Discord: ``g0ldy_``
 
 ## Inspiration 🌟
 Inspired by [ani-cli](https://github.com/pystardust/ani-cli), [lobster](https://github.com/justchokingaround/lobster) and [animdl](https://github.com/justfoolingaround/animdl)
@@ -95,9 +94,12 @@ Inspired by [ani-cli](https://github.com/pystardust/ani-cli), [lobster](https://
 [contributors-url]: https://github.com/mov-cli/mov-cli/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/mov-cli/mov-cli.svg?style=for-the-badge
 [forks-url]: https://github.com/mov-cli/mov-cli/network/members
-[stars-shield]: https://img.shields.io/github/stars/mov-cli/mov-cli.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/mov-cli/mov-cli?style=flat
 [stars-url]: https://github.com/mov-cli/mov-cli/stargazers
-[issues-shield]: https://img.shields.io/github/issues/mov-cli/mov-cli.svg?style=for-the-badge
+[pypi-shield]: https://img.shields.io/pypi/v/mov-cli?style=flat
+[pypi-url]: https://pypi.org/project/mov-cli/
+[python-shield]: https://img.shields.io/pypi/pyversions/mov-cli?style=flat
+[issues-shield]: https://img.shields.io/github/issues/mov-cli/mov-cli?style=flat
 [issues-url]: https://github.com/mov-cli/mov-cli/issues
-[license-shield]: https://img.shields.io/github/license/mov-cli/mov-cli.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/mov-cli/mov-cli?style=flat
 [license-url]: https://github.com/mov-cli/mov-cli/blob/master/LICENSE.txt
