@@ -37,7 +37,7 @@ With the prerequisites installed, mov-cli can be installed via the pip command o
 > [!WARNING]
 > As of right now mov-cli **v4** isn't avaible on pip. Use the command below if you would like to install the development version:
 > ```sh
-> pip install git+https://github.com/mov-cli/mov-cli@v4
+> pip install git+https://github.com/mov-cli/mov-cli@v4 -U
 > ```
 
 ```sh
@@ -51,17 +51,29 @@ mov-cli comes packaged with a CLI interface via the `mov-cli` command you can us
 > You may notice v4 doesn't ship with many scrapers (or previously known as providers) by default, this is because v4 is plugin-based and scrapers are now part of plugins that must be choosen to be installed.
 > Find out how to do so at the [wiki](https://github.com/mov-cli/mov-cli/wiki#plugins).
 
-Running the command below will search for `spider man no way home` on the `sflix` scraper.
+1. Install the scraper plugin of your choice. Visit this [wiki page](https://github.com/mov-cli/mov-cli/wiki#plugins) on how to do so.
 ```sh
-mov-cli -s sflix spider man no way home
+mov-cli -e
+```
+```toml
+[mov-cli.plugins]
+films = "package_name"
+```
+
+2. Scraper away!
+```sh
+mov-cli -s films spider man no way home
 ```
 <img width="370px" src="https://github.com/mov-cli/mov-cli/assets/66202304/86189cab-b246-405e-a266-6c624bee2d36">
 
+> The above command should search for `spider man no way home` with the following scraper.
+
 <br>
 
-For in-depth instructions hit the wiki: https://github.com/mov-cli/mov-cli/wiki
+> [!TIP]
+> For in-depth instructions hit the wiki: https://github.com/mov-cli/mov-cli/wiki
 
-## Contributing
+## Contributing ✨
 Pull requests are welcome and *appreciated*. For major changes, please open an issue first to discuss what you would like to change.
 
 <a href = "https://github.com/mov-cli/mov-cli/graphs/contributors">
@@ -73,7 +85,7 @@ Pull requests are welcome and *appreciated*. For major changes, please open an i
 - Maintainer: **R3tr0Ananas** | Discord: ``r3tr0ananas``
 - Maintainer: **Goldy** | Discord: ``g0ldy_``
 
-## Inspiration ✨
+## Inspiration 🌟
 Inspired by [ani-cli](https://github.com/pystardust/ani-cli), [lobster](https://github.com/justchokingaround/lobster) and [animdl](https://github.com/justfoolingaround/animdl)
 
 
