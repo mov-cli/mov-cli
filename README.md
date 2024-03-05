@@ -36,7 +36,7 @@
 - **[python](https://www.python.org/downloads/)** (required, with pip)
 - **[mpv](https://mpv.io/installation/)** (recommended & default media player)
 
-To get running these are all the prerequisites you'll need although you can find some nice extra ones over [here]().
+To get running these are all the prerequisites you'll need.
 
 With the prerequisites installed, mov-cli can be installed via the pip command on python versions 3.8 and up.
 
