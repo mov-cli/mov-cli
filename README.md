@@ -102,4 +102,4 @@ Inspired by [ani-cli](https://github.com/pystardust/ani-cli), [lobster](https://
 [issues-shield]: https://img.shields.io/github/issues/mov-cli/mov-cli?style=flat
 [issues-url]: https://github.com/mov-cli/mov-cli/issues
 [license-shield]: https://img.shields.io/github/license/mov-cli/mov-cli?style=flat
-[license-url]: https://github.com/mov-cli/mov-cli/blob/master/LICENSE.txt
+[license-url]: ./LICENSE
