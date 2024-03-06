@@ -35,6 +35,7 @@
 - **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional)
 - **[python](https://www.python.org/downloads/)** (required, with pip)
 - **[mpv](https://mpv.io/installation/)** (recommended & default media player)
+- **[lxml](https://pypi.org/project/lxml/)** (optional, ⚡ faster scraping)
 
 To get running these are all the prerequisites you'll need.
 
