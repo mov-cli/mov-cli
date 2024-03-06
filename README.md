@@ -21,7 +21,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/BMzC7ePsBV)
 
 <!-- PROJECT LOGO -->
 <br />
@@ -62,7 +62,7 @@
   <li><a href="#usage">Usage</a></li>
   <li><a href="#disclaimer">Disclaimer</a></li>
   <li><a href="#contributing">Contributing</a></li>
-  <li><a href="#contact">Contact</a></li>
+  <li><a href="#discord">Discord</a></li>
   <li><a href="#inspiration">Inspiration</a></li>
 </ol>
 
@@ -244,14 +244,10 @@ Contributors:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- CONTACT -->
-## Contact
+<!-- DISCORD -->
+## Discord
 
-Author: Poseidon444 | ```Discord: pain444```
-
-Maintainer: HLOAnanas | ```Discord: r3tr0ananas```
-
-Project Link: [https://github.com/mov-cli/mov-cli](https://github.com/mov-cli/mov-cli)
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/BMzC7ePsBV)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
