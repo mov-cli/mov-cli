@@ -69,7 +69,7 @@ films = "package_name"
 
 2. Scraper away!
 ```sh
-mov-cli -s films spider man no way home
+mov-cli -s films spider-man no way home
 ```
 <img width="370px" src="https://github.com/mov-cli/mov-cli/assets/66202304/86189cab-b246-405e-a266-6c624bee2d36">
 
