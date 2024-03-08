@@ -87,7 +87,7 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
     return text + "\n"
 
-def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, config: Config) -> utils.EpisodeSelector:
+def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, config: Config) -> Optional[utils.EpisodeSelector]:
     if choice.type == MetadataType.MOVIE:
         return EpisodeSelector()
 
@@ -103,14 +103,20 @@ def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, c
             choices = [season for season in metadata_episodes], 
             display = lambda x: f"Season {x}", 
             config = config
-        ) # TODO: Remember to catch if it's None.
+        )
+
+        if season is None:
+            return None
 
         ep = prompt(
             "Select Episode", 
             choices = [ep for ep in range(1, metadata_episodes[season])], 
             display = lambda x: f"Episode {x}",
             config = config
-        ) # TODO: Remember to catch if it's None.
+        )
+
+        if ep is None:
+            return None
 
         return EpisodeSelector(ep, season)
 

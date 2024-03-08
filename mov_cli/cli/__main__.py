@@ -88,12 +88,16 @@ def mov_cli(
             mov_cli_logger.error("There was no results or you didn't select anything.")
             return False
 
-        episode: EpisodeSelector = utils.handle_episode(
+        episode: Optional[EpisodeSelector] = utils.handle_episode(
             episode = episode, 
             scraper = scraper, 
             choice = choice, 
             config = config
         )
+
+        if episode is None:
+            mov_cli_logger.error("You didn't select a season/episode.")
+            return False
 
         mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
         media = scraper.scrape(choice, episode)
