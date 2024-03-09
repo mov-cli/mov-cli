@@ -58,7 +58,7 @@ class HTTPClient():
                 **kwargs
             )
 
-            if not response.is_success:
+            if response.is_error:
                 self.logger.error(
                     f"GET Request to {response.url} failed! ({response})"
                 )
