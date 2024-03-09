@@ -8,11 +8,15 @@ if TYPE_CHECKING:
     T = TypeVar('T')
 
 import re
+import sys
 import types
-import iterfzf
 import inquirer
 from inquirer.themes import Default
+from importlib.util import find_spec
 from devgoldyutils import Colours, LoggerAdapter
+
+if find_spec("iterfzf") is not None:
+    import iterfzf
 
 from ..logger import mov_cli_logger
 
@@ -32,7 +36,13 @@ def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Calla
     """Prompt the user to pick from a list choices."""
     choice_picked = None
 
-    if config.fzf_enabled:
+    if config.fzf_enabled and "iterfzf" not in sys.modules:
+        logger.warning(
+            "The module 'iterfzf' is not installed so we will not use fzf!" \
+                "\nInstall 'iterfzf' with 'pip install mov-cli[fzf]' or set fzf to false in the config/cli option to get rid of this warning."
+        )
+
+    if config.fzf_enabled and "iterfzf" in sys.modules:
         logger.debug("Launching fzf...")
         # We pass this in as a generator to take advantage of iterfzf's streaming capabilities.
         # You can find that explained as the second bullet point here: https://github.com/dahlia/iterfzf#key-features

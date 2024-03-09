@@ -30,7 +30,6 @@ dependencies = [
     "devgoldyutils>=2.5.7",
     "typer[all]",
     "inquirer",
-    "iterfzf@git+https://github.com/THEGOLDENPRO/iterfzf",
     "beautifulsoup4",
     "Unidecode",
 
@@ -41,6 +40,9 @@ dependencies = [
 dynamic = ["version"]
 
 [project.optional-dependencies]
+fzf = [
+    "iterfzf@git+https://github.com/THEGOLDENPRO/iterfzf"
+]
 dev = [
     "ruff",
     "build",

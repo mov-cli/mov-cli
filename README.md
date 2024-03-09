@@ -32,7 +32,7 @@
 
 ## Installation 🛠️
 ### Prerequisites
-- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional)
+- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional, but you must use ``mov-cli[fzf]``)
 - **[python](https://www.python.org/downloads/)** (required, with pip)
 - **[mpv](https://mpv.io/installation/)** (recommended & default media player)
 - **[lxml](https://pypi.org/project/lxml/)** (optional, ⚡ faster scraping)
@@ -42,7 +42,7 @@ To get running these are all the prerequisites you'll need.
 With the prerequisites installed, mov-cli can be installed via the pip command on python versions 3.8 and up.
 
 > [!WARNING]
-> As of right now mov-cli **v4** isn't avaible on pip. Use the command below if you would like to install the development version:
+> As of right now mov-cli **v4** isn't available on pip. Use the command below if you would like to install the development version:
 > ```sh
 > pip install git+https://github.com/mov-cli/mov-cli@v4 -U
 > ```
