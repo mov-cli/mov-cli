@@ -19,7 +19,7 @@ from .ui import prompt
 from .. import utils
 from ..plugins import load_plugin
 from ..media import MetadataType
-from ..utils import EpisodeSelector
+from ..utils import EpisodeSelector, what_platform
 from ..logger import mov_cli_logger
 from .. import __version__ as mov_cli_version
 
@@ -62,10 +62,8 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
     )
 
     try:
-        user_name = getpass.getuser()
-    except (
-        Exception
-    ) as e:  # NOTE: Apparently an exception is raised but they don't tell us what exception :(
+        user_name = user_name if what_platform() == "Android" else getpass.getuser()
+    except Exception as e:  # NOTE: Apparently an exception is raised but they don't tell us what exception :(
         logger.debug(
             "getpass couldn't get the user name so a random one is being returned. "
             f"\nError >> {e}"
@@ -77,7 +75,8 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
     )
 
     if display_hint is True and display_version is False:
-        text += f"\n\n- Hint: {Colours.CLAY}mov-cli {Colours.ORANGE}spider man no way home{Colours.RESET}"
+        text += f"\n\n- Hint: {Colours.CLAY}mov-cli {Colours.PINK_GREY}-s films {Colours.ORANGE}mr.robot{Colours.RESET}" \
+            f"\n- Hint: {Colours.CLAY}mov-cli {Colours.PINK_GREY}-s anime {Colours.ORANGE}chuunibyou demo take on me{Colours.RESET}"
 
     if display_version is True:
         text += f"\n\n{Colours.CLAY}-> {Colours.RESET}Version: {Colours.BLUE}{mov_cli_version}{Colours.RESET}"

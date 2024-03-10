@@ -63,8 +63,9 @@ def mov_cli(
             available_scrapers: List[str] = scraper_class_maybe
 
             mov_cli_logger.error(
-                f"Could not find a scraper by the id '{scraper}'! Are you sure the plugin is installed and in your config?" \
-                    f"\nAvailable Scrapers -> {available_scrapers}"
+                f"Could not find a scraper by the id '{scraper}'! Are you sure the plugin is installed and in your config? " \
+                    "Read the wiki for more on that: 'https://github.com/mov-cli/mov-cli/wiki#plugins'." \
+                    f"\n\n  {Colours.GREEN}Available Scrapers{Colours.RESET} -> {available_scrapers}"
             )
 
             return False
