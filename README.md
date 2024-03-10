@@ -32,7 +32,7 @@
 
 ## Installation 🛠️
 ### Prerequisites
-- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional, but you must use ``mov-cli[fzf]``)
+- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional)
 - **[python](https://www.python.org/downloads/)** (required, with pip)
 - **[mpv](https://mpv.io/installation/)** (recommended & default media player)
 - **[lxml](https://pypi.org/project/lxml/)** (optional, ⚡ faster scraping)
