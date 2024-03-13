@@ -2,8 +2,6 @@ from __future__ import annotations
 from typing import List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Tuple
-
     from ..scraper import Scraper
     from ..utils import EpisodeSelector
 
