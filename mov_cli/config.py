@@ -46,18 +46,25 @@ class ConfigData(TypedDict):
     scrapers: ScrapersData
     plugins: Dict[str, str]
 
+logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
+
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
     def __init__(self, override_config: ConfigData = None, config_path: Path = None) -> None:
         self.config_path = config_path
-        self.logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
 
         self.data: ConfigData = {}
 
         if override_config is None:
             self.config_path = self.__get_config_file()
 
-            self.data = toml.load(self.config_path).get("mov-cli", {})
+            try:
+                self.data = toml.load(self.config_path).get("mov-cli", {})
+            except toml.decoder.TomlDecodeError as e:
+                logger.critical(
+                    "Failed to read config.toml! Please check you haven't made any mistakes in the config." \
+                        f"All values will fallback to default. \nError: {e}"
+                )
 
         else:
             self.data = override_config
@@ -88,9 +95,9 @@ class Config():
         return self.data.get("editor")
 
     @property
-    def default_scraper(self) -> str:
+    def default_scraper(self) -> Optional[str]:
         """Returns the scraper that should be used to scrape by default."""
-        return self.data.get("scrapers", {}).get("default", "test")
+        return self.data.get("scrapers", {}).get("default", None)
 
     @property
     def fzf_enabled(self) -> bool:

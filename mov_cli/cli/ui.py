@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..config import Config
     from typing import List, Generator, Any, Callable, TypeVar
 
     T = TypeVar('T')
@@ -28,19 +27,11 @@ class MovCliTheme(Default):
         self.List.selection_color = Colours.CLAY.value
         self.List.selection_cursor = "❯"
 
-def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Callable[[T], str], config: Config) -> T | None:
+def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Callable[[T], str], fzf_enabled: bool) -> T | None:
     """Prompt the user to pick from a list choices."""
     choice_picked = None
 
-    """
-    if config.fzf_enabled:
-        logger.warning(
-            "The module 'iterfzf' is not installed so we will not use fzf!" \
-                "\nInstall 'iterfzf' with 'pip install mov-cli[fzf]' or set fzf to false in the config/cli option to get rid of this warning."
-        )
-    """
-
-    if config.fzf_enabled:
+    if fzf_enabled:
         logger.debug("Launching fzf...")
         # We pass this in as a generator to take advantage of iterfzf's streaming capabilities.
         # You can find that explained as the second bullet point here: https://github.com/dahlia/iterfzf#key-features
