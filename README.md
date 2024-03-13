@@ -5,6 +5,7 @@
 [![Python Versions][python-shield]][pypi-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![Discord][discord-shield]][discord-url]
 
 <div align="center">
 
@@ -104,3 +105,5 @@ Inspired by [ani-cli](https://github.com/pystardust/ani-cli), [lobster](https://
 [issues-url]: https://github.com/mov-cli/mov-cli/issues
 [license-shield]: https://img.shields.io/github/license/mov-cli/mov-cli?style=flat
 [license-url]: ./LICENSE
+[discord-shield]: https://img.shields.io/badge/Discord-7289da?logo=discord&logoColor=white
+[discord-url]: https://discord.gg/BMzC7ePsBV
