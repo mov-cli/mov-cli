@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Tuple
+
     from ..scraper import Scraper
     from ..utils import EpisodeSelector
 
@@ -56,23 +58,18 @@ def mov_cli(
         query: str = " ".join(query)
         http_client = HTTPClient(config)
 
-        scraper = config.default_scraper
-        scraper_name, scraper_class_maybe = utils.get_scraper(scraper, config)
+        chosen_scraper = utils.select_scraper(config.plugins, config.fzf_enabled, config.default_scraper)
 
-        if scraper_name is None:
-            available_scrapers: List[str] = scraper_class_maybe
-
+        if chosen_scraper is None:
             mov_cli_logger.error(
-                f"Could not find a scraper by the id '{scraper}'! Are you sure the plugin is installed and in your config? " \
-                    "Read the wiki for more on that: 'https://github.com/mov-cli/mov-cli/wiki#plugins'." \
-                    f"\n\n  {Colours.GREEN}Available Scrapers{Colours.RESET} -> {available_scrapers}"
+                "You must choose a scraper to scrape with! " \
+                    "You can set a default scraper with the default key in config.toml."
             )
-
             return False
 
-        scraper_class: Scraper = scraper_class_maybe
-        mov_cli_logger.info(f"Using '{Colours.BLUE.apply(scraper_name)}' scraper...")
+        scraper_name, scraper_class = chosen_scraper
 
+        mov_cli_logger.info(f"Using '{Colours.BLUE.apply(scraper_name)}' scraper...")
         scraper: Scraper = scraper_class(config, http_client)
 
         mov_cli_logger.info(f"Searching for '{Colours.ORANGE.apply(query)}'...")
@@ -82,7 +79,7 @@ def mov_cli(
             choices = (choice for choice in scraper.search(query)), 
             display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
                 f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
-            config = config
+            fzf_enabled = config.fzf_enabled
         )
 
         if choice is None:
@@ -93,7 +90,7 @@ def mov_cli(
             episode = episode, 
             scraper = scraper, 
             choice = choice, 
-            config = config
+            fzf_enabled = config.fzf_enabled
         )
 
         if episode is None:
