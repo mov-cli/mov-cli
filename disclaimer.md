@@ -14,7 +14,7 @@ Think of this project as your normal browser, but a bit more straight-forward an
 
 **This project is to be used at the user's own risk, based on their government and laws.**
 
-**This project has no control on the content it is serving, using copyrighted content from the providers is not going to be accounted for by the developer. It is the user's own risk.**
+**This project has no control on the content it is serving, using copyrighted content from the providers is not going to be accounted for by the developers. It is the user's own risk.**
 
 
 ## DMCA and Copyright Infringements
@@ -23,9 +23,9 @@ Think of this project as your normal browser, but a bit more straight-forward an
 
 This project uses client-side content access mechanisms. Hence, the copyright infringements or DMCA in this project's regards are to be forwarded to the associated site by the associated notifier of any such claims. This is one of the main reasons the sites are listed in this project.
 
-**Do not harass the developer. Any personal information about the developer is intentionally not made public. Exploiting such information without consent in regards to this topic will lead to legal actions by the developer themselves.**
+**Do not harass the developers. Any personal information about the developers is intentionally not made public. Exploiting such information without consent in regards to this topic will lead to legal actions by the developers themselves.**
 
 
-## Contacting the developer
+## Contacting the developers
 
-Begin by making a GitHub issue or sending an email to: mov-cli@protonmail.com
+Begin by making a GitHub issue or joining the discord: https://discord.gg/BMzC7ePsBV
