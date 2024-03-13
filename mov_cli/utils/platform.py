@@ -23,7 +23,7 @@ def what_platform() -> SUPPORTED_PLATFORMS:
         if hasattr(sys, "getandroidapilevel"):
             return "Android"
         elif "iPhone" in platform.platform():
-            return "iOS"
+            return "-ish"
 
         return os
 
