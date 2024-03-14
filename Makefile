@@ -1,3 +1,5 @@
+.PHONY: build
+
 pip = pip
 python = python
 
