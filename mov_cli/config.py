@@ -46,11 +46,13 @@ class ConfigData(TypedDict):
     scrapers: ScrapersData
     plugins: Dict[str, str]
 
+logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
+
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
     def __init__(self, override_config: ConfigData = None, config_path: Path = None) -> None:
         self.config_path = config_path
-        self.logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
+
         self.data: ConfigData = {}
 
         if override_config is None:
@@ -182,7 +184,7 @@ class Config():
         config_path.parent.mkdir(exist_ok = True)
 
         if not config_path.exists():
-            self.logger.debug("The 'config.toml' file doesn't exist so we're creating it...")
+            logger.debug("The 'config.toml' file doesn't exist so we're creating it...")
             config_file = open(config_path, "w")
 
             template_config_path = f"{Path(os.path.split(__file__)[0])}{os.sep}config.template.toml"
@@ -191,6 +193,6 @@ class Config():
                 config_file.write(config_template.read())
 
             config_file.close()
-            self.logger.info(f"Config created at '{config_path}'.")
+            logger.info(f"Config created at '{config_path}'.")
 
         return config_path
