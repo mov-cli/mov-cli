@@ -33,6 +33,12 @@
 
 ## Installation 🛠️
 ### Prerequisites
+- **A supported platform:**
+  - Linux
+  - Windows
+  - Android (via [Termux](https://termux.dev/en/))
+  - iOS (via [iSH Shell](https://ish.app/))
+  - *MacOS* (**Not tested**)
 - **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional)
 - **[python](https://www.python.org/downloads/)** (required, with pip)
 - **[mpv](https://mpv.io/installation/)** (recommended & default media player)
@@ -40,13 +46,7 @@
 
 To get running these are all the prerequisites you'll need.
 
-With the prerequisites installed, mov-cli can be installed via the pip command on python versions 3.8 and up.
-
-> [!WARNING]
-> As of right now mov-cli **v4** isn't available on pip. Use the command below if you would like to install the development version:
-> ```sh
-> pip install git+https://github.com/mov-cli/mov-cli@v4 -U
-> ```
+With the prerequisites installed, mov-cli can be installed via the pip command on all platforms with Python version 3.8 or above.
 
 ```sh
 pip install mov-cli -U
@@ -56,7 +56,7 @@ pip install mov-cli -U
 mov-cli comes packaged with a CLI interface via the `mov-cli` command you can use in your respective terminal. 
 
 > [!NOTE]
-> You may notice v4 doesn't ship with many scrapers (or previously known as providers) by default, this is because v4 is plugin-based and scrapers are now part of plugins that must be chosen to be installed.
+> You may notice mov-cli doesn't ship with any scrapers (or previously known as providers) by default, this is because v4 is plugin-based and scrapers are now part of plugins that must be chosen to be installed.
 > Find out how to do so at the [wiki](https://github.com/mov-cli/mov-cli/wiki#plugins).
 
 1. Install the scraper plugin of your choice. Visit this [wiki page](https://github.com/mov-cli/mov-cli/wiki#plugins) on how to do so and the [mov-cli-plugin](https://github.com/topics/mov-cli-plugin) topic for a list of **third-party** mov-cli plugins.
