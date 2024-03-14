@@ -46,13 +46,11 @@ class ConfigData(TypedDict):
     scrapers: ScrapersData
     plugins: Dict[str, str]
 
-logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
-
 class Config():
     """Class that wraps the mov-cli configuration file. Mostly used under the CLI interface."""
     def __init__(self, override_config: ConfigData = None, config_path: Path = None) -> None:
         self.config_path = config_path
-
+        self.logger = LoggerAdapter(mov_cli_logger, prefix = "Config")
         self.data: ConfigData = {}
 
         if override_config is None:
