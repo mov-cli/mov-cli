@@ -27,7 +27,7 @@ class CustomPlayer(Player):
 
         try:
             return subprocess.Popen(
-                [f"{self.player_command}", f'"{media.url}"']
+                [self.player_command, media.url]
             )
         except ModuleNotFoundError:
             raise errors.PlayerNotFound(self)

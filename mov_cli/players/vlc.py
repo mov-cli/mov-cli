@@ -28,7 +28,7 @@ class VLC(Player):
                     [
                         "vlc", 
                         f'--http-referrer="{media.referrer}"', 
-                        f'--meta-title="mov-cli:{media.title}"', 
+                        f'--meta-title="{media.display_name}"', 
                         media.url
                     ]
                 )
