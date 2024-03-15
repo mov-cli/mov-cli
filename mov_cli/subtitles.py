@@ -40,5 +40,5 @@ class Subtitles:
         return response.json()['link']
 
 
-subtitles = Subtitles()
+subtitles = Subtitles("KEY")
 print(subtitles.get_tv_subs("community", 4, 1))
