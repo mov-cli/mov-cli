@@ -3,8 +3,15 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Optional
+    from ..utils import EpisodeSelector
 
-__all__ = ("Media", "Series", "Movie", "LiveTV")
+from abc import abstractmethod
+
+__all__ = (
+    "Media", 
+    "Series", 
+    "Movie"
+)
 
 class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""
@@ -16,26 +23,33 @@ class Media():
         self.referrer = referrer
         """The required referrer for streaming the media content."""
 
+    @property
+    @abstractmethod
+    def display_name(self) -> str:
+        """The title that should be displayed by the player."""
+        ...
+
 class Series(Media):
-    """Represents a TV Show. E.g an Anime or Cartoon"""
+    """Represents a TV Show. E.g an Anime or Cartoon."""
     def __init__(
         self, 
         url: str, 
         title: str, 
         referrer: str, 
-        episode: int, 
-        season: int | None, # TODO: Change this to episode selector, maybe...
-        subtitles: dict | None
+        episode: EpisodeSelector, 
+        subtitles: Optional[dict]
     ) -> None:
-        self.season = season
-        """The season this series belongs to."""
         self.episode = episode
-        """The episode number of this series."""
+        """The episode and season of this series."""
         self.subtitles = subtitles
 
         super().__init__(
             url, title, referrer
         )
+
+    @property
+    def display_name(self) -> str:
+        return f"{self.title} - S{self.episode.season} EP{self.episode.episode}"
 
 class Movie(Media):
     """Represents a Film/Movie."""
@@ -55,15 +69,20 @@ class Movie(Media):
             url, title, referrer
         )
 
-class LiveTV(Media):
-    """Represents a live TV Station."""
-    def __init__(
-        self, 
-        url: str, 
-        title: str, 
-        referrer: str, 
-    ) -> None:
+    @property
+    def display_name(self) -> str:
+        return f"{self.title} ({self.year})"
 
-        super().__init__(
-            url, title, referrer
-        )
+
+# class LiveTV(Media):
+#     """Represents media that is live, like a tv channel or a live stream."""
+#     def __init__(
+#         self, 
+#         url: str, 
+#         title: str, 
+#         referrer: str, 
+#     ) -> None:
+
+#         super().__init__(
+#             url, title, referrer
+#         )

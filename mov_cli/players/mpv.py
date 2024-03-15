@@ -14,8 +14,6 @@ from .player import Player
 
 __all__ = ("MPV",)
 
-# NOTE: Incomplete code.
-
 class MPV(Player):
     def __init__(self, config: Config) -> None:
         self.config = config
@@ -37,11 +35,12 @@ class MPV(Player):
                     "is.xyz.mpv/is.xyz.mpv.MPVActivity",
                     "-e",
                     "filepath",
-                    f"{media.url}",
+                    media.url,
                 ]
             )
 
         elif self.platform == "iOS":
+            # TODO: This should be moved to the VLC player class as it's invoking vlc not mpv.
             self.logger.info("Detected your using iOS. \r\n")
 
             print(
@@ -59,8 +58,8 @@ class MPV(Player):
                     mpv_args = [
                         # f"--sub-file='{media.subtitle}'", eventual subtitling
                         f"--referrer={media.referrer}",
-                        f"{media.url}",
-                        f"--force-media-title={media.title}",
+                        media.url,
+                        f"--force-media-title={media.display_name}",
                         "--no-terminal",
                     ]
 
@@ -74,7 +73,7 @@ class MPV(Player):
                             "--keep-running",
                             f"--mpv-referrer={media.referrer}",
                             media.url,
-                            f"--mpv-force-media-title=mov-cli:{media.title}",
+                            f"--mpv-force-media-title={media.display_name}",
                         ]
                     )
 

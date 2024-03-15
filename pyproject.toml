@@ -34,7 +34,7 @@ dependencies = [
     "Unidecode",
 
     # Included plugins
-    "mov-cli-test@git+https://github.com/THEGOLDENPRO/mov-cli-test"
+    "mov-cli-test"
 ]
 
 dynamic = ["version"]

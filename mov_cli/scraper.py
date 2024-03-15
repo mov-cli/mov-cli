@@ -29,7 +29,7 @@ class Scraper(ABC):
         return BeautifulSoup(html, self.config.parser)
 
     @abstractmethod
-    def search(self, query: str, limit: int = 10) -> Iterable[Metadata]:
+    def search(self, query: str, limit: int = 20) -> Iterable[Metadata]:
         ...
 
     @abstractmethod
