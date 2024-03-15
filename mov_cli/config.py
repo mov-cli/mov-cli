@@ -179,6 +179,8 @@ class Config():
         elif platform == "Linux" or platform == "Android":
             user_profile = Path(os.getenv("HOME"))
             appdata_dir = user_profile.joinpath(".config")
+ 
+            appdata_dir.mkdir(exist_ok = True) # on android the .config file may not exist.
 
         config_path = appdata_dir.joinpath("mov-cli", "config.toml")
         config_path.parent.mkdir(exist_ok = True)
