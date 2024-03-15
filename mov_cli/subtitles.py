@@ -7,12 +7,13 @@ class Subtitles:
     a link to the .srt file which can be passed into vlc or mpv
     """
 
-    def __init__(self, language="en"):
+    def __init__(self, key, language="en"):
         self.language = language
+        self.key = key
         self.base_url = "https://api.opensubtitles.com/api/v1"
         self.get_headers = {
             "User-Agent": "movcli",
-            "Api-Key": "bN8yCgz49NpcZOA7ImHbXdklQVc3UMRJ",
+            "Api-Key": f"{key}",
         }
 
     def get_tv_subs(self, name, episode_number, season_number) -> str:
@@ -25,18 +26,19 @@ class Subtitles:
         response = requests.get(self.base_url + url_params, headers=self.get_headers)
         return self.__get_link(response.json()["data"][0]['attributes']['files'][0]['file_id'])
 
-    def __get_link(self, id) -> str:
+    def __get_link(self, file_id) -> str:
         headers = {
             "User-Agent": "movcli",
-            "Api-Key": "bN8yCgz49NpcZOA7ImHbXdklQVc3UMRJ",
+            "Api-Key": f"{self.key}",
             "Content-Type": "application/json",
             "Accept": "application/json"
         }
 
-        payload = {"file_id": f"{id}"}
+        payload = {"file_id": f"{file_id}"}
 
         response = requests.post(self.base_url + "/download", json=payload, headers=headers)
         return response.json()['link']
 
-subtitles = Subtitles("en")
+
+subtitles = Subtitles()
 print(subtitles.get_tv_subs("community", 4, 1))
