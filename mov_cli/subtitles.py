@@ -2,9 +2,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .utils.episode_selector import EpisodeSelector
+    from typing import Optional
 
 import requests
+
+from .utils import EpisodeSelector
 
 __all__ = (
     "Subtitles",
@@ -16,35 +18,29 @@ class Subtitles:
     a link to the .srt file which can be passed into vlc or mpv
     """
     def __init__(self, key: str, language: str = "en"):
-        self.language = language
         self.key = key
+        self.language = language
+
         self.base_url = "https://api.opensubtitles.com/api/v1"
+
         self.get_headers = {
             "User-Agent": "mov-cli",
-            "Api-Key": f"{key}",
+            "Api-Key": key,
         }
 
-    def get_tv_subs(self, name: str, episode: EpisodeSelector) -> str:
+    def get_subtitles(self, name: str, episode: Optional[EpisodeSelector]) -> str:
+        params = {
+            "query": name,
+            "languages": self.language
+        }
+
+        if episode is not None:
+            params["episode_number"] = episode.episode
+            params["season_number"] = episode.season
+
         response = requests.get(
             self.base_url + "/subtitles/", 
-            params = {
-                "query": name,
-                "languages": self.language,
-                "episode_number": episode.episode,
-                "season_number": episode.season
-            },
-            headers = self.get_headers
-        )
-
-        return self.__get_link(response.json()["data"][0]['attributes']['files'][0]['file_id'])
-
-    def get_movie_subs(self, name: str) -> str:
-        response = requests.get(
-            self.base_url + "/subtitles/", 
-            params = {
-                "query": name,
-                "languages": self.language
-            },
+            params = params,
             headers = self.get_headers
         )
 
@@ -62,7 +58,3 @@ class Subtitles:
 
         response = requests.post(self.base_url + "/download", json = payload, headers = headers)
         return response.json()['link']
-
-
-subtitles = Subtitles("KEY")
-print(subtitles.get_tv_subs("community", 4, 1))

@@ -124,6 +124,11 @@ class Config():
         return self.data.get("debug", False)
 
     @property
+    def open_subtitles_key(self) -> Optional[str]:
+        """Returns the user's key for open subtitles."""
+        return self.data.get("subtitles", {}).get("open_subtitles", {}).get("key", None)
+
+    @property
     def proxy(self) -> dict | None:
         """Returns proxy data. Defaults to None"""
         proxy_config = self.data.get("proxy")
