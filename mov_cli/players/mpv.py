@@ -57,6 +57,7 @@ class MPV(Player):
             try:
                 if self.platform == "Linux" or self.platform == "Windows":
                     mpv_args = [
+                        # f"--sub-file='{media.subtitle}'", eventual subtitling
                         f"--referrer={media.referrer}",
                         f"{media.url}",
                         f"--force-media-title={media.title}",

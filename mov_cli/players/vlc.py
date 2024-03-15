@@ -26,7 +26,8 @@ class VLC(Player):
             try:
                 return subprocess.Popen(
                     [
-                        "vlc", 
+                        "vlc",
+                        # f'--sub-file={media.subtitles}', # some way to add subs!! TODO
                         f'--http-referrer="{media.referrer}"', 
                         f'--meta-title="mov-cli:{media.title}"', 
                         media.url
