@@ -4,9 +4,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Optional
 
+    from .config import Config
+
 import requests
 
 from .utils import EpisodeSelector
+from .errors import SubtitlesKeyMissing
 
 __all__ = (
     "Subtitles",
@@ -17,15 +20,18 @@ class Subtitles:
     pull subtitles from api.opensubtitles.com and return
     a link to the .srt file which can be passed into vlc or mpv
     """
-    def __init__(self, key: str, language: str = "en"):
-        self.key = key
+    def __init__(self, config: Config, language: str = "en"):
         self.language = language
+        self.key = config.open_subtitles_key
+
+        if self.key is None:
+            raise SubtitlesKeyMissing("open subtitles")
 
         self.base_url = "https://api.opensubtitles.com/api/v1"
 
         self.get_headers = {
             "User-Agent": "mov-cli",
-            "Api-Key": key,
+            "Api-Key": self.key,
         }
 
     def get_subtitles(self, name: str, episode: Optional[EpisodeSelector]) -> str:

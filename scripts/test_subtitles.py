@@ -14,17 +14,13 @@ if __name__ == "__main__":
     """
     Add this to your config to test.
 
-    [mov-cli.subtitles.open_subtitles]
-    key = "{your_key}"
+    [mov-cli.subtitles]
+    open_subtitles_key = "{your_key}"
 
     """
 
     config = Config()
 
-    if config.open_subtitles_key is None:
-        mov_cli_logger.error("You don't have a key specified for open subtitles! Get one at ")
-        exit()
-
-    subs = Subtitles(config.open_subtitles_key)
+    subs = Subtitles(config)
 
     print(subs.get_subtitles("community", EpisodeSelector(4, 1)))
