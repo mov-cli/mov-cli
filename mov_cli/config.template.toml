@@ -17,5 +17,5 @@ test = "mov-cli-test"
 # [mov-cli.http] # Don't mess with it if you don't know what you are doing!
 # headers = { User-Agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0" }
 
-# [mov-cli.downloads]
+# [mov-cli.downloads] # Do not use backslashes use forward slashes
 # save_path = "~/Downloads"

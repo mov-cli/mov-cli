@@ -14,6 +14,7 @@ from ..config import Config
 from ..media import MetadataType
 from ..logger import mov_cli_logger
 from ..http_client import HTTPClient
+from ..download import Download
 
 __all__ = ("mov_cli",)
 
@@ -28,7 +29,8 @@ def mov_cli(
     episode: Optional[str] = typer.Option(None, "--episode", "-ep", help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
 
     version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
-    edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
+    edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."),
+    download: bool = typer.Option(False, "--download", "-d", help = "Downloads the media instead of playing"),
 ):
     config = Config()
 
@@ -98,8 +100,15 @@ def mov_cli(
         mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
         media = scraper.scrape(choice, episode)
 
-        popen = config.player.play(media)
-        mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
+        if not download:
+            popen = config.player.play(media)
+            mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
+
+        else:
+            dl = Download(config)
+            mov_cli_logger.debug(f"Downloading with this url -> '{media.url}'")
+
+            popen = dl.download(media)
 
         popen.wait()
 

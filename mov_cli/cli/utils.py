@@ -242,10 +242,10 @@ def open_config_file(config: Config):
 
         if platform == "Windows":
             editor = "notepad"
-        elif platform == "Darwin": # TODO: Implement MacOS and iOS.
-            ...
+        elif platform == "Darwin":
+            editor = "nano" # NOTE: https://support.apple.com/guide/terminal/use-command-line-text-editors-apdb02f1133-25af-4c65-8976-159609f99817/mac
         elif platform == "iOS":
-            ...
+            editor = "vi"
         elif platform == "Linux" or platform == "Android":
             editor = "nano"
 
