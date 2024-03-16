@@ -24,14 +24,16 @@ class VLC(Player):
 
         if self.platform == "Linux" or self.platform == "Windows":
             try:
-                return subprocess.Popen(
-                    [
-                        "vlc", 
-                        f'--http-referrer="{media.referrer}"', 
-                        f'--meta-title="{media.display_name}"', 
-                        media.url
-                    ]
-                )
+                args = [
+                    "vlc", 
+                    f'--meta-title="{media.display_name}"', 
+                    media.url
+                ]
+
+                if media.referrer is not None:
+                    args.append(f'--http-referrer="{media.referrer}"')
+
+                return subprocess.Popen(args)
 
             except ModuleNotFoundError:
                 raise errors.PlayerNotFound(self)
