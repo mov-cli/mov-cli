@@ -113,10 +113,7 @@ class Config():
     @property
     def download_location(self) -> str:
         """Returns download location. Defaults to OS's download location."""
-        # TODO: Replace with custom paths class.
-        # default_location = platformdirs.user_downloads_dir()
-        default_location = None # TODO: Remove this when default_location equals the path from the paths class.
-        return self.data.get("downloads", {}).get("save_path", default_location)
+        return self.data.get("downloads", {}).get("save_path", os.getcwd())
 
     @property
     def debug(self) -> bool:
@@ -180,6 +177,8 @@ class Config():
         elif platform == "iOS":
             user_profile = Path(os.getenv("HOME"))
             appdata_dir = user_profile.joinpath("Library")
+
+            appdata_dir.mkdir(exist_ok = True)
 
         elif platform == "Linux" or platform == "Android":
             user_profile = Path(os.getenv("HOME"))

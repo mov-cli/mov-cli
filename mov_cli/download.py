@@ -2,29 +2,25 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 import subprocess
 import unicodedata
+import os
 
 __all__ = ("Download",)
 
 if TYPE_CHECKING:
     from .config import Config
-    from .media import LiveTV, Series, Movie
+    from .media import Series, Movie
 
 class Download():
     def __init__(self, config: Config) -> None:
         self.config = config
 
-    def download(self, media: LiveTV | Series | Movie, subtitles: str = None):
-        title = unicodedata.normalize('NFKD', media.title).encode('ascii', 'ignore').decode('ascii')
-        episode = media.episode
-        season = media.season
+    def download(self, media: Series | Movie, subtitles: str = None) -> subprocess.Popen:
+        title = unicodedata.normalize('NFKD', media.title).encode('ascii', 'ignore').decode('ascii') # normalize title
 
-        if season is not None:
-            title += f" S{season}"
+        if hasattr(media, "episode"):
+            title += f" S{media.episode.season}E{media.episode.episode}"
 
-        if episode is not None:
-            title += f" E{episode}"
-
-        file = self.config.download_location + title + ".mp4"
+        file = os.path.join(self.config.download_location, title + ".mp4")
 
         args = [
             "ffmpeg",
@@ -44,9 +40,4 @@ class Download():
 
         args.append(file)
 
-        try:
-            ffmpeg = subprocess.Popen(args)
-            ffmpeg.wait()
-            return True
-        except Exception:
-            return False 
+        return subprocess.Popen(args)

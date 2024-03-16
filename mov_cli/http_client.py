@@ -71,8 +71,6 @@ class HTTPClient():
 
             raise e
 
-    # NOTE: Are we even using post requests, like will they be used in the future? ~ Goldy
-    # NOTE: We likely need it at some point, when adding new providers ~ Ananas
     def post(self, url: str, data: dict = None, json: dict = None, **kwargs) -> Response: 
         """Performs a POST request and returns httpx.Response."""
         self.logger.debug(Colours.ORANGE.apply("POST") + f": {url}")
