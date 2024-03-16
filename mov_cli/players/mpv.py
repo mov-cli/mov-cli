@@ -55,27 +55,32 @@ class MPV(Player):
 
             try:
                 if self.platform == "Linux" or self.platform == "Windows":
-                    mpv_args = [
+                    args = [
+                        "mpv",
                         # f"--sub-file='{media.subtitle}'", eventual subtitling
-                        f"--referrer={media.referrer}",
                         media.url,
                         f"--force-media-title={media.display_name}",
                         "--no-terminal",
                     ]
 
-                    return subprocess.Popen(["mpv"] + mpv_args)
+                    if media.referrer is not None:
+                        args.append(f"--referrer={media.referrer}")
+
+                    return subprocess.Popen(args)
 
                 elif self.platform == "Darwin":
-                    return subprocess.Popen(
-                        [
-                            "iina",
-                            "--no-stdin",
-                            "--keep-running",
-                            f"--mpv-referrer={media.referrer}",
-                            media.url,
-                            f"--mpv-force-media-title={media.display_name}",
-                        ]
-                    )
+                    args = [
+                        "iina",
+                        "--no-stdin",
+                        "--keep-running",
+                        media.url,
+                        f"--mpv-force-media-title={media.display_name}",
+                    ]
+
+                    if media.referrer is not None:
+                        args.append(f"--mpv-referrer={media.referrer}")
+
+                    return subprocess.Popen(args)
 
                 raise errors.PlayerNotSupported(self, self.platform)
 

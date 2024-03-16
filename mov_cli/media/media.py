@@ -15,7 +15,7 @@ __all__ = (
 
 class Media():
     """Represents any piece of media in mov-cli that can be streamed or downloaded."""
-    def __init__(self, url: str, title: str, referrer: str) -> None:
+    def __init__(self, url: str, title: str, referrer: Optional[str]) -> None:
         self.url = url
         """The stream-able url."""
         self.title = title
@@ -35,7 +35,7 @@ class Series(Media):
         self, 
         url: str, 
         title: str, 
-        referrer: str, 
+        referrer: Optional[str], 
         episode: EpisodeSelector, 
         subtitles: Optional[dict]
     ) -> None:
