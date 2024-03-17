@@ -15,11 +15,8 @@ class Download():
         self.config = config
 
     def download(self, media: Series | Movie, subtitles: str = None) -> subprocess.Popen:
-        title = unicodedata.normalize('NFKD', media.title).encode('ascii', 'ignore').decode('ascii') # normalize title
-
-        if hasattr(media, "episode"):
-            title += f" S{media.episode.season}E{media.episode.episode}"
-
+        title = unicodedata.normalize('NFKD', media.display_name).encode('ascii', 'ignore').decode('ascii') # normalize title
+        
         file = os.path.join(self.config.download_location, title + ".mp4")
 
         args = [
