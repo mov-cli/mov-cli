@@ -104,13 +104,16 @@ def mov_cli(
             popen = config.player.play(media)
             mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
 
+            if not utils.what_platform() == "iOS":
+                popen.wait()
+
         else:
             dl = Download(config)
             mov_cli_logger.debug(f"Downloading with this url -> '{media.url}'")
 
             popen = dl.download(media)
-
-        popen.wait()
+            
+            popen.wait()
 
 def app():
     uwu_app.command()(mov_cli)

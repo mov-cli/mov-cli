@@ -43,13 +43,10 @@ class MPV(Player):
             # TODO: This should be moved to the VLC player class as it's invoking vlc not mpv.
             self.logger.info("Detected your using iOS. \r\n")
 
-            print(
-                f"\e]8;;vlc-x-callback://x-callback-url/stream?url={media.url}\e\\-------------------------\n- Tap to open VLC -\n-------------------------\e]8;;\e\\\n"
-            )
+            with open('/dev/clipboard', 'w') as f:
+                f.write(f"vlc://{media.url}")
 
-            self.logger.info("Sleeping for 10 Seconds.")
-
-            time.sleep(10)
+            self.logger.info("The URL was copied into your clipboard. To play it, open a browser and paste the URL.")
 
         else:  # Windows, Linux and Other
 
