@@ -33,7 +33,7 @@ class Scraper(ABC):
         ...
 
     @abstractmethod
-    def scrape(self, metadata: Metadata, episode: Optional[EpisodeSelector] = None) -> Series | Movie:
+    def scrape(self, metadata: Metadata, episode: Optional[EpisodeSelector] = None, **kwargs) -> Series | Movie:
         """
         Where your searching and scraping for the media should be performed done. 
         Should return an instance of Media.
@@ -41,7 +41,7 @@ class Scraper(ABC):
         ...
 
     @abstractmethod
-    def scrape_metadata_episodes(self, metadata: Metadata) -> Dict[int, int] | Dict[None, Literal[1]]:
+    def scrape_metadata_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
         """Returns episode count for each season in that Movie/Series."""
         ...
 
