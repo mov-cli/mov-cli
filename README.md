@@ -39,10 +39,10 @@
   - Android (via [Termux](https://termux.dev/en/))
   - iOS (via [iSH Shell](https://ish.app/))
   - *MacOS* (**Not tested**)
-- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional)
-- **[python](https://www.python.org/downloads/)** (required, with pip)
-- **[mpv](https://mpv.io/installation/)** (recommended & default media player)
+- **[python](https://www.python.org/downloads/)** (**required**, with pip)
 - **[lxml](https://pypi.org/project/lxml/)** (optional, ⚡ faster scraping)
+- **[fzf](https://github.com/junegunn/fzf?tab=readme-ov-file#installation)** (optional but **highly recommended**)
+- **[mpv](https://mpv.io/installation/)** (recommended & default media player)
 
 To get running these are all the prerequisites you'll need.
 
