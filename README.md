@@ -26,12 +26,12 @@
 
 > [!Note]
 > v4 is constantly changing so be sure to keep the tool up to date and with that said I would advise not using it as a library yet.
->
-> > Also we now have a discord:
-> >
-> > [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/BMzC7ePsBV)
 
 ## Installation 🛠️
+
+> [!TIP]
+> For in-depth installation instructions hit the [wiki](https://github.com/mov-cli/mov-cli/wiki/Installation).
+
 ### Prerequisites
 - **A supported platform:**
   - Linux
@@ -59,7 +59,7 @@ mov-cli comes packaged with a CLI interface via the `mov-cli` command you can us
 > You may notice mov-cli doesn't ship with any scrapers (or previously known as providers) by default, this is because v4 is plugin-based and scrapers are now part of plugins that must be chosen to be installed.
 > Find out how to do so at the [wiki](https://github.com/mov-cli/mov-cli/wiki#plugins).
 
-1. Install the scraper plugin of your choice. Visit this [wiki page](https://github.com/mov-cli/mov-cli/wiki#plugins) on how to do so and the [mov-cli-plugin](https://github.com/topics/mov-cli-plugin) topic for a list of **third-party** mov-cli plugins.
+1. Install the scraper plugin of your choice. Visit this [wiki page](https://github.com/mov-cli/mov-cli/wiki/Plugins) on how to do so and the [mov-cli-plugin](https://github.com/topics/mov-cli-plugin) topic for a list of **third-party** mov-cli plugins.
 ```sh
 mov-cli -e
 ```
@@ -70,14 +70,11 @@ films = "package_name"
 
 2. Scraper away!
 ```sh
-mov-cli -s films spider-man no way home
+mov-cli -s films spider man no way home
 ```
 <img width="370px" src="https://github.com/mov-cli/mov-cli/assets/66202304/86189cab-b246-405e-a266-6c624bee2d36">
 
 > The above command should search for `spider man no way home` with the following scraper.
-
-> [!TIP]
-> For in-depth instructions hit the wiki: https://github.com/mov-cli/mov-cli/wiki
 
 ## Contributing ✨
 Pull requests are welcome and *appreciated*. For major changes, please open an issue first to discuss what you would like to change.
