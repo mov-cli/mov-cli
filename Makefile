@@ -13,4 +13,4 @@ install-editable:
 	${pip} install -e . --config-settings editable_mode=compat -U
 
 test:
-	ruff .
+	ruff check --target-version=py38 .
