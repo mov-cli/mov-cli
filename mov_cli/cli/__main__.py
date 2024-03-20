@@ -35,8 +35,8 @@ def mov_cli(
     ), 
 
     version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
-    edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."),
-    download: bool = typer.Option(False, "--download", "-d", help = "Downloads the media instead of playing"),
+    edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
+    download: bool = typer.Option(False, "--download", "-d", help = "Downloads the media instead of playing.")
 ):
     config = Config()
 
@@ -111,20 +111,19 @@ def mov_cli(
         mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
         media = scraper.scrape(choice, episode)
 
-        if not download:
+        if download:
+            dl = Download(config)
+            mov_cli_logger.debug(f"Downloading from this url -> '{media.url}'")
+
+            popen = dl.download(media)
+            popen.wait()
+
+        else:
             popen = config.player.play(media)
             mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
 
             if not utils.what_platform() == "iOS":
                 popen.wait()
-
-        else:
-            dl = Download(config)
-            mov_cli_logger.debug(f"Downloading with this url -> '{media.url}'")
-
-            popen = dl.download(media)
-            
-            popen.wait()
 
 def app():
     uwu_app.command()(mov_cli)
