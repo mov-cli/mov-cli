@@ -5,7 +5,6 @@ if TYPE_CHECKING:
     from ..media import Media
     from ..config import Config
 
-import time
 import subprocess
 from devgoldyutils import Colours
 

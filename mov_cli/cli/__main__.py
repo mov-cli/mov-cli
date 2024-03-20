@@ -10,6 +10,9 @@ import logging
 from devgoldyutils import Colours
 
 from . import ui, utils
+from .scraper import select_scraper
+from .auto_select import auto_select_choice
+
 from ..config import Config
 from ..media import MetadataType
 from ..logger import mov_cli_logger
@@ -26,7 +29,10 @@ def mov_cli(
     player: Optional[str] = typer.Option(None, "--player", "-p", help = "Player you would like to stream with. E.g. mpv, vlc"), 
     scraper: Optional[str] = typer.Option(None, "--scraper", "-s", help = "Scraper you would like to scrape with. E.g. remote_stream, sflix"), 
     fzf: Optional[bool] = typer.Option(None, help = "Toggle fzf on/off for all user selection prompts."), 
-    episode: Optional[str] = typer.Option(None, "--episode", "-ep", help = "Episode and season you wanna scrape. E.g {episode}:{season} like -> 26:3"), 
+    episode: Optional[str] = typer.Option(None, "--episode", "-ep", help = "Episode and season you wanna scrape. E.g. {episode}:{season} like -> 26:3"), 
+    auto_select: Optional[int] = typer.Option(None, "--choice", "-c", help = "Auto select the search results. E.g. Setting it to 1 with query 'nyan cat' will pick " \
+        "the first nyan cat video to show up in search results."
+    ), 
 
     version: bool = typer.Option(False, "--version", help = "Display what version mov-cli is currently on."), 
     edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."),
@@ -58,7 +64,7 @@ def mov_cli(
         query: str = " ".join(query)
         http_client = HTTPClient(config)
 
-        chosen_scraper = utils.select_scraper(config.plugins, config.fzf_enabled, config.default_scraper)
+        chosen_scraper = select_scraper(config.plugins, config.fzf_enabled, config.default_scraper)
 
         if chosen_scraper is None:
             mov_cli_logger.error(
@@ -74,20 +80,25 @@ def mov_cli(
 
         mov_cli_logger.info(f"Searching for '{Colours.ORANGE.apply(query)}'...")
 
-        choice = ui.prompt(
-            "Choose Result", 
-            choices = (choice for choice in scraper.search(query)), 
-            display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
-                f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
-            fzf_enabled = config.fzf_enabled
-        )
+        choice = None
+
+        if auto_select is not None:
+            choice = auto_select_choice((choice for choice in scraper.search(query)), auto_select)
+        else:
+            choice = ui.prompt(
+                "Choose Result", 
+                choices = (choice for choice in scraper.search(query)), 
+                display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
+                    f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
+                fzf_enabled = config.fzf_enabled
+            )
 
         if choice is None:
             mov_cli_logger.error("There was no results or you didn't select anything.")
             return False
 
         episode: Optional[EpisodeSelector] = utils.handle_episode(
-            episode = episode, 
+            episode_string = episode, 
             scraper = scraper, 
             choice = choice, 
             fzf_enabled = config.fzf_enabled

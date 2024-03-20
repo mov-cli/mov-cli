@@ -3,11 +3,10 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal, Type, Optional, Any, Tuple, List, Dict
+    from typing import Literal, Optional, Any
     from ..media import Metadata
     from ..scraper import Scraper
     from ..config import Config
-    from ..plugins import PluginHookData
 
 import os
 import random
@@ -18,7 +17,6 @@ from devgoldyutils import Colours
 from .ui import prompt
 
 from .. import utils
-from ..plugins import load_plugin
 from ..media import MetadataType
 from ..utils import EpisodeSelector, what_platform
 from ..logger import mov_cli_logger
@@ -28,9 +26,6 @@ __all__ = (
     "greetings", 
     "welcome_msg", 
     "handle_episode", 
-    "get_scraper", 
-    "get_plugins_data", 
-    "select_scraper", 
     "set_cli_config", 
     "open_config_file"
 )
@@ -89,11 +84,11 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
     return text + "\n"
 
-def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, fzf_enabled: bool) -> Optional[utils.EpisodeSelector]:
+def handle_episode(episode_string: Optional[str], scraper: Scraper, choice: Metadata, fzf_enabled: bool) -> Optional[utils.EpisodeSelector]:
     if choice.type == MetadataType.MOVIE:
         return EpisodeSelector()
 
-    if episode is None:
+    if episode_string is None:
         mov_cli_logger.info(f"Scrapping episodes for '{Colours.CLAY.apply(choice.title)}'...")
         metadata_episodes = scraper.scrape_metadata_episodes(choice)
 
@@ -110,102 +105,40 @@ def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, f
         if season is None:
             return None
 
-        ep = prompt(
+        episode = prompt(
             "Select Episode", 
-            choices = [ep for ep in range(1, metadata_episodes[season])], 
+            choices = [episode for episode in range(1, metadata_episodes[season])], 
             display = lambda x: f"Episode {x}",
             fzf_enabled = fzf_enabled
         )
 
-        if ep is None:
+        if episode is None:
             return None
 
-        return EpisodeSelector(ep, season)
+        return EpisodeSelector(episode, season)
 
-    episode = episode.split(":")
+    try:
+        episode_season = episode_string.split(":")
 
-    if len(episode) < 2:
-        mov_cli_logger.error("Incorrect episode format!")
-        return False
+        episode = 1
+        season = 1
 
-    return utils.EpisodeSelector(episode[0], episode[1])
+        if len(episode_season) == 1 or episode_season[1] == "":
+            episode = int(episode_season[0])
 
-def get_plugins_data(plugins: Dict[str, str]) -> List[Tuple[str, str, PluginHookData]]:
-    plugins_data: List[Tuple[str, str, PluginHookData]] = []
+        elif len(episode_season) == 2:
+            episode = int(episode_season[0])
+            season = int(episode_season[1])
 
-    for plugin_namespace, plugin_module_name in plugins.items():
-        plugin_data = load_plugin(plugin_module_name)
-
-        if plugin_data is None:
-            continue
-
-        plugins_data.append(
-            (plugin_namespace, plugin_module_name, plugin_data)
+    except ValueError as e:
+        mov_cli_logger.error(
+            "Incorrect episode format! This is how it's done --> '5:1' (5 being episode and 1 being season)\n" \
+                f"Error: {e}"
         )
 
-    return plugins_data
+        return None
 
-def select_scraper(plugins: Dict[str, str], fzf_enabled: bool, default_scraper: Optional[str] = None) -> Optional[Tuple[str, Type[Scraper]]]:
-    plugins_data = get_plugins_data(plugins)
-
-    if default_scraper is not None:
-        scraper_name, scraper_or_available_scrapers = get_scraper(default_scraper, plugins_data)
-
-        if scraper_name is None:
-            mov_cli_logger.error(
-                f"Could not find a scraper by the id '{default_scraper}'! Are you sure the plugin is installed and in your config? " \
-                    "Read the wiki for more on that: 'https://github.com/mov-cli/mov-cli/wiki#plugins'." \
-                    f"\n\n  {Colours.GREEN}Available Scrapers{Colours.RESET} -> {scraper_or_available_scrapers}"
-            )
-
-            return None
-
-        return scraper_name, scraper_or_available_scrapers
-
-    chosen_plugin = prompt(
-        "Select a plugin", 
-        choices = plugins_data, 
-        display = lambda x: f"{Colours.ORANGE.apply(x[0])} [{Colours.PINK_GREY.apply(x[1])}]", 
-        fzf_enabled = fzf_enabled
-    )
-
-    if chosen_plugin is not None:
-        plugin_namespace, _, plugin_data = chosen_plugin
-
-        chosen_scraper = prompt(
-            "Select a scraper", 
-            choices = [scraper for scraper in plugin_data["scrapers"].items()], 
-            display = lambda x: Colours.BLUE.apply(x[0].lower()), 
-            fzf_enabled = fzf_enabled
-        )
-
-        if chosen_scraper is None:
-            return None
-
-        scraper_name, scraper = chosen_scraper
-
-        return f"{plugin_namespace}.{scraper_name}".lower(), scraper
-
-    return None
-
-def get_scraper(scraper_id: str, plugins_data: List[Tuple[str, str, PluginHookData]]) -> Tuple[str, Type[Scraper] | Tuple[None, List[str]]]:
-    available_scrapers = []
-
-    for plugin_namespace, _, plugin_hook_data in plugins_data:
-        scrapers = plugin_hook_data["scrapers"]
-
-        if scraper_id.lower() == plugin_namespace.lower() and "DEFAULT" in scrapers:
-            return f"{plugin_namespace}.DEFAULT", scrapers["DEFAULT"]
-
-        for scraper_name, scraper in scrapers.items():
-            id = f"{plugin_namespace}.{scraper_name}".lower()
-
-            available_scrapers.append(id)
-
-            if scraper_id.lower() == id:
-                return id, scraper
-
-    return None, available_scrapers
+    return utils.EpisodeSelector(episode, season)
 
 def set_cli_config(config: Config, **kwargs: Optional[Any]) -> Config:
     debug = kwargs.get("debug")
