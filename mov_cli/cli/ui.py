@@ -2,13 +2,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Generator, Any, Callable, TypeVar
+    from typing import List, Generator, Any, Callable, TypeVar, Iterable, Tuple
 
     T = TypeVar('T')
 
 import re
 import types
 import inquirer
+import itertools
 from inquirer.themes import Default
 from devgoldyutils import Colours, LoggerAdapter
 
@@ -27,9 +28,35 @@ class MovCliTheme(Default):
         self.List.selection_color = Colours.CLAY.value
         self.List.selection_cursor = "❯"
 
+# Checking whether there's only one choice in prompt 
+# without losing performance is serious business at mov-cli. ~ Goldy 2024
+def is_it_just_one_choice(iterable: Iterable[T]) -> Tuple[bool, List[T] | Generator[T, Any, None]]:
+
+    if isinstance(iterable, types.GeneratorType):
+
+        iterable, unwounded_iterable = itertools.tee(iterable) # nuh uh uh uh, we ain't wasting memory and speed.
+
+        for index, _ in enumerate(iterable):
+
+            if index >= 1:
+                return False, unwounded_iterable
+
+        return True, unwounded_iterable
+
+    if len(iterable) == 1:
+        return True, iterable
+
+    return False, iterable
+
 def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Callable[[T], str], fzf_enabled: bool) -> T | None:
     """Prompt the user to pick from a list choices."""
     choice_picked = None
+
+    is_just_one, choices = is_it_just_one_choice(choices)
+
+    if is_just_one is True:
+        logger.info("Skipping prompt as there is only a single choice to choose from...")
+        return next(choices) if isinstance(choices, itertools._tee) else choices[0]
 
     if fzf_enabled:
         logger.debug("Launching fzf...")
