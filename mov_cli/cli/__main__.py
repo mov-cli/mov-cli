@@ -87,7 +87,7 @@ def mov_cli(
             return False
 
         episode: Optional[EpisodeSelector] = utils.handle_episode(
-            episode = episode, 
+            episode_string = episode, 
             scraper = scraper, 
             choice = choice, 
             fzf_enabled = config.fzf_enabled

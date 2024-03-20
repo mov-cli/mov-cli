@@ -89,11 +89,11 @@ def welcome_msg(logger: logging.Logger, display_hint: bool = False, display_vers
 
     return text + "\n"
 
-def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, fzf_enabled: bool) -> Optional[utils.EpisodeSelector]:
+def handle_episode(episode_string: Optional[str], scraper: Scraper, choice: Metadata, fzf_enabled: bool) -> Optional[utils.EpisodeSelector]:
     if choice.type == MetadataType.MOVIE:
         return EpisodeSelector()
 
-    if episode is None:
+    if episode_string is None:
         mov_cli_logger.info(f"Scrapping episodes for '{Colours.CLAY.apply(choice.title)}'...")
         metadata_episodes = scraper.scrape_metadata_episodes(choice)
 
@@ -110,25 +110,40 @@ def handle_episode(episode: Optional[str], scraper: Scraper, choice: Metadata, f
         if season is None:
             return None
 
-        ep = prompt(
+        episode = prompt(
             "Select Episode", 
-            choices = [ep for ep in range(1, metadata_episodes[season])], 
+            choices = [episode for episode in range(1, metadata_episodes[season])], 
             display = lambda x: f"Episode {x}",
             fzf_enabled = fzf_enabled
         )
 
-        if ep is None:
+        if episode is None:
             return None
 
-        return EpisodeSelector(ep, season)
+        return EpisodeSelector(episode, season)
 
-    episode = episode.split(":")
+    try:
+        episode_season = episode_string.split(":")
 
-    if len(episode) < 2:
-        mov_cli_logger.error("Incorrect episode format!")
-        return False
+        episode = 1
+        season = 1
 
-    return utils.EpisodeSelector(episode[0], episode[1])
+        if len(episode_season) == 1 or episode_season[1] == "":
+            episode = int(episode_season[0])
+
+        elif len(episode_season) == 2:
+            episode = int(episode_season[0])
+            season = int(episode_season[1])
+
+    except ValueError as e:
+        mov_cli_logger.error(
+            "Incorrect episode format! This is how it's done --> '5:1' (5 being episode and 1 being season)\n" \
+                f"Error: {e}"
+        )
+
+        return None
+
+    return utils.EpisodeSelector(episode, season)
 
 def get_plugins_data(plugins: Dict[str, str]) -> List[Tuple[str, str, PluginHookData]]:
     plugins_data: List[Tuple[str, str, PluginHookData]] = []
