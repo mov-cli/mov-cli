@@ -8,10 +8,8 @@ if TYPE_CHECKING:
     from typing import List, Any, Generator, Dict, Literal
     from ...http_client import HTTPClient
 
-from bs4 import BeautifulSoup, Tag
 from ...media import Metadata, MetadataType, ExtraMetadata, AiringType
 from base64 import b64decode
-from re import findall
 from fuzzywuzzy import fuzz
 
 
