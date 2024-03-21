@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import logging
-    from typing import Literal, Optional, Any
+    from typing import Literal, Optional, Any, List, Dict
     from ..media import Metadata
     from ..scraper import Scraper
     from ..config import Config
@@ -27,7 +27,8 @@ __all__ = (
     "welcome_msg", 
     "handle_episode", 
     "set_cli_config", 
-    "open_config_file"
+    "open_config_file",
+    "steal_scraper_args"
 )
 
 def greetings() -> Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"]:
@@ -183,3 +184,15 @@ def open_config_file(config: Config):
             editor = "nano"
 
     os.system(f"{editor} {config.config_path}")
+
+def steal_scraper_args(query: List[str]) -> Dict[str, bool]:
+    scrape_arguments = [x for x in query if "--" in x]
+
+    mov_cli_logger.debug(f"Scraper args picked up on --> {scrape_arguments}")
+
+    for scrape_arg in scrape_arguments:
+        query.remove(scrape_arg)
+
+    return dict(
+        [(x.replace("--", ""), True) for x in scrape_arguments]
+    )
