@@ -32,6 +32,7 @@ dependencies = [
     "inquirer",
     "beautifulsoup4",
     "Unidecode",
+    "thefuzz",
 
     # Included plugins
     "mov-cli-test"

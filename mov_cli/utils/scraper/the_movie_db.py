@@ -10,8 +10,7 @@ if TYPE_CHECKING:
 
 from ...media import Metadata, MetadataType, ExtraMetadata, AiringType
 from base64 import b64decode
-from fuzzywuzzy import fuzz
-
+from thefuzz import fuzz
 
 __all__ = ("TheMovieDB",)
 
