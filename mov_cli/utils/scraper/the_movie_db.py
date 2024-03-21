@@ -113,7 +113,7 @@ class TheMovieDB:
         titles = alternative.get("results") or alternative.get("titles")
 
         if titles:
-            alternate_titles = [(i.get("iso_3166_1", i.get("title"))) for i in titles]
+            alternate_titles = [(i.get("iso_3166_1"), i.get("title")) for i in titles]
 
         if metadata["genres"]:
             genres = [i["name"] for i in metadata["genres"]]
