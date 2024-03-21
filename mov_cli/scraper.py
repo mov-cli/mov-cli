@@ -41,7 +41,7 @@ class Scraper(ABC):
         ...
 
     @abstractmethod
-    def scrape_metadata_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
+    def scrape_metadata_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]: # NOTE: Change this into something shorter and more precise.
         """Returns episode count for each season in that Movie/Series."""
         ...
 
