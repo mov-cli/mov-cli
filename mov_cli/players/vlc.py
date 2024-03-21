@@ -40,6 +40,7 @@ class VLC(Player):
             try:
                 args = [
                     "vlc", 
+                    # f'--sub-file={media.subtitles}', # some way to add subs!! TODO
                     f'--meta-title="{media.display_name}"', 
                     media.url
                 ]

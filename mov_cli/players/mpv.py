@@ -51,6 +51,7 @@ class MPV(Player):
                 if self.platform == "Linux" or self.platform == "Windows":
                     args = [
                         "mpv",
+                        # f"--sub-file='{media.subtitle}'", eventual subtitling
                         media.url,
                         f"--force-media-title={media.display_name}",
                         "--no-terminal",

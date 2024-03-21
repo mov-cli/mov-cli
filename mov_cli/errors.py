@@ -9,6 +9,13 @@ if TYPE_CHECKING:
 from devgoldyutils import Colours
 from .logger import mov_cli_logger
 
+__all__ = (
+    "MovCliException", 
+    "PlayerNotFound", 
+    "PlayerNotSupported", 
+    "SubtitlesKeyMissing"
+)
+
 class MovCliException(Exception):
     """Raises whenever there's a known error in mov-cli."""
     def __init__(self, message: str, logger: logging.Logger = None):
@@ -35,4 +42,10 @@ class PlayerNotSupported(MovCliException):
         super().__init__(
             f"The '{player.display_name}' player is not supported on '{platform}'. " \
             "We recommend VLC for iOS and MPV for every other platform."
+        )
+
+class SubtitlesKeyMissing(MovCliException):
+    def __init__(self, subtitle_provider: str) -> None:
+        super().__init__(
+            f"You don't have a key specified for subtitles provider '{subtitle_provider}' in the config!"
         )
