@@ -33,6 +33,7 @@ dependencies = [
     "beautifulsoup4",
     "Unidecode",
     "thefuzz",
+    "deprecation",
 
     # Included plugins
     "mov-cli-test"
