@@ -74,7 +74,7 @@ class TheMovieDB:
                 extra_func = self.__extra_metadata(item)
             )
 
-    def scrape_metadata_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
+    def scrape_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
         scraped_seasons = {}
 
         seasons = self.http_client.get(self.metadata.format("tv", metadata.id, self.api_key)).json()["seasons"]
