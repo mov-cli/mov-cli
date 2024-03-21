@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import List, Callable, Optional
+    from typing import List, Callable, Optional, Tuple
 
 from enum import Enum
 from dataclasses import dataclass, field
@@ -50,7 +50,7 @@ class ExtraMetadata():
     image_url: Optional[str]
     """Url to high res image cover of Series, Film or TV Station."""
 
-    alternate_titles: List[str]
+    alternate_titles: List[str] | Tuple[str, str]
 
     cast: List[str] | None = field(default = None)
     genres: List[str] | None = field(default = None)

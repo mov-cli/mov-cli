@@ -57,8 +57,8 @@ version = { attr = "mov_cli.__version__" }
 requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-include = ["mov-cli*"]
+[tool.setuptools]
+packages = ["mov_cli"]
 
 [project.scripts]
 mov-cli = "mov_cli.cli.__main__:app"
