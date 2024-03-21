@@ -22,7 +22,21 @@ class VLC(Player):
 
         self.logger.info("Launching VLC Media Player...")
 
-        if self.platform == "Linux" or self.platform == "Windows":
+        if self.platform == "Android":
+            return subprocess.Popen(
+                [
+                    "am",
+                    "start",
+                    "-n",
+                    "org.videolan.vlc/org.videolan.vlc.gui.video.VideoPlayerActivity",
+                    "-e",
+                    "title",
+                    media.display_name,
+                    media.url,
+                ]
+            )
+
+        elif self.platform == "Linux" or self.platform == "Windows":
             try:
                 args = [
                     "vlc", 
