@@ -30,23 +30,29 @@ class MovCliTheme(Default):
 
 # Checking whether there's only one choice in prompt 
 # without losing performance is serious business at mov-cli. ~ Goldy 2024
-def is_it_just_one_choice(iterable: Iterable[T]) -> Tuple[bool, List[T] | Generator[T, Any, None]]:
+def is_it_just_one_choice(choices: Iterable[T]) -> Tuple[bool, List[T] | Generator[T, Any, None]]:
 
-    if isinstance(iterable, types.GeneratorType):
+    if isinstance(choices, types.GeneratorType):
 
-        iterable, unwounded_iterable = itertools.tee(iterable) # nuh uh uh uh, we ain't wasting memory and speed.
+        choices, unwounded_iterable = itertools.tee(choices) # nuh uh uh uh, we ain't wasting memory and speed.
 
-        for index, _ in enumerate(iterable):
+        did_iter = False
+
+        for index, _ in enumerate(choices):
+            did_iter = True
 
             if index >= 1:
                 return False, unwounded_iterable
 
+        if did_iter is False:
+            return False, unwounded_iterable
+
         return True, unwounded_iterable
 
-    if len(iterable) == 1:
-        return True, iterable
+    if len(choices) == 1:
+        return True, choices
 
-    return False, iterable
+    return False, choices
 
 def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Callable[[T], str], fzf_enabled: bool) -> T | None:
     """Prompt the user to pick from a list choices."""

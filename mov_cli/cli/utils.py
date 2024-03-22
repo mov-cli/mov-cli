@@ -91,7 +91,7 @@ def handle_episode(episode_string: Optional[str], scraper: Scraper, choice: Meta
 
     if episode_string is None:
         mov_cli_logger.info(f"Scrapping episodes for '{Colours.CLAY.apply(choice.title)}'...")
-        metadata_episodes = scraper.scrape_metadata_episodes(choice)
+        metadata_episodes = scraper.scrape_episodes(choice)
 
         if metadata_episodes.get(None) == 1:
             return EpisodeSelector()

@@ -24,8 +24,6 @@ class MPV(Player):
         self.logger.info("Launching MPV Media Player...")
 
         if self.platform == "Android":
-            self.logger.info("Detected you're using Android.")
-
             return subprocess.Popen(
                 [
                     "am",
@@ -40,7 +38,7 @@ class MPV(Player):
 
         elif self.platform == "iOS":
             # TODO: This should be moved to the VLC player class as it's invoking vlc not mpv.
-            self.logger.info("Detected your using iOS. \r\n")
+            self.logger.debug("Detected your using iOS. \r\n")
 
             with open('/dev/clipboard', 'w') as f:
                 f.write(f"vlc://{media.url}")

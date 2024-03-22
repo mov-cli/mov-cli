@@ -41,37 +41,39 @@ class TheMovieDB:
 
 
     def search(self, query: str, limit: int = 10) -> Generator[Metadata, Any, None]:
-        SerialList: List[TMDbSerial] = []
+        serial_list: List[TMDbSerial] = []
 
         movie = self.http_client.get(self.search_url.format("movie", query, self.api_key)).json()["results"]
-
         tv = self.http_client.get(self.search_url.format("tv", query, self.api_key)).json()["results"]
 
         for item in movie:
             item = TMDbSerial(item, MetadataType.MOVIE)
-            
+
             if not item.release_date:
                 continue
 
-            SerialList.append(item)
-        
+            serial_list.append(item)
+
         for item in tv:
             item = TMDbSerial(item, MetadataType.SERIES)
-            
+
             if not item.release_date:
                 continue
 
-            SerialList.append(item)
-        
-        sorted_list: List[TMDbSerial] = self.__sort(SerialList, query)[:limit]
+            serial_list.append(item)
 
+        sorted_list: List[TMDbSerial] = self.__sort(serial_list, query)[:limit]
+        # Is there are point in fuzzy sorting? The search api (tmdb) should do that for us and fzf exists for that reason. ~ Goldy
+
+        # Also yield won't actually do anything performance wise if we've already appended the items into a list.
+        # Actually in this case we can't really take advantage of yield as the api returns all results at once. ~ Goldy
         for item in sorted_list:
             yield Metadata(
                 id = item.id,
                 title = item.title,
                 type = item.type,
                 year = item.year,
-                extra_func = self.__extra_metadata(item)
+                extra_func = lambda: self.__extra_metadata(item)
             )
 
     def scrape_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
@@ -138,7 +140,7 @@ class TheMovieDB:
             genres = genres,
             airing = airing
         )
-        
+
     def __sort_key(self, query):
         def similarity_score(item: TMDbSerial):
             return fuzz.ratio(item.title, query)
@@ -147,4 +149,3 @@ class TheMovieDB:
     def __sort(self, unsorted, query):
         sorted_list = sorted(unsorted, key=self.__sort_key(query), reverse=True)
         return sorted_list
-
