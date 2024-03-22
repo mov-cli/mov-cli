@@ -119,10 +119,21 @@ def mov_cli(
             popen.wait()
 
         else:
-            popen = config.player.play(media)
+            platform = utils.what_platform()
+
+            popen = config.player(platform).play(media)
+
+            if popen is None:
+                mov_cli_logger.error(
+                    f"The player '{config.player.__class__.__name__.lower()}' is not supported on this platform ({platform}). " \
+                    "We recommend VLC for iOS and MPV for every other platform."
+                )
+
+                return False
+
             mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
 
-            if not utils.what_platform() == "iOS":
+            if not platform == "iOS":
                 popen.wait()
 
 def app():
