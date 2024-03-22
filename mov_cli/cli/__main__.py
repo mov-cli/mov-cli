@@ -121,7 +121,7 @@ def mov_cli(
         else:
             platform = utils.what_platform()
 
-            popen = config.player(platform).play(media)
+            popen = config.player(platform = platform).play(media)
 
             if popen is None:
                 mov_cli_logger.error(
