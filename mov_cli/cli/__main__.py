@@ -11,10 +11,10 @@ from devgoldyutils import Colours
 
 from . import ui
 
-from .utils import welcome_msg
 from .scraper import select_scraper
 from .episode import handle_episode
 from .auto_select import auto_select_choice
+from .utils import welcome_msg, steal_scraper_args
 from .configuration import open_config_file, set_cli_config
 
 from ..config import Config
@@ -67,7 +67,7 @@ def mov_cli(
         return None
 
     if len(query) > 0:
-        scrape_arguments = utils.steal_scraper_args(query) 
+        scrape_arguments = steal_scraper_args(query) 
         # This allows passing arguments to scrapers like this: 
         # https://github.com/mov-cli/mov-cli-youtube/commit/b538d82745a743cd74a02530d6a3d476cd60b808#diff-4e5b064838aa74a5375265f4dfbd94024b655ee24a191290aacd3673abed921a
 
