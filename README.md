@@ -63,10 +63,16 @@ mov-cli comes packaged with a CLI interface via the `mov-cli` command you can us
 ```sh
 mov-cli -e
 ```
+Alternatively, you may also edit by manually opening the config file in:
+
+- **Windows:** `%LocalAppData%/mov-cli/config.toml`
+- **Linux/MacOS:** `~/.config/mov-cli/config.toml`
+
 ```toml
 [mov-cli.plugins]
 films = "package_name"
 ```
+
 
 2. Scraper away!
 ```sh
