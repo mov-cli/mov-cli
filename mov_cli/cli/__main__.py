@@ -9,15 +9,20 @@ import typer
 import logging
 from devgoldyutils import Colours
 
-from . import ui, utils
+from . import ui
+
+from .utils import welcome_msg
 from .scraper import select_scraper
+from .episode import handle_episode
 from .auto_select import auto_select_choice
+from .configuration import open_config_file, set_cli_config
 
 from ..config import Config
+from ..download import Download
 from ..media import MetadataType
+from ..utils import  what_platform
 from ..logger import mov_cli_logger
 from ..http_client import HTTPClient
-from ..download import Download
 
 __all__ = ("mov_cli",)
 
@@ -40,7 +45,7 @@ def mov_cli(
 ):
     config = Config()
 
-    config = utils.set_cli_config(
+    config = set_cli_config(
         config,
         debug = debug,
         player = player,
@@ -52,13 +57,14 @@ def mov_cli(
         mov_cli_logger.setLevel(logging.DEBUG)
 
     print(
-        utils.welcome_msg(mov_cli_logger, True if len(query) == 0 else False, version)
+        welcome_msg(True if len(query) == 0 else False, version)
     )
 
     mov_cli_logger.debug(f"Config -> {config.data}")
 
     if edit is True:
-        utils.open_config_file(config)
+        open_config_file(config)
+        return None
 
     if len(query) > 0:
         query: str = " ".join(query)
@@ -97,7 +103,7 @@ def mov_cli(
             mov_cli_logger.error("There was no results or you didn't select anything.")
             return False
 
-        episode: Optional[EpisodeSelector] = utils.handle_episode(
+        episode: Optional[EpisodeSelector] = handle_episode(
             episode_string = episode, 
             scraper = scraper, 
             choice = choice, 
@@ -119,7 +125,7 @@ def mov_cli(
             popen.wait()
 
         else:
-            platform = utils.what_platform()
+            platform = what_platform()
 
             popen = config.player(platform = platform).play(media)
 

@@ -5,4 +5,4 @@ from .config import *
 from .scraper import *
 from .download import *
 
-__version__ = "4.1.6"
+__version__ = "4.2.0"
