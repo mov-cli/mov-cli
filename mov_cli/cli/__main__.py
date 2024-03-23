@@ -14,8 +14,8 @@ from . import ui
 from .scraper import select_scraper
 from .episode import handle_episode
 from .auto_select import auto_select_choice
-from .utils import welcome_msg, steal_scraper_args
 from .configuration import open_config_file, set_cli_config
+from .utils import welcome_msg, steal_scraper_args, handle_internal_plugin_error
 
 from ..config import Config
 from ..download import Download
@@ -87,18 +87,27 @@ def mov_cli(
         scraper_name, scraper_class = chosen_scraper
 
         mov_cli_logger.info(f"Using '{Colours.BLUE.apply(scraper_name)}' scraper...")
-        scraper: Scraper = scraper_class(config, http_client)
+
+        try:
+            scraper: Scraper = scraper_class(config, http_client)
+        except Exception as e:
+            handle_internal_plugin_error(e)
 
         mov_cli_logger.info(f"Searching for '{Colours.ORANGE.apply(query)}'...")
 
         choice = None
 
+        try:
+            search_results = scraper.search(query)
+        except Exception as e:
+            handle_internal_plugin_error(e)
+
         if auto_select is not None:
-            choice = auto_select_choice((choice for choice in scraper.search(query)), auto_select)
+            choice = auto_select_choice((choice for choice in search_results), auto_select)
         else:
             choice = ui.prompt(
                 "Choose Result", 
-                choices = (choice for choice in scraper.search(query)), 
+                choices = (choice for choice in search_results), 
                 display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
                     f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
                 fzf_enabled = config.fzf_enabled
@@ -120,7 +129,11 @@ def mov_cli(
             return False
 
         mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
-        media = scraper.scrape(choice, episode, **scrape_arguments)
+
+        try:
+            media = scraper.scrape(choice, episode, **scrape_arguments)
+        except Exception as e:
+            handle_internal_plugin_error(e)
 
         if download:
             dl = Download(config)

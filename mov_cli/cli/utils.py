@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Literal, Tuple, List, Dict
+    from typing import Literal, Tuple, List, Dict, NoReturn
 
 import random
 import getpass
@@ -16,7 +16,8 @@ from ..utils import  what_platform, update_available
 __all__ = (
     "greetings", 
     "welcome_msg", 
-    "steal_scraper_args"
+    "steal_scraper_args",
+    "handle_internal_plugin_error"
 )
 
 def greetings() -> Tuple[Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"], str]:
@@ -91,3 +92,11 @@ def steal_scraper_args(query: List[str]) -> Dict[str, bool]:
     return dict(
         [(x.replace("--", ""), True) for x in scrape_arguments]
     )
+
+def handle_internal_plugin_error(e: Exception) -> NoReturn:
+    mov_cli_logger.critical(
+        "An error occurred inside a plugin. This is most likely nothing to do with mov-cli, " \
+            f"make sure your plugins are up to date! \nError: {e}"
+    )
+
+    raise e
