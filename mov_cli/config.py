@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, TypedDict, final
 
 if TYPE_CHECKING:
     from .players import Player
-    from typing import Dict, Union, Literal, Any, Optional
+    from typing import Dict, Union, Literal, Any, Optional, Type
 
     JSON_VALUES = Union[str, bool, int, dict]
     SUPPORTED_PARSERS = Literal["lxml", "html.parser"]
@@ -74,16 +74,16 @@ class Config():
         return self.data.get("version", 1)
 
     @property
-    def player(self) -> Player:
-        """Returns the configured player class. Defaults to MPV."""
+    def player(self) -> Type[Player]:
+        """Returns the player class that was configured in the config. Defaults to MPV."""
         value = self.data.get("player", "mpv")
 
         if value.lower() == "mpv":
-            return players.MPV(self)
+            return players.MPV
         elif value.lower() == "vlc":
-            return players.VLC(self)
+            return players.VLC
 
-        return players.CustomPlayer(self, value)
+        return players.CustomPlayer(value)
 
     @property
     def plugins(self) -> Dict[str, str]:

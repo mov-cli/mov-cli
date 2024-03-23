@@ -6,6 +6,9 @@ python = python
 build:
 	${python} -m build
 
+build-system-packages:
+	${python} -m build --wheel --no-isolation
+
 install:
 	${pip} install . -U
 

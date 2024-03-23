@@ -2,26 +2,31 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Optional
     from ..media import Media
-    from ..config import Config
+    from ..utils.platform import SUPPORTED_PLATFORMS
 
 import subprocess
-from devgoldyutils import Colours
+from devgoldyutils import Colours, LoggerAdapter
 
 from .. import errors
+from ..logger import mov_cli_logger
 from .player import Player
 
 __all__ = ("MPV",)
 
-class MPV(Player):
-    def __init__(self, config: Config) -> None:
-        self.config = config
-        super().__init__(Colours.PURPLE.apply("MPV"), config)
+logger = LoggerAdapter(mov_cli_logger, prefix = Colours.PURPLE.apply("MPV"))
 
-    def play(self, media: Media) -> subprocess.Popen:
+class MPV(Player):
+    def __init__(self, platform: SUPPORTED_PLATFORMS, **kwargs) -> None:
+        self.platform = platform
+
+        super().__init__(**kwargs)
+
+    def play(self, media: Media) -> Optional[subprocess.Popen]:
         """Plays this media in the MPV media player."""
 
-        self.logger.info("Launching MPV Media Player...")
+        logger.info("Launching MPV Media Player...")
 
         if self.platform == "Android":
             return subprocess.Popen(
@@ -36,46 +41,36 @@ class MPV(Player):
                 ]
             )
 
-        elif self.platform == "iOS":
-            # TODO: This should be moved to the VLC player class as it's invoking vlc not mpv.
-            self.logger.debug("Detected your using iOS. \r\n")
+        try:
 
-            with open('/dev/clipboard', 'w') as f:
-                f.write(f"vlc://{media.url}")
+            if self.platform == "Linux" or self.platform == "Windows":
+                args = [
+                    "mpv",
+                    media.url,
+                    f"--force-media-title={media.display_name}",
+                    "--no-terminal",
+                ]
 
-            self.logger.info("The URL was copied into your clipboard. To play it, open a browser and paste the URL.")
+                if media.referrer is not None:
+                    args.append(f"--referrer={media.referrer}")
 
-        else:  # Windows, Linux and Other
+                return subprocess.Popen(args)
 
-            try:
-                if self.platform == "Linux" or self.platform == "Windows":
-                    args = [
-                        "mpv",
-                        media.url,
-                        f"--force-media-title={media.display_name}",
-                        "--no-terminal",
-                    ]
+            elif self.platform == "Darwin":
+                args = [
+                    "iina",
+                    "--no-stdin",
+                    "--keep-running",
+                    media.url,
+                    f"--mpv-force-media-title={media.display_name}",
+                ]
 
-                    if media.referrer is not None:
-                        args.append(f"--referrer={media.referrer}")
+                if media.referrer is not None:
+                    args.append(f"--mpv-referrer={media.referrer}")
 
-                    return subprocess.Popen(args)
+                return subprocess.Popen(args)
 
-                elif self.platform == "Darwin":
-                    args = [
-                        "iina",
-                        "--no-stdin",
-                        "--keep-running",
-                        media.url,
-                        f"--mpv-force-media-title={media.display_name}",
-                    ]
+        except ModuleNotFoundError:
+            raise errors.PlayerNotFound(self)
 
-                    if media.referrer is not None:
-                        args.append(f"--mpv-referrer={media.referrer}")
-
-                    return subprocess.Popen(args)
-
-                raise errors.PlayerNotSupported(self, self.platform)
-
-            except ModuleNotFoundError:
-                raise errors.PlayerNotFound(self)
+        return None

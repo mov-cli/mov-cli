@@ -3,27 +3,30 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..media import Media
-    from ..config import Config
 
 import subprocess
-from devgoldyutils import Colours
+from devgoldyutils import Colours, LoggerAdapter
 
 from .. import errors
+from ..logger import mov_cli_logger
 from .player import Player
 
 __all__ = ("CustomPlayer",)
+
+logger = LoggerAdapter(mov_cli_logger, prefix = Colours.GREY.apply("CustomPlayer"))
 
 class CustomPlayer(Player):
     """
     This player is invoked if you set a player that is not supported by mov-cli in the config, allowing users to invoke their own players.
     """
-    def __init__(self, config: Config, player_command: str) -> None:
+    def __init__(self, player_command: str, **kwargs) -> None:
         self.player_command = player_command
-        super().__init__(Colours.GREY.apply("CustomPlayer"), config)
+
+        super().__init__(**kwargs)
 
     def play(self, media: Media) -> subprocess.Popen:
         """Plays this media in a custom player."""
-        self.logger.info(f"Launching your custom media player '{self.player_command}'...")
+        logger.info(f"Launching your custom media player '{self.player_command}'...")
 
         try:
             return subprocess.Popen(

@@ -56,11 +56,11 @@ BugTracker = "https://github.com/mov-cli/mov-cli/issues"
 version = { attr = "mov_cli.__version__" }
 
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["mov_cli"]
+[tool.setuptools.packages.find]
+include = ["mov_cli*"]
 
 [project.scripts]
 mov-cli = "mov_cli.cli.__main__:app"
