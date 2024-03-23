@@ -67,7 +67,12 @@ def mov_cli(
         return None
 
     if len(query) > 0:
+        scrape_arguments = utils.steal_scraper_args(query) 
+        # This allows passing arguments to scrapers like this: 
+        # https://github.com/mov-cli/mov-cli-youtube/commit/b538d82745a743cd74a02530d6a3d476cd60b808#diff-4e5b064838aa74a5375265f4dfbd94024b655ee24a191290aacd3673abed921a
+
         query: str = " ".join(query)
+
         http_client = HTTPClient(config)
 
         chosen_scraper = select_scraper(config.plugins, config.fzf_enabled, config.default_scraper)
@@ -115,7 +120,7 @@ def mov_cli(
             return False
 
         mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
-        media = scraper.scrape(choice, episode)
+        media = scraper.scrape(choice, episode, **scrape_arguments)
 
         if download:
             dl = Download(config)

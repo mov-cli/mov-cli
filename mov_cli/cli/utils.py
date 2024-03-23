@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Literal, Tuple
+    from typing import Literal, Tuple, List, Dict
 
 import random
 import getpass
@@ -16,6 +16,7 @@ from ..utils import  what_platform, update_available
 __all__ = (
     "greetings", 
     "welcome_msg", 
+    "steal_scraper_args"
 )
 
 def greetings() -> Tuple[Literal["Good Morning", "Good Afternoon", "Good Evening", "Good Night"], str]:
@@ -78,3 +79,15 @@ def welcome_msg(display_hint: bool = False, display_version: bool = False) -> st
         text += f"\n\n {Colours.PURPLE}ツ {Colours.ORANGE}An update is available! --> {Colours.RESET}pip install mov-cli -U"
 
     return text + "\n"
+
+def steal_scraper_args(query: List[str]) -> Dict[str, bool]:
+    scrape_arguments = [x for x in query if "--" in x]
+
+    mov_cli_logger.debug(f"Scraper args picked up on --> {scrape_arguments}")
+
+    for scrape_arg in scrape_arguments:
+        query.remove(scrape_arg)
+
+    return dict(
+        [(x.replace("--", ""), True) for x in scrape_arguments]
+    )
