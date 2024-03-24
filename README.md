@@ -63,13 +63,7 @@ mov-cli comes packaged with a CLI interface via the `mov-cli` command you can us
 ```sh
 mov-cli -e
 ```
-Alternatively, you may also edit by manually opening the config file in:
-
-- **Windows:** `%LocalAppData%/mov-cli/config.toml`
-- **macOS:** `~/Library/Application Support/mov-cli/config.toml`
-- **Linux/Android:** `~/.config/mov-cli/config.toml`
-- **iOS:** `~/Library/mov-cli/config.toml`
-  
+Alternatively, you may also edit by manually opening the config file. See the [Wiki](https://github.com/mov-cli/mov-cli/wiki/Configuration#introduction).  
 ```toml
 [mov-cli.plugins]
 films = "package_name"
