@@ -12,7 +12,8 @@ from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
 
-from . import mov_cli_logger, errors
+from . import errors
+from .logger import mov_cli_logger
 
 __all__ = ("Scraper", "MediaNotFound")
 

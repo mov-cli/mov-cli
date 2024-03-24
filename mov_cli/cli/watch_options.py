@@ -2,12 +2,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import NoReturn
+    from typing import Optional, Literal
 
     from ..media import Media
     from ..players import Player
     from ..utils.platform import SUPPORTED_PLATFORMS
-    
 
 import time
 from subprocess import Popen
@@ -19,7 +18,13 @@ __all__ = (
     "watch_options", 
 )
 
-def watch_options(popen: Popen, player: Player, platform: SUPPORTED_PLATFORMS, media: Media, fzf_enabled: bool) -> None:
+def watch_options(
+    popen: Popen, 
+    player: Player, 
+    platform: SUPPORTED_PLATFORMS, 
+    media: Media, 
+    fzf_enabled: bool
+) -> Optional[Literal["search"]]:
     options = [
         "search",
         "replay",
@@ -31,7 +36,7 @@ def watch_options(popen: Popen, player: Player, platform: SUPPORTED_PLATFORMS, m
         options.insert(1, "previous")
 
     if platform == "iOS":
-        time.sleep(3) # so iOS mfs have time to read the pasted to clipboard prompt. (untested 👍) lmao
+        time.sleep(3) # so iOS mfs have time to read the "pasted to clipboard" prompt. (untested 👍) lmao
 
     choice = prompt(
         text = f"Playing '{media.display_name}'", 
@@ -48,6 +53,11 @@ def watch_options(popen: Popen, player: Player, platform: SUPPORTED_PLATFORMS, m
 
         new_popen = player.play(media)
 
-        watch_options(
+        return watch_options(
             new_popen, player, platform, media, fzf_enabled
         )
+
+    elif choice == "search":
+        return choice
+
+    return None
