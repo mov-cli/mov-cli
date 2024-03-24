@@ -61,7 +61,7 @@ def prompt(text: str, choices: List[T] | Generator[T, Any, None], display: Calla
     is_just_one, choices = is_it_just_one_choice(choices)
 
     if is_just_one is True:
-        logger.info("Skipping prompt as there is only a single choice to choose from...")
+        logger.debug("Skipping prompt as there is only a single choice to choose from...")
         return next(choices) if isinstance(choices, itertools._tee) else choices[0]
 
     if fzf_enabled:
