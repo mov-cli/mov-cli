@@ -66,8 +66,11 @@ mov-cli -e
 Alternatively, you may also edit by manually opening the config file in:
 
 - **Windows:** `%LocalAppData%/mov-cli/config.toml`
-- **Linux/MacOS:** `~/.config/mov-cli/config.toml`
-
+- **macOS:** `~/Library/Application Support/mov-cli/config.toml`
+- **Linux:** `~/.config/mov-cli/config.toml`
+- **iOS:** `~/Library/mov-cli/config.toml`
+- **Android:** `~/.config/mov-cli/config.toml`
+  
 ```toml
 [mov-cli.plugins]
 films = "package_name"
