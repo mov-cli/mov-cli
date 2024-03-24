@@ -43,6 +43,9 @@ def mov_cli(
     edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
     download: bool = typer.Option(False, "--download", "-d", help = "Downloads the media instead of playing.")
 ):
+    if len(query) == 0:
+        query = None
+
     config = Config()
 
     config = set_cli_config(
@@ -57,7 +60,7 @@ def mov_cli(
         mov_cli_logger.setLevel(logging.DEBUG)
 
     print(
-        welcome_msg(True if len(query) == 0 else False, version)
+        welcome_msg(True if query is None else False, version)
     )
 
     mov_cli_logger.debug(f"Config -> {config.data}")
@@ -66,7 +69,7 @@ def mov_cli(
         open_config_file(config)
         return None
 
-    if len(query) > 0:
+    if query is not None:
         scrape_arguments = steal_scraper_args(query) 
         # This allows passing arguments to scrapers like this: 
         # https://github.com/mov-cli/mov-cli-youtube/commit/b538d82745a743cd74a02530d6a3d476cd60b808#diff-4e5b064838aa74a5375265f4dfbd94024b655ee24a191290aacd3673abed921a
