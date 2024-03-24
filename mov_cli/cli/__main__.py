@@ -13,6 +13,7 @@ from . import ui
 
 from .scraper import select_scraper
 from .episode import handle_episode
+from .watch_options import watch_options
 from .auto_select import auto_select_choice
 from .configuration import open_config_file, set_cli_config
 from .utils import welcome_msg, steal_scraper_args, handle_internal_plugin_error
@@ -148,7 +149,9 @@ def mov_cli(
         else:
             platform = what_platform()
 
-            popen = config.player(platform = platform).play(media)
+            chosen_player = config.player(platform = platform)
+
+            popen = chosen_player.play(media)
 
             if popen is None:
                 mov_cli_logger.error(
@@ -160,8 +163,7 @@ def mov_cli(
 
             mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
 
-            if not platform == "iOS":
-                popen.wait()
+            watch_options(popen, chosen_player, platform, media, config.fzf_enabled)
 
 def app():
     uwu_app.command()(mov_cli)
