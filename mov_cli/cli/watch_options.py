@@ -24,7 +24,7 @@ def watch_options(
     platform: SUPPORTED_PLATFORMS, 
     media: Media, 
     fzf_enabled: bool
-) -> Optional[Literal["search"]]:
+) -> Optional[Literal["search", "next", "previous"]]:
     options = [
         "search",
         "replay",
@@ -57,7 +57,7 @@ def watch_options(
             new_popen, player, platform, media, fzf_enabled
         )
 
-    elif choice == "search":
+    elif choice == "search" or choice == "previous" or choice == "next":
         return choice
 
     return None

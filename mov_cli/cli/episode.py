@@ -41,7 +41,7 @@ def handle_episode(episode_string: Optional[str], scraper: Scraper, choice: Meta
 
         episode = prompt(
             "Select Episode", 
-            choices = [episode for episode in range(1, metadata_episodes[season])], 
+            choices = [episode for episode in range(1, metadata_episodes[season] + 1)], 
             display = lambda x: f"Episode {x}",
             fzf_enabled = fzf_enabled
         )

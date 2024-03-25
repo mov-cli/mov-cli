@@ -8,16 +8,15 @@ import typer
 import logging
 from devgoldyutils import Colours
 
+from .play import play
 from .search import search
 from .episode import handle_episode
-from .watch_options import watch_options
 from .scraper import select_scraper, use_scraper, scrape
 from .configuration import open_config_file, set_cli_config
 from .utils import welcome_msg, steal_scraper_args
 
 from ..config import Config
 from ..download import Download
-from ..utils import  what_platform
 from ..logger import mov_cli_logger
 from ..http_client import HTTPClient
 
@@ -113,27 +112,9 @@ def mov_cli(
             popen.wait()
 
         else:
-            platform = what_platform()
-
-            chosen_player = config.player(platform = platform)
-
-            popen = chosen_player.play(media)
-
-            if popen is None:
-                mov_cli_logger.error(
-                    f"The player '{config.player.__class__.__name__.lower()}' is not supported on this platform ({platform}). " \
-                    "We recommend VLC for iOS and MPV for every other platform."
-                )
-
-                return False
-
-            mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
-
-            option = watch_options(popen, chosen_player, platform, media, config.fzf_enabled)
+            option = play(media, choice, chosen_scraper, chosen_episode, config, scrape_args)
 
             if option == "search":
-                popen.kill()
-
                 query = input(Colours.BLUE.apply("  Enter Query: "))
 
                 mov_cli(
@@ -142,7 +123,12 @@ def mov_cli(
                     player = player, 
                     scraper = scraper, 
                     fzf = fzf,
-                    auto_select = None
+                    episode = None,
+                    auto_select = None,
+
+                    version = False,
+                    edit = False,
+                    download = False
                 )
 
 def app():
