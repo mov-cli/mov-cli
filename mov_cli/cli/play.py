@@ -60,7 +60,7 @@ def play(media: Media, metadata: Metadata, scraper: Scraper, episode: EpisodeSel
             mov_cli_logger.info("No more episodes :(")
             return None
 
-        result = handle_next_season(episode, season_episode_count, media_episodes)
+        result = __handle_next_season(episode, season_episode_count, media_episodes)
 
         if result is False:
             mov_cli_logger.info("No more episodes :(")
@@ -84,7 +84,7 @@ def play(media: Media, metadata: Metadata, scraper: Scraper, episode: EpisodeSel
 
     return None
 
-def handle_next_season(episode: EpisodeSelector, season_episode_count: int, media_episodes: dict) -> bool:
+def __handle_next_season(episode: EpisodeSelector, season_episode_count: int, media_episodes: dict) -> bool:
 
     if episode.episode > season_episode_count:
         next_season = episode.season + 1
