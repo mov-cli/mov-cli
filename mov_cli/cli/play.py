@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from utils.episode_selector import EpisodeSelector
 
 from .scraper import scrape
+from .episode import handle_episode
 from .watch_options import watch_options
 
 from ..utils import what_platform
@@ -63,6 +64,18 @@ def play(media: Media, metadata: Metadata, scraper: Scraper, episode: EpisodeSel
 
         if result is False:
             mov_cli_logger.info("No more episodes :(")
+            return None
+
+        media = scrape(metadata, episode, scraper, **scrape_args)
+
+        return play(media, metadata, scraper, episode, config, scrape_args)
+
+    elif option == "select":
+        popen.kill()
+
+        episode = handle_episode(None, scraper, metadata, config.fzf_enabled)
+
+        if episode is None:
             return None
 
         media = scrape(metadata, episode, scraper, **scrape_args)

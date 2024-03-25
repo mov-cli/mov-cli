@@ -24,7 +24,7 @@ def watch_options(
     platform: SUPPORTED_PLATFORMS, 
     media: Media, 
     fzf_enabled: bool
-) -> Optional[Literal["search", "next", "previous"]]:
+) -> Optional[Literal["search", "next", "previous", "select"]]:
     options = [
         "search",
         "replay",
@@ -34,6 +34,7 @@ def watch_options(
     if isinstance(media, Series):
         options.insert(0, "next")
         options.insert(1, "previous")
+        options.insert(2, "select")
 
     if platform == "iOS":
         time.sleep(3) # so iOS mfs have time to read the "pasted to clipboard" prompt. (untested 👍) lmao
@@ -57,7 +58,4 @@ def watch_options(
             new_popen, player, platform, media, fzf_enabled
         )
 
-    elif choice == "search" or choice == "previous" or choice == "next":
-        return choice
-
-    return None
+    return choice
