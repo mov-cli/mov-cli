@@ -21,4 +21,3 @@ def auto_select_choice(choices: Iterable[T], auto_select: int) -> Optional[T]:
             return choice
 
     return None
-            

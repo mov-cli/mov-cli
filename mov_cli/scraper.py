@@ -11,9 +11,9 @@ if TYPE_CHECKING:
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
 from devgoldyutils import LoggerAdapter
-from deprecation import deprecated
 
-from . import mov_cli_logger, errors
+from . import errors
+from .logger import mov_cli_logger
 
 __all__ = ("Scraper", "MediaNotFound")
 
@@ -41,21 +41,10 @@ class Scraper(ABC):
         """
         ...
 
-    # TODO: When 'scrape_metadata_episodes' is removed make this an abstract method.
+    @abstractmethod
     def scrape_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
         """Returns episode count for each season in that Movie/Series."""
-        return self.scrape_metadata_episodes(metadata, **kwargs)
-
-    # NOTE: This won't raise a warning exception as this method is an abstract method but *I think* it will warn on type checkers.
-    @deprecated(
-        deprecated_in = "4.1.2", 
-        removed_in = "4.2.0", 
-        details = "'Scraper.scraper_episodes()' should be used instead as we are now removing 'Scraper.scrape_metadata_episodes()'."
-    )
-    def scrape_metadata_episodes(self, metadata: Metadata, **kwargs) -> Dict[int, int] | Dict[None, Literal[1]]:
-        """DEPRECATED! Use 'scrape_episodes' instead, THIS WILL BE REMOVED IN v4.2.0!"""
         ...
-
 
 class MediaNotFound(errors.MovCliException):
     """Raises when a scraper fails to find a show/movie/tv-station."""

@@ -14,7 +14,8 @@ from pathlib import Path
 from importlib.util import find_spec
 from devgoldyutils import LoggerAdapter
 
-from . import players, mov_cli_logger, utils
+from . import players, utils
+from .logger import mov_cli_logger
 
 __all__ = ("Config",)
 
