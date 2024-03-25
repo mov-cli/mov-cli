@@ -2,25 +2,21 @@ from __future__ import annotations
 from typing import List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..scraper import Scraper
-    from ..utils import EpisodeSelector
+    ...
 
 import typer
 import logging
 from devgoldyutils import Colours
 
-from . import ui
-
-from .scraper import select_scraper
+from .play import play
+from .search import search
 from .episode import handle_episode
-from .auto_select import auto_select_choice
+from .scraper import select_scraper, use_scraper, scrape
 from .configuration import open_config_file, set_cli_config
-from .utils import welcome_msg, steal_scraper_args, handle_internal_plugin_error
+from .utils import welcome_msg, steal_scraper_args
 
 from ..config import Config
 from ..download import Download
-from ..media import MetadataType
-from ..utils import  what_platform
 from ..logger import mov_cli_logger
 from ..http_client import HTTPClient
 
@@ -70,7 +66,7 @@ def mov_cli(
         return None
 
     if query is not None:
-        scrape_arguments = steal_scraper_args(query) 
+        scrape_args = steal_scraper_args(query) 
         # This allows passing arguments to scrapers like this: 
         # https://github.com/mov-cli/mov-cli-youtube/commit/b538d82745a743cd74a02530d6a3d476cd60b808#diff-4e5b064838aa74a5375265f4dfbd94024b655ee24a191290aacd3673abed921a
 
@@ -78,65 +74,35 @@ def mov_cli(
 
         http_client = HTTPClient(config)
 
-        chosen_scraper = select_scraper(config.plugins, config.fzf_enabled, config.default_scraper)
+        selected_scraper = select_scraper(config.plugins, config.fzf_enabled, config.default_scraper)
 
-        if chosen_scraper is None:
+        if selected_scraper is None:
             mov_cli_logger.error(
                 "You must choose a scraper to scrape with! " \
                     "You can set a default scraper with the default key in config.toml."
             )
             return False
 
-        scraper_name, scraper_class = chosen_scraper
+        chosen_scraper = use_scraper(selected_scraper, config, http_client)
 
-        mov_cli_logger.info(f"Using '{Colours.BLUE.apply(scraper_name)}' scraper...")
-
-        try:
-            scraper: Scraper = scraper_class(config, http_client)
-        except Exception as e:
-            handle_internal_plugin_error(e)
-
-        mov_cli_logger.info(f"Searching for '{Colours.ORANGE.apply(query)}'...")
-
-        choice = None
-
-        try:
-            search_results = scraper.search(query)
-        except Exception as e:
-            handle_internal_plugin_error(e)
-
-        if auto_select is not None:
-            choice = auto_select_choice((choice for choice in search_results), auto_select)
-        else:
-            choice = ui.prompt(
-                "Choose Result", 
-                choices = (choice for choice in search_results), 
-                display = lambda x: f"{Colours.CLAY if x.type == MetadataType.MOVIE else Colours.BLUE}{x.title}" \
-                    f"{Colours.RESET} ({x.year if x.year is not None else 'N/A'})", 
-                fzf_enabled = config.fzf_enabled
-            )
+        choice = search(query, auto_select, chosen_scraper, config.fzf_enabled)
 
         if choice is None:
             mov_cli_logger.error("There was no results or you didn't select anything.")
             return False
 
-        episode: Optional[EpisodeSelector] = handle_episode(
+        chosen_episode = handle_episode(
             episode_string = episode, 
-            scraper = scraper, 
+            scraper = chosen_scraper, 
             choice = choice, 
             fzf_enabled = config.fzf_enabled
         )
 
-        if episode is None:
+        if chosen_episode is None:
             mov_cli_logger.error("You didn't select a season/episode.")
             return False
 
-        mov_cli_logger.info(f"Scrapping media for '{Colours.CLAY.apply(choice.title)}'...")
-
-        try:
-            media = scraper.scrape(choice, episode, **scrape_arguments)
-        except Exception as e:
-            handle_internal_plugin_error(e)
+        media = scrape(choice, chosen_episode, chosen_scraper, **scrape_args)
 
         if download:
             dl = Download(config)
@@ -146,22 +112,24 @@ def mov_cli(
             popen.wait()
 
         else:
-            platform = what_platform()
+            option = play(media, choice, chosen_scraper, chosen_episode, config, scrape_args)
 
-            popen = config.player(platform = platform).play(media)
+            if option == "search":
+                query = input(Colours.BLUE.apply("  Enter Query: "))
 
-            if popen is None:
-                mov_cli_logger.error(
-                    f"The player '{config.player.__class__.__name__.lower()}' is not supported on this platform ({platform}). " \
-                    "We recommend VLC for iOS and MPV for every other platform."
+                mov_cli(
+                    query = [query], 
+                    debug = debug, 
+                    player = player, 
+                    scraper = scraper, 
+                    fzf = fzf,
+                    episode = None,
+                    auto_select = None,
+
+                    version = False,
+                    edit = False,
+                    download = False
                 )
-
-                return False
-
-            mov_cli_logger.debug(f"Streaming with this url -> '{media.url}'")
-
-            if not platform == "iOS":
-                popen.wait()
 
 def app():
     uwu_app.command()(mov_cli)

@@ -8,7 +8,8 @@ if TYPE_CHECKING:
 import httpx
 from devgoldyutils import LoggerAdapter, Colours
 
-from . import mov_cli_logger, errors
+from . import errors
+from .logger import mov_cli_logger
 
 __all__ = ("HTTPClient",)
 
