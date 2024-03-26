@@ -36,7 +36,7 @@ dependencies = [
     "deprecation",
 
     # Included plugins
-    "mov-cli-test"
+    "mov-cli-test>=1.1.0"
 ]
 
 dynamic = ["version"]
