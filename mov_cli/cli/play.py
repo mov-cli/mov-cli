@@ -82,6 +82,8 @@ def play(media: Media, metadata: Metadata, scraper: Scraper, episode: EpisodeSel
 
         return play(media, metadata, scraper, episode, config, scrape_args)
 
+    popen.wait()
+
     return None
 
 def __handle_next_season(episode: EpisodeSelector, season_episode_count: int, media_episodes: dict) -> bool:
