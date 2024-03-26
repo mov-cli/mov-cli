@@ -39,9 +39,6 @@ def mov_cli(
     edit: bool = typer.Option(False, "--edit", "-e", help = "Opens the mov-cli config with your respective editor."), 
     download: bool = typer.Option(False, "--download", "-d", help = "Downloads the media instead of playing.")
 ):
-    if query is not None:
-        query = None
-
     config = Config()
 
     config = set_cli_config(
