@@ -14,7 +14,7 @@ import subprocess
 from os import fspath, PathLike
 
 if TYPE_CHECKING:
-    from typing import AnyStr, Iterable, Literal, Optional, List, Tuple, TypeVar
+    from typing import AnyStr, Iterable, Literal, Optional, Tuple, TypeVar
 
     T = TypeVar("T")
 
@@ -81,10 +81,7 @@ def iterfzf(
     byte = None
     lf = u'\n'
     cr = u'\r'
-    value_list: List[AnyStr] = [] # NEW in this fork. 
-    # (I know this defeats the whole point of generators but I NEED the choices to be returned in the project I'm utilizing this)
     for line in iterable:
-        value_list.append(line[1])
         line = line[0]
 
         if byte is None:
@@ -123,7 +120,7 @@ def iterfzf(
         if print_query:
             return None, None
         else:
-            return None, value_list
+            return None
     try:
         stdin.close()
     except IOError as e:
@@ -135,16 +132,16 @@ def iterfzf(
     if print_query:
         try:
             if multi:
-                return output[0], output[1:], value_list
+                return output[0], output[1:]
             else:
-                return output[0], output[1], value_list
+                return output[0], output[1]
         except IndexError:
             return output[0], None
     else:
         if multi:
-            return output, value_list
+            return output
         else:
             try:
-                return output[0], value_list
+                return output[0]
             except IndexError:
-                return None, value_list
+                return None
