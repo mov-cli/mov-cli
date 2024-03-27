@@ -35,9 +35,9 @@ class Series(Media):
         self, 
         url: str, 
         title: str, 
-        referrer: Optional[str], 
         episode: EpisodeSelector, 
-        subtitles: Optional[dict]
+        referrer: Optional[str] = None, 
+        subtitles: Optional[dict] = None
     ) -> None:
         self.episode = episode
         """The episode and season of this series."""
@@ -57,9 +57,9 @@ class Movie(Media):
         self, 
         url: str,
         title: str,
-        referrer: str,
-        year: Optional[str],
-        subtitles: Optional[dict]
+        referrer: Optional[str] = None,
+        year: Optional[str] = None,
+        subtitles: Optional[dict] = None
     ) -> None:
         self.year = year
         """The year this film was released."""
