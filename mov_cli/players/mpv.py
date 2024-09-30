@@ -86,12 +86,16 @@ class MPV(Player):
                 ]
             )
 
-        elif self.platform == "Linux" or self.platform == "Windows" or self.platform == "Darwin":
+        elif self.platform == "Linux" or self.platform == "Windows" or self.platform == "Darwin" or self.platform == "FreeBSD":
             default_args = [
                 "mpv", 
                 media.url
             ]
 
-            return subprocess.Popen(default_args + self._get_args(self.platform, media))
+            return subprocess.Popen(
+                default_args + self._get_args(self.platform, media),
+                stdout = (subprocess.STDOUT if self.debug else subprocess.DEVNULL), # NOTE: https://github.com/mov-cli/mov-cli/issues/361
+                stderr = subprocess.STDOUT
+            )
 
         return None

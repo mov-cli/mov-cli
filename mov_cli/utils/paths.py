@@ -13,6 +13,8 @@ __all__ = (
     "get_cache_directory"
 )
 
+LINUX_LIKE_FILE_STRUCTURE = ["Linux", "Android", "iOS", "FreeBSD"]
+
 def get_appdata_directory(platform: SUPPORTED_PLATFORMS) -> Path:
     """Returns the path to the mov-cli appdata folder on multiple platforms."""
     appdata_dir = None
@@ -25,7 +27,7 @@ def get_appdata_directory(platform: SUPPORTED_PLATFORMS) -> Path:
         user_profile = Path.home()
         appdata_dir = user_profile.joinpath("Library", "Application Support")
 
-    elif platform == "Linux" or platform == "Android" or platform == "iOS":
+    elif platform in LINUX_LIKE_FILE_STRUCTURE:
         user_profile = Path(os.getenv("HOME"))
         appdata_dir = user_profile.joinpath(".config")
 
@@ -46,10 +48,10 @@ def get_temp_directory(platform: SUPPORTED_PLATFORMS) -> Path:
     if platform == "Windows":
         temp_directory = Path(os.getenv("TEMP"))
 
-    elif platform == "Darwin": # NOTE: Path maybe incorrect
+    elif platform == "Darwin": # NOTE: Path maybe incorrect, please report failures!
         temp_directory = Path(os.getenv("TMPDIR"))
 
-    elif platform == "Linux" or platform == "iOS":
+    elif platform == "Linux" or platform == "iOS" or platform == "FreeBSD":
         linux_temp_dir = os.getenv("TMPDIR") # Respect the TMPDIR environment variable on Linux: https://unix.stackexchange.com/a/362107
 
         if linux_temp_dir is None:
@@ -78,7 +80,7 @@ def get_cache_directory(platform: SUPPORTED_PLATFORMS) -> Path:
         user_profile = Path.home()
         cache_directory = user_profile.joinpath("Library", "Caches")
 
-    elif platform == "Linux" or platform == "Android" or platform == "iOS":
+    elif platform in LINUX_LIKE_FILE_STRUCTURE:
         user_profile = Path(os.getenv("HOME"))
         cache_directory = user_profile.joinpath(".cache")
 

@@ -28,8 +28,8 @@ preview_app = typer.Typer(
 def metadata(id: str):
     platform = what_platform()
 
-    if not platform == "Linux" and not platform == "Android":
-        print("Image preview only works on Linux & Android atm.")
+    if not platform == "Linux" and not platform == "FreeBSD" and not platform == "Android":
+        print("Image preview only works on Linux, Android an FreeBSD atm.")
         return False
 
     cache = Cache(
@@ -81,22 +81,21 @@ def metadata(id: str):
     if details is not None:
         print("\n" + details)
 
-
 def image_url_to_file(image_url: str, id: str, platform: str) -> Optional[Path]:
     temp = get_temp_directory(platform)
     file = temp.joinpath(slugify(id))
+
+    if file.exists():
+        return file
 
     request = httpx.get(image_url)
 
     if request.is_error:
         return None
-    
-    if file.exists():
-        return file
-    
+
     with file.open("wb") as f:
         f.write(request.content)
-    
+
     return file
 
 def slugify(value): # https://github.com/django/django/blob/main/django/utils/text.py#L452-L469

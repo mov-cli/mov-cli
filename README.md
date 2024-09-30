@@ -54,6 +54,7 @@
 - **A supported platform:**
   - Linux
   - Windows
+  - FreeBSD (https://github.com/mov-cli/mov-cli/issues/359)
   - Android (via [Termux](https://termux.dev/en/))
   - iOS (via [iSH Shell](https://ish.app/))
   - MacOS

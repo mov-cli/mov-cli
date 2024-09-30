@@ -1,7 +1,7 @@
 ---
 name: Question
 about: Ask anything that you have concerns about
-title: ''
+title: '[QUESTION] '
 labels: question
 assignees: ''
 ---

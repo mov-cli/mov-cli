@@ -80,7 +80,7 @@ class VLC(Player):
 
             return None
 
-        elif self.platform == "Linux" or self.platform == "Windows":
+        elif self.platform == "Linux" or self.platform == "Windows" or self.platform == "FreeBSD":
             default_args = [
                 "vlc", 
                 media.url

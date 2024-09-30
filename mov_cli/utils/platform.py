@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Literal
 
-    SUPPORTED_PLATFORMS = Literal["Windows", "Linux", "Android", "Darwin", "iOS"]
+    SUPPORTED_PLATFORMS = Literal["Windows", "Linux", "Android", "Darwin", "iOS", "FreeBSD"]
 
 import sys
 import platform
@@ -16,7 +16,7 @@ def what_platform() -> SUPPORTED_PLATFORMS:
     """
     Returns what platform/OS this device is running on.
 
-    E.g. Windows, Linux, Android, Darwin, iOS
+    E.g. Windows, Linux, Android, Darwin, iOS, FreeBSD
     """
     os = platform.system()
 

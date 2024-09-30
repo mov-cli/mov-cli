@@ -6,7 +6,7 @@ labels: enhancement
 assignees: ''
 ---
 
-<!-- Please refrain from reporting plugin specific issues here, report those issues to the plugins themsevles. -->
+<!-- Please refrain from reporting plugin specific issues here, report those issues to the plugins themselves. -->
 
 **Describe the feature / change you'd like.**
 <!-- A clear and concise description of what you want to see. -->

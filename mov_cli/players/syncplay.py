@@ -38,7 +38,7 @@ class SyncPlay(MPV):
         """Plays this media in SyncPlay."""
         mpv_args = self._get_args(self.platform, media)
 
-        if self.platform == "Windows" or self.platform == "Linux":
+        if self.platform == "Windows" or self.platform == "Linux" or self.platform == "FreeBSD":
             return subprocess.Popen(["syncplay", media.url, "--"] + mpv_args)
 
         elif self.platform == "Darwin": # NOTE: Limits you to IINA

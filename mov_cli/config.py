@@ -132,7 +132,7 @@ class Config():
     @property
     def player_args(self) -> List[str]:
         """Returns the player that was configured in the config. Defaults to MPV."""
-        player_config = self.data.get("player", None)
+        player_config = self.data.get("player", {})
 
         if isinstance(player_config, str):
             return []
@@ -142,7 +142,7 @@ class Config():
     @property
     def player_args_override(self) -> bool:
         """Returns the player that was configured in the config. Defaults to MPV."""
-        player_config = self.data.get("player", None)
+        player_config = self.data.get("player", {})
 
         if isinstance(player_config, str):
             return False
