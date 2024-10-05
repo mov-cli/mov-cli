@@ -74,4 +74,5 @@ include = ["mov_cli*"]
 
 [project.scripts]
 mov-cli = "mov_cli.cli.__main__:app"
+mov-cli-v2 = "mov_cli.cli_v2.main:app"
 mov-cli-dev = "mov_cli.dev_cli.__main__:app"
