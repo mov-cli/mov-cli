@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 import re
 import os
+import sys
 import json
 import types
 import random
@@ -90,8 +91,13 @@ def prompt(
         logger.debug("Skipping prompt as there is only a single choice to choose from...")
         return next(choices) if isinstance(choices, itertools._tee) else choices[0]
 
-    # silence the global logger so it doesn't mess with fzf or inquirer's output.
+    # silence the global logger and stdout so it doesn't mess with fzf or inquirer's output.
+    previous_sys_stdout = sys.stdout
+    previous_sys_stderr = sys.stderr
     previous_logger_level = mov_cli_logger.level
+
+    sys.stdout = open(os.devnull, "w")
+    sys.stderr = open(os.devnull, "w")
     mov_cli_logger.setLevel(logging.CRITICAL)
 
     choices, unwounded_choices = itertools.tee(choices)
@@ -119,7 +125,9 @@ def prompt(
         if inquirer_result is not None:
             choice_picked = inquirer_result["choices"]
 
-    # restore the logger
+    # restore the logger and stdout
+    sys.stdout = previous_sys_stdout
+    sys.stderr = previous_sys_stderr
     mov_cli_logger.setLevel(previous_logger_level)
 
     # Using this to remove ansi colours returned in the picked choice.
