@@ -11,6 +11,9 @@ app = typer.Typer(
 def mov_cli(
     ctx: typer.Context
 ):
-    print(
-        "Hello, you've reached the mov-cli master command but there's nothing here yet..."
-    )
+    if ctx.invoked_subcommand is not None:
+        return
+
+
+
+    print("NOTICE: THIS IS A WORK IN PROGRESS! Not everything will work.")
