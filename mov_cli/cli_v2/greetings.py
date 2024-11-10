@@ -21,6 +21,7 @@ from devgoldyutils import Colours, LoggerAdapter
 import mov_cli
 
 from ..cache import Cache
+from ..plugins import Plugin
 from ..logger import mov_cli_logger
 from ..utils import  what_platform, update_available, plugin_update_available, update_command
 

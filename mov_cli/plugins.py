@@ -2,7 +2,8 @@
 Module containing mov-cli plugin related stuff.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, TypedDict, TypeVar
+from typing_extensions import NotRequired
+from typing import TYPE_CHECKING, TypedDict, TypeVar, Union
 
 if TYPE_CHECKING:
     from types import ModuleType
@@ -18,22 +19,80 @@ from .scraper import Scraper
 from .logger import mov_cli_logger
 
 __all__ = (
-    "load_plugin", 
-    "PluginHookData", 
-    "Plugin"
+    "Plugin",
+    "load_plugin",
+    "V1PluginHookDataT",
+    "V2PluginHookDataT",
 )
 
 logger = LoggerAdapter(mov_cli_logger, prefix = "Plugins")
 
 T = TypeVar("T", int, str, bool)
 
-class PluginHookData(TypedDict):
+class V2PluginHookDataT(TypedDict):
+    """
+    ⭐ Example:
+    -------------
+    This is how you can define the plugin hook inside your plugin::
+
+        # my_plugin/__init__.py
+
+        from __future__ import annotations
+        from typing import TYPE_CHECKING
+
+        if TYPE_CHECKING:
+            from mov_cli.plugins import V2PluginHookDataT
+
+        from .my_scraper import MyScraper
+        from .ananas_amazing_scraper import TheAnanasScraper
+
+        plugin: V2PluginHookDataT = {
+            "version": 2,
+            "package_name": "my-plugin-package", # The PYPI name of your package. Set as None, if you don't have one yet.
+            "scrapers": {
+                "my-scraper": MyScraper,
+                "ananas": TheAnanasScraper,
+            },
+            "scraper_configs": {
+                "ananas": {
+                    "unsupported_platforms": ["android", "ios"]
+                }
+            }
+        }
+
+        __version__ = "1.0.0"
+    """
     version: Literal[2]
-    """The version of the plugin hook to use. Version 2 is latest currently."""
+    package_name: str
+    """The name of the pypi package. This is required for the plugin update notifier to work."""
+    scrapers: Dict[str, Type[Scraper]]
+    """
+    Where you define the IDs of the scraper classes your plugin has to offer.
+    The default scraper is always the first scraper that is defined in the dictionary.
+    Scrapers should ideally be put in order of which is best / recommended, if one scraper fails and
+    the user has "try next scraper" mode enabled, the next scraper in that exact order will be invoked.
+
+    .. Warning::
+
+        In version 2 the "DEFAULT" keys should no longer be present!
+    """
+    scraper_configs: Dict[str, ScraperConfigT]
+
+class V1PluginHookDataT(TypedDict):
+    version: Literal[1]
     package_name: str
     """The name of the pypi package. This is required for the plugin update notifier to work."""
     scrapers: Dict[str, Type[Scraper]] | PluginHookScrapersT
-    args: Dict[str, T]
+    args: Dict[str, Type[T]]
+
+# NOTE: Here for backwards compatibility with pre-v4.5 plugins.
+PluginHookData = V1PluginHookDataT
+
+PluginHookDataUnionT = Union[V1PluginHookDataT, V2PluginHookDataT]
+
+class ScraperConfigT(TypedDict):
+    allowed_args: NotRequired[Dict[str, Type[T]]]
+    unsupported_platforms: List[SUPPORTED_PLATFORMS]
 
 PluginHookScrapersT = TypedDict(
     "PluginHookScrapersT",
@@ -50,10 +109,15 @@ PluginHookScrapersT = TypedDict(
 @dataclass
 class Plugin:
     module: ModuleType
-    hook_data: PluginHookData
+    hook_data: PluginHookDataUnionT
 
     @property
     def scrapers(self) -> List[Tuple[str, Type[Scraper]]]:
+        if self.hook_data["version"] == 2:
+            return [
+                (scraper[0], scraper[1]) for scraper in self.hook_data.get("scrapers", []).items()
+            ]
+
         non_default_scrapers = []
 
         for scraper_namespace, scraper_class in self.hook_data["scrapers"].items():
@@ -70,8 +134,13 @@ class Plugin:
         return getattr(self.module, "__version__", None)
 
     def default_scraper(self, platform: SUPPORTED_PLATFORMS) -> Optional[Scraper]:
+        if self.hook_data["version"] == 2:
+            # Default scraper in version 2 plugin hook is just the first scraper defined.
+            return next(
+                self.hook_data.get("scrapers", []).values(), None
+            )
 
-        for scraper_namespace, scraper_class in self.hook_data["scrapers"].items():
+        for scraper_namespace, scraper_class in self.hook_data.get("scrapers").items():
 
             if scraper_namespace == f"{platform}.DEFAULT" or scraper_namespace == "DEFAULT":
                 return scraper_class
@@ -92,6 +161,6 @@ def load_plugin(module_name: str) -> Optional[Plugin]:
         return None
 
     return Plugin(
-        module = plugin_module, 
+        module = plugin_module,
         hook_data = plugin_data
     )
