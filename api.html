@@ -1,0 +1,831 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="📘 API Documentation" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://mov-cli.sata-andagi.moe/api.html" />
+<meta property="og:site_name" content="mov-cli" />
+<meta property="og:description" content="The documentation for the mov-cli programming api." />
+<meta property="og:image" content="https://mov-cli.sata-andagi.moe/_static/logo.png" />
+<meta property="og:image:alt" content="mov-cli" />
+<meta name="description" content="The documentation for the mov-cli programming api. 🎞️ Media, ⚙️ Utils, 📺 Players. Config: Cache: Download: HTTPClient: Logger: Plugins: Module containing mov-cli plugin related stuff. Scraper: Errors:" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="🎞️ Media" href="media.html"><link rel="prev" title="What is mov-cli? 💫" href="index.html">
+        <link rel="prefetch" href="_static/logo.png" as="image">
+
+    <link rel="shortcut icon" href="_static/logo.png"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+        <title>📘 API Documentation - mov-cli documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: orange;
+  --color-brand-content: #c95f12;
+  --color-admonition-background: #ffe7ae;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: orange;
+  --color-brand-content: #ffdfae;
+  --color-admonition-background: #0d0904;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: orange;
+  --color-brand-content: #ffdfae;
+  --color-admonition-background: #0d0904;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mov-cli  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mov-cli  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">📘 API Documentation</a><input aria-label="Toggle navigation of 📘 API Documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="media.html">🎞️ Media</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="utils.html">⚙️ Utils</a><input aria-label="Toggle navigation of ⚙️ Utils" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.scraper.html">⚡ Scraper Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.subtitles.html">🗒️ Subtitle Utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="players.html">📺 Players</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/api.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="api-documentation">
+<h1>📘 API Documentation<a class="headerlink" href="#api-documentation" title="Link to this heading">¶</a></h1>
+<p>The documentation for the mov-cli programming api.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="media.html">🎞️ Media</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">⚙️ Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="players.html">📺 Players</a></li>
+</ul>
+</div>
+<section id="module-mov_cli.config">
+<span id="config"></span><h2>Config<a class="headerlink" href="#module-mov_cli.config" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.config.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.config.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">override_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ConfigData</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/config.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.config.Config" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that wraps the mov-cli configuration file. Mostly used under the CLI interface.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.auto_try_next_scraper">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">auto_try_next_scraper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.auto_try_next_scraper" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.debug">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">debug</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.debug" title="Link to this definition">¶</a></dt>
+<dd><p>Returns whether debug should be enabled or not.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.debug_player">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">debug_player</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.debug_player" title="Link to this definition">¶</a></dt>
+<dd><p>Returns whether debug for the player should be enabled or not.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.default_scraper">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_scraper</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mov_cli.config.Config.default_scraper" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the scraper that should be used to scrape by default.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.display_quality">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">display_quality</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mov_cli.config.Config.display_quality" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.download_location">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download_location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mov_cli.config.Config.download_location" title="Link to this definition">¶</a></dt>
+<dd><p>Returns download location. Defaults to current working directory.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.editor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">editor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mov_cli.config.Config.editor" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the editor that should be opened while editing.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.fzf_enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fzf_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.fzf_enabled" title="Link to this definition">¶</a></dt>
+<dd><p>Returns whether fzf is allowed to be used. Defaults to True of fzf is available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.config.Config.get_env_config">
+<span class="sig-name descname"><span class="pre">get_env_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AutoConfig</span></span></span><a class="reference internal" href="_modules/mov_cli/config.html#Config.get_env_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.config.Config.get_env_config" title="Link to this definition">¶</a></dt>
+<dd><p>Returns python decouple config object for mov-cli’s appdata .env file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.hide_ip">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hide_ip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.hide_ip" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.http_headers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">http_headers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpHeadersData</span></em><a class="headerlink" href="#mov_cli.config.Config.http_headers" title="Link to this definition">¶</a></dt>
+<dd><p>Returns http headers.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.http_timeout">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">http_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#mov_cli.config.Config.http_timeout" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the http timeout delay that should be set.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.language">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">language</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.subtitles.html#mov_cli.utils.subtitles.lang.Lang" title="mov_cli.utils.subtitles.lang.Lang"><span class="pre">Lang</span></a></em><a class="headerlink" href="#mov_cli.config.Config.language" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.limit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mov_cli.config.Config.limit" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.parser">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parser</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SupportedParsersT</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#mov_cli.config.Config.parser" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the parser type configured by the user else it just returns the default.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.player">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">player</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mov_cli.config.Config.player" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the player that was configured in the config. Defaults to MPV.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.player_args">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">player_args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mov_cli.config.Config.player_args" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the player that was configured in the config. Defaults to MPV.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.player_args_override">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">player_args_override</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.player_args_override" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the player that was configured in the config. Defaults to MPV.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.plugins">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plugins</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mov_cli.config.Config.plugins" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.preview">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">preview</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mov_cli.config.Config.preview" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.resolution">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">resolution</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="media.html#mov_cli.media.quality.Quality" title="mov_cli.media.quality.Quality"><span class="pre">Quality</span></a></em><a class="headerlink" href="#mov_cli.config.Config.resolution" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.scrapers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scrapers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ScrapersConfigT</span></em><a class="headerlink" href="#mov_cli.config.Config.scrapers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.skip_update_checker">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">skip_update_checker</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.skip_update_checker" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.use_yt_dlp">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">use_yt_dlp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.use_yt_dlp" title="Link to this definition">¶</a></dt>
+<dd><p>Returns if yt-dlp should be used. Defaults to True.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#mov_cli.config.Config.version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.config.Config.watch_options">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">watch_options</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#mov_cli.config.Config.watch_options" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-mov_cli.cache">
+<span id="cache"></span><h2>Cache<a class="headerlink" href="#module-mov_cli.cache" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.cache.Cache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.cache.</span></span><span class="sig-name descname"><span class="pre">Cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SUPPORTED_PLATFORMS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/cache.html#Cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.cache.Cache" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An API for caching text based data on mov-cli cross platform respectively.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.cache.Cache.clear_all_cache">
+<span class="sig-name descname"><span class="pre">clear_all_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/cache.html#Cache.clear_all_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.cache.Cache.clear_all_cache" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.cache.Cache.clear_cache">
+<span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/cache.html#Cache.clear_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.cache.Cache.clear_cache" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.cache.Cache.delete_cache_file">
+<span class="sig-name descname"><span class="pre">delete_cache_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/cache.html#Cache.delete_cache_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.cache.Cache.delete_cache_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.cache.Cache.get_cache">
+<span class="sig-name descname"><span class="pre">get_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/cache.html#Cache.get_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.cache.Cache.get_cache" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.cache.Cache.set_cache">
+<span class="sig-name descname"><span class="pre">set_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds_until_expired</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="reference internal" href="_modules/mov_cli/cache.html#Cache.set_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.cache.Cache.set_cache" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-mov_cli.download">
+<span id="download"></span><h2>Download<a class="headerlink" href="#module-mov_cli.download" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.download.Download">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.download.</span></span><span class="sig-name descname"><span class="pre">Download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mov_cli.config.Config" title="mov_cli.config.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/download.html#Download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.download.Download" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.download.Download.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">media</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="media.html#mov_cli.media.media.Multi" title="mov_cli.media.media.Multi"><span class="pre">Multi</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="media.html#mov_cli.media.media.Single" title="mov_cli.media.media.Single"><span class="pre">Single</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtitles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">subprocess.Popen</span></span></span><a class="reference internal" href="_modules/mov_cli/download.html#Download.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.download.Download.download" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-mov_cli.http_client">
+<span id="httpclient"></span><h2>HTTPClient<a class="headerlink" href="#module-mov_cli.http_client" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.http_client.HTTPClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.http_client.</span></span><span class="sig-name descname"><span class="pre">HTTPClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/http_client.html#HTTPClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.http_client.HTTPClient" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.http_client.HTTPClient.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_default_headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/mov_cli/http_client.html#HTTPClient.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.http_client.HTTPClient.get" title="Link to this definition">¶</a></dt>
+<dd><p>Performs a GET request and returns httpx.Response.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.4: </span>Switch to ‘HTTPClient.request()’ for the latest functionality.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.http_client.HTTPClient.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_default_headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/mov_cli/http_client.html#HTTPClient.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.http_client.HTTPClient.post" title="Link to this definition">¶</a></dt>
+<dd><p>Performs a POST request and returns httpx.Response.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.4: </span>Switch to ‘HTTPClient.request()’ for the latest functionality.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.http_client.HTTPClient.request">
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'GET'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'HEAD'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'POST'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'PUT'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'DELETE'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'CONNECT'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'OPTIONS'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'TRACE'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'PATCH'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_default_headers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/mov_cli/http_client.html#HTTPClient.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.http_client.HTTPClient.request" title="Link to this definition">¶</a></dt>
+<dd><p>Performs a request with httpx and returns <cite>httpx.Response</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.http_client.HTTPClient.set_cookies">
+<span class="sig-name descname"><span class="pre">set_cookies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/http_client.html#HTTPClient.set_cookies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.http_client.HTTPClient.set_cookies" title="Link to this definition">¶</a></dt>
+<dd><p>Sets cookies.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-mov_cli.logger">
+<span id="logger"></span><h2>Logger<a class="headerlink" href="#module-mov_cli.logger" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-mov_cli.plugins">
+<span id="plugins"></span><h2>Plugins<a class="headerlink" href="#module-mov_cli.plugins" title="Link to this heading">¶</a></h2>
+<p>Module containing mov-cli plugin related stuff.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.plugins.Plugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.plugins.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'ModuleType'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hook_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'PluginHookData'</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/plugins.html#Plugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.plugins.Plugin" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.plugins.Plugin.default_scraper">
+<span class="sig-name descname"><span class="pre">default_scraper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SUPPORTED_PLATFORMS</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mov_cli.scraper.Scraper" title="mov_cli.scraper.Scraper"><span class="pre">Scraper</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/plugins.html#Plugin.default_scraper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.plugins.Plugin.default_scraper" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mov_cli.plugins.Plugin.hook_data">
+<span class="sig-name descname"><span class="pre">hook_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#mov_cli.plugins.PluginHookData" title="mov_cli.plugins.PluginHookData"><span class="pre">PluginHookData</span></a></em><a class="headerlink" href="#mov_cli.plugins.Plugin.hook_data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mov_cli.plugins.Plugin.module">
+<span class="sig-name descname"><span class="pre">module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ModuleType</span></em><a class="headerlink" href="#mov_cli.plugins.Plugin.module" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.plugins.Plugin.scrapers">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scrapers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#mov_cli.scraper.Scraper" title="mov_cli.scraper.Scraper"><span class="pre">Scraper</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mov_cli.plugins.Plugin.scrapers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mov_cli.plugins.Plugin.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mov_cli.plugins.Plugin.version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.plugins.PluginHookData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.plugins.</span></span><span class="sig-name descname"><span class="pre">PluginHookData</span></span><a class="reference internal" href="_modules/mov_cli/plugins.html#PluginHookData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.plugins.PluginHookData" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mov_cli.plugins.PluginHookData.package_name">
+<span class="sig-name descname"><span class="pre">package_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mov_cli.plugins.PluginHookData.package_name" title="Link to this definition">¶</a></dt>
+<dd><p>The name of the pypi package. This is required for the plugin update notifier to work.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mov_cli.plugins.PluginHookData.scrapers">
+<span class="sig-name descname"><span class="pre">scrapers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#mov_cli.scraper.Scraper" title="mov_cli.scraper.Scraper"><span class="pre">Scraper</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PluginHookScrapersT</span></em><a class="headerlink" href="#mov_cli.plugins.PluginHookData.scrapers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mov_cli.plugins.PluginHookData.version">
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mov_cli.plugins.PluginHookData.version" title="Link to this definition">¶</a></dt>
+<dd><p>The version of the plugin hook to use. Version 1 is latest currently.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mov_cli.plugins.load_plugin">
+<span class="sig-prename descclassname"><span class="pre">mov_cli.plugins.</span></span><span class="sig-name descname"><span class="pre">load_plugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mov_cli.plugins.Plugin" title="mov_cli.plugins.Plugin"><span class="pre">Plugin</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/plugins.html#load_plugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.plugins.load_plugin" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mov_cli.scraper">
+<span id="scraper"></span><h2>Scraper<a class="headerlink" href="#module-mov_cli.scraper" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="mov_cli.scraper.Scraper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.scraper.</span></span><span class="sig-name descname"><span class="pre">Scraper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mov_cli.config.Config" title="mov_cli.config.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mov_cli.http_client.HTTPClient" title="mov_cli.http_client.HTTPClient"><span class="pre">HTTPClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ScraperOptionsT</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/scraper.html#Scraper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.scraper.Scraper" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>A base class for building scrapers from.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.scraper.Scraper.scrape">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scrape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="media.html#mov_cli.media.metadata.Metadata" title="mov_cli.media.metadata.Metadata"><span class="pre">Metadata</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">episode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="utils.html#mov_cli.utils.episode_selector.EpisodeSelector" title="mov_cli.utils.episode_selector.EpisodeSelector"><span class="pre">EpisodeSelector</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="media.html#mov_cli.media.media.Multi" title="mov_cli.media.media.Multi"><span class="pre">Multi</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="media.html#mov_cli.media.media.Single" title="mov_cli.media.media.Single"><span class="pre">Single</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mov_cli/scraper.html#Scraper.scrape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.scraper.Scraper.scrape" title="Link to this definition">¶</a></dt>
+<dd><p>Where your scraping for the media should be performed. 
+Should return an instance of <cite>Media()</cite> but return <cite>None</cite> if the media is unavailable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.scraper.Scraper.scrape_episodes">
+<span class="sig-name descname"><span class="pre">scrape_episodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="media.html#mov_cli.media.metadata.Metadata" title="mov_cli.media.metadata.Metadata"><span class="pre">Metadata</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ScrapeEpisodesT</span></span></span><a class="reference internal" href="_modules/mov_cli/scraper.html#Scraper.scrape_episodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.scraper.Scraper.scrape_episodes" title="Link to this definition">¶</a></dt>
+<dd><p>Returns episode count for each season in that Media.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.scraper.Scraper.search">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="media.html#mov_cli.media.metadata.Metadata" title="mov_cli.media.metadata.Metadata"><span class="pre">Metadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mov_cli/scraper.html#Scraper.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.scraper.Scraper.search" title="Link to this definition">¶</a></dt>
+<dd><p>Where your searching for media should be done. Should return or yield Metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mov_cli.scraper.Scraper.soup">
+<span class="sig-name descname"><span class="pre">soup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BeautifulSoup</span></span></span><a class="reference internal" href="_modules/mov_cli/scraper.html#Scraper.soup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.scraper.Scraper.soup" title="Link to this definition">¶</a></dt>
+<dd><p>A ready to use beautiful soup instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-mov_cli.errors">
+<span id="errors"></span><h2>Errors<a class="headerlink" href="#module-mov_cli.errors" title="Link to this heading">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="mov_cli.errors.InternalPluginError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.errors.</span></span><span class="sig-name descname"><span class="pre">InternalPluginError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/errors.html#InternalPluginError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.errors.InternalPluginError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mov_cli.errors.MovCliException" title="mov_cli.errors.MovCliException"><code class="xref py py-class docutils literal notranslate"><span class="pre">MovCliException</span></code></a></p>
+<p>Raised when an exception occurs from inside a plugin’s codebase.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mov_cli.errors.MovCliException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.errors.</span></span><span class="sig-name descname"><span class="pre">MovCliException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/errors.html#MovCliException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.errors.MovCliException" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raises whenever there’s a known error in mov-cli.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mov_cli.errors.MovCliException.message">
+<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mov_cli.errors.MovCliException.message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mov_cli.errors.ReferrerNotSupportedError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.errors.</span></span><span class="sig-name descname"><span class="pre">ReferrerNotSupportedError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/errors.html#ReferrerNotSupportedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.errors.ReferrerNotSupportedError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mov_cli.errors.MovCliException" title="mov_cli.errors.MovCliException"><code class="xref py py-class docutils literal notranslate"><span class="pre">MovCliException</span></code></a></p>
+<p>Raised by some players on platforms like Android and 
+iOS where players don’t support the passing of referrer urls.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="mov_cli.errors.SiteMaybeBlockedError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mov_cli.errors.</span></span><span class="sig-name descname"><span class="pre">SiteMaybeBlockedError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">httpx.ConnectError</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mov_cli/errors.html#SiteMaybeBlockedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mov_cli.errors.SiteMaybeBlockedError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mov_cli.errors.MovCliException" title="mov_cli.errors.MovCliException"><code class="xref py py-class docutils literal notranslate"><span class="pre">MovCliException</span></code></a></p>
+<p>Raises when a connection is looked like to be blocked by a DNS or ISP provider’s DNS.</p>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="media.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">🎞️ Media</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, mov-cli
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">📘 API Documentation</a><ul>
+<li><a class="reference internal" href="#module-mov_cli.config">Config</a><ul>
+<li><a class="reference internal" href="#mov_cli.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.config.Config.auto_try_next_scraper"><code class="docutils literal notranslate"><span class="pre">Config.auto_try_next_scraper</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.debug"><code class="docutils literal notranslate"><span class="pre">Config.debug</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.debug_player"><code class="docutils literal notranslate"><span class="pre">Config.debug_player</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.default_scraper"><code class="docutils literal notranslate"><span class="pre">Config.default_scraper</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.display_quality"><code class="docutils literal notranslate"><span class="pre">Config.display_quality</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.download_location"><code class="docutils literal notranslate"><span class="pre">Config.download_location</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.editor"><code class="docutils literal notranslate"><span class="pre">Config.editor</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.fzf_enabled"><code class="docutils literal notranslate"><span class="pre">Config.fzf_enabled</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.get_env_config"><code class="docutils literal notranslate"><span class="pre">Config.get_env_config()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.hide_ip"><code class="docutils literal notranslate"><span class="pre">Config.hide_ip</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.http_headers"><code class="docutils literal notranslate"><span class="pre">Config.http_headers</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.http_timeout"><code class="docutils literal notranslate"><span class="pre">Config.http_timeout</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.language"><code class="docutils literal notranslate"><span class="pre">Config.language</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.limit"><code class="docutils literal notranslate"><span class="pre">Config.limit</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.parser"><code class="docutils literal notranslate"><span class="pre">Config.parser</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.player"><code class="docutils literal notranslate"><span class="pre">Config.player</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.player_args"><code class="docutils literal notranslate"><span class="pre">Config.player_args</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.player_args_override"><code class="docutils literal notranslate"><span class="pre">Config.player_args_override</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.plugins"><code class="docutils literal notranslate"><span class="pre">Config.plugins</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.preview"><code class="docutils literal notranslate"><span class="pre">Config.preview</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.resolution"><code class="docutils literal notranslate"><span class="pre">Config.resolution</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.scrapers"><code class="docutils literal notranslate"><span class="pre">Config.scrapers</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.skip_update_checker"><code class="docutils literal notranslate"><span class="pre">Config.skip_update_checker</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.use_yt_dlp"><code class="docutils literal notranslate"><span class="pre">Config.use_yt_dlp</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.version"><code class="docutils literal notranslate"><span class="pre">Config.version</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.config.Config.watch_options"><code class="docutils literal notranslate"><span class="pre">Config.watch_options</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-mov_cli.cache">Cache</a><ul>
+<li><a class="reference internal" href="#mov_cli.cache.Cache"><code class="docutils literal notranslate"><span class="pre">Cache</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.cache.Cache.clear_all_cache"><code class="docutils literal notranslate"><span class="pre">Cache.clear_all_cache()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.cache.Cache.clear_cache"><code class="docutils literal notranslate"><span class="pre">Cache.clear_cache()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.cache.Cache.delete_cache_file"><code class="docutils literal notranslate"><span class="pre">Cache.delete_cache_file()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.cache.Cache.get_cache"><code class="docutils literal notranslate"><span class="pre">Cache.get_cache()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.cache.Cache.set_cache"><code class="docutils literal notranslate"><span class="pre">Cache.set_cache()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-mov_cli.download">Download</a><ul>
+<li><a class="reference internal" href="#mov_cli.download.Download"><code class="docutils literal notranslate"><span class="pre">Download</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.download.Download.download"><code class="docutils literal notranslate"><span class="pre">Download.download()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-mov_cli.http_client">HTTPClient</a><ul>
+<li><a class="reference internal" href="#mov_cli.http_client.HTTPClient"><code class="docutils literal notranslate"><span class="pre">HTTPClient</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.http_client.HTTPClient.get"><code class="docutils literal notranslate"><span class="pre">HTTPClient.get()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.http_client.HTTPClient.post"><code class="docutils literal notranslate"><span class="pre">HTTPClient.post()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.http_client.HTTPClient.request"><code class="docutils literal notranslate"><span class="pre">HTTPClient.request()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.http_client.HTTPClient.set_cookies"><code class="docutils literal notranslate"><span class="pre">HTTPClient.set_cookies()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-mov_cli.logger">Logger</a></li>
+<li><a class="reference internal" href="#module-mov_cli.plugins">Plugins</a><ul>
+<li><a class="reference internal" href="#mov_cli.plugins.Plugin"><code class="docutils literal notranslate"><span class="pre">Plugin</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.plugins.Plugin.default_scraper"><code class="docutils literal notranslate"><span class="pre">Plugin.default_scraper()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.plugins.Plugin.hook_data"><code class="docutils literal notranslate"><span class="pre">Plugin.hook_data</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.plugins.Plugin.module"><code class="docutils literal notranslate"><span class="pre">Plugin.module</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.plugins.Plugin.scrapers"><code class="docutils literal notranslate"><span class="pre">Plugin.scrapers</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.plugins.Plugin.version"><code class="docutils literal notranslate"><span class="pre">Plugin.version</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mov_cli.plugins.PluginHookData"><code class="docutils literal notranslate"><span class="pre">PluginHookData</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.plugins.PluginHookData.package_name"><code class="docutils literal notranslate"><span class="pre">PluginHookData.package_name</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.plugins.PluginHookData.scrapers"><code class="docutils literal notranslate"><span class="pre">PluginHookData.scrapers</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.plugins.PluginHookData.version"><code class="docutils literal notranslate"><span class="pre">PluginHookData.version</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mov_cli.plugins.load_plugin"><code class="docutils literal notranslate"><span class="pre">load_plugin()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-mov_cli.scraper">Scraper</a><ul>
+<li><a class="reference internal" href="#mov_cli.scraper.Scraper"><code class="docutils literal notranslate"><span class="pre">Scraper</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.scraper.Scraper.scrape"><code class="docutils literal notranslate"><span class="pre">Scraper.scrape()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.scraper.Scraper.scrape_episodes"><code class="docutils literal notranslate"><span class="pre">Scraper.scrape_episodes()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.scraper.Scraper.search"><code class="docutils literal notranslate"><span class="pre">Scraper.search()</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.scraper.Scraper.soup"><code class="docutils literal notranslate"><span class="pre">Scraper.soup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-mov_cli.errors">Errors</a><ul>
+<li><a class="reference internal" href="#mov_cli.errors.InternalPluginError"><code class="docutils literal notranslate"><span class="pre">InternalPluginError</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.errors.MovCliException"><code class="docutils literal notranslate"><span class="pre">MovCliException</span></code></a><ul>
+<li><a class="reference internal" href="#mov_cli.errors.MovCliException.message"><code class="docutils literal notranslate"><span class="pre">MovCliException.message</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mov_cli.errors.ReferrerNotSupportedError"><code class="docutils literal notranslate"><span class="pre">ReferrerNotSupportedError</span></code></a></li>
+<li><a class="reference internal" href="#mov_cli.errors.SiteMaybeBlockedError"><code class="docutils literal notranslate"><span class="pre">SiteMaybeBlockedError</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/tabs.js?v=3ee01567"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
